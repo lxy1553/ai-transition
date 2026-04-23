@@ -45,16 +45,16 @@
 
 | 序号 | 平台 | 公司 | 岗位名称 | 城市 | 薪资 | 方向分类 | 关键词 | 我的匹配点 | 我的缺口 | 是否值得投 |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 1 |  |  |  |  |  |  |  |  |  |  |
-| 2 |  |  |  |  |  |  |  |  |  |  |
-| 3 |  |  |  |  |  |  |  |  |  |  |
-| 4 |  |  |  |  |  |  |  |  |  |  |
-| 5 |  |  |  |  |  |  |  |  |  |  |
-| 6 |  |  |  |  |  |  |  |  |  |  |
-| 7 |  |  |  |  |  |  |  |  |  |  |
-| 8 |  |  |  |  |  |  |  |  |  |  |
-| 9 |  |  |  |  |  |  |  |  |  |  |
-| 10 |  |  |  |  |  |  |  |  |  |  |
+| 1 | AIJobs | 某互联网公司 | AI智能体平台研发工程师 | 北京 | 15-25K | AI应用 | Python, LLM, Agent, FastAPI, Docker | SQL强, 数据理解 | Agent开发, LLM实战 | 是 |
+| 2 | AIJobs | 某AI公司 | 大模型算法工程师(开放域对话) | 北京 | 25-37K | AI应用 | LLM, Prompt, Python, 对话系统 | 业务理解 | 大模型调优, 对话系统 | 待定 |
+| 3 | Lenovo | 联想 | 端侧大模型RAG系统优化研究员 | 北京 | 20-35K | RAG/NL2SQL | RAG, Embedding, 向量检索, Python | 数据处理经验 | RAG优化, 端侧部署 | 是 |
+| 4 | Boss直聘 | 某数据公司 | NL2SQL工程师 | 上海 | 22-40K | RAG/NL2SQL | Python, SQL, NL2SQL, LLM, Schema理解 | SQL强, 数仓建模 | NL2SQL实战, LLM调用 | 是 |
+| 5 | 拉勾 | 某金融科技 | 数据问答工程师 | 深圳 | 20-35K | RAG/NL2SQL | RAG, SQL, Python, 向量数据库, Prompt | SQL强, 指标体系 | RAG实战, 向量检索 | 是 |
+| 6 | 智联 | 某企业服务 | AI应用开发工程师 | 北京 | 18-32K | AI应用 | Python, FastAPI, LLM, API开发, Docker | 数据处理 | Python工程化, 服务化 | 是 |
+| 7 | Boss直聘 | 某电商平台 | 智能问答系统工程师 | 杭州 | 22-38K | RAG/NL2SQL | RAG, NL2SQL, Python, 幻觉控制, 评测 | SQL能力, 业务理解 | 幻觉控制, 评测体系 | 是 |
+| 8 | 拉勾 | 某AI创业公司 | LLM应用工程师 | 北京 | 20-35K | AI应用 | Python, Prompt, Function Calling, LangChain | 数据经验 | Prompt工程, 函数调用 | 是 |
+| 9 | 智联 | 某大数据公司 | AI数据工程师 | 上海 | 23-38K | 数据工程(AI) | Python, SQL, 数据建模, 向量库, ETL | 数仓建模, 数据治理 | 向量库, AI数据流 | 是 |
+| 10 | Boss直聘 | 某SaaS公司 | 数据智能应用工程师 | 深圳 | 18-30K | RAG/NL2SQL | Python, SQL, RAG, FastAPI, 数据分析 | SQL强, 业务分析 | RAG实战, API开发 | 是 |
 
 ## 建议怎么填
 
