@@ -1,0 +1,11 @@
+company,position,city,salary,direction,skills
+某互联网公司,AI工程师,北京,20-35K,AI应用,"Python,LLM,Agent,FastAPI,Docker"
+某AI公司,大模型算法工程师,北京,25-37K,AI应用,"LLM,Prompt,Python,对话系统"
+联想,端侧RAG系统优化研究员,北京,20-35K,RAG/NL2SQL,"RAG,Embedding,向量检索,Python"
+某数据公司,NL2SQL工程师,上海,22-40K,RAG/NL2SQL,"Python,SQL,NL2SQL,LLM,Schema理解"
+某金融科技,数据问答工程师,深圳,20-35K,RAG/NL2SQL,"RAG,SQL,Python,向量数据库,Prompt"
+某企业服务,AI应用开发工程师,北京,18-32K,AI应用,"Python,FastAPI,LLM,API开发,Docker"
+某电商平台,智能问答系统工程师,杭州,22-38K,RAG/NL2SQL,"RAG,NL2SQL,Python,幻觉控制,评测"
+某AI创业公司,LLM应用工程师,北京,20-35K,AI应用,"Python,Prompt,Function Calling,LangChain"
+某大数据公司,AI数据工程师,上海,23-38K,数据工程(AI),"Python,SQL,数据建模,向量库,ETL"
+某SaaS公司,数据智能应用工程师,深圳,18-30K,RAG/NL2SQL,"Python,SQL,RAG,FastAPI,数据分析"
