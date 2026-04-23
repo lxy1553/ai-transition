@@ -1,0 +1,23 @@
+{
+  "example": "天气API响应示例",
+  "current_condition": [
+    {
+      "temp_C": "18",
+      "FeelsLikeC": "16",
+      "humidity": "45",
+      "weatherDesc": [
+        {
+          "value": "Partly cloudy"
+        }
+      ],
+      "windspeedKmph": "15"
+    }
+  ],
+  "weather": [
+    {
+      "date": "2026-04-25",
+      "maxtempC": "22",
+      "mintempC": "12"
+    }
+  ]
+}

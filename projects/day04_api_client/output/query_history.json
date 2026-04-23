@@ -1,0 +1,29 @@
+[
+  {
+    "city": "beijing",
+    "query_time": "2026-04-23 17:29:34",
+    "temperature": "25",
+    "feels_like": "24",
+    "humidity": "34",
+    "weather_desc": "Sunny",
+    "wind_speed": "21"
+  },
+  {
+    "city": "shanghai",
+    "query_time": "2026-04-23 17:29:37",
+    "temperature": "16",
+    "feels_like": "16",
+    "humidity": "59",
+    "weather_desc": "Partly cloudy",
+    "wind_speed": "9"
+  },
+  {
+    "city": "shenzhen",
+    "query_time": "2026-04-23 17:29:41",
+    "temperature": "24",
+    "feels_like": "26",
+    "humidity": "83",
+    "weather_desc": "Shower in vicinity, rain with thunderstorm, rain shower",
+    "wind_speed": "12"
+  }
+]
