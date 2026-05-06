@@ -431,58 +431,7 @@ with requests.Session() as session:
 
 ---
 
-### 6️⃣ 实战：调用真实API
-
-**完整流程：**
-
-```python
-import requests
-import json
-
-def query_weather(city):
-    """查询天气"""
-    # 1. 准备URL和参数
-    url = f"https://wttr.in/{city}"
-    params = {'format': 'j1'}
-    
-    # 2. 设置请求头
-    headers = {
-        'User-Agent': 'MyWeatherApp/1.0'
-    }
-    
-    # 3. 发送请求
-    try:
-        response = requests.get(
-            url,
-            params=params,
-            headers=headers,
-            timeout=10
-        )
-        response.raise_for_status()
-        
-        # 4. 解析JSON响应
-        data = response.json()
-        
-        # 5. 提取需要的信息
-        current = data['current_condition'][0]
-        weather_info = {
-            'city': city,
-            'temperature': current['temp_C'],
-            'weather': current['weatherDesc'][0]['value'],
-            'humidity': current['humidity']
-        }
-        
-        return weather_info
-        
-    except Exception as e:
-        print(f"查询失败: {e}")
-        return None
-
-# 使用
-weather = query_weather('beijing')
-if weather:
-    print(f"{weather['city']}: {weather['temperature']}°C, {weather['weather']}")
-```
+### 6kia'hsi
 
 ---
 
