@@ -112,7 +112,7 @@ day05_fastapi_service/
 ### 1️⃣ FastAPI是什么？
 
 **大白话：**
-FastAPI是一个现代化的Python Web框架，用来快速开发API。它的特点是：快、自动生成文档、自动校验参数。
+Fdi。
 
 **为什么选FastAPI？**
 - 自动生成API文档（Swagger UI）
