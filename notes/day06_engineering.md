@@ -2,7 +2,8 @@
 
 ## 今日主题
 
-工程化基础
+
+he
 
 ## 今日目标
 
@@ -119,7 +120,8 @@ day06_engineering_service/
 
 **为什么需要配置管理？**
 
-大白话：就像你的手机有"设置"一样，程序也需要设置。不同环境（开发、测试、生产）需要不同的设置，不能把设置写死在代码里。
+大白话：就像你的手机有"设置"一样，程序也需要设置。不同环境（开发、测试、
+生产）需要不同的设置，不能把设置写死在代码里。
 
 **传统方式的问题：**
 
@@ -178,7 +180,7 @@ class Settings(BaseSettings):
     host: str = "127.0.0.1"
     port: int = 8000
     log_level: str = "INFO"
-    
+
     class Config:
         env_file = ".env"  # 自动读取.env文件
 
@@ -308,7 +310,8 @@ format_str = '%(asctime)s - %(name)s - %(levelname)s - %(filename)s:%(lineno)d -
 
 **为什么需要异常处理？**
 
-大白话：程序运行时可能出错（网络断了、文件不存在、数据格式错误），需要优雅地处理这些错误，而不是直接崩溃。
+大白话：程序运行时可能出错（网络断了、文件不存在、数据格式错误），需要优雅地处理这些错误，
+而不是直接崩溃。
 
 **基本用法：**
 
@@ -428,17 +431,17 @@ async def log_requests(request: Request, call_next):
     # 请求开始
     start_time = time.time()
     logger.info(f"请求开始: {request.method} {request.url.path}")
-    
+
     # 处理请求
     response = await call_next(request)
-    
+
     # 请求结束
     process_time = time.time() - start_time
     logger.info(
         f"请求完成: {request.method} {request.url.path} "
         f"状态码={response.status_code} 耗时={process_time:.3f}s"
     )
-    
+
     return response
 ```
 
@@ -501,15 +504,15 @@ class Settings(BaseSettings):
     # 应用配置
     app_name: str = "用户管理API"
     debug: bool = False
-    
+
     # 服务器配置
     host: str = "127.0.0.1"
     port: int = 8000
-    
+
     # 日志配置
     log_level: str = "INFO"
     log_file: str = "logs/app.log"
-    
+
     class Config:
         env_file = ".env"
 
@@ -526,20 +529,20 @@ from logging.handlers import RotatingFileHandler
 def setup_logger(name, log_file, log_level):
     logger = logging.getLogger(name)
     logger.setLevel(log_level)
-    
+
     # 文件处理器
     handler = RotatingFileHandler(
         log_file,
         maxBytes=10*1024*1024,
         backupCount=5
     )
-    
+
     # 格式化
     formatter = logging.Formatter(
         '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     )
     handler.setFormatter(formatter)
-    
+
     logger.addHandler(handler)
     return logger
 
@@ -653,3 +656,34 @@ async def handle_app_exception(request, exc):
 ---
 
 *完成时间：2026-05-07 下午*
+
+---
+
+## 每日核心问题自测
+
+> 回答通过校验后，才把当天学习状态标记为完成。
+> 用户回答通过校验前，不提前写参考答案；通过后在对应问题后追加参考答案。
+
+### 1. AI API 服务为什么需要配置、日志和异常处理？
+
+我的回答：
+
+
+### 2. 为什么密钥、端口和运行环境不应该硬编码在代码里？
+
+我的回答：
+
+
+### 3. 日志里应该记录哪些信息，哪些敏感信息不能记录？
+
+我的回答：
+
+
+### 4. 统一异常处理对前端、调用方和排查有什么价值？
+
+我的回答：
+
+
+### 5. 工程化能力如何支撑后续 RAG API 的稳定性？
+
+我的回答：

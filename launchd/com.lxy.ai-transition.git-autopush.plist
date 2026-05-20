@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.lxy.ai-transition.git-autopush</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/Users/lxy/Documents/ai_transition/scripts/auto_git_push.sh</string>
+  </array>
+  <key>RunAtLoad</key>
+  <false/>
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Hour</key>
+    <integer>23</integer>
+    <key>Minute</key>
+    <integer>30</integer>
+  </dict>
+  <key>StandardOutPath</key>
+  <string>/Users/lxy/Documents/ai_transition/logs/git-autopush.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/lxy/Documents/ai_transition/logs/git-autopush.log</string>
+  <key>WorkingDirectory</key>
+  <string>/Users/lxy/Documents/ai_transition</string>
+</dict>
+</plist>

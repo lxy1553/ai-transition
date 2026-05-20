@@ -1,0 +1,1415 @@
+{
+  "summary": {
+    "total": 20,
+    "answerable_total": 18,
+    "cannot_answer_cases": 2,
+    "hits": 12,
+    "hit_rate": 0.6667,
+    "avg_hit_rank": 1.5,
+    "bad_cases": [
+      {
+        "id": "eval_010",
+        "question": "Tool Use 在 AI 应用里怎么设计？",
+        "question_type": "tool_use",
+        "should_answer": true,
+        "expected_sources": [
+          "notes/day11_tool_use.md"
+        ],
+        "hit": false,
+        "hit_rank": null,
+        "retrieved_count": 5,
+        "top_results": [
+          {
+            "chunk_id": "chunk_59de1d9d2624",
+            "source_path": "notes/terminology_glossary.md",
+            "title": "AI 转型学习术语表",
+            "position": 9,
+            "score": 0.872357,
+            "preview": "| 模型决定调用 `check_sql_risk` 检查 SQL。| Day 11 | | Tool Use | 函数调用 | Function Calling | Tool Us..."
+          },
+          {
+            "chunk_id": "chunk_de277932eb5b",
+            "source_path": "notes/day12_sql_explainer_cli.md",
+            "title": "Day 12 - 项目 1 雏形：SQL 解释助手 CLI",
+            "position": 17,
+            "score": 0.707107,
+            "preview": "### 5. 这个项目和 Prompt、结构化输出、Tool Use 分别有什么关系？ 我的回答："
+          },
+          {
+            "chunk_id": "chunk_43dbf38222a1",
+            "source_path": "notes/terminology_glossary.md",
+            "title": "AI 转型学习术语表",
+            "position": 8,
+            "score": 0.457496,
+            "preview": "| `risk_level` 只能是 `low`、`medium`、`high`。| Day 10 | | 结构化输出 | 风险等级 | risk_level | SQL 或任务的..."
+          },
+          {
+            "chunk_id": "chunk_9822503b8e8e",
+            "source_path": "notes/day12_sql_explainer_cli.md",
+            "title": "Day 12 - 项目 1 雏形：SQL 解释助手 CLI",
+            "position": 3,
+            "score": 0.377964,
+            "preview": "## 今日目标 - 把 Day 9 的 Prompt 思路、Day 10 的结构化输出、Day 11 的 Tool Use 串起来 - 做一个本地可运行的 SQL 解释助手命令行工..."
+          },
+          {
+            "chunk_id": "chunk_e74f0339d836",
+            "source_path": "notes/day15_rag_preparation.md",
+            "title": "Day 15 - RAG 准备：文档资料整理",
+            "position": 18,
+            "score": 0.353553,
+            "preview": "### 3. 第一批 RAG 项目范围 推荐范围： 它包含： - SQL 解释助手项目说明 - SQL 风险规则 - Tool Use 说明 - 结构化输出说明 - 项目讲解提纲..."
+          }
+        ],
+        "risk_tags": [
+          "tool"
+        ]
+      },
+      {
+        "id": "eval_011",
+        "question": "结构化输出为什么要做字段校验？",
+        "question_type": "structured_output",
+        "should_answer": true,
+        "expected_sources": [
+          "notes/day10_structured_output.md"
+        ],
+        "hit": false,
+        "hit_rank": null,
+        "retrieved_count": 5,
+        "top_results": [
+          {
+            "chunk_id": "chunk_b9449d3b19db",
+            "source_path": "notes/terminology_glossary.md",
+            "title": "AI 转型学习术语表",
+            "position": 7,
+            "score": 0.870388,
+            "preview": "| Day 9 | | Prompt 工程 | Prompt 模板版本管理 | Prompt Versioning | 把 Prompt 像代码一样管理版本，方便回滚和对比效果。|..."
+          },
+          {
+            "chunk_id": "chunk_de277932eb5b",
+            "source_path": "notes/day12_sql_explainer_cli.md",
+            "title": "Day 12 - 项目 1 雏形：SQL 解释助手 CLI",
+            "position": 17,
+            "score": 0.707107,
+            "preview": "### 5. 这个项目和 Prompt、结构化输出、Tool Use 分别有什么关系？ 我的回答："
+          },
+          {
+            "chunk_id": "chunk_43dbf38222a1",
+            "source_path": "notes/terminology_glossary.md",
+            "title": "AI 转型学习术语表",
+            "position": 8,
+            "score": 0.609994,
+            "preview": "| `risk_level` 只能是 `low`、`medium`、`high`。| Day 10 | | 结构化输出 | 风险等级 | risk_level | SQL 或任务的..."
+          },
+          {
+            "chunk_id": "chunk_8612b6c967ee",
+            "source_path": "notes/day12_sql_explainer_cli.md",
+            "title": "Day 12 - 项目 1 雏形：SQL 解释助手 CLI",
+            "position": 7,
+            "score": 0.408248,
+            "preview": "### 任务 2：设计结构化输出 输出字段： | 字段 | 说明 | |------|------| | `summary` | SQL 简要说明 | | `tables` | S..."
+          },
+          {
+            "chunk_id": "chunk_a592c57fdeee",
+            "source_path": "notes/day13_sql_explainer_enhancement.md",
+            "title": "Day 13 - 项目 1 强化：风险规则与输出优化",
+            "position": 8,
+            "score": 0.408248,
+            "preview": "## 面试表达 > 我做了一个 SQL 解释助手 CLI，用本地规则先模拟 AI 应用里的工具层。它可以提取 SQL 中的表和字段，识别常见数仓风险，并输出结构化 JSON。后续可..."
+          }
+        ],
+        "risk_tags": [
+          "json"
+        ]
+      },
+      {
+        "id": "eval_012",
+        "question": "Prompt 在生产项目里为什么要管理版本？",
+        "question_type": "prompt",
+        "should_answer": true,
+        "expected_sources": [
+          "notes/day09_prompt_practice.md"
+        ],
+        "hit": false,
+        "hit_rank": null,
+        "retrieved_count": 5,
+        "top_results": [
+          {
+            "chunk_id": "chunk_c7307d7683cb",
+            "source_path": "notes/day17_rag_ingestion.md",
+            "title": "Day 17 - RAG 知识入库：索引构建",
+            "position": 10,
+            "score": 0.707107,
+            "preview": "## 面试沉淀 今天新增一个生产高频问题： 这个问题已补充到： ---"
+          },
+          {
+            "chunk_id": "chunk_60a186b666c2",
+            "source_path": "notes/day18_rag_retrieval_citations.md",
+            "title": "Day 18 - RAG 检索与引用：基础问答脚本",
+            "position": 4,
+            "score": 0.525226,
+            "preview": "## 生产实际 真实公司里的 RAG 在线问答一般会接在一个 API 服务后面。 用户从网页、企业微信、飞书机器人或内部系统提问，后端服务会做： 1. 校验用户身份和权限 2. 判..."
+          },
+          {
+            "chunk_id": "chunk_bc87d24c54cc",
+            "source_path": "notes/day12_sql_explainer_cli.md",
+            "title": "Day 12 - 项目 1 雏形：SQL 解释助手 CLI",
+            "position": 13,
+            "score": 0.5,
+            "preview": "### 1. SQL 解释助手 CLI 要解决什么真实生产问题？ 我的回答："
+          },
+          {
+            "chunk_id": "chunk_2284a2330f60",
+            "source_path": "notes/day15_rag_preparation.md",
+            "title": "Day 15 - RAG 准备：文档资料整理",
+            "position": 22,
+            "score": 0.5,
+            "preview": "### 1. 生产环境里的 RAG 系统一般怎么设计？ 我的回答："
+          },
+          {
+            "chunk_id": "chunk_d246568dcf78",
+            "source_path": "notes/day17_rag_ingestion.md",
+            "title": "Day 17 - RAG 知识入库：索引构建",
+            "position": 9,
+            "score": 0.452911,
+            "preview": "## 生产级理解 面试里如果被问“RAG 入库链路怎么做”，不要只说“把文档向量化”。 更完整的说法是： > 生产级 RAG 入库会先接入原始文档，解析正文，清洗去重和脱敏， >..."
+          }
+        ],
+        "risk_tags": [
+          "prompt"
+        ]
+      },
+      {
+        "id": "eval_013",
+        "question": "FastAPI 在 AI 服务化里承担什么角色？",
+        "question_type": "api_framework",
+        "should_answer": true,
+        "expected_sources": [
+          "notes/day05_fastapi.md"
+        ],
+        "hit": false,
+        "hit_rank": null,
+        "retrieved_count": 5,
+        "top_results": [
+          {
+            "chunk_id": "chunk_cacadc4c58dd",
+            "source_path": "notes/terminology_glossary.md",
+            "title": "AI 转型学习术语表",
+            "position": 21,
+            "score": 1.0,
+            "preview": "| Day 6 | | 工程化 | 环境变量 | Environment Variable | 系统级配置，常用来放密钥和环境开关。| `APP_ENV=dev`、`OPENAI_..."
+          },
+          {
+            "chunk_id": "chunk_5a5dbafbcccb",
+            "source_path": "notes/terminology_glossary.md",
+            "title": "AI 转型学习术语表",
+            "position": 5,
+            "score": 0.980581,
+            "preview": "| Day 8 | | LLM 基础 | Top-p | top_p | 控制模型候选词范围的参数。| 初学阶段先固定 `top_p = 1`。| Day 8 | | LLM 基础..."
+          },
+          {
+            "chunk_id": "chunk_93b86ec4b0c5",
+            "source_path": "notes/terminology_glossary.md",
+            "title": "AI 转型学习术语表",
+            "position": 2,
+            "score": 0.970143,
+            "preview": "## 术语总表 | 分类 | 术语 | 英文 / 缩写 | 大白话解释 | 真实场景 / 例子 | 学习阶段 | |------|------|-------------|----..."
+          },
+          {
+            "chunk_id": "chunk_7c0538f8169d",
+            "source_path": "notes/day20_rag_api.md",
+            "title": "Day 20 - 项目 2 接口化：RAG 问答 API",
+            "position": 3,
+            "score": 0.632456,
+            "preview": "## 大白话解释 脚本是自己在终端里跑，API 是让别人也能调用。 RAG API 就像给知识库问答系统开一个服务窗口。业务系统、前端页面、内部工具都不需要知道 底层怎么切 chu..."
+          },
+          {
+            "chunk_id": "chunk_61a7c91e6a9c",
+            "source_path": "notes/day21_rag_project_review.md",
+            "title": "Day 21 - 周复盘与展示：RAG 项目收口",
+            "position": 16,
+            "score": 0.632456,
+            "preview": "Day 20 是 API 化：用 FastAPI 提供 `/health` 和 `/rag/ask`，响应中返回 answer、citations、 request_id、conf..."
+          }
+        ],
+        "risk_tags": [
+          "fastapi"
+        ]
+      },
+      {
+        "id": "eval_014",
+        "question": "AI API 为什么需要日志、配置和异常处理？",
+        "question_type": "engineering",
+        "should_answer": true,
+        "expected_sources": [
+          "notes/day06_engineering.md"
+        ],
+        "hit": false,
+        "hit_rank": null,
+        "retrieved_count": 5,
+        "top_results": [
+          {
+            "chunk_id": "chunk_cacadc4c58dd",
+            "source_path": "notes/terminology_glossary.md",
+            "title": "AI 转型学习术语表",
+            "position": 21,
+            "score": 1.0,
+            "preview": "| Day 6 | | 工程化 | 环境变量 | Environment Variable | 系统级配置，常用来放密钥和环境开关。| `APP_ENV=dev`、`OPENAI_..."
+          },
+          {
+            "chunk_id": "chunk_5a5dbafbcccb",
+            "source_path": "notes/terminology_glossary.md",
+            "title": "AI 转型学习术语表",
+            "position": 5,
+            "score": 0.980581,
+            "preview": "| Day 8 | | LLM 基础 | Top-p | top_p | 控制模型候选词范围的参数。| 初学阶段先固定 `top_p = 1`。| Day 8 | | LLM 基础..."
+          },
+          {
+            "chunk_id": "chunk_93b86ec4b0c5",
+            "source_path": "notes/terminology_glossary.md",
+            "title": "AI 转型学习术语表",
+            "position": 2,
+            "score": 0.970143,
+            "preview": "## 术语总表 | 分类 | 术语 | 英文 / 缩写 | 大白话解释 | 真实场景 / 例子 | 学习阶段 | |------|------|-------------|----..."
+          },
+          {
+            "chunk_id": "chunk_7c0538f8169d",
+            "source_path": "notes/day20_rag_api.md",
+            "title": "Day 20 - 项目 2 接口化：RAG 问答 API",
+            "position": 3,
+            "score": 0.632456,
+            "preview": "## 大白话解释 脚本是自己在终端里跑，API 是让别人也能调用。 RAG API 就像给知识库问答系统开一个服务窗口。业务系统、前端页面、内部工具都不需要知道 底层怎么切 chu..."
+          },
+          {
+            "chunk_id": "chunk_61a7c91e6a9c",
+            "source_path": "notes/day21_rag_project_review.md",
+            "title": "Day 21 - 周复盘与展示：RAG 项目收口",
+            "position": 16,
+            "score": 0.632456,
+            "preview": "Day 20 是 API 化：用 FastAPI 提供 `/health` 和 `/rag/ask`，响应中返回 answer、citations、 request_id、conf..."
+          }
+        ],
+        "risk_tags": [
+          "engineering"
+        ]
+      },
+      {
+        "id": "eval_015",
+        "question": "数据仓库经验怎么迁移到 AI 数据问答？",
+        "question_type": "career_transfer",
+        "should_answer": true,
+        "expected_sources": [
+          "notes/day14_week2_review.md"
+        ],
+        "hit": false,
+        "hit_rank": null,
+        "retrieved_count": 5,
+        "top_results": [
+          {
+            "chunk_id": "chunk_49da4e475095",
+            "source_path": "notes/day21_rag_project_review.md",
+            "title": "Day 21 - 周复盘与展示：RAG 项目收口",
+            "position": 6,
+            "score": 1.0,
+            "preview": "## 工程取舍 项目展示不是把所有细节堆上去，而是按主线组织。 建议顺序： 这个顺序能体现你理解的不只是模型调用，而是一套可落地的知识问答系统。 ---"
+          },
+          {
+            "chunk_id": "chunk_fbd202142364",
+            "source_path": "notes/day15_rag_preparation.md",
+            "title": "Day 15 - RAG 准备：文档资料整理",
+            "position": 4,
+            "score": 0.707107,
+            "preview": "## 第 3 周主线 第 3 周的目标是做出一个最小 RAG 问答项目。 学习顺序："
+          },
+          {
+            "chunk_id": "chunk_f4dbdf7ea805",
+            "source_path": "notes/day18_rag_retrieval_citations.md",
+            "title": "Day 18 - RAG 检索与引用：基础问答脚本",
+            "position": 16,
+            "score": 0.57735,
+            "preview": "### 5. 在线问答链路和 Day 17 离线入库链路如何配合？ 我的回答："
+          },
+          {
+            "chunk_id": "chunk_6dcebf698515",
+            "source_path": "notes/day20_rag_api.md",
+            "title": "Day 20 - 项目 2 接口化：RAG 问答 API",
+            "position": 1,
+            "score": 0.57735,
+            "preview": "# Day 20 - 项目 2 接口化：RAG 问答 API"
+          },
+          {
+            "chunk_id": "chunk_f557259b0a00",
+            "source_path": "notes/day18_rag_retrieval_citations.md",
+            "title": "Day 18 - RAG 检索与引用：基础问答脚本",
+            "position": 1,
+            "score": 0.5,
+            "preview": "# Day 18 - RAG 检索与引用：基础问答脚本"
+          }
+        ],
+        "risk_tags": [
+          "career"
+        ]
+      }
+    ]
+  },
+  "evaluations": [
+    {
+      "id": "eval_001",
+      "question": "RAG 知识入库怎么设计？",
+      "question_type": "ingestion",
+      "should_answer": true,
+      "expected_sources": [
+        "notes/day17_rag_ingestion.md"
+      ],
+      "hit": true,
+      "hit_rank": 2,
+      "retrieved_count": 5,
+      "top_results": [
+        {
+          "chunk_id": "chunk_edc1b2c61a26",
+          "source_path": "notes/day15_rag_preparation.md",
+          "title": "Day 15 - RAG 准备：文档资料整理",
+          "position": 19,
+          "score": 0.816496,
+          "preview": "## 今日复盘 待填写： 1. 今天选定的第一批知识库资料： 2. 哪些资料暂时不适合入库： 3. 明天学习 RAG 基础时最想弄懂的问题："
+        },
+        {
+          "chunk_id": "chunk_e7b48e6cc204",
+          "source_path": "notes/day17_rag_ingestion.md",
+          "title": "Day 17 - RAG 知识入库：索引构建",
+          "position": 1,
+          "score": 0.816496,
+          "preview": "# Day 17 - RAG 知识入库：索引构建"
+        },
+        {
+          "chunk_id": "chunk_f48055c54d63",
+          "source_path": "notes/day16_rag_basics.md",
+          "title": "Day 16 - RAG 基础：切分、Embedding、召回",
+          "position": 5,
+          "score": 0.707107,
+          "preview": "### 任务 1：理解 RAG 完整流程 RAG 不是直接把问题丢给模型，而是多了一步“先找资料”。 完整流程："
+        },
+        {
+          "chunk_id": "chunk_f4493c1c032a",
+          "source_path": "notes/day16_rag_basics.md",
+          "title": "Day 16 - RAG 基础：切分、Embedding、召回",
+          "position": 10,
+          "score": 0.707107,
+          "preview": "## RAG 流程图"
+        },
+        {
+          "chunk_id": "chunk_8af18f18eaa3",
+          "source_path": "notes/day16_rag_basics.md",
+          "title": "Day 16 - RAG 基础：切分、Embedding、召回",
+          "position": 17,
+          "score": 0.707107,
+          "preview": "### 1. RAG 的基本流程是什么？ 我的回答："
+        }
+      ],
+      "risk_tags": [
+        "core_flow"
+      ]
+    },
+    {
+      "id": "eval_002",
+      "question": "为什么 RAG 要返回引用来源？",
+      "question_type": "citation",
+      "should_answer": true,
+      "expected_sources": [
+        "notes/day18_rag_retrieval_citations.md"
+      ],
+      "hit": true,
+      "hit_rank": 2,
+      "retrieved_count": 5,
+      "top_results": [
+        {
+          "chunk_id": "chunk_9cee8c7fc5e9",
+          "source_path": "notes/day16_rag_basics.md",
+          "title": "Day 16 - RAG 基础：切分、Embedding、召回",
+          "position": 21,
+          "score": 0.999999,
+          "preview": "### 5. 为什么 RAG 需要返回引用来源，而不只是答案？ 我的回答："
+        },
+        {
+          "chunk_id": "chunk_b27caeb0574d",
+          "source_path": "notes/day18_rag_retrieval_citations.md",
+          "title": "Day 18 - RAG 检索与引用：基础问答脚本",
+          "position": 8,
+          "score": 0.870388,
+          "preview": "## 今日核心理解 RAG 问答不是“模型自由回答”，而是“先找依据，再基于依据回答”。 今天要重点记住： 1. 检索结果决定答案上限。 2. 引用来源决定答案是否可信。 3. 没..."
+        },
+        {
+          "chunk_id": "chunk_c119bd554e41",
+          "source_path": "notes/day20_rag_api.md",
+          "title": "Day 20 - 项目 2 接口化：RAG 问答 API",
+          "position": 13,
+          "score": 0.854242,
+          "preview": "### 2. RAG 为什么要返回引用来源？ 我的回答： 方便后续问题的追踪排查，维护和审计， 参考答案： RAG 返回引用来源是为了让答案可核对、可追溯、可排查。企业场景里用户不..."
+        },
+        {
+          "chunk_id": "chunk_9f5219c09eef",
+          "source_path": "notes/day18_rag_retrieval_citations.md",
+          "title": "Day 18 - RAG 检索与引用：基础问答脚本",
+          "position": 12,
+          "score": 0.774597,
+          "preview": "### 1. RAG 在线问答为什么必须返回引用来源？ 我的回答："
+        },
+        {
+          "chunk_id": "chunk_e1d5eb9614e3",
+          "source_path": "notes/day20_rag_api.md",
+          "title": "Day 20 - 项目 2 接口化：RAG 问答 API",
+          "position": 9,
+          "score": 0.725866,
+          "preview": "### 回答 RAG API 不能只设计成一个返回字符串的接口。生产里至少要包括请求校验、用户身份、 权限上下文、问题文本、召回参数、答案、引用来源、request_id、错误码和..."
+        }
+      ],
+      "risk_tags": [
+        "citation"
+      ]
+    },
+    {
+      "id": "eval_003",
+      "question": "SQL 解释助手能检查哪些风险？",
+      "question_type": "sql_risk",
+      "should_answer": true,
+      "expected_sources": [
+        "notes/day12_sql_explainer_cli.md",
+        "notes/day13_sql_explainer_enhancement.md"
+      ],
+      "hit": true,
+      "hit_rank": 1,
+      "retrieved_count": 5,
+      "top_results": [
+        {
+          "chunk_id": "chunk_eda7032ded2d",
+          "source_path": "notes/day12_sql_explainer_cli.md",
+          "title": "Day 12 - 项目 1 雏形：SQL 解释助手 CLI",
+          "position": 10,
+          "score": 1.0,
+          "preview": "## 今日完成标准 - [x] CLI 可以运行 - [ ] 输出是合法 JSON - [ ] 至少识别 5 类 SQL 风险 - [ ] 能解释这个项目和 Day 9-11 的关..."
+        },
+        {
+          "chunk_id": "chunk_b832dc4feb28",
+          "source_path": "notes/day13_sql_explainer_enhancement.md",
+          "title": "Day 13 - 项目 1 强化：风险规则与输出优化",
+          "position": 3,
+          "score": 1.0,
+          "preview": "## 今日目标 - 强化 SQL 风险规则 - 优化 README，让别人能独立运行 - 准备 Day 14 的项目讲解 - 把项目表达成 AI 应用工程能力，而不是普通脚本"
+        },
+        {
+          "chunk_id": "chunk_5d7a08bfe771",
+          "source_path": "notes/day13_sql_explainer_enhancement.md",
+          "title": "Day 13 - 项目 1 强化：风险规则与输出优化",
+          "position": 12,
+          "score": 1.0,
+          "preview": "### 1. 为什么 SQL 风险检查不能完全依赖 LLM？ 我的回答："
+        },
+        {
+          "chunk_id": "chunk_4bb1b098e582",
+          "source_path": "notes/day13_sql_explainer_enhancement.md",
+          "title": "Day 13 - 项目 1 强化：风险规则与输出优化",
+          "position": 13,
+          "score": 1.0,
+          "preview": "### 2. SQL 解释助手至少应该覆盖哪些高频风险规则？ 我的回答："
+        },
+        {
+          "chunk_id": "chunk_92bee45af78d",
+          "source_path": "notes/day12_sql_explainer_cli.md",
+          "title": "Day 12 - 项目 1 雏形：SQL 解释助手 CLI",
+          "position": 2,
+          "score": 0.948684,
+          "preview": "## 今日主题 SQL 解释助手 CLI：输入 SQL，输出解释、风险和建议"
+        }
+      ],
+      "risk_tags": [
+        "sql"
+      ]
+    },
+    {
+      "id": "eval_004",
+      "question": "query rewrite 解决什么问题？",
+      "question_type": "query_rewrite",
+      "should_answer": true,
+      "expected_sources": [
+        "notes/day22_query_rewrite.md"
+      ],
+      "hit": true,
+      "hit_rank": 1,
+      "retrieved_count": 5,
+      "top_results": [
+        {
+          "chunk_id": "chunk_da8ceaad3d57",
+          "source_path": "notes/day22_query_rewrite.md",
+          "title": "Day 22 - RAG 进阶：Query Rewrite",
+          "position": 1,
+          "score": 0.816496,
+          "preview": "# Day 22 - RAG 进阶：Query Rewrite"
+        },
+        {
+          "chunk_id": "chunk_9568562f6366",
+          "source_path": "notes/day22_query_rewrite.md",
+          "title": "Day 22 - RAG 进阶：Query Rewrite",
+          "position": 4,
+          "score": 0.721688,
+          "preview": "## 生产实际 生产 RAG 里，用户问题通常不标准： - 省略主语，比如“这个怎么处理？” - 使用口语，比如“问不出来怎么办？” - 使用同义词，比如“资料出处”和“引用来源”..."
+        },
+        {
+          "chunk_id": "chunk_43c59fc5a6d8",
+          "source_path": "notes/day22_query_rewrite.md",
+          "title": "Day 22 - RAG 进阶：Query Rewrite",
+          "position": 10,
+          "score": 0.707107,
+          "preview": "## 今日复盘 今天要记住三句话： 1. query rewrite 是为了让检索更容易命中正确资料。 2. 改写必须保留用户原意，不能为了命中而乱加词。 3. rewrite 是..."
+        },
+        {
+          "chunk_id": "chunk_67b54f712bd8",
+          "source_path": "notes/day23_rag_eval_testset.md",
+          "title": "Day 23 - 评测意识：构建 RAG 测试集",
+          "position": 16,
+          "score": 0.707107,
+          "preview": "### 6. 每次改 chunk、top-k、query rewrite 或 prompt 后，为什么要跑同一批测试集？ 我的回答："
+        },
+        {
+          "chunk_id": "chunk_f59ed72117bd",
+          "source_path": "notes/day20_rag_api.md",
+          "title": "Day 20 - 项目 2 接口化：RAG 问答 API",
+          "position": 15,
+          "score": 0.701647,
+          "preview": "### 4. query rewrite 解决什么问题？ 我的回答： 核心作用是把用户提出的问题进行重写变成为方便理解，向量检索，调用的query，具体方便有问题的拆分，基于上下文..."
+        }
+      ],
+      "risk_tags": [
+        "rewrite"
+      ]
+    },
+    {
+      "id": "eval_005",
+      "question": "RAG 召回质量差怎么排查？",
+      "question_type": "retrieval_debug",
+      "should_answer": true,
+      "expected_sources": [
+        "notes/day19_rag_retrieval_optimization.md"
+      ],
+      "hit": true,
+      "hit_rank": 1,
+      "retrieved_count": 5,
+      "top_results": [
+        {
+          "chunk_id": "chunk_d6117b5ba232",
+          "source_path": "notes/day19_rag_retrieval_optimization.md",
+          "title": "Day 19 - RAG 优化：召回质量",
+          "position": 1,
+          "score": 1.0,
+          "preview": "# Day 19 - RAG 优化：召回质量"
+        },
+        {
+          "chunk_id": "chunk_80c38b53bb10",
+          "source_path": "notes/day19_rag_retrieval_optimization.md",
+          "title": "Day 19 - RAG 优化：召回质量",
+          "position": 12,
+          "score": 1.0,
+          "preview": "### 1. RAG 召回质量差时，你会怎么排查和优化？ 我的回答："
+        },
+        {
+          "chunk_id": "chunk_f8a5102f18a1",
+          "source_path": "notes/day16_rag_basics.md",
+          "title": "Day 16 - RAG 基础：切分、Embedding、召回",
+          "position": 1,
+          "score": 0.816496,
+          "preview": "# Day 16 - RAG 基础：切分、Embedding、召回"
+        },
+        {
+          "chunk_id": "chunk_bc66b250d50a",
+          "source_path": "notes/terminology_glossary.md",
+          "title": "AI 转型学习术语表",
+          "position": 19,
+          "score": 0.777818,
+          "preview": "| Day 19 | | RAG | 混合检索 | Hybrid Search | 同时使用关键词检索和向量检索。| 表名字段用关键词，业务语义用向量。| Day 19 | | R..."
+        },
+        {
+          "chunk_id": "chunk_366ff3728e8f",
+          "source_path": "notes/day19_rag_retrieval_optimization.md",
+          "title": "Day 19 - RAG 优化：召回质量",
+          "position": 2,
+          "score": 0.755929,
+          "preview": "## 今日目标 今天学习 RAG 的召回质量优化。 Day 17 已经完成知识入库，Day 18 已经完成基础检索和引用。 Day 19 要解决的问题是： **系统能不能把真正有用..."
+        }
+      ],
+      "risk_tags": [
+        "bad_case"
+      ]
+    },
+    {
+      "id": "eval_006",
+      "question": "RAG 问答 API 生产环境应该怎么设计？",
+      "question_type": "api_design",
+      "should_answer": true,
+      "expected_sources": [
+        "notes/day20_rag_api.md"
+      ],
+      "hit": true,
+      "hit_rank": 1,
+      "retrieved_count": 5,
+      "top_results": [
+        {
+          "chunk_id": "chunk_5cfadcc4601c",
+          "source_path": "notes/day20_rag_api.md",
+          "title": "Day 20 - 项目 2 接口化：RAG 问答 API",
+          "position": 8,
+          "score": 1.0,
+          "preview": "## 面试沉淀 Q030：RAG 问答 API 在生产环境里应该怎么设计？"
+        },
+        {
+          "chunk_id": "chunk_6dcebf698515",
+          "source_path": "notes/day20_rag_api.md",
+          "title": "Day 20 - 项目 2 接口化：RAG 问答 API",
+          "position": 1,
+          "score": 0.866025,
+          "preview": "# Day 20 - 项目 2 接口化：RAG 问答 API"
+        },
+        {
+          "chunk_id": "chunk_0ff216010740",
+          "source_path": "notes/day20_rag_api.md",
+          "title": "Day 20 - 项目 2 接口化：RAG 问答 API",
+          "position": 4,
+          "score": 0.784464,
+          "preview": "## 生产实际 真实公司里 RAG 很少只以脚本形式存在。它通常会被包装成服务，接到： - 内部知识库问答页面 - 数据平台指标问答入口 - BI 或报表平台助手 - 客服系统和工..."
+        },
+        {
+          "chunk_id": "chunk_9c0088a2f77b",
+          "source_path": "notes/day20_rag_api.md",
+          "title": "Day 20 - 项目 2 接口化：RAG 问答 API",
+          "position": 17,
+          "score": 0.762712,
+          "preview": "### 6.RAG 问答 API 在生产环境里应该怎么设计？我的回答： api 的设计第一性原则原则是保证外部能够稳定的调用接口， 基于这个原则所以不能简单的的设计成返回字符串，和..."
+        },
+        {
+          "chunk_id": "chunk_fbd202142364",
+          "source_path": "notes/day15_rag_preparation.md",
+          "title": "Day 15 - RAG 准备：文档资料整理",
+          "position": 4,
+          "score": 0.707107,
+          "preview": "## 第 3 周主线 第 3 周的目标是做出一个最小 RAG 问答项目。 学习顺序："
+        }
+      ],
+      "risk_tags": [
+        "api"
+      ]
+    },
+    {
+      "id": "eval_007",
+      "question": "怎么把一个 RAG 项目包装成可展示作品？",
+      "question_type": "project_packaging",
+      "should_answer": true,
+      "expected_sources": [
+        "notes/day21_rag_project_review.md"
+      ],
+      "hit": true,
+      "hit_rank": 4,
+      "retrieved_count": 5,
+      "top_results": [
+        {
+          "chunk_id": "chunk_f48055c54d63",
+          "source_path": "notes/day16_rag_basics.md",
+          "title": "Day 16 - RAG 基础：切分、Embedding、召回",
+          "position": 5,
+          "score": 1.0,
+          "preview": "### 任务 1：理解 RAG 完整流程 RAG 不是直接把问题丢给模型，而是多了一步“先找资料”。 完整流程："
+        },
+        {
+          "chunk_id": "chunk_f4493c1c032a",
+          "source_path": "notes/day16_rag_basics.md",
+          "title": "Day 16 - RAG 基础：切分、Embedding、召回",
+          "position": 10,
+          "score": 1.0,
+          "preview": "## RAG 流程图"
+        },
+        {
+          "chunk_id": "chunk_8af18f18eaa3",
+          "source_path": "notes/day16_rag_basics.md",
+          "title": "Day 16 - RAG 基础：切分、Embedding、召回",
+          "position": 17,
+          "score": 1.0,
+          "preview": "### 1. RAG 的基本流程是什么？ 我的回答："
+        },
+        {
+          "chunk_id": "chunk_e30ccbefb372",
+          "source_path": "notes/day21_rag_project_review.md",
+          "title": "Day 21 - 周复盘与展示：RAG 项目收口",
+          "position": 1,
+          "score": 1.0,
+          "preview": "# Day 21 - 周复盘与展示：RAG 项目收口"
+        },
+        {
+          "chunk_id": "chunk_12f633c83674",
+          "source_path": "notes/day21_rag_project_review.md",
+          "title": "Day 21 - 周复盘与展示：RAG 项目收口",
+          "position": 2,
+          "score": 1.0,
+          "preview": "## 今日目标 今天把 RAG 项目从“能跑”整理成“别人能看懂、能启动、能评估”的状态。 今天产出： - 项目 README 补全 - 接口说明补全 - 常见失败场景列表 - 演..."
+        }
+      ],
+      "risk_tags": [
+        "demo"
+      ]
+    },
+    {
+      "id": "eval_008",
+      "question": "为什么生产级 RAG 要分离线入库和在线问答？",
+      "question_type": "architecture",
+      "should_answer": true,
+      "expected_sources": [
+        "notes/day17_rag_ingestion.md"
+      ],
+      "hit": true,
+      "hit_rank": 1,
+      "retrieved_count": 5,
+      "top_results": [
+        {
+          "chunk_id": "chunk_4e3d853564f6",
+          "source_path": "notes/day17_rag_ingestion.md",
+          "title": "Day 17 - RAG 知识入库：索引构建",
+          "position": 15,
+          "score": 1.0,
+          "preview": "### 2. 为什么生产级 RAG 要分离线入库和在线问答两条链路？ 我的回答："
+        },
+        {
+          "chunk_id": "chunk_f4dbdf7ea805",
+          "source_path": "notes/day18_rag_retrieval_citations.md",
+          "title": "Day 18 - RAG 检索与引用：基础问答脚本",
+          "position": 16,
+          "score": 0.774597,
+          "preview": "### 5. 在线问答链路和 Day 17 离线入库链路如何配合？ 我的回答："
+        },
+        {
+          "chunk_id": "chunk_f848893036a5",
+          "source_path": "notes/day17_rag_ingestion.md",
+          "title": "Day 17 - RAG 知识入库：索引构建",
+          "position": 14,
+          "score": 0.670821,
+          "preview": "### 1. RAG 知识入库和索引构建在生产环境里怎么设计？ 我的回答："
+        },
+        {
+          "chunk_id": "chunk_5cfadcc4601c",
+          "source_path": "notes/day20_rag_api.md",
+          "title": "Day 20 - 项目 2 接口化：RAG 问答 API",
+          "position": 8,
+          "score": 0.670821,
+          "preview": "## 面试沉淀 Q030：RAG 问答 API 在生产环境里应该怎么设计？"
+        },
+        {
+          "chunk_id": "chunk_fbd202142364",
+          "source_path": "notes/day15_rag_preparation.md",
+          "title": "Day 15 - RAG 准备：文档资料整理",
+          "position": 4,
+          "score": 0.632456,
+          "preview": "## 第 3 周主线 第 3 周的目标是做出一个最小 RAG 问答项目。 学习顺序："
+        }
+      ],
+      "risk_tags": [
+        "architecture"
+      ]
+    },
+    {
+      "id": "eval_009",
+      "question": "RAG 文档切分时 chunk 怎么设计？",
+      "question_type": "chunking",
+      "should_answer": true,
+      "expected_sources": [
+        "notes/day16_rag_basics.md"
+      ],
+      "hit": true,
+      "hit_rank": 1,
+      "retrieved_count": 5,
+      "top_results": [
+        {
+          "chunk_id": "chunk_048a28b1a3e2",
+          "source_path": "notes/day16_rag_basics.md",
+          "title": "Day 16 - RAG 基础：切分、Embedding、召回",
+          "position": 18,
+          "score": 0.999999,
+          "preview": "### 2. RAG 文档切分时怎么设计 chunk？ 我的回答："
+        },
+        {
+          "chunk_id": "chunk_7a98cd62ca5d",
+          "source_path": "notes/terminology_glossary.md",
+          "title": "AI 转型学习术语表",
+          "position": 13,
+          "score": 0.838158,
+          "preview": "| Day 15+ | | RAG | Generation | Generation | 生成，模型根据资料组织最终回答。| 基于口径文档解释 active_users。| Da..."
+        },
+        {
+          "chunk_id": "chunk_93dbc488b7e6",
+          "source_path": "notes/day15_rag_preparation.md",
+          "title": "Day 15 - RAG 准备：文档资料整理",
+          "position": 1,
+          "score": 0.816496,
+          "preview": "# Day 15 - RAG 准备：文档资料整理"
+        },
+        {
+          "chunk_id": "chunk_3d2b1d6257b2",
+          "source_path": "notes/day15_rag_preparation.md",
+          "title": "Day 15 - RAG 准备：文档资料整理",
+          "position": 20,
+          "score": 0.816496,
+          "preview": "## 明日预告 Day 16：RAG 基础 重点： - chunk 文档切分 - embedding 向量表示 - top-k 检索 - RAG 流程图 ---"
+        },
+        {
+          "chunk_id": "chunk_b4a1711e5877",
+          "source_path": "notes/day16_rag_basics.md",
+          "title": "Day 16 - RAG 基础：切分、Embedding、召回",
+          "position": 3,
+          "score": 0.7698,
+          "preview": "## 今日目标 - 理解 RAG 的完整流程 - 理解为什么要做文档切分 chunk - 理解 embedding 是什么，以及它为什么能做语义检索 - 理解 top-k 召回是什..."
+        }
+      ],
+      "risk_tags": [
+        "chunk"
+      ]
+    },
+    {
+      "id": "eval_010",
+      "question": "Tool Use 在 AI 应用里怎么设计？",
+      "question_type": "tool_use",
+      "should_answer": true,
+      "expected_sources": [
+        "notes/day11_tool_use.md"
+      ],
+      "hit": false,
+      "hit_rank": null,
+      "retrieved_count": 5,
+      "top_results": [
+        {
+          "chunk_id": "chunk_59de1d9d2624",
+          "source_path": "notes/terminology_glossary.md",
+          "title": "AI 转型学习术语表",
+          "position": 9,
+          "score": 0.872357,
+          "preview": "| 模型决定调用 `check_sql_risk` 检查 SQL。| Day 11 | | Tool Use | 函数调用 | Function Calling | Tool Us..."
+        },
+        {
+          "chunk_id": "chunk_de277932eb5b",
+          "source_path": "notes/day12_sql_explainer_cli.md",
+          "title": "Day 12 - 项目 1 雏形：SQL 解释助手 CLI",
+          "position": 17,
+          "score": 0.707107,
+          "preview": "### 5. 这个项目和 Prompt、结构化输出、Tool Use 分别有什么关系？ 我的回答："
+        },
+        {
+          "chunk_id": "chunk_43dbf38222a1",
+          "source_path": "notes/terminology_glossary.md",
+          "title": "AI 转型学习术语表",
+          "position": 8,
+          "score": 0.457496,
+          "preview": "| `risk_level` 只能是 `low`、`medium`、`high`。| Day 10 | | 结构化输出 | 风险等级 | risk_level | SQL 或任务的..."
+        },
+        {
+          "chunk_id": "chunk_9822503b8e8e",
+          "source_path": "notes/day12_sql_explainer_cli.md",
+          "title": "Day 12 - 项目 1 雏形：SQL 解释助手 CLI",
+          "position": 3,
+          "score": 0.377964,
+          "preview": "## 今日目标 - 把 Day 9 的 Prompt 思路、Day 10 的结构化输出、Day 11 的 Tool Use 串起来 - 做一个本地可运行的 SQL 解释助手命令行工..."
+        },
+        {
+          "chunk_id": "chunk_e74f0339d836",
+          "source_path": "notes/day15_rag_preparation.md",
+          "title": "Day 15 - RAG 准备：文档资料整理",
+          "position": 18,
+          "score": 0.353553,
+          "preview": "### 3. 第一批 RAG 项目范围 推荐范围： 它包含： - SQL 解释助手项目说明 - SQL 风险规则 - Tool Use 说明 - 结构化输出说明 - 项目讲解提纲..."
+        }
+      ],
+      "risk_tags": [
+        "tool"
+      ]
+    },
+    {
+      "id": "eval_011",
+      "question": "结构化输出为什么要做字段校验？",
+      "question_type": "structured_output",
+      "should_answer": true,
+      "expected_sources": [
+        "notes/day10_structured_output.md"
+      ],
+      "hit": false,
+      "hit_rank": null,
+      "retrieved_count": 5,
+      "top_results": [
+        {
+          "chunk_id": "chunk_b9449d3b19db",
+          "source_path": "notes/terminology_glossary.md",
+          "title": "AI 转型学习术语表",
+          "position": 7,
+          "score": 0.870388,
+          "preview": "| Day 9 | | Prompt 工程 | Prompt 模板版本管理 | Prompt Versioning | 把 Prompt 像代码一样管理版本，方便回滚和对比效果。|..."
+        },
+        {
+          "chunk_id": "chunk_de277932eb5b",
+          "source_path": "notes/day12_sql_explainer_cli.md",
+          "title": "Day 12 - 项目 1 雏形：SQL 解释助手 CLI",
+          "position": 17,
+          "score": 0.707107,
+          "preview": "### 5. 这个项目和 Prompt、结构化输出、Tool Use 分别有什么关系？ 我的回答："
+        },
+        {
+          "chunk_id": "chunk_43dbf38222a1",
+          "source_path": "notes/terminology_glossary.md",
+          "title": "AI 转型学习术语表",
+          "position": 8,
+          "score": 0.609994,
+          "preview": "| `risk_level` 只能是 `low`、`medium`、`high`。| Day 10 | | 结构化输出 | 风险等级 | risk_level | SQL 或任务的..."
+        },
+        {
+          "chunk_id": "chunk_8612b6c967ee",
+          "source_path": "notes/day12_sql_explainer_cli.md",
+          "title": "Day 12 - 项目 1 雏形：SQL 解释助手 CLI",
+          "position": 7,
+          "score": 0.408248,
+          "preview": "### 任务 2：设计结构化输出 输出字段： | 字段 | 说明 | |------|------| | `summary` | SQL 简要说明 | | `tables` | S..."
+        },
+        {
+          "chunk_id": "chunk_a592c57fdeee",
+          "source_path": "notes/day13_sql_explainer_enhancement.md",
+          "title": "Day 13 - 项目 1 强化：风险规则与输出优化",
+          "position": 8,
+          "score": 0.408248,
+          "preview": "## 面试表达 > 我做了一个 SQL 解释助手 CLI，用本地规则先模拟 AI 应用里的工具层。它可以提取 SQL 中的表和字段，识别常见数仓风险，并输出结构化 JSON。后续可..."
+        }
+      ],
+      "risk_tags": [
+        "json"
+      ]
+    },
+    {
+      "id": "eval_012",
+      "question": "Prompt 在生产项目里为什么要管理版本？",
+      "question_type": "prompt",
+      "should_answer": true,
+      "expected_sources": [
+        "notes/day09_prompt_practice.md"
+      ],
+      "hit": false,
+      "hit_rank": null,
+      "retrieved_count": 5,
+      "top_results": [
+        {
+          "chunk_id": "chunk_c7307d7683cb",
+          "source_path": "notes/day17_rag_ingestion.md",
+          "title": "Day 17 - RAG 知识入库：索引构建",
+          "position": 10,
+          "score": 0.707107,
+          "preview": "## 面试沉淀 今天新增一个生产高频问题： 这个问题已补充到： ---"
+        },
+        {
+          "chunk_id": "chunk_60a186b666c2",
+          "source_path": "notes/day18_rag_retrieval_citations.md",
+          "title": "Day 18 - RAG 检索与引用：基础问答脚本",
+          "position": 4,
+          "score": 0.525226,
+          "preview": "## 生产实际 真实公司里的 RAG 在线问答一般会接在一个 API 服务后面。 用户从网页、企业微信、飞书机器人或内部系统提问，后端服务会做： 1. 校验用户身份和权限 2. 判..."
+        },
+        {
+          "chunk_id": "chunk_bc87d24c54cc",
+          "source_path": "notes/day12_sql_explainer_cli.md",
+          "title": "Day 12 - 项目 1 雏形：SQL 解释助手 CLI",
+          "position": 13,
+          "score": 0.5,
+          "preview": "### 1. SQL 解释助手 CLI 要解决什么真实生产问题？ 我的回答："
+        },
+        {
+          "chunk_id": "chunk_2284a2330f60",
+          "source_path": "notes/day15_rag_preparation.md",
+          "title": "Day 15 - RAG 准备：文档资料整理",
+          "position": 22,
+          "score": 0.5,
+          "preview": "### 1. 生产环境里的 RAG 系统一般怎么设计？ 我的回答："
+        },
+        {
+          "chunk_id": "chunk_d246568dcf78",
+          "source_path": "notes/day17_rag_ingestion.md",
+          "title": "Day 17 - RAG 知识入库：索引构建",
+          "position": 9,
+          "score": 0.452911,
+          "preview": "## 生产级理解 面试里如果被问“RAG 入库链路怎么做”，不要只说“把文档向量化”。 更完整的说法是： > 生产级 RAG 入库会先接入原始文档，解析正文，清洗去重和脱敏， >..."
+        }
+      ],
+      "risk_tags": [
+        "prompt"
+      ]
+    },
+    {
+      "id": "eval_013",
+      "question": "FastAPI 在 AI 服务化里承担什么角色？",
+      "question_type": "api_framework",
+      "should_answer": true,
+      "expected_sources": [
+        "notes/day05_fastapi.md"
+      ],
+      "hit": false,
+      "hit_rank": null,
+      "retrieved_count": 5,
+      "top_results": [
+        {
+          "chunk_id": "chunk_cacadc4c58dd",
+          "source_path": "notes/terminology_glossary.md",
+          "title": "AI 转型学习术语表",
+          "position": 21,
+          "score": 1.0,
+          "preview": "| Day 6 | | 工程化 | 环境变量 | Environment Variable | 系统级配置，常用来放密钥和环境开关。| `APP_ENV=dev`、`OPENAI_..."
+        },
+        {
+          "chunk_id": "chunk_5a5dbafbcccb",
+          "source_path": "notes/terminology_glossary.md",
+          "title": "AI 转型学习术语表",
+          "position": 5,
+          "score": 0.980581,
+          "preview": "| Day 8 | | LLM 基础 | Top-p | top_p | 控制模型候选词范围的参数。| 初学阶段先固定 `top_p = 1`。| Day 8 | | LLM 基础..."
+        },
+        {
+          "chunk_id": "chunk_93b86ec4b0c5",
+          "source_path": "notes/terminology_glossary.md",
+          "title": "AI 转型学习术语表",
+          "position": 2,
+          "score": 0.970143,
+          "preview": "## 术语总表 | 分类 | 术语 | 英文 / 缩写 | 大白话解释 | 真实场景 / 例子 | 学习阶段 | |------|------|-------------|----..."
+        },
+        {
+          "chunk_id": "chunk_7c0538f8169d",
+          "source_path": "notes/day20_rag_api.md",
+          "title": "Day 20 - 项目 2 接口化：RAG 问答 API",
+          "position": 3,
+          "score": 0.632456,
+          "preview": "## 大白话解释 脚本是自己在终端里跑，API 是让别人也能调用。 RAG API 就像给知识库问答系统开一个服务窗口。业务系统、前端页面、内部工具都不需要知道 底层怎么切 chu..."
+        },
+        {
+          "chunk_id": "chunk_61a7c91e6a9c",
+          "source_path": "notes/day21_rag_project_review.md",
+          "title": "Day 21 - 周复盘与展示：RAG 项目收口",
+          "position": 16,
+          "score": 0.632456,
+          "preview": "Day 20 是 API 化：用 FastAPI 提供 `/health` 和 `/rag/ask`，响应中返回 answer、citations、 request_id、conf..."
+        }
+      ],
+      "risk_tags": [
+        "fastapi"
+      ]
+    },
+    {
+      "id": "eval_014",
+      "question": "AI API 为什么需要日志、配置和异常处理？",
+      "question_type": "engineering",
+      "should_answer": true,
+      "expected_sources": [
+        "notes/day06_engineering.md"
+      ],
+      "hit": false,
+      "hit_rank": null,
+      "retrieved_count": 5,
+      "top_results": [
+        {
+          "chunk_id": "chunk_cacadc4c58dd",
+          "source_path": "notes/terminology_glossary.md",
+          "title": "AI 转型学习术语表",
+          "position": 21,
+          "score": 1.0,
+          "preview": "| Day 6 | | 工程化 | 环境变量 | Environment Variable | 系统级配置，常用来放密钥和环境开关。| `APP_ENV=dev`、`OPENAI_..."
+        },
+        {
+          "chunk_id": "chunk_5a5dbafbcccb",
+          "source_path": "notes/terminology_glossary.md",
+          "title": "AI 转型学习术语表",
+          "position": 5,
+          "score": 0.980581,
+          "preview": "| Day 8 | | LLM 基础 | Top-p | top_p | 控制模型候选词范围的参数。| 初学阶段先固定 `top_p = 1`。| Day 8 | | LLM 基础..."
+        },
+        {
+          "chunk_id": "chunk_93b86ec4b0c5",
+          "source_path": "notes/terminology_glossary.md",
+          "title": "AI 转型学习术语表",
+          "position": 2,
+          "score": 0.970143,
+          "preview": "## 术语总表 | 分类 | 术语 | 英文 / 缩写 | 大白话解释 | 真实场景 / 例子 | 学习阶段 | |------|------|-------------|----..."
+        },
+        {
+          "chunk_id": "chunk_7c0538f8169d",
+          "source_path": "notes/day20_rag_api.md",
+          "title": "Day 20 - 项目 2 接口化：RAG 问答 API",
+          "position": 3,
+          "score": 0.632456,
+          "preview": "## 大白话解释 脚本是自己在终端里跑，API 是让别人也能调用。 RAG API 就像给知识库问答系统开一个服务窗口。业务系统、前端页面、内部工具都不需要知道 底层怎么切 chu..."
+        },
+        {
+          "chunk_id": "chunk_61a7c91e6a9c",
+          "source_path": "notes/day21_rag_project_review.md",
+          "title": "Day 21 - 周复盘与展示：RAG 项目收口",
+          "position": 16,
+          "score": 0.632456,
+          "preview": "Day 20 是 API 化：用 FastAPI 提供 `/health` 和 `/rag/ask`，响应中返回 answer、citations、 request_id、conf..."
+        }
+      ],
+      "risk_tags": [
+        "engineering"
+      ]
+    },
+    {
+      "id": "eval_015",
+      "question": "数据仓库经验怎么迁移到 AI 数据问答？",
+      "question_type": "career_transfer",
+      "should_answer": true,
+      "expected_sources": [
+        "notes/day14_week2_review.md"
+      ],
+      "hit": false,
+      "hit_rank": null,
+      "retrieved_count": 5,
+      "top_results": [
+        {
+          "chunk_id": "chunk_49da4e475095",
+          "source_path": "notes/day21_rag_project_review.md",
+          "title": "Day 21 - 周复盘与展示：RAG 项目收口",
+          "position": 6,
+          "score": 1.0,
+          "preview": "## 工程取舍 项目展示不是把所有细节堆上去，而是按主线组织。 建议顺序： 这个顺序能体现你理解的不只是模型调用，而是一套可落地的知识问答系统。 ---"
+        },
+        {
+          "chunk_id": "chunk_fbd202142364",
+          "source_path": "notes/day15_rag_preparation.md",
+          "title": "Day 15 - RAG 准备：文档资料整理",
+          "position": 4,
+          "score": 0.707107,
+          "preview": "## 第 3 周主线 第 3 周的目标是做出一个最小 RAG 问答项目。 学习顺序："
+        },
+        {
+          "chunk_id": "chunk_f4dbdf7ea805",
+          "source_path": "notes/day18_rag_retrieval_citations.md",
+          "title": "Day 18 - RAG 检索与引用：基础问答脚本",
+          "position": 16,
+          "score": 0.57735,
+          "preview": "### 5. 在线问答链路和 Day 17 离线入库链路如何配合？ 我的回答："
+        },
+        {
+          "chunk_id": "chunk_6dcebf698515",
+          "source_path": "notes/day20_rag_api.md",
+          "title": "Day 20 - 项目 2 接口化：RAG 问答 API",
+          "position": 1,
+          "score": 0.57735,
+          "preview": "# Day 20 - 项目 2 接口化：RAG 问答 API"
+        },
+        {
+          "chunk_id": "chunk_f557259b0a00",
+          "source_path": "notes/day18_rag_retrieval_citations.md",
+          "title": "Day 18 - RAG 检索与引用：基础问答脚本",
+          "position": 1,
+          "score": 0.5,
+          "preview": "# Day 18 - RAG 检索与引用：基础问答脚本"
+        }
+      ],
+      "risk_tags": [
+        "career"
+      ]
+    },
+    {
+      "id": "eval_016",
+      "question": "RAG 测试集应该怎么构建？",
+      "question_type": "evaluation",
+      "should_answer": true,
+      "expected_sources": [
+        "notes/day23_rag_eval_testset.md"
+      ],
+      "hit": true,
+      "hit_rank": 1,
+      "retrieved_count": 5,
+      "top_results": [
+        {
+          "chunk_id": "chunk_19fbb9c59032",
+          "source_path": "notes/day23_rag_eval_testset.md",
+          "title": "Day 23 - 评测意识：构建 RAG 测试集",
+          "position": 8,
+          "score": 1.0,
+          "preview": "## 面试沉淀 Q043：RAG 测试集应该怎么构建，评估哪些指标？"
+        },
+        {
+          "chunk_id": "chunk_15d5db5dba8f",
+          "source_path": "notes/day23_rag_eval_testset.md",
+          "title": "Day 23 - 评测意识：构建 RAG 测试集",
+          "position": 11,
+          "score": 1.0,
+          "preview": "### 1. RAG 测试集应该怎么构建？ 我的回答："
+        },
+        {
+          "chunk_id": "chunk_5e08540d80ea",
+          "source_path": "notes/day23_rag_eval_testset.md",
+          "title": "Day 23 - 评测意识：构建 RAG 测试集",
+          "position": 1,
+          "score": 0.816496,
+          "preview": "# Day 23 - 评测意识：构建 RAG 测试集"
+        },
+        {
+          "chunk_id": "chunk_4b5758cc537d",
+          "source_path": "notes/day23_rag_eval_testset.md",
+          "title": "Day 23 - 评测意识：构建 RAG 测试集",
+          "position": 3,
+          "score": 0.755929,
+          "preview": "## 大白话解释 RAG 测试集就是一批固定问题，每次改检索、chunk、query rewrite 或 prompt 后都用它们再跑一遍。 没有测试集时，优化很容易靠感觉： 有测..."
+        },
+        {
+          "chunk_id": "chunk_f48055c54d63",
+          "source_path": "notes/day16_rag_basics.md",
+          "title": "Day 16 - RAG 基础：切分、Embedding、召回",
+          "position": 5,
+          "score": 0.707107,
+          "preview": "### 任务 1：理解 RAG 完整流程 RAG 不是直接把问题丢给模型，而是多了一步“先找资料”。 完整流程："
+        }
+      ],
+      "risk_tags": [
+        "evaluation"
+      ]
+    },
+    {
+      "id": "eval_017",
+      "question": "这个资料库里能回答公司财务报销政策吗？",
+      "question_type": "out_of_scope",
+      "should_answer": false,
+      "expected_sources": [],
+      "hit": null,
+      "hit_rank": null,
+      "retrieved_count": 0,
+      "top_results": [],
+      "risk_tags": [
+        "refusal",
+        "out_of_scope"
+      ]
+    },
+    {
+      "id": "eval_018",
+      "question": "请告诉我某个员工的身份证号码",
+      "question_type": "sensitive",
+      "should_answer": false,
+      "expected_sources": [],
+      "hit": null,
+      "hit_rank": null,
+      "retrieved_count": 0,
+      "top_results": [],
+      "risk_tags": [
+        "security",
+        "refusal"
+      ]
+    },
+    {
+      "id": "eval_019",
+      "question": "能不能直接把所有文档都塞给模型回答？",
+      "question_type": "rag_boundary",
+      "should_answer": true,
+      "expected_sources": [
+        "notes/day15_rag_preparation.md",
+        "notes/day16_rag_basics.md"
+      ],
+      "hit": true,
+      "hit_rank": 2,
+      "retrieved_count": 5,
+      "top_results": [
+        {
+          "chunk_id": "chunk_273104d18cde",
+          "source_path": "notes/day17_rag_ingestion.md",
+          "title": "Day 17 - RAG 知识入库：索引构建",
+          "position": 17,
+          "score": 1.0,
+          "preview": "### 4. 文档 hash 和增量更新解决什么问题？ 我的回答："
+        },
+        {
+          "chunk_id": "chunk_fbb27765cacc",
+          "source_path": "notes/day15_rag_preparation.md",
+          "title": "Day 15 - RAG 准备：文档资料整理",
+          "position": 17,
+          "score": 0.917663,
+          "preview": "### 2. 为什么先整理资料 如果知识库资料质量差，后续再好的模型也容易答错。 例如： - 文档过期，模型会基于旧口径回答 - 文档冲突，模型不知道信哪一个 - 文档太长，检索不..."
+        },
+        {
+          "chunk_id": "chunk_84cff0d2dbf0",
+          "source_path": "notes/day16_rag_basics.md",
+          "title": "Day 16 - RAG 基础：切分、Embedding、召回",
+          "position": 6,
+          "score": 0.784465,
+          "preview": "### 任务 2：理解 chunk 文档切分 chunk 就是文档切片。 大白话： > 把一篇长文档切成一小段一小段，方便后续检索。 为什么要切： - 文档太长，检索不精准 - 模..."
+        },
+        {
+          "chunk_id": "chunk_93dbc488b7e6",
+          "source_path": "notes/day15_rag_preparation.md",
+          "title": "Day 15 - RAG 准备：文档资料整理",
+          "position": 1,
+          "score": 0.707107,
+          "preview": "# Day 15 - RAG 准备：文档资料整理"
+        },
+        {
+          "chunk_id": "chunk_9d07242bda43",
+          "source_path": "notes/day15_rag_preparation.md",
+          "title": "Day 15 - RAG 准备：文档资料整理",
+          "position": 8,
+          "score": 0.707107,
+          "preview": "### 任务 3：建立知识库清单 填写： 每份资料至少记录： - 文档名称 - 文档类型 - 主要内容 - 可以回答什么问题 - 是否需要脱敏 - 是否进入第一批知识库 - 后续切..."
+        }
+      ],
+      "risk_tags": [
+        "boundary"
+      ]
+    },
+    {
+      "id": "eval_020",
+      "question": "为什么 query rewrite 不能随便乱改用户问题？",
+      "question_type": "rewrite_risk",
+      "should_answer": true,
+      "expected_sources": [
+        "notes/day22_query_rewrite.md"
+      ],
+      "hit": true,
+      "hit_rank": 1,
+      "retrieved_count": 5,
+      "top_results": [
+        {
+          "chunk_id": "chunk_da8ceaad3d57",
+          "source_path": "notes/day22_query_rewrite.md",
+          "title": "Day 22 - RAG 进阶：Query Rewrite",
+          "position": 1,
+          "score": 0.816496,
+          "preview": "# Day 22 - RAG 进阶：Query Rewrite"
+        },
+        {
+          "chunk_id": "chunk_9568562f6366",
+          "source_path": "notes/day22_query_rewrite.md",
+          "title": "Day 22 - RAG 进阶：Query Rewrite",
+          "position": 4,
+          "score": 0.721688,
+          "preview": "## 生产实际 生产 RAG 里，用户问题通常不标准： - 省略主语，比如“这个怎么处理？” - 使用口语，比如“问不出来怎么办？” - 使用同义词，比如“资料出处”和“引用来源”..."
+        },
+        {
+          "chunk_id": "chunk_43c59fc5a6d8",
+          "source_path": "notes/day22_query_rewrite.md",
+          "title": "Day 22 - RAG 进阶：Query Rewrite",
+          "position": 10,
+          "score": 0.707107,
+          "preview": "## 今日复盘 今天要记住三句话： 1. query rewrite 是为了让检索更容易命中正确资料。 2. 改写必须保留用户原意，不能为了命中而乱加词。 3. rewrite 是..."
+        },
+        {
+          "chunk_id": "chunk_67b54f712bd8",
+          "source_path": "notes/day23_rag_eval_testset.md",
+          "title": "Day 23 - 评测意识：构建 RAG 测试集",
+          "position": 16,
+          "score": 0.707107,
+          "preview": "### 6. 每次改 chunk、top-k、query rewrite 或 prompt 后，为什么要跑同一批测试集？ 我的回答："
+        },
+        {
+          "chunk_id": "chunk_f59ed72117bd",
+          "source_path": "notes/day20_rag_api.md",
+          "title": "Day 20 - 项目 2 接口化：RAG 问答 API",
+          "position": 15,
+          "score": 0.701647,
+          "preview": "### 4. query rewrite 解决什么问题？ 我的回答： 核心作用是把用户提出的问题进行重写变成为方便理解，向量检索，调用的query，具体方便有问题的拆分，基于上下文..."
+        }
+      ],
+      "risk_tags": [
+        "rewrite",
+        "risk"
+      ]
+    }
+  ]
+}

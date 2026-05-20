@@ -1,7 +1,8 @@
-"""
-工具类：数据加载器
+"""工具类：数据加载器。
 
-提供数据读取和加载功能
+这个模块专门负责“把外部文件读进程序”。
+数据读取单独封装后，主流程不用关心 CSV 编码、读取异常和基础信息展示。
+以后如果数据来源从 CSV 换成 Excel、数据库或 API，也只需要替换这一层。
 """
 
 import pandas as pd
@@ -9,12 +10,14 @@ from pathlib import Path
 
 
 class DataLoader:
-    """数据加载器类"""
+    """集中管理数据读取和基础查看方法。"""
 
     @staticmethod
     def load_csv(file_path, encoding='utf-8'):
-        """
-        加载CSV文件
+        """加载 CSV 文件，并返回 pandas DataFrame。
+
+        这里捕获异常，是为了让调用方能得到明确的失败提示。
+        真实数据处理任务里，文件路径、编码、列分隔符都可能出错，不能让程序静默失败。
 
         Args:
             file_path: CSV文件路径
@@ -33,8 +36,10 @@ class DataLoader:
 
     @staticmethod
     def save_csv(df, file_path, encoding='utf-8', index=False):
-        """
-        保存为CSV文件
+        """把处理后的 DataFrame 保存成 CSV。
+
+        保存结果是为了让清洗或分析产物可复查。
+        默认不保存索引，因为业务数据通常不需要 pandas 自动生成的行号。
 
         Args:
             df: pandas数据框
@@ -50,8 +55,10 @@ class DataLoader:
 
     @staticmethod
     def show_info(df):
-        """
-        显示数据框基本信息
+        """展示数据的基本质量情况。
+
+        在做任何统计前，先看行数、列名、类型和缺失值。
+        这一步能提前发现字段缺失、类型不对、数据为空等问题。
 
         Args:
             df: pandas数据框

@@ -1,0 +1,100 @@
+{
+  "run_id": "run_482067b1af0d",
+  "created_at": "2026-05-20T10:50:15.682689+00:00",
+  "database_path": "projects/day17_rag_ingestion/output/rag_index.sqlite",
+  "document_count": 15,
+  "chunk_count": 267,
+  "embedding_model": "local_keyword_embedding_v1",
+  "documents": [
+    {
+      "doc_id": "doc_d3e91e684f76",
+      "source_path": "notes/day12_sql_explainer_cli.md",
+      "title": "Day 12 - 项目 1 雏形：SQL 解释助手 CLI",
+      "content_hash": "d3e91e684f76414db78dbade2429fe65922c0b80dc9918d0e81a0d618cb14045"
+    },
+    {
+      "doc_id": "doc_858b0135486a",
+      "source_path": "notes/day13_sql_explainer_enhancement.md",
+      "title": "Day 13 - 项目 1 强化：风险规则与输出优化",
+      "content_hash": "858b0135486aa6dcaec8f1912b45a6e998ba015785750d9c9408e126ab2729db"
+    },
+    {
+      "doc_id": "doc_216e59e92ede",
+      "source_path": "notes/day15_rag_preparation.md",
+      "title": "Day 15 - RAG 准备：文档资料整理",
+      "content_hash": "216e59e92edee3cd33fb8d21f0734a2cb4a9d9e3acd6a0215ab8f1b66e212bfd"
+    },
+    {
+      "doc_id": "doc_6abfc1aa1d92",
+      "source_path": "notes/day16_rag_basics.md",
+      "title": "Day 16 - RAG 基础：切分、Embedding、召回",
+      "content_hash": "6abfc1aa1d929d769970cc73de9692db8976f85c89945e02b50c7fb53c829637"
+    },
+    {
+      "doc_id": "doc_94849ca206f7",
+      "source_path": "notes/day17_rag_ingestion.md",
+      "title": "Day 17 - RAG 知识入库：索引构建",
+      "content_hash": "94849ca206f7ab9e4bcbb823c7c4f9ea6dde354b34f078e4e422550293c90c62"
+    },
+    {
+      "doc_id": "doc_eed1efbc65b0",
+      "source_path": "notes/day18_rag_retrieval_citations.md",
+      "title": "Day 18 - RAG 检索与引用：基础问答脚本",
+      "content_hash": "eed1efbc65b0c7b66fc555de29563bfd09ba8c5bdba8af1e2f058f6c92b7417f"
+    },
+    {
+      "doc_id": "doc_d72c0a0e978f",
+      "source_path": "notes/day19_rag_retrieval_optimization.md",
+      "title": "Day 19 - RAG 优化：召回质量",
+      "content_hash": "d72c0a0e978f33b212d67831125871ac24a6e17512659d707428ac49795e18e3"
+    },
+    {
+      "doc_id": "doc_12e558f36ff4",
+      "source_path": "notes/day20_rag_api.md",
+      "title": "Day 20 - 项目 2 接口化：RAG 问答 API",
+      "content_hash": "12e558f36ff4512410e9f445dc2d1b35cac672decd57f81ad2064866fa512781"
+    },
+    {
+      "doc_id": "doc_2b7fde5ac37c",
+      "source_path": "notes/day21_rag_project_review.md",
+      "title": "Day 21 - 周复盘与展示：RAG 项目收口",
+      "content_hash": "2b7fde5ac37cf22363bc53fc85586510f682a755cde12b250d4d1720648813c0"
+    },
+    {
+      "doc_id": "doc_7204eb50b473",
+      "source_path": "notes/day22_query_rewrite.md",
+      "title": "Day 22 - RAG 进阶：Query Rewrite",
+      "content_hash": "7204eb50b47386dcc98c499e185eb0483faf17a7f0a4069a429d42ff4415e7c9"
+    },
+    {
+      "doc_id": "doc_15bca9744c12",
+      "source_path": "notes/day23_rag_eval_testset.md",
+      "title": "Day 23 - 评测意识：构建 RAG 测试集",
+      "content_hash": "15bca9744c12243b30761f5953b4e07a0fd8e42a839984b3333c2e2bc974cf56"
+    },
+    {
+      "doc_id": "doc_0e3eb0723d93",
+      "source_path": "notes/day24_hallucination_guardrails.md",
+      "title": "Day 24 - 幻觉控制：拒答与边界",
+      "content_hash": "0e3eb0723d93cf391eb83b7479b3008f7b654502a986eb14cfb61329e33853eb"
+    },
+    {
+      "doc_id": "doc_1c0d97d4f00e",
+      "source_path": "notes/day25_security_controls.md",
+      "title": "Day 25 - 权限与安全：敏感信息控制",
+      "content_hash": "1c0d97d4f00efea30736c519effb1a9236749b7d7a5d8a65e65a369e4603bbc3"
+    },
+    {
+      "doc_id": "doc_c463cfe1b7aa",
+      "source_path": "docs/day25_security_control_checklist.md",
+      "title": "Day 25 - RAG 权限与敏感信息安全控制清单",
+      "content_hash": "c463cfe1b7aa03b1bf49c925dd1eac58c5542d05744d755779267b1668e35f9b"
+    },
+    {
+      "doc_id": "doc_d7a2a641bf9a",
+      "source_path": "notes/terminology_glossary.md",
+      "title": "AI 转型学习术语表",
+      "content_hash": "d7a2a641bf9afadb44e4c98cd7ea226ceb467959cebc7cd4e8f572172dc1fc38"
+    }
+  ]
+}

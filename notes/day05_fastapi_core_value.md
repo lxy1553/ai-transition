@@ -15,24 +15,24 @@ app = Flask(__name__)
 def create_user():
     # 1. 手动获取数据
     data = request.get_json()
-    
+
     # 2. 手动校验（容易遗漏）
     if not data:
         return jsonify({"error": "缺少数据"}), 400
-    
+
     if 'username' not in data:
         return jsonify({"error": "缺少用户名"}), 400
-    
+
     if len(data['username']) < 3:
         return jsonify({"error": "用户名太短"}), 400
-    
+
     if 'email' not in data:
         return jsonify({"error": "缺少邮箱"}), 400
-    
+
     # 简单的邮箱校验
     if '@' not in data['email']:
         return jsonify({"error": "邮箱格式错误"}), 400
-    
+
     if 'age' in data:
         try:
             age = int(data['age'])
@@ -40,10 +40,10 @@ def create_user():
                 return jsonify({"error": "年龄范围错误"}), 400
         except ValueError:
             return jsonify({"error": "年龄必须是数字"}), 400
-    
+
     # 3. 业务逻辑
     user = create_user_in_db(data)
-    
+
     # 4. 手动写文档（通常没人写）
     return jsonify(user), 201
 ```
@@ -111,16 +111,16 @@ from typing import Optional
 class UserCreate(BaseModel):
     # 用户名：3-50字符
     username: str = Field(..., min_length=3, max_length=50, description="用户名")
-    
+
     # 邮箱：自动校验格式
     email: EmailStr = Field(..., description="邮箱地址")
-    
+
     # 年龄：0-150之间
     age: Optional[int] = Field(None, ge=0, le=150, description="年龄")
-    
+
     # 密码：6-20字符
     password: str = Field(..., min_length=6, max_length=20, description="密码")
-    
+
     # 自定义校验：密码必须包含数字
     @validator('password')
     def password_must_contain_number(cls, v):
@@ -228,7 +228,7 @@ def process_user(user: User):
     # IDE会自动提示所有字段
     print(user.username)  # ✅ IDE自动补全
     print(user.usrname)   # ❌ IDE立刻报错：没有这个字段
-    
+
     # 类型检查
     age_next_year = user.age + 1  # ✅ 正确，age是int
     result = user.age + "1"       # ❌ IDE警告：不能把int和str相加
@@ -264,7 +264,7 @@ class UserCreate(BaseModel):
 def create_user(user: UserCreate):
     """
     创建新用户：
-    
+
     - **username**: 用户名（必填，3-50字符）
     - **email**: 邮箱地址（必填）
     - **age**: 年龄（可选，0-150）
@@ -543,5 +543,4 @@ def calculate_points(user: User):
 
 ---
 
-*整理时间：2026-05-06*
-*Day 5 核心价值总结*
+*整理时间：2026-05-06* *Day 5 核心价值总结*

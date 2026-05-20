@@ -1,6 +1,8 @@
-"""
-Day 4 - HTTP与API
-主函数：天气查询API调用器
+"""Day 4 - HTTP 与 API 主入口：天气查询 API 调用器。
+
+这个脚本用天气查询和 httpbin 示例练习真实接口调用链路：
+构造请求、处理认证、解析 JSON、保存查询历史。
+后续调用 LLM API、RAG 服务、NL2SQL 服务，本质上也都是这套 HTTP + JSON 流程。
 
 项目结构：
 ├── main.py              # 主函数入口
@@ -21,8 +23,10 @@ from utils import HTTPClient, APIAuth, JSONParser
 
 
 def query_weather(city: str = "beijing") -> dict:
-    """
-    查询天气信息（使用免费的wttr.in服务）
+    """查询天气信息，并整理成业务更容易使用的字段。
+
+    外部 API 返回通常很大、字段层级也深，业务系统不会直接使用完整原始响应。
+    这里提取温度、湿度、天气描述等关键字段，是为了练习“接口响应 -> 业务结构”的转换。
 
     Args:
         city: 城市名称
@@ -32,7 +36,7 @@ def query_weather(city: str = "beijing") -> dict:
     """
     print(f"\n🌤️  正在查询 {city} 的天气...")
 
-    # 使用wttr.in的JSON API（无需API Key）
+    # 使用 wttr.in 的 JSON API。这里选无 API Key 服务，是为了先练通 HTTP 调用流程。
     client = HTTPClient()
     url = f"https://wttr.in/{city}?format=j1"
 
@@ -42,14 +46,14 @@ def query_weather(city: str = "beijing") -> dict:
         print("❌ 天气查询失败")
         return None
 
-    # 解析JSON响应
+    # 外部接口返回的是 JSON 字符串，必须先解析成 Python 对象，后续才能按字段取值。
     data = JSONParser.parse(response.text)
 
     if data is None:
         print("❌ JSON解析失败")
         return None
 
-    # 提取关键信息
+    # 只保留后续展示和留档需要的字段，避免业务层依赖外部 API 的复杂原始结构。
     current = data.get('current_condition', [{}])[0]
     weather_info = {
         'city': city,
@@ -66,8 +70,10 @@ def query_weather(city: str = "beijing") -> dict:
 
 
 def display_weather(weather_info: dict):
-    """
-    格式化显示天气信息
+    """把结构化天气信息打印成人能快速看懂的格式。
+
+    真实项目里这一步可能变成前端展示、机器人消息或 API 响应。
+    单独拆出来，是为了不把查询逻辑和展示逻辑混在一起。
 
     Args:
         weather_info: 天气信息字典
@@ -88,8 +94,10 @@ def display_weather(weather_info: dict):
 
 
 def save_query_history(weather_info: dict, history_file: Path):
-    """
-    保存查询历史
+    """保存查询历史，方便后续复盘每次 API 调用结果。
+
+    真实 AI 应用也需要记录请求历史，比如用户问题、模型返回、错误信息和耗时。
+    有历史记录，后面才能分析高频问题和失败原因。
 
     Args:
         weather_info: 天气信息字典
@@ -98,7 +106,7 @@ def save_query_history(weather_info: dict, history_file: Path):
     if weather_info is None:
         return
 
-    # 加载现有历史
+    # 先读旧历史，再追加新记录，避免每次查询都覆盖前面的结果。
     history = JSONParser.load_from_file(history_file) or []
 
     # 添加新记录
@@ -110,8 +118,10 @@ def save_query_history(weather_info: dict, history_file: Path):
 
 
 def demo_http_methods():
-    """
-    演示HTTP请求方法
+    """演示 GET 和 POST 的区别。
+
+    GET 常用于查询，POST 常用于提交数据。
+    后续 LLM API、RAG 问答接口通常都会用 POST 发送结构化请求体。
     """
     print("\n" + "=" * 70)
     print("演示：HTTP请求方法")
@@ -141,8 +151,10 @@ def demo_http_methods():
 
 
 def demo_api_auth():
-    """
-    演示API认证方法
+    """演示常见 API 认证头。
+
+    真实公司接口基本不会裸奔访问，通常需要 API Key、Bearer Token 或 Basic Auth。
+    先理解请求头怎么带认证，后续调用模型服务和内部平台才不会卡在鉴权上。
     """
     print("\n" + "=" * 70)
     print("演示：API认证方法")
@@ -165,8 +177,10 @@ def demo_api_auth():
 
 
 def demo_json_parser():
-    """
-    演示JSON解析
+    """演示 JSON 解析和嵌套字段提取。
+
+    API 返回值通常是嵌套 JSON。学会按路径取值，后续才能稳定提取模型结果、
+    citations、错误码、token 用量等字段。
     """
     print("\n" + "=" * 70)
     print("演示：JSON解析")
@@ -201,7 +215,10 @@ def demo_json_parser():
 
 
 def main():
-    """主函数"""
+    """按“请求、认证、解析、实战调用”的顺序运行 Day 4 练习。
+
+    这个顺序对应真实 API 开发的基本能力：会发请求、会带身份、会解析返回、会保存结果。
+    """
     print("=" * 70)
     print("Day 4 - HTTP与API：天气查询API调用器")
     print("=" * 70)

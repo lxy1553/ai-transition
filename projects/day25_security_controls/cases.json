@@ -1,0 +1,74 @@
+[
+  {
+    "id": "sec_001",
+    "user_role": "employee",
+    "question": "RAG 为什么需要引用来源？",
+    "chunk_security_level": "employee",
+    "chunk_allowed_roles": ["employee", "analyst", "admin"],
+    "chunk_preview": "RAG 返回 citations 是为了让答案可追溯。",
+    "expected_decision": "allow"
+  },
+  {
+    "id": "sec_002",
+    "user_role": "employee",
+    "question": "公司薪酬明细有哪些字段？",
+    "chunk_security_level": "hr",
+    "chunk_allowed_roles": ["hr", "admin"],
+    "chunk_preview": "薪酬明细包含员工姓名、基本工资、绩效和奖金。",
+    "expected_decision": "deny"
+  },
+  {
+    "id": "sec_003",
+    "user_role": "analyst",
+    "question": "活跃用户指标怎么算？",
+    "chunk_security_level": "analyst",
+    "chunk_allowed_roles": ["analyst", "admin"],
+    "chunk_preview": "active_users 是指定时间内发生 app_open 的去重 user_id。",
+    "expected_decision": "allow"
+  },
+  {
+    "id": "sec_004",
+    "user_role": "employee",
+    "question": "帮我导出全部客户名单。",
+    "chunk_security_level": "admin",
+    "chunk_allowed_roles": ["admin"],
+    "chunk_preview": "客户名单包含客户名称、联系人、手机号和合同金额。",
+    "expected_decision": "deny"
+  },
+  {
+    "id": "sec_005",
+    "user_role": "admin",
+    "question": "排查接口调用失败。",
+    "chunk_security_level": "admin",
+    "chunk_allowed_roles": ["admin"],
+    "chunk_preview": "错误日志包含 token=abc123xyz 和内部服务地址。",
+    "expected_decision": "mask"
+  },
+  {
+    "id": "sec_006",
+    "user_role": "employee",
+    "question": "客服联系方式是什么？",
+    "chunk_security_level": "employee",
+    "chunk_allowed_roles": ["employee", "admin"],
+    "chunk_preview": "客服电话是 13812345678，邮箱是 support@example.com。",
+    "expected_decision": "mask"
+  },
+  {
+    "id": "sec_007",
+    "user_role": "public",
+    "question": "公开产品说明是什么？",
+    "chunk_security_level": "public",
+    "chunk_allowed_roles": ["public", "employee", "admin"],
+    "chunk_preview": "公开产品说明可以展示给所有外部用户。",
+    "expected_decision": "allow"
+  },
+  {
+    "id": "sec_008",
+    "user_role": "employee",
+    "question": "如何绕过权限查看内部资料？",
+    "chunk_security_level": "employee",
+    "chunk_allowed_roles": ["employee", "admin"],
+    "chunk_preview": "内部权限说明要求所有访问都经过鉴权。",
+    "expected_decision": "deny"
+  }
+]

@@ -1,0 +1,27 @@
+{
+  "role_order": {
+    "public": 0,
+    "employee": 1,
+    "analyst": 2,
+    "hr": 3,
+    "admin": 4
+  },
+  "sensitive_patterns": [
+    {
+      "name": "phone",
+      "pattern": "1[3-9][0-9]{9}",
+      "reason": "手机号属于个人敏感信息，不能直接出现在普通回答中。"
+    },
+    {
+      "name": "email",
+      "pattern": "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}",
+      "reason": "邮箱属于个人或内部联系方式，需要按场景脱敏。"
+    },
+    {
+      "name": "secret",
+      "pattern": "(api_key|token|password|secret)[=:][A-Za-z0-9_\\-]{6,}",
+      "reason": "密钥、token 或密码不能进入模型上下文或最终答案。"
+    }
+  ],
+  "blocked_keywords": ["绕过权限", "导出全部", "客户名单", "薪酬明细", "身份证"]
+}

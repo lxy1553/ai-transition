@@ -1,7 +1,8 @@
-"""
-工具类：日志分析器
+"""工具类：日志分析器。
 
-提供日志文件分析功能
+这个模块模拟生产环境里的基础日志排查：从日志文件中解析时间、级别和消息，
+再统计错误、警告和总体数量。以后做 API、RAG 或 NL2SQL 服务时，
+日志就是定位“接口失败、模型失败、检索失败”的第一手线索。
 """
 
 import re
@@ -10,11 +11,13 @@ from collections import Counter
 
 
 class LogAnalyzer:
-    """日志分析器类"""
+    """把日志读取、解析、统计和报告生成封装成一个完整流程。"""
 
     def __init__(self, log_file):
-        """
-        初始化日志分析器
+        """初始化日志分析器，并准备存放解析结果和统计结果。
+
+        `logs` 保存逐行解析后的明细，`stats` 保存聚合结果。
+        这样既能看总体错误数量，也能回到具体日志行排查原因。
 
         Args:
             log_file: 日志文件路径
@@ -29,10 +32,12 @@ class LogAnalyzer:
         }
 
     def parse_log_line(self, line):
-        """
-        解析单行日志
+        """解析单行日志，把纯文本拆成结构化字段。
 
         日志格式：2026-04-23 10:30:15 [INFO] 消息内容
+
+        结构化之后，后续才能按级别统计、筛选 ERROR、生成报告。
+        生产日志平台本质上也在做类似事情，只是规模和字段更多。
 
         Args:
             line: 日志行
@@ -54,7 +59,10 @@ class LogAnalyzer:
         return None
 
     def read_logs(self):
-        """读取并解析日志文件"""
+        """读取日志文件，把能识别的日志行放进内存。
+
+        这里跳过空行和不符合格式的行，避免一行脏数据让整个分析流程失败。
+        """
         print(f"📖 读取日志文件: {self.log_file}")
 
         with open(self.log_file, 'r', encoding='utf-8') as f:
@@ -67,7 +75,10 @@ class LogAnalyzer:
         print(f"✅ 成功读取 {len(self.logs)} 条日志")
 
     def analyze(self):
-        """分析日志"""
+        """统计日志级别，并把错误和警告单独保留下来。
+
+        生产排查时通常先看 ERROR 和 WARNING，因为它们最可能影响用户请求或数据结果。
+        """
         print("📊 分析日志...")
 
         self.stats['total'] = len(self.logs)
@@ -84,8 +95,10 @@ class LogAnalyzer:
         print("✅ 分析完成")
 
     def generate_report(self, output_file=None):
-        """
-        生成分析报告
+        """生成面向人阅读的日志分析报告。
+
+        报告同时打印到控制台，并可保存到文件。
+        这样既方便现场查看，也方便把结果作为学习产物或排查记录留存。
 
         Args:
             output_file: 输出文件路径
@@ -136,8 +149,10 @@ class LogAnalyzer:
             print(f"\n💾 报告已保存到: {output_file}")
 
     def run(self, output_file=None):
-        """
-        运行完整分析流程
+        """运行完整日志分析流程。
+
+        入口方法把读取、分析、报告三个步骤串起来。
+        主程序只需要调用 `run`，不用关心内部每一步怎么做。
 
         Args:
             output_file: 输出报告文件路径

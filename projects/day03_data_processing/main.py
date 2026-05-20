@@ -1,6 +1,8 @@
-"""
-Day 3 - 数据处理基础
-主函数：招聘数据分析器
+"""Day 3 - 数据处理基础主入口：招聘数据分析器。
+
+这个脚本模拟一条最小数据处理链路：读取原始 CSV、清洗字段、做统计分析、落到 SQLite。
+它的用途不是只练 pandas 语法，而是建立“原始数据 -> 清洗数据 -> 分析结果 -> 可查询存储”的思路。
+后续做 Boss 岗位统计、RAG 知识入库、NL2SQL 示例库，都会复用这条链路。
 
 项目结构：
 ├── main.py              # 主函数入口
@@ -22,12 +24,16 @@ from utils import DataLoader, DataCleaner, DataAnalyzer, DatabaseManager
 
 
 def main():
-    """主函数"""
+    """按数据处理的真实顺序运行完整流程。
+
+    主函数只负责串联步骤，具体读取、清洗、分析、入库分别交给工具类。
+    这样后续某一步要替换实现时，不会把整个流程都改乱。
+    """
     print("=" * 70)
     print("Day 3 - 数据处理基础：招聘数据分析器")
     print("=" * 70)
 
-    # 1. 加载数据
+    # 第一步先加载原始数据。只有把原始数据读成 DataFrame，后面才能统一清洗和分析。
     print("\n" + "=" * 70)
     print("步骤 1：加载数据")
     print("=" * 70)
@@ -38,14 +44,14 @@ def main():
         print("❌ 数据加载失败，程序退出")
         return
 
-    # 显示数据基本信息
+    # 先看行数、列名、类型和缺失值，避免在不了解数据质量的情况下直接统计。
     DataLoader.show_info(df)
 
-    # 显示前几行数据
+    # 看前几行是为了确认字段含义和样例格式，尤其是薪资、技能这类需要解析的文本字段。
     print("\n前5行数据预览:")
     print(df.head())
 
-    # 2. 数据清洗
+    # 第二步做清洗，把展示给人的薪资、技能文本整理成机器更容易统计的结构化字段。
     print("\n" + "=" * 70)
     print("步骤 2：数据清洗")
     print("=" * 70)
@@ -55,7 +61,7 @@ def main():
     print("\n清洗后的数据预览:")
     print(df_clean[['position', 'city', 'salary_min', 'salary_max', 'salary_avg']].head())
 
-    # 3. 数据分析
+    # 第三步做分析，重点看薪资、城市、岗位方向和技能频率，这些直接服务后续求职判断。
     print("\n" + "=" * 70)
     print("步骤 3：数据分析")
     print("=" * 70)
@@ -64,20 +70,20 @@ def main():
     report_file.parent.mkdir(exist_ok=True)
     analyzer.run_analysis(output_file=report_file)
 
-    # 4. 保存到数据库
+    # 第四步保存到数据库。这样分析结果不是只停留在内存里，后续可以继续用 SQL 查询和复盘。
     print("\n" + "=" * 70)
     print("步骤 4：保存到数据库")
     print("=" * 70)
     db_file = Path("output/jobs.db")
 
     with DatabaseManager(db_file) as db:
-        # 保存原始数据
+        # 原始表用于追溯来源，清洗错了还能回到最初数据重新处理。
         db.save_dataframe(df, 'jobs_raw')
 
-        # 保存清洗后的数据
+        # 清洗表用于后续查询和统计，避免每次分析都重复解析薪资和技能字段。
         db.save_dataframe(df_clean, 'jobs_clean')
 
-        # 查询示例
+        # 查询示例说明：数据入库后就能用 SQL 继续分析，这也是 NL2SQL 项目的基础。
         print("\n查询示例：北京地区的岗位")
         sql = "SELECT position, city, salary FROM jobs_raw WHERE city='北京'"
         result = db.query(sql)

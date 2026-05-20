@@ -1,0 +1,29 @@
+{
+  "rules": [
+    {
+      "id": "sensitive_data",
+      "decision": "refuse",
+      "keywords": ["手机号", "身份证", "工资", "密钥", "token", "password", "全量导出"],
+      "reason": "问题涉及敏感信息或个人隐私，不能直接回答或生成操作方案。"
+    },
+    {
+      "id": "dangerous_action",
+      "decision": "refuse",
+      "keywords": ["删除所有", "绕过权限", "跳过审批", "删库", "drop table", "truncate"],
+      "reason": "问题涉及高风险操作，必须拒答并引导走审批或安全流程。"
+    },
+    {
+      "id": "permission_required",
+      "decision": "refuse",
+      "keywords": ["无权限", "没有权限", "内部薪酬", "用户明细", "客户名单"],
+      "reason": "问题涉及权限边界，当前用户没有足够权限时不能回答。"
+    },
+    {
+      "id": "ambiguous_question",
+      "decision": "clarify",
+      "keywords": ["这个怎么算", "这个接口", "这个指标", "最近怎么样"],
+      "reason": "问题缺少明确对象、指标、时间范围或业务域，需要先澄清。"
+    }
+  ],
+  "low_confidence_threshold": 0.35
+}

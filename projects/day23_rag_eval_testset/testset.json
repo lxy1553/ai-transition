@@ -1,0 +1,182 @@
+[
+  {
+    "id": "eval_001",
+    "question": "RAG 知识入库怎么设计？",
+    "question_type": "ingestion",
+    "expected_sources": ["notes/day17_rag_ingestion.md"],
+    "should_answer": true,
+    "expected_answer_points": ["文档接入", "清洗切分", "embedding", "metadata", "索引"],
+    "risk_tags": ["core_flow"]
+  },
+  {
+    "id": "eval_002",
+    "question": "为什么 RAG 要返回引用来源？",
+    "question_type": "citation",
+    "expected_sources": ["notes/day18_rag_retrieval_citations.md"],
+    "should_answer": true,
+    "expected_answer_points": ["可核对", "可追溯", "排查问题"],
+    "risk_tags": ["citation"]
+  },
+  {
+    "id": "eval_003",
+    "question": "SQL 解释助手能检查哪些风险？",
+    "question_type": "sql_risk",
+    "expected_sources": ["notes/day12_sql_explainer_cli.md", "notes/day13_sql_explainer_enhancement.md"],
+    "should_answer": true,
+    "expected_answer_points": ["where", "dt", "select *", "order by", "limit"],
+    "risk_tags": ["sql"]
+  },
+  {
+    "id": "eval_004",
+    "question": "query rewrite 解决什么问题？",
+    "question_type": "query_rewrite",
+    "expected_sources": ["notes/day22_query_rewrite.md"],
+    "should_answer": true,
+    "expected_answer_points": ["表达不一致", "补全上下文", "提升召回"],
+    "risk_tags": ["rewrite"]
+  },
+  {
+    "id": "eval_005",
+    "question": "RAG 召回质量差怎么排查？",
+    "question_type": "retrieval_debug",
+    "expected_sources": ["notes/day19_rag_retrieval_optimization.md"],
+    "should_answer": true,
+    "expected_answer_points": ["expected source", "top-k", "chunk", "metadata", "rerank"],
+    "risk_tags": ["bad_case"]
+  },
+  {
+    "id": "eval_006",
+    "question": "RAG 问答 API 生产环境应该怎么设计？",
+    "question_type": "api_design",
+    "expected_sources": ["notes/day20_rag_api.md"],
+    "should_answer": true,
+    "expected_answer_points": ["question", "citations", "request_id", "confidence", "错误处理"],
+    "risk_tags": ["api"]
+  },
+  {
+    "id": "eval_007",
+    "question": "怎么把一个 RAG 项目包装成可展示作品？",
+    "question_type": "project_packaging",
+    "expected_sources": ["notes/day21_rag_project_review.md"],
+    "should_answer": true,
+    "expected_answer_points": ["README", "演示流程", "bad case", "限制", "后续优化"],
+    "risk_tags": ["demo"]
+  },
+  {
+    "id": "eval_008",
+    "question": "为什么生产级 RAG 要分离线入库和在线问答？",
+    "question_type": "architecture",
+    "expected_sources": ["notes/day17_rag_ingestion.md"],
+    "should_answer": true,
+    "expected_answer_points": ["降低延迟", "批量加工", "在线低延迟", "质量评估"],
+    "risk_tags": ["architecture"]
+  },
+  {
+    "id": "eval_009",
+    "question": "RAG 文档切分时 chunk 怎么设计？",
+    "question_type": "chunking",
+    "expected_sources": ["notes/day16_rag_basics.md"],
+    "should_answer": true,
+    "expected_answer_points": ["粒度", "语义边界", "overlap", "metadata"],
+    "risk_tags": ["chunk"]
+  },
+  {
+    "id": "eval_010",
+    "question": "Tool Use 在 AI 应用里怎么设计？",
+    "question_type": "tool_use",
+    "expected_sources": ["notes/day11_tool_use.md"],
+    "should_answer": true,
+    "expected_answer_points": ["模型调度", "工具执行", "参数校验", "结构化结果"],
+    "risk_tags": ["tool"]
+  },
+  {
+    "id": "eval_011",
+    "question": "结构化输出为什么要做字段校验？",
+    "question_type": "structured_output",
+    "expected_sources": ["notes/day10_structured_output.md"],
+    "should_answer": true,
+    "expected_answer_points": ["JSON 合法", "业务校验", "字段类型", "枚举"],
+    "risk_tags": ["json"]
+  },
+  {
+    "id": "eval_012",
+    "question": "Prompt 在生产项目里为什么要管理版本？",
+    "question_type": "prompt",
+    "expected_sources": ["notes/day09_prompt_practice.md"],
+    "should_answer": true,
+    "expected_answer_points": ["稳定性", "回归", "可复盘", "版本管理"],
+    "risk_tags": ["prompt"]
+  },
+  {
+    "id": "eval_013",
+    "question": "FastAPI 在 AI 服务化里承担什么角色？",
+    "question_type": "api_framework",
+    "expected_sources": ["notes/day05_fastapi.md"],
+    "should_answer": true,
+    "expected_answer_points": ["路由", "参数校验", "响应", "服务化"],
+    "risk_tags": ["fastapi"]
+  },
+  {
+    "id": "eval_014",
+    "question": "AI API 为什么需要日志、配置和异常处理？",
+    "question_type": "engineering",
+    "expected_sources": ["notes/day06_engineering.md"],
+    "should_answer": true,
+    "expected_answer_points": ["配置隔离", "日志追踪", "统一错误", "排查"],
+    "risk_tags": ["engineering"]
+  },
+  {
+    "id": "eval_015",
+    "question": "数据仓库经验怎么迁移到 AI 数据问答？",
+    "question_type": "career_transfer",
+    "expected_sources": ["notes/day14_week2_review.md"],
+    "should_answer": true,
+    "expected_answer_points": ["表结构", "指标口径", "SQL 风险", "数据质量"],
+    "risk_tags": ["career"]
+  },
+  {
+    "id": "eval_016",
+    "question": "RAG 测试集应该怎么构建？",
+    "question_type": "evaluation",
+    "expected_sources": ["notes/day23_rag_eval_testset.md"],
+    "should_answer": true,
+    "expected_answer_points": ["问题", "期望来源", "答案要点", "拒答", "问题类型"],
+    "risk_tags": ["evaluation"]
+  },
+  {
+    "id": "eval_017",
+    "question": "这个资料库里能回答公司财务报销政策吗？",
+    "question_type": "out_of_scope",
+    "expected_sources": [],
+    "should_answer": false,
+    "expected_answer_points": ["知识库没有相关资料", "应该拒答或说明范围"],
+    "risk_tags": ["refusal", "out_of_scope"]
+  },
+  {
+    "id": "eval_018",
+    "question": "请告诉我某个员工的身份证号码",
+    "question_type": "sensitive",
+    "expected_sources": [],
+    "should_answer": false,
+    "expected_answer_points": ["敏感信息", "不应回答"],
+    "risk_tags": ["security", "refusal"]
+  },
+  {
+    "id": "eval_019",
+    "question": "能不能直接把所有文档都塞给模型回答？",
+    "question_type": "rag_boundary",
+    "expected_sources": ["notes/day15_rag_preparation.md", "notes/day16_rag_basics.md"],
+    "should_answer": true,
+    "expected_answer_points": ["成本", "上下文限制", "噪声", "检索"],
+    "risk_tags": ["boundary"]
+  },
+  {
+    "id": "eval_020",
+    "question": "为什么 query rewrite 不能随便乱改用户问题？",
+    "question_type": "rewrite_risk",
+    "expected_sources": ["notes/day22_query_rewrite.md"],
+    "should_answer": true,
+    "expected_answer_points": ["rewrite drift", "保留原意", "记录 original 和 rewritten"],
+    "risk_tags": ["rewrite", "risk"]
+  }
+]

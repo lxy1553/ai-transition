@@ -1,7 +1,7 @@
-"""
-工具类：数据分析器
+"""工具类：数据分析器。
 
-提供数据分析和统计功能
+这个模块负责把清洗后的招聘数据变成可读结论。
+它关注薪资、城市、岗位方向和技能词频，这些统计结果能帮助判断 AI 转型岗位应该重点补哪些能力。
 """
 
 import pandas as pd
@@ -10,11 +10,12 @@ from datetime import datetime
 
 
 class DataAnalyzer:
-    """数据分析器类"""
+    """把多个分析维度封装到一起，并统一生成报告。"""
 
     def __init__(self, df):
-        """
-        初始化数据分析器
+        """初始化分析器，保存待分析数据和统计结果。
+
+        `stats` 用来存放中间结果，后面生成报告时不需要重复计算。
 
         Args:
             df: pandas数据框
@@ -23,7 +24,11 @@ class DataAnalyzer:
         self.stats = {}
 
     def analyze_salary(self):
-        """分析薪资数据"""
+        """分析薪资数据，判断岗位薪资的大致水平。
+
+        这里看均值、中位数、最低和最高值。
+        中位数通常比平均值更稳，因为少数高薪岗位会把平均值拉高。
+        """
         print("\n📊 分析薪资数据...")
 
         if 'salary_avg' in self.df.columns:
@@ -43,7 +48,10 @@ class DataAnalyzer:
             print(f"  范围: {self.stats['salary']['min']:.0f}K - {self.stats['salary']['max']:.0f}K")
 
     def analyze_city(self):
-        """分析城市分布"""
+        """分析城市分布，判断岗位主要集中在哪些城市。
+
+        求职时城市分布会直接影响投递策略和通勤成本。
+        """
         print("\n📊 分析城市分布...")
 
         if 'city' in self.df.columns:
@@ -56,7 +64,10 @@ class DataAnalyzer:
                 print(f"    {city}: {count} ({percentage:.1f}%)")
 
     def analyze_direction(self):
-        """分析岗位方向"""
+        """分析岗位方向，判断市场更偏 RAG、NL2SQL、后端还是算法。
+
+        这一步用于把学习路线和招聘需求对齐，避免只学自己感兴趣但市场不高频的方向。
+        """
         print("\n📊 分析岗位方向...")
 
         if 'direction' in self.df.columns:
@@ -69,7 +80,10 @@ class DataAnalyzer:
                 print(f"    {direction}: {count} ({percentage:.1f}%)")
 
     def analyze_skills(self):
-        """分析技能词频"""
+        """分析技能词频，找出岗位描述里最常出现的能力要求。
+
+        高频技能词可以反向指导简历关键词和后续学习重点。
+        """
         print("\n📊 分析技能词频...")
 
         if 'skills_list' in self.df.columns:
@@ -86,8 +100,10 @@ class DataAnalyzer:
                 print(f"    {i:2d}. {skill:20s}: {count:2d} ({percentage:5.1f}%)")
 
     def generate_report(self, output_file=None):
-        """
-        生成分析报告
+        """生成适合复盘和留档的分析报告。
+
+        报告不是只给程序看，而是给自己做求职判断和复盘使用。
+        因此这里会把统计结果整理成更容易阅读的文本格式。
 
         Args:
             output_file: 输出文件路径
@@ -152,8 +168,10 @@ class DataAnalyzer:
             print(f"\n💾 报告已保存到: {output_file}")
 
     def run_analysis(self, output_file=None):
-        """
-        运行完整分析流程
+        """运行完整分析流程。
+
+        这个方法统一调度各个分析步骤，主程序只需要调用一次。
+        后续要新增分析维度，也可以在这里扩展。
 
         Args:
             output_file: 输出报告文件路径

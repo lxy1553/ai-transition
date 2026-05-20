@@ -1,20 +1,22 @@
-"""
-工具类：HTTP客户端
+"""工具类：HTTP 客户端。
 
-提供HTTP请求功能
+这个模块把 GET、POST、超时、重试和会话管理封装起来。
+后续调用天气 API、LLM API、RAG API 时，业务代码不用重复写请求和异常处理。
 """
 
 import requests
-from typing import Dict, Optional, Any
+from typing import Dict, Optional
 import time
 
 
 class HTTPClient:
-    """HTTP客户端类"""
+    """带超时和重试的轻量 HTTP 客户端。"""
 
     def __init__(self, base_url: str = "", timeout: int = 10):
-        """
-        初始化HTTP客户端
+        """初始化客户端。
+
+        `Session` 可以复用连接，适合连续请求同一个服务。
+        timeout 是必须有的保护，避免外部接口卡住时拖死整个程序。
 
         Args:
             base_url: 基础URL
@@ -31,8 +33,10 @@ class HTTPClient:
         headers: Optional[Dict] = None,
         retry: int = 3
     ) -> Optional[requests.Response]:
-        """
-        发送GET请求
+        """发送 GET 请求，适合查询类接口。
+
+        这里带有限重试，是为了应对偶发网络抖动。
+        但如果所有重试都失败，就返回 None，让调用方明确走失败分支。
 
         Args:
             url: 请求URL
@@ -45,6 +49,7 @@ class HTTPClient:
         """
         full_url = self.base_url + url if not url.startswith('http') else url
 
+        # 对外部 API 不能假设永远成功，所以每次请求都要有超时、重试和错误提示。
         for attempt in range(retry):
             try:
                 response = self.session.get(
@@ -70,8 +75,10 @@ class HTTPClient:
         headers: Optional[Dict] = None,
         retry: int = 3
     ) -> Optional[requests.Response]:
-        """
-        发送POST请求
+        """发送 POST 请求，适合提交 JSON 或表单数据。
+
+        LLM 调用、RAG 问答、NL2SQL 查询通常都会用 POST，
+        因为请求体里要放 prompt、上下文、用户问题等结构化内容。
 
         Args:
             url: 请求URL
@@ -104,5 +111,8 @@ class HTTPClient:
                     return None
 
     def close(self):
-        """关闭会话"""
+        """关闭会话，释放底层连接资源。
+
+        长时间运行的服务要注意释放连接，否则可能造成连接泄漏。
+        """
         self.session.close()

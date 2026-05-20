@@ -1,20 +1,21 @@
-"""
-工具类：数据清洗器
+"""工具类：数据清洗器。
 
-提供数据清洗和预处理功能
+这个模块负责把招聘 CSV 里的文本字段整理成可统计字段。
+原始岗位数据通常是给人看的，比如 `20-35K`、`Python,SQL,RAG`。
+清洗后才能计算薪资均值、技能词频，也方便后续写入数据库做 SQL 查询。
 """
 
 import pandas as pd
-import re
-
 
 class DataCleaner:
-    """数据清洗器类"""
+    """集中处理招聘数据里的字段清洗规则。"""
 
     @staticmethod
     def clean_salary(salary_str):
-        """
-        清洗薪资字符串，提取最小值和最大值
+        """清洗薪资字符串，提取最小值、最大值和平均值。
+
+        招聘网站的薪资是展示文本，不能直接参与统计。
+        解析成数字后，后续才能计算平均薪资、中位数和不同岗位的薪资区间。
 
         Args:
             salary_str: 薪资字符串，如 "20-35K"
@@ -41,8 +42,10 @@ class DataCleaner:
 
     @staticmethod
     def extract_skills(skills_str):
-        """
-        提取技能列表
+        """把技能字符串拆成技能列表。
+
+        技能词频统计需要列表结构。先把一整段字符串拆开，
+        后续才能统计 Python、SQL、RAG 等关键词出现次数。
 
         Args:
             skills_str: 技能字符串，如 "Python,SQL,RAG"
@@ -53,15 +56,17 @@ class DataCleaner:
         if pd.isna(skills_str):
             return []
 
-        # 移除引号并分割
+        # 原始 CSV 里技能可能带引号，先去掉这些展示符号，再按逗号拆分。
         skills_str = str(skills_str).replace('"', '').replace("'", "")
         skills = [s.strip() for s in skills_str.split(',')]
         return skills
 
     @staticmethod
     def clean_dataframe(df):
-        """
-        清洗整个数据框
+        """清洗整个招聘数据表。
+
+        这里把单字段清洗规则集中应用到 DataFrame：
+        去重保证样本不被重复统计，薪资解析保证能做数值分析，技能拆分保证能做词频统计。
 
         Args:
             df: 原始数据框
@@ -71,7 +76,7 @@ class DataCleaner:
         """
         print("🧹 开始数据清洗...")
 
-        # 复制数据框
+        # 复制一份再清洗，避免破坏原始数据。真实项目里原始数据要保留，方便追溯和重跑。
         df_clean = df.copy()
 
         # 移除完全重复的行（在添加新列之前）

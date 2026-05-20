@@ -1,0 +1,287 @@
+[
+  {
+    "request_id": "reg_001",
+    "question": "RAG 知识入库怎么设计？",
+    "answer": "基于当前知识库，相关资料主要来自以下片段：\n[1] ## 今日复盘 待填写： 1. 今天选定的第一批知识库资料： 2. 哪些资料暂时不适合入库： 3. 明天学习 RAG 基础时最想弄懂的问题：\n[2] # Day 17 - RAG 知识入库：索引构建\n[3] ### 任务 1：理解 RAG 完整流程 RAG 不是直接把问题丢给模型，而是多了一步“先找资料”。 完整流程：",
+    "citations": [
+      {
+        "ref": 1,
+        "chunk_id": "chunk_edc1b2c61a26",
+        "doc_id": "doc_216e59e92ede",
+        "source_path": "notes/day15_rag_preparation.md",
+        "title": "Day 15 - RAG 准备：文档资料整理",
+        "position": 19,
+        "score": 0.816496
+      },
+      {
+        "ref": 2,
+        "chunk_id": "chunk_e7b48e6cc204",
+        "doc_id": "doc_94849ca206f7",
+        "source_path": "notes/day17_rag_ingestion.md",
+        "title": "Day 17 - RAG 知识入库：索引构建",
+        "position": 1,
+        "score": 0.816496
+      },
+      {
+        "ref": 3,
+        "chunk_id": "chunk_f48055c54d63",
+        "doc_id": "doc_e8e7fb71a561",
+        "source_path": "notes/day16_rag_basics.md",
+        "title": "Day 16 - RAG 基础：切分、Embedding、召回",
+        "position": 5,
+        "score": 0.707107
+      }
+    ],
+    "retrieved_chunks": [
+      {
+        "chunk_id": "chunk_edc1b2c61a26",
+        "score": 0.816496,
+        "preview": "## 今日复盘 待填写： 1. 今天选定的第一批知识库资料： 2. 哪些资料暂时不适合入库： 3. 明天学习 RAG 基础时最想弄懂的问题："
+      },
+      {
+        "chunk_id": "chunk_e7b48e6cc204",
+        "score": 0.816496,
+        "preview": "# Day 17 - RAG 知识入库：索引构建"
+      },
+      {
+        "chunk_id": "chunk_f48055c54d63",
+        "score": 0.707107,
+        "preview": "### 任务 1：理解 RAG 完整流程 RAG 不是直接把问题丢给模型，而是多了一步“先找资料”。 完整流程："
+      }
+    ],
+    "confidence": 0.816496,
+    "cannot_answer_reason": null,
+    "latency_ms": 3,
+    "has_answer": true,
+    "has_citations": true,
+    "has_request_id": true
+  },
+  {
+    "request_id": "reg_002",
+    "question": "RAG 为什么要返回引用来源？",
+    "answer": "基于当前知识库，相关资料主要来自以下片段：\n[1] ### 5. 为什么 RAG 需要返回引用来源，而不只是答案？ 我的回答：\n[2] ## 今日核心理解 RAG 问答不是“模型自由回答”，而是“先找依据，再基于依据回答”。 今天要重点记住： 1. 检索结果决定答案上限。 2. 引用来源决定答案是否可信。 3. 没有引用的企业 RAG 很难排查问题，也很难让用户信任。 ---\n[3] ### 2. RAG 为什么要返回引用来源？ 我的回答： 方便后续问题的追踪排查，维护和审计， 参考答案： RAG 返回引用来源是为了让答案可核对、可追溯、可排查。企业场景里用户不能只相信 一个自然语言答案，还要知道它来自哪份文档、哪个 chunk、哪个位置和哪个版本。 如果答案错了，研发可以根据 citations 判断是资料本身错误、检索召回错误、rer...",
+    "citations": [
+      {
+        "ref": 1,
+        "chunk_id": "chunk_9cee8c7fc5e9",
+        "doc_id": "doc_e8e7fb71a561",
+        "source_path": "notes/day16_rag_basics.md",
+        "title": "Day 16 - RAG 基础：切分、Embedding、召回",
+        "position": 21,
+        "score": 0.999999
+      },
+      {
+        "ref": 2,
+        "chunk_id": "chunk_b27caeb0574d",
+        "doc_id": "doc_eed1efbc65b0",
+        "source_path": "notes/day18_rag_retrieval_citations.md",
+        "title": "Day 18 - RAG 检索与引用：基础问答脚本",
+        "position": 8,
+        "score": 0.870388
+      },
+      {
+        "ref": 3,
+        "chunk_id": "chunk_c119bd554e41",
+        "doc_id": "doc_c39c01403c16",
+        "source_path": "notes/day20_rag_api.md",
+        "title": "Day 20 - 项目 2 接口化：RAG 问答 API",
+        "position": 13,
+        "score": 0.854242
+      }
+    ],
+    "retrieved_chunks": [
+      {
+        "chunk_id": "chunk_9cee8c7fc5e9",
+        "score": 0.999999,
+        "preview": "### 5. 为什么 RAG 需要返回引用来源，而不只是答案？ 我的回答："
+      },
+      {
+        "chunk_id": "chunk_b27caeb0574d",
+        "score": 0.870388,
+        "preview": "## 今日核心理解 RAG 问答不是“模型自由回答”，而是“先找依据，再基于依据回答”。 今天要重点记住： 1. 检索结果决定答案上限。 2. 引用来源决定答案是否可信。 3. 没有引用的企业 RAG 很难排查问题，也很难让用户信任。 --..."
+      },
+      {
+        "chunk_id": "chunk_c119bd554e41",
+        "score": 0.854242,
+        "preview": "### 2. RAG 为什么要返回引用来源？ 我的回答： 方便后续问题的追踪排查，维护和审计， 参考答案： RAG 返回引用来源是为了让答案可核对、可追溯、可排查。企业场景里用户不能只相信 一个自然语言答案，还要知道它来自哪份文档、哪个 c..."
+      }
+    ],
+    "confidence": 0.999999,
+    "cannot_answer_reason": null,
+    "latency_ms": 1,
+    "has_answer": true,
+    "has_citations": true,
+    "has_request_id": true
+  },
+  {
+    "request_id": "reg_003",
+    "question": "SQL 解释助手能检查哪些风险？",
+    "answer": "基于当前知识库，相关资料主要来自以下片段：\n[1] ## 今日完成标准 - [x] CLI 可以运行 - [ ] 输出是合法 JSON - [ ] 至少识别 5 类 SQL 风险 - [ ] 能解释这个项目和 Day 9-11 的关系\n[2] ## 今日目标 - 强化 SQL 风险规则 - 优化 README，让别人能独立运行 - 准备 Day 14 的项目讲解 - 把项目表达成 AI 应用工程能力，而不是普通脚本\n[3] ### 1. 为什么 SQL 风险检查不能完全依赖 LLM？ 我的回答：",
+    "citations": [
+      {
+        "ref": 1,
+        "chunk_id": "chunk_eda7032ded2d",
+        "doc_id": "doc_d3e91e684f76",
+        "source_path": "notes/day12_sql_explainer_cli.md",
+        "title": "Day 12 - 项目 1 雏形：SQL 解释助手 CLI",
+        "position": 10,
+        "score": 1.0
+      },
+      {
+        "ref": 2,
+        "chunk_id": "chunk_b832dc4feb28",
+        "doc_id": "doc_ed5005ce9c99",
+        "source_path": "notes/day13_sql_explainer_enhancement.md",
+        "title": "Day 13 - 项目 1 强化：风险规则与输出优化",
+        "position": 3,
+        "score": 1.0
+      },
+      {
+        "ref": 3,
+        "chunk_id": "chunk_5d7a08bfe771",
+        "doc_id": "doc_ed5005ce9c99",
+        "source_path": "notes/day13_sql_explainer_enhancement.md",
+        "title": "Day 13 - 项目 1 强化：风险规则与输出优化",
+        "position": 12,
+        "score": 1.0
+      }
+    ],
+    "retrieved_chunks": [
+      {
+        "chunk_id": "chunk_eda7032ded2d",
+        "score": 1.0,
+        "preview": "## 今日完成标准 - [x] CLI 可以运行 - [ ] 输出是合法 JSON - [ ] 至少识别 5 类 SQL 风险 - [ ] 能解释这个项目和 Day 9-11 的关系"
+      },
+      {
+        "chunk_id": "chunk_b832dc4feb28",
+        "score": 1.0,
+        "preview": "## 今日目标 - 强化 SQL 风险规则 - 优化 README，让别人能独立运行 - 准备 Day 14 的项目讲解 - 把项目表达成 AI 应用工程能力，而不是普通脚本"
+      },
+      {
+        "chunk_id": "chunk_5d7a08bfe771",
+        "score": 1.0,
+        "preview": "### 1. 为什么 SQL 风险检查不能完全依赖 LLM？ 我的回答："
+      }
+    ],
+    "confidence": 1.0,
+    "cannot_answer_reason": null,
+    "latency_ms": 1,
+    "has_answer": true,
+    "has_citations": true,
+    "has_request_id": true
+  },
+  {
+    "request_id": "reg_004",
+    "question": "query rewrite 解决什么问题？",
+    "answer": "基于当前知识库，相关资料主要来自以下片段：\n[1] # Day 22 - RAG 进阶：Query Rewrite\n[2] ## 生产实际 生产 RAG 里，用户问题通常不标准： - 省略主语，比如“这个怎么处理？” - 使用口语，比如“问不出来怎么办？” - 使用同义词，比如“资料出处”和“引用来源” - 中英文混用，比如 citation、source、chunk - 一个问题里有多个意图 - 带上下文指代，比如“上面那个指标怎么算？” query rewrite 通常接在用...\n[3] ## 今日复盘 今天要记住三句话： 1. query rewrite 是为了让检索更容易命中正确资料。 2. 改写必须保留用户原意，不能为了命中而乱加词。 3. rewrite 是否有效，要用固定测试集和 bad case 验证。 ---",
+    "citations": [
+      {
+        "ref": 1,
+        "chunk_id": "chunk_da8ceaad3d57",
+        "doc_id": "doc_e141a9eb84ca",
+        "source_path": "notes/day22_query_rewrite.md",
+        "title": "Day 22 - RAG 进阶：Query Rewrite",
+        "position": 1,
+        "score": 0.816496
+      },
+      {
+        "ref": 2,
+        "chunk_id": "chunk_9568562f6366",
+        "doc_id": "doc_e141a9eb84ca",
+        "source_path": "notes/day22_query_rewrite.md",
+        "title": "Day 22 - RAG 进阶：Query Rewrite",
+        "position": 4,
+        "score": 0.721688
+      },
+      {
+        "ref": 3,
+        "chunk_id": "chunk_43c59fc5a6d8",
+        "doc_id": "doc_e141a9eb84ca",
+        "source_path": "notes/day22_query_rewrite.md",
+        "title": "Day 22 - RAG 进阶：Query Rewrite",
+        "position": 10,
+        "score": 0.707107
+      }
+    ],
+    "retrieved_chunks": [
+      {
+        "chunk_id": "chunk_da8ceaad3d57",
+        "score": 0.816496,
+        "preview": "# Day 22 - RAG 进阶：Query Rewrite"
+      },
+      {
+        "chunk_id": "chunk_9568562f6366",
+        "score": 0.721688,
+        "preview": "## 生产实际 生产 RAG 里，用户问题通常不标准： - 省略主语，比如“这个怎么处理？” - 使用口语，比如“问不出来怎么办？” - 使用同义词，比如“资料出处”和“引用来源” - 中英文混用，比如 citation、source、ch..."
+      },
+      {
+        "chunk_id": "chunk_43c59fc5a6d8",
+        "score": 0.707107,
+        "preview": "## 今日复盘 今天要记住三句话： 1. query rewrite 是为了让检索更容易命中正确资料。 2. 改写必须保留用户原意，不能为了命中而乱加词。 3. rewrite 是否有效，要用固定测试集和 bad case 验证。 ---"
+      }
+    ],
+    "confidence": 0.816496,
+    "cannot_answer_reason": null,
+    "latency_ms": 1,
+    "has_answer": true,
+    "has_citations": true,
+    "has_request_id": true
+  },
+  {
+    "request_id": "reg_005",
+    "question": "RAG 召回质量差怎么排查？",
+    "answer": "基于当前知识库，相关资料主要来自以下片段：\n[1] # Day 19 - RAG 优化：召回质量\n[2] ### 1. RAG 召回质量差时，你会怎么排查和优化？ 我的回答：\n[3] # Day 16 - RAG 基础：切分、Embedding、召回",
+    "citations": [
+      {
+        "ref": 1,
+        "chunk_id": "chunk_d6117b5ba232",
+        "doc_id": "doc_d72c0a0e978f",
+        "source_path": "notes/day19_rag_retrieval_optimization.md",
+        "title": "Day 19 - RAG 优化：召回质量",
+        "position": 1,
+        "score": 1.0
+      },
+      {
+        "ref": 2,
+        "chunk_id": "chunk_80c38b53bb10",
+        "doc_id": "doc_d72c0a0e978f",
+        "source_path": "notes/day19_rag_retrieval_optimization.md",
+        "title": "Day 19 - RAG 优化：召回质量",
+        "position": 12,
+        "score": 1.0
+      },
+      {
+        "ref": 3,
+        "chunk_id": "chunk_f8a5102f18a1",
+        "doc_id": "doc_e8e7fb71a561",
+        "source_path": "notes/day16_rag_basics.md",
+        "title": "Day 16 - RAG 基础：切分、Embedding、召回",
+        "position": 1,
+        "score": 0.816496
+      }
+    ],
+    "retrieved_chunks": [
+      {
+        "chunk_id": "chunk_d6117b5ba232",
+        "score": 1.0,
+        "preview": "# Day 19 - RAG 优化：召回质量"
+      },
+      {
+        "chunk_id": "chunk_80c38b53bb10",
+        "score": 1.0,
+        "preview": "### 1. RAG 召回质量差时，你会怎么排查和优化？ 我的回答："
+      },
+      {
+        "chunk_id": "chunk_f8a5102f18a1",
+        "score": 0.816496,
+        "preview": "# Day 16 - RAG 基础：切分、Embedding、召回"
+      }
+    ],
+    "confidence": 1.0,
+    "cannot_answer_reason": null,
+    "latency_ms": 1,
+    "has_answer": true,
+    "has_citations": true,
+    "has_request_id": true
+  }
+]

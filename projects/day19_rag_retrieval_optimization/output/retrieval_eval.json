@@ -1,0 +1,447 @@
+{
+  "summary": [
+    {
+      "strategy": "baseline_top3",
+      "case_count": 4,
+      "hit_count": 3,
+      "hit_rate": 0.75,
+      "avg_hit_rank": 1.67
+    },
+    {
+      "strategy": "expanded_top3",
+      "case_count": 4,
+      "hit_count": 3,
+      "hit_rate": 0.75,
+      "avg_hit_rank": 1.0
+    },
+    {
+      "strategy": "expanded_top5",
+      "case_count": 4,
+      "hit_count": 3,
+      "hit_rate": 0.75,
+      "avg_hit_rank": 1.0
+    }
+  ],
+  "evaluations": [
+    {
+      "case_id": "tc_001",
+      "question": "RAG 知识入库在生产环境里怎么设计？",
+      "strategy": "baseline_top3",
+      "rewritten_query": "RAG 知识入库在生产环境里怎么设计？",
+      "expected_sources": [
+        "notes/day17_rag_ingestion.md"
+      ],
+      "hit": true,
+      "hit_rank": 2,
+      "results": [
+        {
+          "chunk_id": "chunk_0b3f51e05c28",
+          "source_path": "notes/day15_rag_preparation.md",
+          "title": "Day 15 - RAG 准备：文档资料整理",
+          "position": 19,
+          "score": 0.666666,
+          "preview": "## 今日复盘 待填写： 1. 今天选定的第一批知识库资料： 2. 哪些资料暂时不适合入库： 3. 明天学习 RAG 基础时最想弄懂的问题："
+        },
+        {
+          "chunk_id": "chunk_f5f5c87d7d30",
+          "source_path": "notes/day17_rag_ingestion.md",
+          "title": "Day 17 - RAG 知识入库：索引构建",
+          "position": 1,
+          "score": 0.666666,
+          "preview": "# Day 17 - RAG 知识入库：索引构建"
+        },
+        {
+          "chunk_id": "chunk_60cdceadb1de",
+          "source_path": "notes/day17_rag_ingestion.md",
+          "title": "Day 17 - RAG 知识入库：索引构建",
+          "position": 2,
+          "score": 0.666666,
+          "preview": "## 今日目标 今天进入 RAG 的离线入库链路。 目标不是“问答”，而是先把资料整理成系统能检索的知识库。 这一步对应生产 RAG 里的文档接入、解析、切分、embedding、索引构建和版本管理。..."
+        }
+      ]
+    },
+    {
+      "case_id": "tc_001",
+      "question": "RAG 知识入库在生产环境里怎么设计？",
+      "strategy": "expanded_top3",
+      "rewritten_query": "RAG 知识入库在生产环境里怎么设计？ 文档 chunk embedding metadata 索引",
+      "expected_sources": [
+        "notes/day17_rag_ingestion.md"
+      ],
+      "hit": true,
+      "hit_rank": 1,
+      "results": [
+        {
+          "chunk_id": "chunk_6d86d175d1cb",
+          "source_path": "notes/day17_rag_ingestion.md",
+          "title": "Day 17 - RAG 知识入库：索引构建",
+          "position": 7,
+          "score": 0.710046,
+          "preview": "## 工程取舍 今天为什么用 SQLite，而不是直接上 Milvus 或 pgvector？ 原因是当前目标是先理解“入库数据结构”和“离线处理链路”。 SQLite 足够模拟文档表、chunk 表..."
+        },
+        {
+          "chunk_id": "chunk_7fbb90b3cfc6",
+          "source_path": "notes/day17_rag_ingestion.md",
+          "title": "Day 17 - RAG 知识入库：索引构建",
+          "position": 9,
+          "score": 0.697485,
+          "preview": "## 生产级理解 面试里如果被问“RAG 入库链路怎么做”，不要只说“把文档向量化”。 更完整的说法是： > 生产级 RAG 入库会先接入原始文档，解析正文，清洗去重和脱敏， > 然后按业务语义切 c..."
+        },
+        {
+          "chunk_id": "chunk_60cdceadb1de",
+          "source_path": "notes/day17_rag_ingestion.md",
+          "title": "Day 17 - RAG 知识入库：索引构建",
+          "position": 2,
+          "score": 0.680413,
+          "preview": "## 今日目标 今天进入 RAG 的离线入库链路。 目标不是“问答”，而是先把资料整理成系统能检索的知识库。 这一步对应生产 RAG 里的文档接入、解析、切分、embedding、索引构建和版本管理。..."
+        }
+      ]
+    },
+    {
+      "case_id": "tc_001",
+      "question": "RAG 知识入库在生产环境里怎么设计？",
+      "strategy": "expanded_top5",
+      "rewritten_query": "RAG 知识入库在生产环境里怎么设计？ 文档 chunk embedding metadata 索引",
+      "expected_sources": [
+        "notes/day17_rag_ingestion.md"
+      ],
+      "hit": true,
+      "hit_rank": 1,
+      "results": [
+        {
+          "chunk_id": "chunk_6d86d175d1cb",
+          "source_path": "notes/day17_rag_ingestion.md",
+          "title": "Day 17 - RAG 知识入库：索引构建",
+          "position": 7,
+          "score": 0.710046,
+          "preview": "## 工程取舍 今天为什么用 SQLite，而不是直接上 Milvus 或 pgvector？ 原因是当前目标是先理解“入库数据结构”和“离线处理链路”。 SQLite 足够模拟文档表、chunk 表..."
+        },
+        {
+          "chunk_id": "chunk_7fbb90b3cfc6",
+          "source_path": "notes/day17_rag_ingestion.md",
+          "title": "Day 17 - RAG 知识入库：索引构建",
+          "position": 9,
+          "score": 0.697485,
+          "preview": "## 生产级理解 面试里如果被问“RAG 入库链路怎么做”，不要只说“把文档向量化”。 更完整的说法是： > 生产级 RAG 入库会先接入原始文档，解析正文，清洗去重和脱敏， > 然后按业务语义切 c..."
+        },
+        {
+          "chunk_id": "chunk_60cdceadb1de",
+          "source_path": "notes/day17_rag_ingestion.md",
+          "title": "Day 17 - RAG 知识入库：索引构建",
+          "position": 2,
+          "score": 0.680413,
+          "preview": "## 今日目标 今天进入 RAG 的离线入库链路。 目标不是“问答”，而是先把资料整理成系统能检索的知识库。 这一步对应生产 RAG 里的文档接入、解析、切分、embedding、索引构建和版本管理。..."
+        },
+        {
+          "chunk_id": "chunk_8be8d93c93e3",
+          "source_path": "notes/day15_rag_preparation.md",
+          "title": "Day 15 - RAG 准备：文档资料整理",
+          "position": 20,
+          "score": 0.668152,
+          "preview": "## 明日预告 Day 16：RAG 基础 重点： - chunk 文档切分 - embedding 向量表示 - top-k 检索 - RAG 流程图"
+        },
+        {
+          "chunk_id": "chunk_6d5959dd57af",
+          "source_path": "notes/day17_rag_ingestion.md",
+          "title": "Day 17 - RAG 知识入库：索引构建",
+          "position": 5,
+          "score": 0.666666,
+          "preview": "## 今日核心流程 对应生产链路： | 今日练习步骤 | 生产环境对应能力 | |--------------|------------------| | 读取本地 Markdown | 文档接入 |..."
+        }
+      ]
+    },
+    {
+      "case_id": "tc_002",
+      "question": "SQL 解释助手为什么要检查 dt 分区？",
+      "strategy": "baseline_top3",
+      "rewritten_query": "SQL 解释助手为什么要检查 dt 分区？",
+      "expected_sources": [
+        "notes/day12_sql_explainer_cli.md",
+        "notes/day13_sql_explainer_enhancement.md"
+      ],
+      "hit": true,
+      "hit_rank": 2,
+      "results": [
+        {
+          "chunk_id": "chunk_17cfd71a925d",
+          "source_path": "notes/terminology_glossary.md",
+          "title": "AI 转型学习术语表",
+          "position": 11,
+          "score": 0.833333,
+          "preview": "” | Day 14 | | 数据与 SQL | 指标口径 | Metric Definition | 一个指标到底怎么算。| 活跃用户 = 指定时间内发生 `app_open` 的去重 `user_..."
+        },
+        {
+          "chunk_id": "chunk_8c3c40f4025c",
+          "source_path": "notes/day12_sql_explainer_cli.md",
+          "title": "Day 12 - 项目 1 雏形：SQL 解释助手 CLI",
+          "position": 8,
+          "score": 0.745356,
+          "preview": "### 任务 3：实现基础风险规则 \"使用 select * 会读取不必要字段。\", \"只选择业务需要的字段。\")) \"缺少 where 条件， 可能触发全表扫描。\", \"增加时间范围、分区或业务过滤..."
+        },
+        {
+          "chunk_id": "chunk_a9a22509b1a5",
+          "source_path": "notes/day12_sql_explainer_cli.md",
+          "title": "Day 12 - 项目 1 雏形：SQL 解释助手 CLI",
+          "position": 1,
+          "score": 0.57735,
+          "preview": "# Day 12 - 项目 1 雏形：SQL 解释助手 CLI"
+        }
+      ]
+    },
+    {
+      "case_id": "tc_002",
+      "question": "SQL 解释助手为什么要检查 dt 分区？",
+      "strategy": "expanded_top3",
+      "rewritten_query": "SQL 解释助手为什么要检查 dt 分区？ 分区 where 全表扫描 风险 dt where 全表扫描 风险",
+      "expected_sources": [
+        "notes/day12_sql_explainer_cli.md",
+        "notes/day13_sql_explainer_enhancement.md"
+      ],
+      "hit": true,
+      "hit_rank": 1,
+      "results": [
+        {
+          "chunk_id": "chunk_2b304f23d59e",
+          "source_path": "notes/day13_sql_explainer_enhancement.md",
+          "title": "Day 13 - 项目 1 强化：风险规则与输出优化",
+          "position": 5,
+          "score": 0.970142,
+          "preview": "### 任务 1：检查风险规则 重点规则： - [x] `select *`：读取不必要字段 - [x] 缺少 `where`：可能全表扫描 - [x] 缺少 `dt`：数仓大表可能缺少分区过滤 -..."
+        },
+        {
+          "chunk_id": "chunk_8c3c40f4025c",
+          "source_path": "notes/day12_sql_explainer_cli.md",
+          "title": "Day 12 - 项目 1 雏形：SQL 解释助手 CLI",
+          "position": 8,
+          "score": 0.876714,
+          "preview": "### 任务 3：实现基础风险规则 \"使用 select * 会读取不必要字段。\", \"只选择业务需要的字段。\")) \"缺少 where 条件， 可能触发全表扫描。\", \"增加时间范围、分区或业务过滤..."
+        },
+        {
+          "chunk_id": "chunk_6be449f4dffe",
+          "source_path": "notes/day12_sql_explainer_cli.md",
+          "title": "Day 12 - 项目 1 雏形：SQL 解释助手 CLI",
+          "position": 10,
+          "score": 0.514496,
+          "preview": "## 今日完成标准 - [x] CLI 可以运行 - [ ] 输出是合法 JSON - [ ] 至少识别 5 类 SQL 风险 - [ ] 能解释这个项目和 Day 9-11 的关系"
+        }
+      ]
+    },
+    {
+      "case_id": "tc_002",
+      "question": "SQL 解释助手为什么要检查 dt 分区？",
+      "strategy": "expanded_top5",
+      "rewritten_query": "SQL 解释助手为什么要检查 dt 分区？ 分区 where 全表扫描 风险 dt where 全表扫描 风险",
+      "expected_sources": [
+        "notes/day12_sql_explainer_cli.md",
+        "notes/day13_sql_explainer_enhancement.md"
+      ],
+      "hit": true,
+      "hit_rank": 1,
+      "results": [
+        {
+          "chunk_id": "chunk_2b304f23d59e",
+          "source_path": "notes/day13_sql_explainer_enhancement.md",
+          "title": "Day 13 - 项目 1 强化：风险规则与输出优化",
+          "position": 5,
+          "score": 0.970142,
+          "preview": "### 任务 1：检查风险规则 重点规则： - [x] `select *`：读取不必要字段 - [x] 缺少 `where`：可能全表扫描 - [x] 缺少 `dt`：数仓大表可能缺少分区过滤 -..."
+        },
+        {
+          "chunk_id": "chunk_8c3c40f4025c",
+          "source_path": "notes/day12_sql_explainer_cli.md",
+          "title": "Day 12 - 项目 1 雏形：SQL 解释助手 CLI",
+          "position": 8,
+          "score": 0.876714,
+          "preview": "### 任务 3：实现基础风险规则 \"使用 select * 会读取不必要字段。\", \"只选择业务需要的字段。\")) \"缺少 where 条件， 可能触发全表扫描。\", \"增加时间范围、分区或业务过滤..."
+        },
+        {
+          "chunk_id": "chunk_6be449f4dffe",
+          "source_path": "notes/day12_sql_explainer_cli.md",
+          "title": "Day 12 - 项目 1 雏形：SQL 解释助手 CLI",
+          "position": 10,
+          "score": 0.514496,
+          "preview": "## 今日完成标准 - [x] CLI 可以运行 - [ ] 输出是合法 JSON - [ ] 至少识别 5 类 SQL 风险 - [ ] 能解释这个项目和 Day 9-11 的关系"
+        },
+        {
+          "chunk_id": "chunk_a8814fb14164",
+          "source_path": "notes/day13_sql_explainer_enhancement.md",
+          "title": "Day 13 - 项目 1 强化：风险规则与输出优化",
+          "position": 3,
+          "score": 0.514496,
+          "preview": "## 今日目标 - 强化 SQL 风险规则 - 优化 README，让别人能独立运行 - 准备 Day 14 的项目讲解 - 把项目表达成 AI 应用工程能力，而不是普通脚本"
+        },
+        {
+          "chunk_id": "chunk_17cfd71a925d",
+          "source_path": "notes/terminology_glossary.md",
+          "title": "AI 转型学习术语表",
+          "position": 11,
+          "score": 0.490098,
+          "preview": "” | Day 14 | | 数据与 SQL | 指标口径 | Metric Definition | 一个指标到底怎么算。| 活跃用户 = 指定时间内发生 `app_open` 的去重 `user_..."
+        }
+      ]
+    },
+    {
+      "case_id": "tc_003",
+      "question": "RAG 问答为什么要返回引用来源？",
+      "strategy": "baseline_top3",
+      "rewritten_query": "RAG 问答为什么要返回引用来源？",
+      "expected_sources": [
+        "notes/day18_rag_retrieval_citations.md"
+      ],
+      "hit": true,
+      "hit_rank": 1,
+      "results": [
+        {
+          "chunk_id": "chunk_d7d75426f0c3",
+          "source_path": "notes/day18_rag_retrieval_citations.md",
+          "title": "Day 18 - RAG 检索与引用：基础问答脚本",
+          "position": 8,
+          "score": 0.79057,
+          "preview": "## 今日核心理解 RAG 问答不是“模型自由回答”，而是“先找依据，再基于依据回答”。 今天要重点记住： 1. 检索结果决定答案上限。 2. 引用来源决定答案是否可信。 3. 没有引用的企业 RAG..."
+        },
+        {
+          "chunk_id": "chunk_305c4bd3c51a",
+          "source_path": "notes/day18_rag_retrieval_citations.md",
+          "title": "Day 18 - RAG 检索与引用：基础问答脚本",
+          "position": 3,
+          "score": 0.75,
+          "preview": "## 大白话解释 Day 17 像“把书整理进图书馆”。 Day 18 像“用户来问图书管理员”。 用户问： 系统不能直接靠模型猜，而是要先从知识库里找资料： 今天的脚本暂时不调用真实 LLM，而是用..."
+        },
+        {
+          "chunk_id": "chunk_54e76385d34c",
+          "source_path": "notes/day16_rag_basics.md",
+          "title": "Day 16 - RAG 基础：切分、Embedding、召回",
+          "position": 12,
+          "score": 0.632456,
+          "preview": "## 注意事项 ⚠️ **今天的重点：** - RAG 的核心是“先检索，再生成” - chunk 决定资料能不能被准确找到 - embedding 决定语义相似度能不能计算 - top-k 决定给模..."
+        }
+      ]
+    },
+    {
+      "case_id": "tc_003",
+      "question": "RAG 问答为什么要返回引用来源？",
+      "strategy": "expanded_top3",
+      "rewritten_query": "RAG 问答为什么要返回引用来源？ citation 来源 可追溯 chunk",
+      "expected_sources": [
+        "notes/day18_rag_retrieval_citations.md"
+      ],
+      "hit": true,
+      "hit_rank": 1,
+      "results": [
+        {
+          "chunk_id": "chunk_305c4bd3c51a",
+          "source_path": "notes/day18_rag_retrieval_citations.md",
+          "title": "Day 18 - RAG 检索与引用：基础问答脚本",
+          "position": 3,
+          "score": 0.666667,
+          "preview": "## 大白话解释 Day 17 像“把书整理进图书馆”。 Day 18 像“用户来问图书管理员”。 用户问： 系统不能直接靠模型猜，而是要先从知识库里找资料： 今天的脚本暂时不调用真实 LLM，而是用..."
+        },
+        {
+          "chunk_id": "chunk_54e76385d34c",
+          "source_path": "notes/day16_rag_basics.md",
+          "title": "Day 16 - RAG 基础：切分、Embedding、召回",
+          "position": 12,
+          "score": 0.632456,
+          "preview": "## 注意事项 ⚠️ **今天的重点：** - RAG 的核心是“先检索，再生成” - chunk 决定资料能不能被准确找到 - embedding 决定语义相似度能不能计算 - top-k 决定给模..."
+        },
+        {
+          "chunk_id": "chunk_2bf067b20a6f",
+          "source_path": "notes/terminology_glossary.md",
+          "title": "AI 转型学习术语表",
+          "position": 16,
+          "score": 0.60753,
+          "preview": "| Day 17 | | RAG | 元数据 | Metadata | chunk 的附加信息，比如来源、权限、版本、业务域。| 检索时按权限和业务域过滤结果。| Day 17 | | RAG | 索..."
+        }
+      ]
+    },
+    {
+      "case_id": "tc_003",
+      "question": "RAG 问答为什么要返回引用来源？",
+      "strategy": "expanded_top5",
+      "rewritten_query": "RAG 问答为什么要返回引用来源？ citation 来源 可追溯 chunk",
+      "expected_sources": [
+        "notes/day18_rag_retrieval_citations.md"
+      ],
+      "hit": true,
+      "hit_rank": 1,
+      "results": [
+        {
+          "chunk_id": "chunk_305c4bd3c51a",
+          "source_path": "notes/day18_rag_retrieval_citations.md",
+          "title": "Day 18 - RAG 检索与引用：基础问答脚本",
+          "position": 3,
+          "score": 0.666667,
+          "preview": "## 大白话解释 Day 17 像“把书整理进图书馆”。 Day 18 像“用户来问图书管理员”。 用户问： 系统不能直接靠模型猜，而是要先从知识库里找资料： 今天的脚本暂时不调用真实 LLM，而是用..."
+        },
+        {
+          "chunk_id": "chunk_54e76385d34c",
+          "source_path": "notes/day16_rag_basics.md",
+          "title": "Day 16 - RAG 基础：切分、Embedding、召回",
+          "position": 12,
+          "score": 0.632456,
+          "preview": "## 注意事项 ⚠️ **今天的重点：** - RAG 的核心是“先检索，再生成” - chunk 决定资料能不能被准确找到 - embedding 决定语义相似度能不能计算 - top-k 决定给模..."
+        },
+        {
+          "chunk_id": "chunk_2bf067b20a6f",
+          "source_path": "notes/terminology_glossary.md",
+          "title": "AI 转型学习术语表",
+          "position": 16,
+          "score": 0.60753,
+          "preview": "| Day 17 | | RAG | 元数据 | Metadata | chunk 的附加信息，比如来源、权限、版本、业务域。| 检索时按权限和业务域过滤结果。| Day 17 | | RAG | 索..."
+        },
+        {
+          "chunk_id": "chunk_ac348855ac5d",
+          "source_path": "notes/day18_rag_retrieval_citations.md",
+          "title": "Day 18 - RAG 检索与引用：基础问答脚本",
+          "position": 5,
+          "score": 0.554699,
+          "preview": "## 常见坑 | 问题 | 影响 | 处理方式 | |------|------|----------| | 只返回答案不返回引用 | 用户无法判断答案依据 | 每个答案必须带 source、chun..."
+        },
+        {
+          "chunk_id": "chunk_408e4b8f0cda",
+          "source_path": "notes/day16_rag_basics.md",
+          "title": "Day 16 - RAG 基础：切分、Embedding、召回",
+          "position": 13,
+          "score": 0.549971,
+          "preview": "## 面试表达 > 我理解 RAG 的完整链路是先把文档切成 chunk，再用 embedding 把文本转成向量，用户提问时计算问题向量和文档向量的相似度， > 召回 top-k 相关片段，最后把这..."
+        }
+      ]
+    },
+    {
+      "case_id": "tc_004",
+      "question": "结构化输出为什么要校验 JSON 字段？",
+      "strategy": "baseline_top3",
+      "rewritten_query": "结构化输出为什么要校验 JSON 字段？",
+      "expected_sources": [
+        "notes/terminology_glossary.md"
+      ],
+      "hit": false,
+      "hit_rank": null,
+      "results": []
+    },
+    {
+      "case_id": "tc_004",
+      "question": "结构化输出为什么要校验 JSON 字段？",
+      "strategy": "expanded_top3",
+      "rewritten_query": "结构化输出为什么要校验 JSON 字段？ json 字段 校验 枚举",
+      "expected_sources": [
+        "notes/terminology_glossary.md"
+      ],
+      "hit": false,
+      "hit_rank": null,
+      "results": []
+    },
+    {
+      "case_id": "tc_004",
+      "question": "结构化输出为什么要校验 JSON 字段？",
+      "strategy": "expanded_top5",
+      "rewritten_query": "结构化输出为什么要校验 JSON 字段？ json 字段 校验 枚举",
+      "expected_sources": [
+        "notes/terminology_glossary.md"
+      ],
+      "hit": false,
+      "hit_rank": null,
+      "results": []
+    }
+  ]
+}

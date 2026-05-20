@@ -111,8 +111,7 @@ day05_fastapi_service/
 
 ### 1️⃣ FastAPI是什么？
 
-**大白话：**
-Fdi。
+**大白话：** Fdi。
 
 **为什么选FastAPI？**
 - 自动生成API文档（Swagger UI）
@@ -137,8 +136,7 @@ def root():
 
 ### 2️⃣ 路由设计
 
-**什么是路由？**
-路由就是URL和函数的映射关系。访问某个URL，就执行对应的函数。
+**什么是路由？** 路由就是URL和函数的映射关系。访问某个URL，就执行对应的函数。
 
 **HTTP方法对应的操作：**
 
@@ -191,8 +189,7 @@ DELETE /users/{id}     # 删除用户
 
 ### 3️⃣ Pydantic数据校验
 
-**Pydantic是什么？**
-Pydantic是一个数据校验库，用类型注解来定义数据模型，自动校验数据。
+**Pydantic是什么？** Pydantic是一个数据校验库，用类型注解来定义数据模型，自动校验数据。
 
 **为什么需要数据校验？**
 - 防止脏数据进入系统
@@ -232,17 +229,17 @@ from pydantic import Field
 class User(BaseModel):
     # 必填字段（...表示必填）
     username: str = Field(..., description="用户名")
-    
+
     # 字符串长度限制
     password: str = Field(..., min_length=6, max_length=20)
-    
+
     # 数字范围限制
     age: int = Field(..., ge=0, le=150)  # ge=大于等于, le=小于等于
-    
+
     # 可选字段（Optional或默认值）
     city: Optional[str] = None
     phone: str = Field("", description="手机号")
-    
+
     # 邮箱校验
     email: EmailStr
 ```
@@ -452,8 +449,7 @@ app.include_router(users.router)
 
 ### 8️⃣ 自动生成API文档
 
-**FastAPI的杀手级特性：**
-启动服务后，自动生成两种API文档：
+**FastAPI的杀手级特性：** 启动服务后，自动生成两种API文档：
 
 **1. Swagger UI（交互式文档）**
 - 访问：http://127.0.0.1:8000/docs
@@ -473,7 +469,7 @@ from pydantic import BaseModel, Field
 class User(BaseModel):
     username: str = Field(..., description="用户名", example="zhangsan")
     email: str = Field(..., description="邮箱地址", example="zhangsan@example.com")
-    
+
     class Config:
         json_schema_extra = {
             "example": {
@@ -486,7 +482,7 @@ class User(BaseModel):
 def create_user(user: User):
     """
     创建新用户：
-    
+
     - **username**: 用户名（必填）
     - **email**: 邮箱地址（必填）
     """
@@ -621,3 +617,34 @@ app.include_router(router)
 ---
 
 *完成时间：2026-05-06 下午*
+
+---
+
+## 每日核心问题自测
+
+> 回答通过校验后，才把当天学习状态标记为完成。
+> 用户回答通过校验前，不提前写参考答案；通过后在对应问题后追加参考答案。
+
+### 1. FastAPI 在 AI 应用服务化里一般承担什么角色？
+
+我的回答：
+
+
+### 2. Pydantic 请求模型为什么比手写字典解析更稳定？
+
+我的回答：
+
+
+### 3. 路由层、模型层和服务层为什么要分开？
+
+我的回答：
+
+
+### 4. API 里为什么要把业务异常转换成稳定的 HTTP 响应？
+
+我的回答：
+
+
+### 5. `/health`、用户接口和后续 RAG API 之间有什么共同设计思路？
+
+我的回答：
