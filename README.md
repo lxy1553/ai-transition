@@ -21,9 +21,9 @@
 
 ## 当前阶段
 
-Day 25：权限与安全 - 敏感信息控制
+Day 25：权限与安全 - 敏感信息控制（已完成）
 
-今天要完成：
+今日已完成：
 
 - 阅读 `notes/day25_security_controls.md`
 - 跑通 `projects/day25_security_controls/`
