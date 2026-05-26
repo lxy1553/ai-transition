@@ -35,3 +35,8 @@
 - [Day 23 - RAG 测试集](./day23_rag_eval_testset.md)
 - [Day 24 - 幻觉控制：拒答与边界](./day24_hallucination_guardrails.md)
 - [Day 25 - 权限与安全：敏感信息控制](./day25_security_controls.md)
+- [Day 26 - 性能与成本：缓存与上下文控制](./day26_rag_performance_cost.md)
+- [Day 27 - 项目 2 打磨：演示与稳定性](./day27_rag_demo_stability.md)
+- [Day 28 - 第 4 周复盘与试投启动](./day28_week4_review_application.md)
+- [Day 29 - NL2SQL 准备：Schema 与问题类型](./day29_nl2sql_schema_preparation.md)
+- [Day 30 - NL2SQL 问题解析：指标、维度、时间抽取](./day30_nl2sql_question_parser.md)

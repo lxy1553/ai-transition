@@ -1,0 +1,165 @@
+{
+  "pricing": {
+    "input_cost_per_1k": 0.002,
+    "output_cost_per_1k": 0.006,
+    "note": "这是本地实验用的固定估算单价，不代表真实模型价格。"
+  },
+  "summary": {
+    "baseline": {
+      "total_requests": 5,
+      "total_input_tokens": 395,
+      "total_output_tokens": 900,
+      "total_tokens": 1295,
+      "total_estimated_cost": 0.00619,
+      "avg_context_chunks": 2.6,
+      "cache_hits": 0,
+      "cache_hit_rate": 0.0
+    },
+    "optimized": {
+      "total_requests": 5,
+      "total_input_tokens": 220,
+      "total_output_tokens": 540,
+      "total_tokens": 760,
+      "total_estimated_cost": 0.00368,
+      "avg_context_chunks": 1.4,
+      "cache_hits": 2,
+      "cache_hit_rate": 0.4
+    },
+    "comparison": {
+      "saved_tokens": 535,
+      "saved_cost": 0.00251,
+      "token_reduction_rate": 0.4131,
+      "cost_reduction_rate": 0.4055
+    }
+  },
+  "results": [
+    {
+      "request_id": "req_001",
+      "strategy": "baseline",
+      "cache_hit": false,
+      "context_chunks": 3,
+      "input_tokens": 76,
+      "output_tokens": 180,
+      "estimated_cost": 0.001232,
+      "sources": [
+        "notes/day18_rag_retrieval_citations.md",
+        "notes/day18_rag_retrieval_citations.md",
+        "notes/day05_fastapi.md"
+      ]
+    },
+    {
+      "request_id": "req_002",
+      "strategy": "baseline",
+      "cache_hit": false,
+      "context_chunks": 2,
+      "input_tokens": 71,
+      "output_tokens": 180,
+      "estimated_cost": 0.001222,
+      "sources": [
+        "notes/day18_rag_retrieval_citations.md",
+        "notes/day18_rag_retrieval_citations.md"
+      ]
+    },
+    {
+      "request_id": "req_003",
+      "strategy": "baseline",
+      "cache_hit": false,
+      "context_chunks": 4,
+      "input_tokens": 109,
+      "output_tokens": 180,
+      "estimated_cost": 0.001298,
+      "sources": [
+        "notes/day19_rag_retrieval_optimization.md",
+        "notes/day26_rag_performance_cost.md",
+        "notes/day26_rag_performance_cost.md",
+        "notes/day01_environment_setup.md"
+      ]
+    },
+    {
+      "request_id": "req_004",
+      "strategy": "baseline",
+      "cache_hit": false,
+      "context_chunks": 2,
+      "input_tokens": 71,
+      "output_tokens": 180,
+      "estimated_cost": 0.001222,
+      "sources": [
+        "notes/day26_rag_performance_cost.md",
+        "notes/day26_rag_performance_cost.md"
+      ]
+    },
+    {
+      "request_id": "req_005",
+      "strategy": "baseline",
+      "cache_hit": false,
+      "context_chunks": 2,
+      "input_tokens": 68,
+      "output_tokens": 180,
+      "estimated_cost": 0.001216,
+      "sources": [
+        "notes/day25_security_controls.md",
+        "notes/day25_security_controls.md"
+      ]
+    },
+    {
+      "request_id": "req_001",
+      "strategy": "optimized",
+      "cache_hit": false,
+      "context_chunks": 2,
+      "input_tokens": 61,
+      "output_tokens": 180,
+      "estimated_cost": 0.001202,
+      "sources": [
+        "notes/day18_rag_retrieval_citations.md",
+        "notes/day18_rag_retrieval_citations.md"
+      ]
+    },
+    {
+      "request_id": "req_002",
+      "strategy": "optimized",
+      "cache_hit": true,
+      "context_chunks": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "estimated_cost": 0,
+      "reused_from": "req_001"
+    },
+    {
+      "request_id": "req_003",
+      "strategy": "optimized",
+      "cache_hit": false,
+      "context_chunks": 3,
+      "input_tokens": 91,
+      "output_tokens": 180,
+      "estimated_cost": 0.001262,
+      "sources": [
+        "notes/day26_rag_performance_cost.md",
+        "notes/day26_rag_performance_cost.md",
+        "notes/day19_rag_retrieval_optimization.md"
+      ]
+    },
+    {
+      "request_id": "req_004",
+      "strategy": "optimized",
+      "cache_hit": true,
+      "context_chunks": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "estimated_cost": 0,
+      "reused_from": "req_003"
+    },
+    {
+      "request_id": "req_005",
+      "strategy": "optimized",
+      "cache_hit": false,
+      "context_chunks": 2,
+      "input_tokens": 68,
+      "output_tokens": 180,
+      "estimated_cost": 0.001216,
+      "sources": [
+        "notes/day25_security_controls.md",
+        "notes/day25_security_controls.md"
+      ]
+    }
+  ]
+}

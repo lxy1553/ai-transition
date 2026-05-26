@@ -1,0 +1,109 @@
+{
+  "summary": {
+    "total": 7,
+    "passed": 7,
+    "failed": 0,
+    "pass_rate": 1.0
+  },
+  "results": [
+    {
+      "name": "index_ready",
+      "passed": true,
+      "detail": "Day 17 索引已存在，RAG API 具备检索前置条件。",
+      "payload": {
+        "status": "ok",
+        "service": "day20-rag-api",
+        "index_ready": true,
+        "index_path": "projects/day17_rag_ingestion/output/rag_index.sqlite"
+      }
+    },
+    {
+      "name": "success_case_1",
+      "passed": true,
+      "detail": "成功样例返回 answer、citations、request_id、confidence 和 latency。",
+      "payload": {
+        "question": "RAG 知识入库怎么设计？",
+        "citations": 3,
+        "confidence": 0.816496,
+        "latency_ms": 4
+      }
+    },
+    {
+      "name": "success_case_2",
+      "passed": true,
+      "detail": "成功样例返回 answer、citations、request_id、confidence 和 latency。",
+      "payload": {
+        "question": "RAG 为什么要返回引用来源？",
+        "citations": 3,
+        "confidence": 0.999999,
+        "latency_ms": 2
+      }
+    },
+    {
+      "name": "success_case_3",
+      "passed": true,
+      "detail": "成功样例返回 answer、citations、request_id、confidence 和 latency。",
+      "payload": {
+        "question": "SQL 解释助手能检查哪些风险？",
+        "citations": 3,
+        "confidence": 1.0,
+        "latency_ms": 2
+      }
+    },
+    {
+      "name": "no_answer_case",
+      "passed": true,
+      "detail": "无相关资料时能明确返回 no_relevant_chunks。",
+      "payload": {
+        "request_id": "demo_no_answer_001",
+        "question": "蓝色香蕉发票制度是什么？",
+        "answer": "当前知识库没有检索到足够相关的资料，无法基于已有内容回答。",
+        "citations": [],
+        "retrieved_chunks": [],
+        "confidence": 0.0,
+        "cannot_answer_reason": "no_relevant_chunks",
+        "latency_ms": 1
+      }
+    },
+    {
+      "name": "empty_question_validation",
+      "passed": true,
+      "detail": "空问题会被请求模型校验拦截。",
+      "payload": {
+        "error_count": 1,
+        "first_error": {
+          "type": "string_too_short",
+          "loc": [
+            "question"
+          ],
+          "msg": "String should have at least 1 character",
+          "input": "",
+          "ctx": {
+            "min_length": 1
+          },
+          "url": "https://errors.pydantic.dev/2.13/v/string_too_short"
+        }
+      }
+    },
+    {
+      "name": "top_k_validation",
+      "passed": true,
+      "detail": "top_k 越界会被请求模型校验拦截。",
+      "payload": {
+        "error_count": 1,
+        "first_error": {
+          "type": "less_than_equal",
+          "loc": [
+            "top_k"
+          ],
+          "msg": "Input should be less than or equal to 8",
+          "input": 99,
+          "ctx": {
+            "le": 8
+          },
+          "url": "https://errors.pydantic.dev/2.13/v/less_than_equal"
+        }
+      }
+    }
+  ]
+}

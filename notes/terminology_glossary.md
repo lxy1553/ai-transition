@@ -1,7 +1,8 @@
 # AI 转型学习术语表
 
 > 维护规则：每天学习新内容后，把当天出现的新名词、新缩写、新工具、新工程概念追加到本表。
-> 表格优先使用“大白话解释”，后续再补真实场景和面试表达。
+> 新增术语时不能只写术语名，必须解释这个术语是什么意思；
+> 同时补充英文 / 缩写、大白话解释和真实项目例子。（2026-05-25 更新）
 
 ## 术语总表
 
@@ -26,7 +27,7 @@
 | LLM 基础 | LLM API | LLM API | 调用大模型的接口。 | 把 prompt、模型名、参数发给模型服务，拿到回答。 | 第 3 周前补齐 |
 | LLM 基础 | API Key | API Key | 调用模型或外部服务的身份凭证。 | `OPENAI_API_KEY=xxx`，不能提交到 Git。 | 第 3 周前补齐 |
 | Prompt 工程 | Prompt 五要素 | Role / Task / Context / Constraints / Format | 好 Prompt 要说清角色、任务、上下文、约束和输出格式。 | SQL 解释 Prompt 要限制模型不要编造字段口径。 | Day 9 |
-| Prompt 工程 | Role | Role | 模型当前扮演的角色。 | “你是一个数据仓库 SQL 解释助手。” | Day 9 |
+| Prompt 工程 | Role | Role | 模型当前扮演的角色。 | “你是一个信贷数据 SQL 解释助手。” | Day 9 |
 | Prompt 工程 | Task | Task | 要模型完成的具体任务。 | “解释 SQL 的业务含义和风险。” | Day 9 |
 | Prompt 工程 | Context | Context | 模型回答问题需要参考的背景信息。 | 表结构、字段含义、指标口径、业务规则。 | Day 9 |
 | Prompt 工程 | Constraints | Constraints | 告诉模型哪些事不能乱做。 | “不要编造不存在的表结构。” | Day 9 |
@@ -46,12 +47,20 @@
 | Tool Use | Tool | Tool | 给模型使用的外部能力。 | 查表结构、查指标口径、检查 SQL 风险。 | Day 11 |
 | Tool Use | Tool Parameters | Tool Parameters | 调用工具时传入的参数。 | `{"sql": "select * from orders", "dialect": "hive"}` | Day 11 |
 | Tool Use | Tool Result | Tool Result | 工具执行后返回的结构化结果。 | `{"risk_level": "high", "risks": ["使用 select *"]}` | Day 11 |
-| 数据与 SQL | SQL | Structured Query Language | 查询数据库的语言。 | `select city, count(*) from orders group by city`。 | Day 3 / Day 12 |
+| 数据与 SQL | SQL | Structured Query Language | 查询数据库的语言。 | `select channel, approval_rate from dws_credit_application_daily`。 | Day 3 / Day 12 |
 | 数据与 SQL | SQL 解释助手 | SQL Explainer | 输入 SQL，输出它在做什么、有什么风险、怎么优化。 | 当前项目：`projects/day12_sql_explainer_cli/`。 | Day 12 |
-| 数据与 SQL | NL2SQL | Natural Language to SQL | 用户用人话问问题，系统自动生成 SQL。 | “上周每个城市的活跃用户数是多少？”转成 SQL。 | Day 14 |
-| 数据与 SQL | 数据问答 | Data Q&A | 业务人员直接问数据问题，系统查数并解释。 | “这个月 GMV 环比上个月涨了多少？” | Day 14 |
-| 数据与 SQL | 指标口径 | Metric Definition | 一个指标到底怎么算。 | 活跃用户 = 指定时间内发生 `app_open` 的去重 `user_id`。 | Day 12 / RAG |
-| 数据与 SQL | 表结构 | Schema | 一张表有哪些字段、字段类型和字段含义。 | `user_id`、`dt`、`event_name`。 | Day 12 / RAG |
+| 数据与 SQL | NL2SQL | Natural Language to SQL | 用户用人话问问题，系统自动生成 SQL。 | “上周每个渠道的授信通过率是多少？”转成 SQL。 | Day 14 |
+| 数据与 SQL | 数据问答 | Data Q&A | 业务人员直接问数据问题，系统查数并解释。 | “这个月放款金额环比上个月涨了多少？” | Day 14 |
+| 数据与 SQL | 指标口径 | Metric Definition | 一个指标到底怎么算。 | 授信通过率 = 审批通过申请数 / 有效授信申请数。 | Day 12 / RAG |
+| 数据与 SQL | 表结构 | Schema | 一张表有哪些字段、字段类型和字段含义。 | `application_id`、`customer_id`、`approval_status`、`dt`。 | Day 12 / RAG |
+| 数据与 SQL | Schema Catalog | Schema Catalog | 把可用表、字段、指标、维度、时间字段和权限信息整理成目录。 | NL2SQL 生成 SQL 前先查 Catalog，避免编造字段。 | Day 29 |
+| 数据与 SQL | 问题类型分类 | Question Classification | 先判断用户问题是指标、趋势、TopN、明细还是敏感查询。 | “最近 7 天放款金额趋势”归为趋势查询。 | Day 29 |
+| 数据与 SQL | 表粒度 | Grain | 一张表每一行代表什么业务粒度。 | 申请日表是 `channel + dt`，申请明细表是 `application_id`。 | Day 29 |
+| 数据与 SQL | 候选表选择 | Candidate Table Selection | 根据问题先找可能要查的表，不直接让模型自由选表。 | 问放款金额时优先推荐放款日汇总表。 | Day 29 |
+| 数据与 SQL | 实体抽取 | Entity Extraction | 从用户问题里抽出指标、维度、时间、过滤条件和排序限制。 | “上周每个渠道授信通过率”抽出 approval_rate、channel、上周。 | Day 30 |
+| 数据与 SQL | 时间范围解析 | Time Range Parsing | 把自然语言时间转成结构化查询时间范围。 | “最近 7 天”转成 start_date、end_date 和 granularity。 | Day 30 |
+| 数据与 SQL | 指标映射 | Metric Mapping | 把用户说的业务词映射到标准指标名。 | “审批通过率”映射为 approval_rate，“放款额”映射为 disbursement_amount。 | Day 30 |
+| 数据与 SQL | 维度抽取 | Dimension Extraction | 识别用户想按什么维度分组、过滤或展示。 | “每个渠道”抽出 group_by 维度 channel。 | Day 30 |
 | 数据与 SQL | 分区字段 | Partition Field | 大表里用来缩小扫描范围的字段。 | 常见分区字段是 `dt`。 | Day 12 |
 | 数据与 SQL | Group By | GROUP BY | 按字段分组统计。 | `group by city` 表示按城市统计。 | Day 12 |
 | 数据与 SQL | Order By | ORDER BY | 对结果排序。 | 大数据场景里全局排序可能很贵。 | Day 12 |
@@ -60,9 +69,9 @@
 | 数据与 SQL | SQL 解析准确性 | SQL Parsing Accuracy | 程序理解 SQL 的结果准不准。 | 复杂 SQL 里正则可能识别错表名或字段。 | 第 3 周前补齐 |
 | 数据与 SQL | CTE | Common Table Expression | SQL 里的临时结果，通常用 `with ... as (...)` 写。 | `with t as (...) select * from t`。 | 第 3 周前补齐 |
 | RAG | RAG | Retrieval-Augmented Generation | 先从知识库找资料，再让模型基于资料回答。 | 问 active_users 口径时，先检索指标文档。 | Day 15+ |
-| RAG | Retrieval | Retrieval | 检索，从知识库里找相关资料。 | 找到和“活跃用户怎么算”最相关的文档片段。 | Day 15+ |
+| RAG | Retrieval | Retrieval | 检索，从知识库里找相关资料。 | 找到和“授信通过率怎么算”最相关的文档片段。 | Day 15+ |
 | RAG | Generation | Generation | 生成，模型根据资料组织最终回答。 | 基于口径文档解释 active_users。 | Day 15+ |
-| RAG | Embedding | Embedding | 把文字变成一串数字，用来比较语义相似度。 | “活跃用户怎么算”和“active_users 口径”语义接近。 | Day 16+ |
+| RAG | Embedding | Embedding | 把文字变成一串数字，用来比较语义相似度。 | “授信通过率怎么算”和“approval_rate 口径”语义接近。 | Day 16+ |
 | RAG | 向量数据库 | Vector Database | 存向量并支持相似度搜索的数据库。 | RAG 用它找最相关文档片段。 | Day 16+ |
 | RAG | Chunk | Chunk | 文档切片，把长文档切成小段。 | 按标题、段落、问答、指标切分。 | Day 16+ |
 | RAG | Top-k | Top-k | 检索时取最相关的前 k 条结果。 | `top_k = 5` 表示取前 5 个片段。 | Day 16+ |
@@ -83,7 +92,7 @@
 | RAG 安全 | 脱敏 | Masking | 返回或入库前隐藏敏感字段。 | 手机号 `13812345678` 返回前改成 `138****5678`。 | Day 25 |
 | RAG 安全 | 权限标签 | Permission Tag | 写在 metadata 里的访问控制信息。 | chunk 标记 `allowed_roles=["hr","admin"]`。 | Day 25 |
 | RAG 安全 | 审计日志 | Audit Log | 记录谁在什么时间问了什么、召回了什么、返回了什么。 | 通过 request_id 回放一次越权风险。 | Day 25 |
-| RAG | Citation / 引用 | Citation | 回答时标明答案依据来自哪份文档。 | “依据：指标口径文档 - 活跃用户定义”。 | Day 16+ |
+| RAG | Citation / 引用 | Citation | 回答时标明答案依据来自哪份文档。 | “依据：指标口径文档 - 授信通过率定义”。 | Day 16+ |
 | RAG | 知识库 | Knowledge Base | RAG 用来检索资料的文档集合。 | 表结构说明、指标口径、SQL 规范、FAQ。 | Day 15+ |
 | RAG | 文档切分 | Document Chunking | 把长文档切成适合检索的小片段。 | 按标题、段落、问答或指标切。 | Day 16+ |
 | RAG | 资料治理 | Document Governance | 在入库前先筛选、清洗、脱敏和确认资料是否可信。 | Day 15 先整理知识库清单，而不是直接写向量库代码。 | Day 15 |
@@ -105,6 +114,16 @@
 | RAG | RAG API | RAG API | 把 RAG 问答能力封装成可调用的 HTTP 接口。 | `POST /rag/ask` 输入问题，返回答案和 citations。 | Day 20 |
 | 后端与 API | Request ID | Request ID | 每次请求的唯一编号，用来串起日志和排查链路。 | 用户反馈答错时，用 request_id 找到问题、召回和回答。 | Day 20 |
 | RAG | 项目收口 | Project Packaging | 把能跑的 Demo 整理成别人能看懂、能启动、能评估的项目。 | README 写清启动命令、接口示例、bad case 和限制。 | Day 21 |
+| RAG | 上下文控制 | Context Control | 控制放进模型 prompt 的资料数量和质量，避免又贵又乱。 | 去重 chunk，只放最相关的 3-5 段，并限制 token 上限。 | Day 26 |
+| 工程化 | 缓存 | Cache | 把高频问题的召回结果或答案临时存起来，重复请求直接复用。 | 相同问题命中缓存后不再重复检索和调用模型。 | Day 26 |
+| 成本治理 | Token 成本 | Token Cost | 模型输入和输出 token 带来的调用费用。 | RAG 上下文越长，单次请求越贵，延迟也越高。 | Day 26 |
+| RAG | 上下文去重 | Context Deduplication | 删除重复或高度相似的 chunk，减少无效上下文。 | 同一段 README 被召回多次时，只保留一份进入 prompt。 | Day 26 |
+| 工程化 | 演示稳定性 | Demo Stability | 演示前确认关键链路、错误提示和边界样例都能稳定运行。 | 面试前跑一键检查，确认 `/health`、问答样例和 no-answer 场景正常。 | Day 27 |
+| 工程化 | 回归冒烟 | Smoke Test | 用少量关键样例快速判断主链路有没有坏。 | 每次演示前跑 3-5 个问题，确认 answer、citations、request_id 都存在。 | Day 27 |
+| 工程化 | 演示脚本 | Demo Runbook | 演示时按固定顺序讲和操作的清单。 | 先讲目标，再讲入库、检索、API、引用和 bad case。 | Day 27 |
+| 求职 | 试投 | Trial Application | 先小批量投递高匹配岗位，用反馈验证简历和项目表达。 | 先投 5-10 个 RAG / AI 应用岗位，再根据反馈调整。 | Day 28 |
+| 求职 | 投递记录 | Application Tracking | 记录公司、岗位、渠道、状态和反馈，方便复盘。 | `docs/day28_application_tracking.md`。 | Day 28 |
+| 求职 | 项目包装 | Project Positioning | 把项目按岗位需求讲成可理解、可验证的能力证明。 | 把 RAG Demo 包装成离线入库、在线问答、评测、安全和成本治理。 | Day 28 |
 | 工程化 | CLI | Command Line Interface | 命令行工具，在终端输入命令执行。 | `python3 projects/day12_sql_explainer_cli/main.py --example` | Day 12 |
 | 工程化 | README | README | 项目说明书，告诉别人项目是什么、怎么运行。 | `projects/day12_sql_explainer_cli/README.md` | Day 13 |
 | 工程化 | 日志 | Logging | 程序运行时留下的记录，方便排查问题。 | 请求开始、接口报错、风险等级为 high。 | Day 6 |
@@ -118,9 +137,11 @@
 |------|----------|
 | 1 | 学完当天笔记后，找出新术语、新缩写、新工具名。 |
 | 2 | 判断它属于哪个分类：LLM、Prompt、RAG、SQL、工程化等。 |
-| 3 | 用一句大白话解释它。 |
-| 4 | 补一个真实场景或项目例子。 |
-| 5 | 写上首次学习阶段，例如 `Day 15` 或 `第 3 周前补齐`。 |
+| 3 | 写清术语的含义，说明它到底是什么意思。 |
+| 4 | 补充英文名或缩写，避免只知道中文叫法。 |
+| 5 | 用一句大白话解释它。 |
+| 6 | 补一个真实场景或项目例子。 |
+| 7 | 写上首次学习阶段，例如 `Day 15` 或 `第 3 周前补齐`。 |
 
 ## 本阶段最重要的几句话
 
@@ -131,4 +152,4 @@
 | 3 | Tool Use 是让模型做调度，工具做确定性工作。 |
 | 4 | NL2SQL 不只是生成 SQL，还包括理解口径、找表字段、校验风险和解释结果。 |
 | 5 | RAG 是先检索资料，再让模型基于资料回答。 |
-| 6 | 数据仓库经验可以迁移到 AI 应用：表结构、指标口径、SQL 风险、数据质量都是核心能力。 |
+| 6 | 金融信贷开发经验可以迁移到 AI 应用：信贷流程、风控规则、权限合规、SQL 风险和业务系统落地都是核心能力。 |

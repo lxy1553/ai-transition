@@ -1,0 +1,94 @@
+[
+  {
+    "question": "昨天授信申请量是多少？",
+    "expected": {
+      "metrics": ["application_count"],
+      "dimensions": [],
+      "time_range": "yesterday",
+      "query_type": "metric"
+    }
+  },
+  {
+    "question": "上周每个渠道的授信通过率是多少？",
+    "expected": {
+      "metrics": ["approval_rate"],
+      "dimensions": ["channel"],
+      "time_range": "last_week",
+      "query_type": "group_by"
+    }
+  },
+  {
+    "question": "最近 7 天放款金额趋势怎么样？",
+    "expected": {
+      "metrics": ["disbursement_amount"],
+      "dimensions": ["dt"],
+      "time_range": "last_7_days",
+      "query_type": "trend"
+    }
+  },
+  {
+    "question": "上周放款金额最高的 10 个城市是什么？",
+    "expected": {
+      "metrics": ["disbursement_amount"],
+      "dimensions": ["city"],
+      "time_range": "last_week",
+      "top_n": 10,
+      "query_type": "topn"
+    }
+  },
+  {
+    "question": "本周逾期率比上周变化多少？",
+    "expected": {
+      "metrics": ["overdue_rate"],
+      "time_range": "this_week_vs_last_week",
+      "query_type": "comparison"
+    }
+  },
+  {
+    "question": "查询申请 A123 的审批状态",
+    "expected": {
+      "metrics": [],
+      "dimensions": ["application_status"],
+      "filters": {"application_id": "A123"},
+      "query_type": "detail"
+    }
+  },
+  {
+    "question": "导出客户手机号列表",
+    "expected": {
+      "metrics": [],
+      "dimensions": ["phone"],
+      "query_type": "sensitive",
+      "risk_flags": ["sensitive_field"]
+    }
+  },
+  {
+    "question": "本月每个产品的逾期金额前 5 名账龄",
+    "expected": {
+      "metrics": ["overdue_amount"],
+      "dimensions": ["product_type", "overdue_bucket"],
+      "time_range": "this_month",
+      "top_n": 5,
+      "query_type": "topn"
+    }
+  },
+  {
+    "question": "北京最近 7 天放款笔数趋势",
+    "expected": {
+      "metrics": ["loan_count"],
+      "dimensions": ["dt"],
+      "filters": {"city": "北京"},
+      "time_range": "last_7_days",
+      "query_type": "trend"
+    }
+  },
+  {
+    "question": "各风险等级的授信通过量",
+    "expected": {
+      "metrics": ["approval_count"],
+      "dimensions": ["risk_level"],
+      "query_type": "group_by",
+      "risk_flags": ["missing_time_range"]
+    }
+  }
+]

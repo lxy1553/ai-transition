@@ -36,6 +36,12 @@ SOURCE_FILES = [
     "notes/day24_hallucination_guardrails.md",
     "notes/day25_security_controls.md",
     "docs/day25_security_control_checklist.md",
+    "notes/day26_rag_performance_cost.md",
+    "notes/day27_rag_demo_stability.md",
+    "notes/day28_week4_review_application.md",
+    "docs/day28_application_tracking.md",
+    "notes/day29_nl2sql_schema_preparation.md",
+    "docs/day29_nl2sql_schema_scenarios.md",
     "notes/terminology_glossary.md",
 ]
 
@@ -98,6 +104,24 @@ VOCABULARY = [
     "deny",
     "mask",
     "pii",
+    "缓存",
+    "成本",
+    "上下文",
+    "演示",
+    "稳定性",
+    "投递",
+    "简历",
+    "试投",
+    "面试",
+    "nl2sql",
+    "schema",
+    "catalog",
+    "表结构",
+    "指标",
+    "维度",
+    "粒度",
+    "候选表",
+    "问题类型",
 ]
 
 

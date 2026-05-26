@@ -1,0 +1,58 @@
+[
+  {
+    "id": "resume_direction",
+    "category": "resume",
+    "item": "简历主方向是否明确写成 RAG / NL2SQL / 数据问答 / AI 应用工程",
+    "status": "ready",
+    "evidence": "docs/job_targets.md 已明确主攻方向"
+  },
+  {
+    "id": "rag_project_readme",
+    "category": "project",
+    "item": "RAG 项目是否有可读 README 和运行方式",
+    "status": "ready",
+    "evidence": "projects/day20_rag_api/README.md 和 Day 21 演示文档已存在"
+  },
+  {
+    "id": "demo_stability",
+    "category": "project",
+    "item": "演示前是否有 smoke test 或固定回归检查",
+    "status": "ready",
+    "evidence": "projects/day27_rag_demo_stability/output/demo_stability_report.md 通过 7/7"
+  },
+  {
+    "id": "interview_questions",
+    "category": "interview",
+    "item": "面试核心问题库是否覆盖 RAG、API、安全、成本和演示",
+    "status": "ready",
+    "evidence": "docs/interview_core_questions.md 已同步 Q001-Q060"
+  },
+  {
+    "id": "application_tracking",
+    "category": "application",
+    "item": "是否有投递记录表",
+    "status": "ready",
+    "evidence": "docs/day28_application_tracking.md 已创建"
+  },
+  {
+    "id": "real_resume",
+    "category": "resume",
+    "item": "真实简历是否已更新到可投递版本",
+    "status": "todo",
+    "evidence": "需要用户补充个人真实经历、公司、项目指标和联系方式"
+  },
+  {
+    "id": "portfolio_link",
+    "category": "project",
+    "item": "项目是否有可直接发送的 GitHub 或压缩包链接",
+    "status": "todo",
+    "evidence": "需要确认仓库可访问性和敏感信息清理"
+  },
+  {
+    "id": "first_batch_jobs",
+    "category": "application",
+    "item": "是否筛出首批 5-10 个高匹配岗位",
+    "status": "todo",
+    "evidence": "需要从 Boss / 猎聘 / 内推渠道选择最新岗位"
+  }
+]

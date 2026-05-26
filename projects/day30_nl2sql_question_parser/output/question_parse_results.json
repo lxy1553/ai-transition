@@ -1,0 +1,377 @@
+{
+  "summary": {
+    "total": 10,
+    "passed": 10,
+    "accuracy": 1.0,
+    "risk_cases": 2
+  },
+  "results": [
+    {
+      "question": "昨天授信申请量是多少？",
+      "expected": {
+        "metrics": [
+          "application_count"
+        ],
+        "dimensions": [],
+        "time_range": "yesterday",
+        "query_type": "metric"
+      },
+      "parsed": {
+        "question": "昨天授信申请量是多少？",
+        "query_type": "metric",
+        "metrics": [
+          "application_count"
+        ],
+        "dimensions": [],
+        "time_range": "yesterday",
+        "top_n": null,
+        "filters": {},
+        "risk_flags": []
+      },
+      "evaluation": {
+        "checks": {
+          "query_type": true,
+          "time_range": true,
+          "metrics": true,
+          "dimensions": true
+        },
+        "passed": true
+      }
+    },
+    {
+      "question": "上周每个渠道的授信通过率是多少？",
+      "expected": {
+        "metrics": [
+          "approval_rate"
+        ],
+        "dimensions": [
+          "channel"
+        ],
+        "time_range": "last_week",
+        "query_type": "group_by"
+      },
+      "parsed": {
+        "question": "上周每个渠道的授信通过率是多少？",
+        "query_type": "group_by",
+        "metrics": [
+          "approval_rate"
+        ],
+        "dimensions": [
+          "channel"
+        ],
+        "time_range": "last_week",
+        "top_n": null,
+        "filters": {},
+        "risk_flags": []
+      },
+      "evaluation": {
+        "checks": {
+          "query_type": true,
+          "time_range": true,
+          "metrics": true,
+          "dimensions": true
+        },
+        "passed": true
+      }
+    },
+    {
+      "question": "最近 7 天放款金额趋势怎么样？",
+      "expected": {
+        "metrics": [
+          "disbursement_amount"
+        ],
+        "dimensions": [
+          "dt"
+        ],
+        "time_range": "last_7_days",
+        "query_type": "trend"
+      },
+      "parsed": {
+        "question": "最近 7 天放款金额趋势怎么样？",
+        "query_type": "trend",
+        "metrics": [
+          "disbursement_amount"
+        ],
+        "dimensions": [
+          "dt"
+        ],
+        "time_range": "last_7_days",
+        "top_n": null,
+        "filters": {},
+        "risk_flags": []
+      },
+      "evaluation": {
+        "checks": {
+          "query_type": true,
+          "time_range": true,
+          "metrics": true,
+          "dimensions": true
+        },
+        "passed": true
+      }
+    },
+    {
+      "question": "上周放款金额最高的 10 个城市是什么？",
+      "expected": {
+        "metrics": [
+          "disbursement_amount"
+        ],
+        "dimensions": [
+          "city"
+        ],
+        "time_range": "last_week",
+        "top_n": 10,
+        "query_type": "topn"
+      },
+      "parsed": {
+        "question": "上周放款金额最高的 10 个城市是什么？",
+        "query_type": "topn",
+        "metrics": [
+          "disbursement_amount"
+        ],
+        "dimensions": [
+          "city"
+        ],
+        "time_range": "last_week",
+        "top_n": 10,
+        "filters": {},
+        "risk_flags": []
+      },
+      "evaluation": {
+        "checks": {
+          "query_type": true,
+          "time_range": true,
+          "top_n": true,
+          "metrics": true,
+          "dimensions": true
+        },
+        "passed": true
+      }
+    },
+    {
+      "question": "本周逾期率比上周变化多少？",
+      "expected": {
+        "metrics": [
+          "overdue_rate"
+        ],
+        "time_range": "this_week_vs_last_week",
+        "query_type": "comparison"
+      },
+      "parsed": {
+        "question": "本周逾期率比上周变化多少？",
+        "query_type": "comparison",
+        "metrics": [
+          "overdue_rate"
+        ],
+        "dimensions": [],
+        "time_range": "this_week_vs_last_week",
+        "top_n": null,
+        "filters": {},
+        "risk_flags": []
+      },
+      "evaluation": {
+        "checks": {
+          "query_type": true,
+          "time_range": true,
+          "metrics": true
+        },
+        "passed": true
+      }
+    },
+    {
+      "question": "查询申请 A123 的审批状态",
+      "expected": {
+        "metrics": [],
+        "dimensions": [
+          "application_status"
+        ],
+        "filters": {
+          "application_id": "A123"
+        },
+        "query_type": "detail"
+      },
+      "parsed": {
+        "question": "查询申请 A123 的审批状态",
+        "query_type": "detail",
+        "metrics": [],
+        "dimensions": [
+          "application_status"
+        ],
+        "time_range": null,
+        "top_n": null,
+        "filters": {
+          "application_id": "A123"
+        },
+        "risk_flags": []
+      },
+      "evaluation": {
+        "checks": {
+          "query_type": true,
+          "metrics": true,
+          "dimensions": true,
+          "filters": true
+        },
+        "passed": true
+      }
+    },
+    {
+      "question": "导出客户手机号列表",
+      "expected": {
+        "metrics": [],
+        "dimensions": [
+          "phone"
+        ],
+        "query_type": "sensitive",
+        "risk_flags": [
+          "sensitive_field"
+        ]
+      },
+      "parsed": {
+        "question": "导出客户手机号列表",
+        "query_type": "sensitive",
+        "metrics": [],
+        "dimensions": [
+          "phone"
+        ],
+        "time_range": null,
+        "top_n": null,
+        "filters": {},
+        "risk_flags": [
+          "sensitive_field"
+        ]
+      },
+      "evaluation": {
+        "checks": {
+          "query_type": true,
+          "metrics": true,
+          "dimensions": true,
+          "risk_flags": true
+        },
+        "passed": true
+      }
+    },
+    {
+      "question": "本月每个产品的逾期金额前 5 名账龄",
+      "expected": {
+        "metrics": [
+          "overdue_amount"
+        ],
+        "dimensions": [
+          "product_type",
+          "overdue_bucket"
+        ],
+        "time_range": "this_month",
+        "top_n": 5,
+        "query_type": "topn"
+      },
+      "parsed": {
+        "question": "本月每个产品的逾期金额前 5 名账龄",
+        "query_type": "topn",
+        "metrics": [
+          "overdue_amount"
+        ],
+        "dimensions": [
+          "product_type",
+          "overdue_bucket"
+        ],
+        "time_range": "this_month",
+        "top_n": 5,
+        "filters": {},
+        "risk_flags": []
+      },
+      "evaluation": {
+        "checks": {
+          "query_type": true,
+          "time_range": true,
+          "top_n": true,
+          "metrics": true,
+          "dimensions": true
+        },
+        "passed": true
+      }
+    },
+    {
+      "question": "北京最近 7 天放款笔数趋势",
+      "expected": {
+        "metrics": [
+          "loan_count"
+        ],
+        "dimensions": [
+          "dt"
+        ],
+        "filters": {
+          "city": "北京"
+        },
+        "time_range": "last_7_days",
+        "query_type": "trend"
+      },
+      "parsed": {
+        "question": "北京最近 7 天放款笔数趋势",
+        "query_type": "trend",
+        "metrics": [
+          "loan_count"
+        ],
+        "dimensions": [
+          "city",
+          "dt"
+        ],
+        "time_range": "last_7_days",
+        "top_n": null,
+        "filters": {
+          "city": "北京"
+        },
+        "risk_flags": []
+      },
+      "evaluation": {
+        "checks": {
+          "query_type": true,
+          "time_range": true,
+          "metrics": true,
+          "dimensions": true,
+          "filters": true
+        },
+        "passed": true
+      }
+    },
+    {
+      "question": "各风险等级的授信通过量",
+      "expected": {
+        "metrics": [
+          "approval_count"
+        ],
+        "dimensions": [
+          "risk_level"
+        ],
+        "query_type": "group_by",
+        "risk_flags": [
+          "missing_time_range"
+        ]
+      },
+      "parsed": {
+        "question": "各风险等级的授信通过量",
+        "query_type": "group_by",
+        "metrics": [
+          "approval_count"
+        ],
+        "dimensions": [
+          "risk_level"
+        ],
+        "time_range": null,
+        "top_n": null,
+        "filters": {},
+        "risk_flags": [
+          "missing_time_range"
+        ]
+      },
+      "evaluation": {
+        "checks": {
+          "query_type": true,
+          "metrics": true,
+          "dimensions": true,
+          "risk_flags": true
+        },
+        "passed": true
+      }
+    }
+  ]
+}

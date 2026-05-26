@@ -6,10 +6,10 @@
 
 ## 📊 整体进度
 
-- 已完成天数：24 / 56
+- 已完成天数：29 / 56
 - 进行中天数：1 / 56
-- 完成百分比：约 42.9%
-- 当前阶段：**Day 20 待校验，Day 25 权限与安全已完成**
+- 完成百分比：51.8%
+- 当前阶段：**Day 30 NL2SQL 问题解析进行中**
 
 ---
 
@@ -38,7 +38,7 @@
 
 **关键收获：**
 - 确定主攻方向：RAG/NL2SQL工程师
-- 明确优势：SQL强、数据建模、业务理解
+- 明确优势：金融信贷业务理解、SQL、后端开发、风控规则、权限与合规意识
 - 明确缺口：Python工程化、LLM实战、RAG项目
 - 薪资范围：20-35K
 
@@ -282,7 +282,7 @@
 
 ---
 
-## 🚧 Day 20 - RAG 问答 API（待核心问题回答校验）
+## ✅ Day 20 - RAG 问答 API（已完成）
 
 **主题：** 项目 2 接口化
 
@@ -292,12 +292,12 @@
 - [x] 跑通 5 个固定问题回归脚本
 - [x] 确认响应包含 `answer`、`citations`、`request_id`、`confidence`
 - [x] 启动 `/health` 和 `/rag/ask` HTTP 服务并手动验证接口
-- [ ] 完成 `notes/day20_rag_api.md` 中 Day 20 的 6 个核心问题回答校验
+- [x] 完成 `notes/day20_rag_api.md` 中 Day 20 的核心问题回答校验
 
 **产出：** `notes/day20_rag_api.md`、`projects/day20_rag_api/`、
 `projects/day20_rag_api/output/regression_results.json`
 
-**状态：** 🚧 待核心问题回答校验
+**状态：** ✅ 已完成
 
 ---
 
@@ -404,6 +404,114 @@
 
 **状态：** ✅ 已完成
 
+---
+
+## ✅ Day 26 - 性能与成本：缓存与上下文控制（已完成）
+
+**主题：** RAG 成本优化、上下文裁剪、缓存命中和 token 记录
+
+**计划任务：**
+- [x] 创建 Day 26 学习笔记：`notes/day26_rag_performance_cost.md`
+- [x] 创建成本优化实验项目：`projects/day26_rag_performance_cost/`
+- [x] 模拟 baseline 与优化策略的 token 成本差异
+- [x] 生成 JSON 与 Markdown 成本优化报告
+- [x] 补充 Day 26 面试题、术语和核心问题
+- [x] 用户填写 Day 26 核心问题回答并通过校验
+
+**产出：** `notes/day26_rag_performance_cost.md`、
+`projects/day26_rag_performance_cost/`、
+`projects/day26_rag_performance_cost/output/cost_eval_results.json`、
+`projects/day26_rag_performance_cost/output/cost_optimization_report.md`
+
+**状态：** ✅ 已完成
+
+---
+
+## ✅ Day 27 - 项目 2 打磨：演示与稳定性（已完成）
+
+**主题：** RAG API 演示检查、错误提示、边界处理和稳定性报告
+
+**计划任务：**
+- [x] 创建 Day 27 学习笔记：`notes/day27_rag_demo_stability.md`
+- [x] 创建演示稳定性检查项目：`projects/day27_rag_demo_stability/`
+- [x] 检查 Day 17 索引、Day 20 成功样例和无答案边界
+- [x] 检查空问题、top_k 越界等参数校验
+- [x] 生成 JSON 与 Markdown 演示稳定性报告
+- [x] 补充 Day 27 面试题、术语和核心问题
+- [x] 用户填写 Day 27 核心问题回答并通过校验
+
+**产出：** `notes/day27_rag_demo_stability.md`、
+`projects/day27_rag_demo_stability/`、
+`projects/day27_rag_demo_stability/output/demo_stability_results.json`、
+`projects/day27_rag_demo_stability/output/demo_stability_report.md`
+
+**状态：** ✅ 已完成
+
+---
+
+## ✅ Day 28 - 第 4 周复盘与试投启动（已完成）
+
+**主题：** 第 4 周复盘、RAG 项目包装和试投准备
+
+**计划任务：**
+- [x] 创建 Day 28 学习笔记：`notes/day28_week4_review_application.md`
+- [x] 创建试投启动记录：`docs/day28_application_tracking.md`
+- [x] 创建试投准备检查项目：`projects/day28_application_start/`
+- [x] 生成 JSON 与 Markdown 试投准备报告
+- [x] 补充 Day 28 面试题、术语和核心问题
+- [x] 用户填写 Day 28 核心问题回答并通过校验
+
+**产出：** `notes/day28_week4_review_application.md`、
+`docs/day28_application_tracking.md`、
+`projects/day28_application_start/`、
+`projects/day28_application_start/output/application_readiness_results.json`、
+`projects/day28_application_start/output/application_readiness_report.md`
+
+**状态：** ✅ 已完成
+
+---
+
+## ✅ Day 29 - NL2SQL 准备：Schema 与问题类型（已完成）
+
+**主题：** Schema Catalog、问题类型分类、候选表和字段选择
+
+**计划任务：**
+- [x] 创建 Day 29 学习笔记：`notes/day29_nl2sql_schema_preparation.md`
+- [x] 创建 NL2SQL 场景分类表：`docs/day29_nl2sql_schema_scenarios.md`
+- [x] 创建 Schema Router 项目：`projects/day29_nl2sql_schema_router/`
+- [x] 生成 JSON 与 Markdown Schema 路由报告
+- [x] 补充 Day 29 面试题、术语和核心问题
+- [x] 用户填写 Day 29 核心问题回答并通过校验
+
+**产出：** `notes/day29_nl2sql_schema_preparation.md`、
+`docs/day29_nl2sql_schema_scenarios.md`、
+`projects/day29_nl2sql_schema_router/`、
+`projects/day29_nl2sql_schema_router/output/schema_routing_results.json`、
+`projects/day29_nl2sql_schema_router/output/schema_routing_report.md`
+
+**状态：** ✅ 已完成
+
+---
+
+## 🔄 Day 30 - 问题解析：指标、维度、时间抽取（进行中）
+
+**主题：** NL2SQL 用户问题解析、实体抽取、时间范围和过滤条件识别
+
+**计划任务：**
+- [x] 创建 Day 30 学习笔记：`notes/day30_nl2sql_question_parser.md`
+- [x] 创建问题解析项目：`projects/day30_nl2sql_question_parser/`
+- [x] 抽取指标、维度、时间范围、TopN 和过滤条件
+- [x] 生成 JSON 与 Markdown 问题解析报告
+- [x] 补充 Day 30 面试题、术语和核心问题
+- [ ] 用户填写 Day 30 核心问题回答并通过校验
+
+**产出：** `notes/day30_nl2sql_question_parser.md`、
+`projects/day30_nl2sql_question_parser/`、
+`projects/day30_nl2sql_question_parser/output/question_parse_results.json`、
+`projects/day30_nl2sql_question_parser/output/question_parse_report.md`
+
+**状态：** 🔄 等待用户完成 Day 30 学习与核心问题回答
+
 ## 📈 周进度统计
 
 ### 第1周（Day 1-7）：定位、Python、API、FastAPI、工程化基础
@@ -419,15 +527,21 @@
 
 ### 第3周（Day 15-21）：RAG 入门与项目化
 
-- 已完成：6 / 7 天
-- 进行中：1 / 7 天
-- 状态：✅ Day 21 已完成，Day 20 待校验
+- 已完成：7 / 7 天
+- 进行中：0 / 7 天
+- 状态：✅ 已完成
 
 ### 第4周（Day 22-28）：RAG 优化、评测、幻觉控制、安全
 
-- 已完成：3 / 7 天
+- 已完成：7 / 7 天
 - 进行中：0 / 7 天
-- 状态：✅ Day 25 已完成
+- 状态：✅ 已完成
+
+### 第5周（Day 29-35）：NL2SQL 核心能力
+
+- 已完成：1 / 7 天
+- 进行中：1 / 7 天
+- 状态：🔄 Day 30 进行中
 
 ---
 
@@ -436,8 +550,8 @@
 - [x] **Day 1：** 环境搭建完成，GitHub仓库建立
 - [x] **Day 7：** 第1周完成，简历草稿完成
 - [x] **Day 14：** 第2周完成，SQL解释助手项目完成
-- [ ] **Day 21：** 第3周完成，RAG项目可演示版本
-- [ ] **Day 28：** 第4周完成，开始试投简历
+- [x] **Day 21：** 第3周完成，RAG项目可演示版本
+- [x] **Day 28：** 第4周完成，开始试投简历
 - [ ] **Day 35：** 第5周完成，NL2SQL助手成型
 - [ ] **Day 42：** 第6周完成，项目Docker化部署
 - [ ] **Day 49：** 第7周完成，作品集整理完成
@@ -447,15 +561,22 @@
 
 ## 📝 备注
 
-- 每天必须留下代码、文档或演示产物
-- 每天必须完成当天 note 中的“每日核心问题自测”；
+- 每天必须留下代码、文档或演示产物。（2026-04-22 建立）
+- 每天必须完成当天 note 中的“每日核心问题自测”；（2026-05-15 建立，2026-05-20 完善）
   按“我的回答 -> 回答评价 -> 参考答案”记录，才能把当天标记为完成
-- 所有新生成文档按阅读需要换行，不是遇到所有分号或句号都换行；
+- 每日自测问题统一使用 `### 序号. 问题`；（2026-05-21 二次更新）
+  下一行写两个空格缩进的 `我的回答：`，后面留空行，下一题再另起标题
+- 每天的自测题必须加入前 2 天最核心问题；（2026-05-21 更新）
+  每 7 天复盘日还要加入上一周最核心问题，方便回顾前一段学习内容
+- 后续新增或修改学习规则时，必须写入 `docs/rule_update_log.md`；
+  记录日期、变更内容和影响范围。（2026-05-21 更新）
+- 所有新生成文档按阅读需要换行，不是遇到所有分号或句号都换行；（2026-05-20 更新）
   单行接近 100 字时，优先在分号、句号或自然语义边界处断行
-- 写新代码、修改旧代码时，都要按 `docs/code_commenting_guidelines.md` 补大白话注释，说明用途、设计原因和风险
-- 每周至少形成一个可展示的阶段性成果
-- 从第4周开始同步优化简历和准备投递
+- 写新代码、修改旧代码时，都要按 `docs/code_commenting_guidelines.md` 补大白话注释；（2026-05-20 更新）
+  说明用途、设计原因和风险
+- 每周至少形成一个可展示的阶段性成果。（2026-04-22 建立）
+- 从第4周开始同步优化简历和准备投递。（2026-04-22 建立）
 
 ---
 
-*最后更新：2026-05-20（已同步到 Day 25 已完成）*
+*最后更新：2026-05-25（Day 30 进行中，问题解析阶段启动）*

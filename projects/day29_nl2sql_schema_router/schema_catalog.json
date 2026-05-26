@@ -1,0 +1,98 @@
+[
+  {
+    "table_name": "dws_credit_application_daily",
+    "description": "授信申请按天汇总表，用于分析申请量、通过量、通过率和平均授信额度。",
+    "business_domain": "credit_application",
+    "grain": "dt + product_type + channel + risk_level",
+    "permission_level": "internal",
+    "columns": [
+      {"name": "dt", "type": "date", "role": "time", "description": "分区日期"},
+      {"name": "product_type", "type": "string", "role": "dimension", "description": "信贷产品类型"},
+      {"name": "channel", "type": "string", "role": "dimension", "description": "申请渠道"},
+      {"name": "risk_level", "type": "string", "role": "dimension", "description": "风控评级"},
+      {"name": "application_count", "type": "int", "role": "metric", "description": "授信申请量"},
+      {"name": "approval_count", "type": "int", "role": "metric", "description": "授信通过量"},
+      {"name": "approval_rate", "type": "decimal", "role": "metric", "description": "授信通过率"},
+      {"name": "avg_credit_amount", "type": "decimal", "role": "metric", "description": "平均授信额度"}
+    ],
+    "metrics": ["application_count", "approval_count", "approval_rate", "avg_credit_amount"],
+    "dimensions": ["product_type", "channel", "risk_level"],
+    "time_fields": ["dt"],
+    "aliases": ["授信申请", "申请量", "通过量", "通过率", "授信额度", "风控评级", "申请渠道"]
+  },
+  {
+    "table_name": "dws_loan_disbursement_daily",
+    "description": "放款按天汇总表，用于分析放款金额、放款笔数和信贷产品表现。",
+    "business_domain": "loan_disbursement",
+    "grain": "dt + product_type + city",
+    "permission_level": "internal",
+    "columns": [
+      {"name": "dt", "type": "date", "role": "time", "description": "分区日期"},
+      {"name": "product_type", "type": "string", "role": "dimension", "description": "信贷产品类型"},
+      {"name": "city", "type": "string", "role": "dimension", "description": "客户城市"},
+      {"name": "disbursement_amount", "type": "decimal", "role": "metric", "description": "放款金额"},
+      {"name": "loan_count", "type": "int", "role": "metric", "description": "放款笔数"}
+    ],
+    "metrics": ["disbursement_amount", "loan_count"],
+    "dimensions": ["product_type", "city"],
+    "time_fields": ["dt"],
+    "aliases": ["放款", "放款金额", "放款笔数", "贷款发放", "城市", "信贷产品"]
+  },
+  {
+    "table_name": "dws_repayment_overdue_daily",
+    "description": "还款逾期按天汇总表，用于分析应还、实还、逾期金额、逾期率和账龄分布。",
+    "business_domain": "repayment_overdue",
+    "grain": "dt + product_type + overdue_bucket + risk_level",
+    "permission_level": "internal",
+    "columns": [
+      {"name": "dt", "type": "date", "role": "time", "description": "分区日期"},
+      {"name": "product_type", "type": "string", "role": "dimension", "description": "信贷产品类型"},
+      {"name": "overdue_bucket", "type": "string", "role": "dimension", "description": "逾期账龄，例如 M1、M2、M3+"},
+      {"name": "risk_level", "type": "string", "role": "dimension", "description": "风控评级"},
+      {"name": "due_amount", "type": "decimal", "role": "metric", "description": "应还金额"},
+      {"name": "repayment_amount", "type": "decimal", "role": "metric", "description": "实还金额"},
+      {"name": "overdue_amount", "type": "decimal", "role": "metric", "description": "逾期金额"},
+      {"name": "overdue_rate", "type": "decimal", "role": "metric", "description": "逾期率"}
+    ],
+    "metrics": ["due_amount", "repayment_amount", "overdue_amount", "overdue_rate"],
+    "dimensions": ["product_type", "overdue_bucket", "risk_level"],
+    "time_fields": ["dt"],
+    "aliases": ["还款", "应还", "实还", "逾期", "逾期金额", "逾期率", "账龄", "M1", "M2"]
+  },
+  {
+    "table_name": "dwd_credit_application_detail",
+    "description": "授信申请明细表，用于按申请编号查询审批状态、授信额度和风险等级。",
+    "business_domain": "credit_application",
+    "grain": "application_id",
+    "permission_level": "restricted",
+    "columns": [
+      {"name": "application_id", "type": "string", "role": "dimension", "description": "授信申请编号"},
+      {"name": "customer_id", "type": "string", "role": "dimension", "description": "客户 ID"},
+      {"name": "application_status", "type": "string", "role": "dimension", "description": "申请审批状态"},
+      {"name": "approved_amount", "type": "decimal", "role": "metric", "description": "审批通过额度"},
+      {"name": "risk_level", "type": "string", "role": "dimension", "description": "风控评级"},
+      {"name": "apply_time", "type": "datetime", "role": "time", "description": "申请时间"}
+    ],
+    "metrics": ["approved_amount"],
+    "dimensions": ["application_id", "customer_id", "application_status", "risk_level"],
+    "time_fields": ["apply_time"],
+    "aliases": ["申请明细", "申请编号", "授信状态", "审批状态", "审批额度", "风险等级"]
+  },
+  {
+    "table_name": "dim_credit_customer",
+    "description": "信贷客户维表，包含手机号、身份证等敏感字段，只允许授权角色查询。",
+    "business_domain": "customer",
+    "grain": "customer_id",
+    "permission_level": "sensitive",
+    "columns": [
+      {"name": "customer_id", "type": "string", "role": "dimension", "description": "客户 ID"},
+      {"name": "phone", "type": "string", "role": "sensitive", "description": "手机号"},
+      {"name": "id_card", "type": "string", "role": "sensitive", "description": "身份证号"},
+      {"name": "city", "type": "string", "role": "dimension", "description": "客户城市"}
+    ],
+    "metrics": [],
+    "dimensions": ["customer_id", "city"],
+    "time_fields": [],
+    "aliases": ["手机号", "身份证", "客户信息", "客户画像", "导出客户"]
+  }
+]

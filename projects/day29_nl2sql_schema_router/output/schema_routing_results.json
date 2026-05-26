@@ -1,0 +1,152 @@
+[
+  {
+    "question": "昨天授信申请量是多少？",
+    "question_type": "metric",
+    "candidate_tables": [
+      "dws_credit_application_daily"
+    ],
+    "candidate_metrics": [
+      "application_count",
+      "approval_count",
+      "approval_rate",
+      "avg_credit_amount"
+    ],
+    "candidate_dimensions": [
+      "product_type",
+      "channel",
+      "risk_level"
+    ],
+    "time_fields": [
+      "dt"
+    ],
+    "risk_flags": [],
+    "should_generate_sql": true
+  },
+  {
+    "question": "上周每个渠道的授信通过率是多少？",
+    "question_type": "group_by",
+    "candidate_tables": [
+      "dws_credit_application_daily"
+    ],
+    "candidate_metrics": [
+      "application_count",
+      "approval_count",
+      "approval_rate",
+      "avg_credit_amount"
+    ],
+    "candidate_dimensions": [
+      "product_type",
+      "channel",
+      "risk_level"
+    ],
+    "time_fields": [
+      "dt"
+    ],
+    "risk_flags": [],
+    "should_generate_sql": true
+  },
+  {
+    "question": "最近 7 天放款金额趋势怎么样？",
+    "question_type": "trend",
+    "candidate_tables": [
+      "dws_loan_disbursement_daily"
+    ],
+    "candidate_metrics": [
+      "disbursement_amount",
+      "loan_count"
+    ],
+    "candidate_dimensions": [
+      "product_type",
+      "city"
+    ],
+    "time_fields": [
+      "dt"
+    ],
+    "risk_flags": [],
+    "should_generate_sql": true
+  },
+  {
+    "question": "上周放款金额最高的 10 个城市是什么？",
+    "question_type": "topn",
+    "candidate_tables": [
+      "dws_loan_disbursement_daily"
+    ],
+    "candidate_metrics": [
+      "disbursement_amount",
+      "loan_count"
+    ],
+    "candidate_dimensions": [
+      "product_type",
+      "city"
+    ],
+    "time_fields": [
+      "dt"
+    ],
+    "risk_flags": [],
+    "should_generate_sql": true
+  },
+  {
+    "question": "本周逾期率比上周变化多少？",
+    "question_type": "comparison",
+    "candidate_tables": [
+      "dws_repayment_overdue_daily"
+    ],
+    "candidate_metrics": [
+      "due_amount",
+      "repayment_amount",
+      "overdue_amount",
+      "overdue_rate"
+    ],
+    "candidate_dimensions": [
+      "product_type",
+      "overdue_bucket",
+      "risk_level"
+    ],
+    "time_fields": [
+      "dt"
+    ],
+    "risk_flags": [],
+    "should_generate_sql": true
+  },
+  {
+    "question": "查询申请 A123 的审批状态",
+    "question_type": "detail",
+    "candidate_tables": [
+      "dwd_credit_application_detail"
+    ],
+    "candidate_metrics": [
+      "approved_amount"
+    ],
+    "candidate_dimensions": [
+      "application_id",
+      "customer_id",
+      "application_status",
+      "risk_level"
+    ],
+    "time_fields": [
+      "apply_time"
+    ],
+    "risk_flags": [
+      "permission:restricted"
+    ],
+    "should_generate_sql": true
+  },
+  {
+    "question": "导出客户手机号列表",
+    "question_type": "sensitive",
+    "candidate_tables": [
+      "dim_credit_customer"
+    ],
+    "candidate_metrics": [],
+    "candidate_dimensions": [
+      "customer_id",
+      "city"
+    ],
+    "time_fields": [],
+    "risk_flags": [
+      "permission:sensitive",
+      "sensitive_query"
+    ],
+    "should_generate_sql": false
+  }
+]
