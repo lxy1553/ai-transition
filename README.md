@@ -22,15 +22,15 @@
 
 ## 当前阶段
 
-Day 30：问题解析 - 指标、维度、时间抽取（进行中）
+Day 31：SQL 生成 - 从结构化解析到只读 SQL（进行中）
 
 今天要完成：
 
-- 阅读 `notes/day30_nl2sql_question_parser.md`
-- 跑通 `projects/day30_nl2sql_question_parser/`
-- 理解指标、维度、时间范围、过滤条件和 TopN 的抽取方式
-- 生成问题解析结果和准确率报告
-- 在 `notes/day30_nl2sql_question_parser.md` 中回答 Day 30 核心问题
+- 阅读 `notes/day31_nl2sql_sql_generation.md`
+- 跑通 `projects/day31_nl2sql_sql_generator/`
+- 理解 SQL 生成为什么必须受 Schema Catalog、只读约束和权限规则限制
+- 生成 SQL 草稿、阻断原因和静态校验报告
+- 在 `notes/day31_nl2sql_sql_generation.md` 中回答 Day 31 核心问题
 
 ## 仓库结构
 
@@ -62,13 +62,13 @@ Day 30：问题解析 - 指标、维度、时间抽取（进行中）
 详细计划见：[plans/ai_56_day_plan.md](/Users/longfeiguo/PycharmProjects/bi_cube1/ai_transi
 tion/plans/ai_56_day_plan.md)
 
-## Day 30 完成标准
+## Day 31 完成标准
 
-- `projects/day30_nl2sql_question_parser/main.py` 能运行
-- 生成 `projects/day30_nl2sql_question_parser/output/question_parse_results.json`
-- 生成 `projects/day30_nl2sql_question_parser/output/question_parse_report.md`
-- 能说清 NL2SQL 问题解析为什么要先抽指标、维度、时间和过滤条件
-- `notes/day30_nl2sql_question_parser.md` 中的 Day 30 核心问题已填写并通过校验
+- `projects/day31_nl2sql_sql_generator/main.py` 能运行
+- 生成 `projects/day31_nl2sql_sql_generator/output/sql_generation_results.json`
+- 生成 `projects/day31_nl2sql_sql_generator/output/sql_generation_report.md`
+- 能说清 SQL 生成为什么不能直接执行，必须经过校验层
+- `notes/day31_nl2sql_sql_generation.md` 中的 Day 31 核心问题已填写并通过校验
 
 ## 后续规则
 
