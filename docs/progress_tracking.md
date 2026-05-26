@@ -7,9 +7,9 @@
 ## 📊 整体进度
 
 - 已完成天数：29 / 56
-- 进行中天数：1 / 56
+- 进行中天数：2 / 56
 - 完成百分比：51.8%
-- 当前阶段：**Day 30 NL2SQL 问题解析进行中**
+- 当前阶段：**Day 31 NL2SQL SQL 生成进行中**
 
 ---
 
@@ -512,6 +512,28 @@
 
 **状态：** 🔄 等待用户完成 Day 30 学习与核心问题回答
 
+---
+
+## 🔄 Day 31 - SQL 生成：从结构化解析到只读 SQL（进行中）
+
+**主题：** NL2SQL SQL 生成、只读 SQL、Schema 约束和生成前阻断
+
+**计划任务：**
+- [x] 创建 Day 31 学习笔记：`notes/day31_nl2sql_sql_generation.md`
+- [x] 创建 SQL 生成项目：`projects/day31_nl2sql_sql_generator/`
+- [x] 基于 Day 30 解析结果和 Day 29 Schema Catalog 生成只读 SQL 草稿
+- [x] 拦截敏感字段查询和缺少时间范围的问题
+- [x] 生成 JSON 与 Markdown SQL 生成报告
+- [x] 补充 Day 31 面试题、术语和核心问题
+- [ ] 用户填写 Day 31 核心问题回答并通过校验
+
+**产出：** `notes/day31_nl2sql_sql_generation.md`、
+`projects/day31_nl2sql_sql_generator/`、
+`projects/day31_nl2sql_sql_generator/output/sql_generation_results.json`、
+`projects/day31_nl2sql_sql_generator/output/sql_generation_report.md`
+
+**状态：** 🔄 等待用户完成 Day 31 学习与核心问题回答
+
 ## 📈 周进度统计
 
 ### 第1周（Day 1-7）：定位、Python、API、FastAPI、工程化基础
@@ -540,8 +562,8 @@
 ### 第5周（Day 29-35）：NL2SQL 核心能力
 
 - 已完成：1 / 7 天
-- 进行中：1 / 7 天
-- 状态：🔄 Day 30 进行中
+- 进行中：2 / 7 天
+- 状态：🔄 Day 31 进行中；Day 30 / Day 31 等待核心问题回答
 
 ---
 
@@ -579,4 +601,4 @@
 
 ---
 
-*最后更新：2026-05-25（Day 30 进行中，问题解析阶段启动）*
+*最后更新：2026-05-26（Day 31 进行中，SQL 生成阶段启动）*

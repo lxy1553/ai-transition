@@ -61,6 +61,11 @@
 | 数据与 SQL | 时间范围解析 | Time Range Parsing | 把自然语言时间转成结构化查询时间范围。 | “最近 7 天”转成 start_date、end_date 和 granularity。 | Day 30 |
 | 数据与 SQL | 指标映射 | Metric Mapping | 把用户说的业务词映射到标准指标名。 | “审批通过率”映射为 approval_rate，“放款额”映射为 disbursement_amount。 | Day 30 |
 | 数据与 SQL | 维度抽取 | Dimension Extraction | 识别用户想按什么维度分组、过滤或展示。 | “每个渠道”抽出 group_by 维度 channel。 | Day 30 |
+| 数据与 SQL | SQL 生成 | SQL Generation | 把结构化问题解析结果和 Schema Catalog 转成 SQL 草稿。 | 将“上周每个渠道授信通过率”生成只读聚合 SQL。 | Day 31 |
+| 数据与 SQL | 只读 SQL | Read-only SQL | 只能查询数据，不能修改、删除或建表的 SQL。 | 只允许 `select` 或安全的 `with ... select`，拒绝 `delete`、`update`、`drop`。 | Day 31 |
+| 数据与 SQL | SQL 模板 | SQL Template | 按问题类型预先定义好的 SQL 结构。 | TopN 模板包含 `group by`、`order by` 和 `limit`。 | Day 31 |
+| 数据与 SQL | 时间条件 | Time Predicate | SQL 里限制查询时间范围的 where 条件。 | `dt between ...` 防止授信申请汇总表被全量扫描。 | Day 31 |
+| 数据与 SQL | SQL 校验 | SQL Validation | SQL 执行前检查是否合法、安全、低成本。 | 检查只读、字段白名单、时间范围、权限和危险关键字。 | Day 31 |
 | 数据与 SQL | 分区字段 | Partition Field | 大表里用来缩小扫描范围的字段。 | 常见分区字段是 `dt`。 | Day 12 |
 | 数据与 SQL | Group By | GROUP BY | 按字段分组统计。 | `group by city` 表示按城市统计。 | Day 12 |
 | 数据与 SQL | Order By | ORDER BY | 对结果排序。 | 大数据场景里全局排序可能很贵。 | Day 12 |

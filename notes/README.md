@@ -40,3 +40,4 @@
 - [Day 28 - 第 4 周复盘与试投启动](./day28_week4_review_application.md)
 - [Day 29 - NL2SQL 准备：Schema 与问题类型](./day29_nl2sql_schema_preparation.md)
 - [Day 30 - NL2SQL 问题解析：指标、维度、时间抽取](./day30_nl2sql_question_parser.md)
+- [Day 31 - NL2SQL SQL 生成：从结构化解析到只读 SQL](./day31_nl2sql_sql_generation.md)
