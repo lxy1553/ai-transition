@@ -1,0 +1,655 @@
+{
+  "summary": {
+    "total": 13,
+    "answered": 8,
+    "safely_blocked": 5,
+    "execution_errors": 0,
+    "incomplete": 0,
+    "demo_ready": true
+  },
+  "cases": [
+    {
+      "question": "昨天授信申请量是多少？",
+      "final_status": "answered",
+      "query_type": "metric",
+      "pipeline": {
+        "parse": "available",
+        "sql_generation": "passed",
+        "sql_validation": "passed",
+        "query_execution": "executed",
+        "result_interpretation": "available"
+      },
+      "parsed": {
+        "metrics": [
+          "application_count"
+        ],
+        "dimensions": [],
+        "time_range": "yesterday",
+        "filters": {},
+        "risk_flags": []
+      },
+      "sql": "select\n  sum(application_count) as application_count\nfrom dws_credit_application_daily\nwhere dt = current_date - interval '1' day;",
+      "validation": {
+        "can_execute": true,
+        "risk_level": "low",
+        "issues": [],
+        "warnings": []
+      },
+      "execution": {
+        "status": "executed",
+        "response_type": "scalar",
+        "row_count": 1,
+        "summary_text": "application_count = 380"
+      },
+      "answer": {
+        "business_answer": "查询结果为：授信申请量 380笔。",
+        "key_findings": [
+          "授信申请量 = 380笔"
+        ],
+        "risk_notes": [
+          "该结果来自本地演示数据，生产环境需要说明数据日期和统计口径。"
+        ],
+        "follow_up_questions": [
+          "是否需要按渠道、产品或风险等级继续拆分？"
+        ]
+      }
+    },
+    {
+      "question": "上周每个渠道的授信通过率是多少？",
+      "final_status": "answered",
+      "query_type": "group_by",
+      "pipeline": {
+        "parse": "available",
+        "sql_generation": "passed",
+        "sql_validation": "passed",
+        "query_execution": "executed",
+        "result_interpretation": "available"
+      },
+      "parsed": {
+        "metrics": [
+          "approval_rate"
+        ],
+        "dimensions": [
+          "channel"
+        ],
+        "time_range": "last_week",
+        "filters": {},
+        "risk_flags": []
+      },
+      "sql": "select\n  channel,\n  sum(approval_count) / nullif(sum(application_count), 0) as approval_rate\nfrom dws_credit_application_daily\nwhere dt between date_trunc('week', current_date) - interval '7' day and date_trunc('week', current_date) - interval '1' day\ngroup by channel;",
+      "validation": {
+        "can_execute": true,
+        "risk_level": "low",
+        "issues": [],
+        "warnings": []
+      },
+      "execution": {
+        "status": "executed",
+        "response_type": "table",
+        "row_count": 3,
+        "summary_text": "查询返回 3 行，字段包括：channel, approval_rate。"
+      },
+      "answer": {
+        "business_answer": "本次按 渠道 分组返回 3 行结果，APP 表现最高。",
+        "key_findings": [
+          "APP 的授信通过率最高，为 64.87%。",
+          "线下 的授信通过率最低，为 55.29%。"
+        ],
+        "risk_notes": [
+          "分组结果只能说明当前查询周期内的表现，不能直接代表长期趋势。"
+        ],
+        "follow_up_questions": [
+          "是否需要继续按产品、城市或风险等级交叉拆分？"
+        ]
+      }
+    },
+    {
+      "question": "最近 7 天放款金额趋势怎么样？",
+      "final_status": "answered",
+      "query_type": "trend",
+      "pipeline": {
+        "parse": "available",
+        "sql_generation": "passed",
+        "sql_validation": "passed",
+        "query_execution": "executed",
+        "result_interpretation": "available"
+      },
+      "parsed": {
+        "metrics": [
+          "disbursement_amount"
+        ],
+        "dimensions": [
+          "dt"
+        ],
+        "time_range": "last_7_days",
+        "filters": {},
+        "risk_flags": []
+      },
+      "sql": "select\n  dt,\n  sum(disbursement_amount) as disbursement_amount\nfrom dws_loan_disbursement_daily\nwhere dt between current_date - interval '7' day and current_date - interval '1' day\ngroup by dt;",
+      "validation": {
+        "can_execute": true,
+        "risk_level": "low",
+        "issues": [],
+        "warnings": []
+      },
+      "execution": {
+        "status": "executed",
+        "response_type": "trend_table",
+        "row_count": 7,
+        "summary_text": "查询返回 7 行，字段包括：dt, disbursement_amount。"
+      },
+      "answer": {
+        "business_answer": "最近 7 天放款金额整体下降，首日为 65.00 万，末日为 47.00 万。",
+        "key_findings": [
+          "累计放款金额为 315.00 万。",
+          "最高点出现在 2026-05-17，数值为 65.00 万。",
+          "最低点出现在 2026-05-18，数值为 36.00 万。"
+        ],
+        "risk_notes": [
+          "趋势解释只基于当前查询窗口，生产分析还需要结合节假日、渠道活动和样本量。"
+        ],
+        "follow_up_questions": [
+          "是否需要按渠道、城市或产品拆分趋势？"
+        ]
+      }
+    },
+    {
+      "question": "上周放款金额最高的 10 个城市是什么？",
+      "final_status": "answered",
+      "query_type": "topn",
+      "pipeline": {
+        "parse": "available",
+        "sql_generation": "passed",
+        "sql_validation": "passed",
+        "query_execution": "executed",
+        "result_interpretation": "available"
+      },
+      "parsed": {
+        "metrics": [
+          "disbursement_amount"
+        ],
+        "dimensions": [
+          "city"
+        ],
+        "time_range": "last_week",
+        "filters": {},
+        "risk_flags": []
+      },
+      "sql": "select\n  city,\n  sum(disbursement_amount) as disbursement_amount\nfrom dws_loan_disbursement_daily\nwhere dt between date_trunc('week', current_date) - interval '7' day and date_trunc('week', current_date) - interval '1' day\ngroup by city\norder by disbursement_amount desc\nlimit 10;",
+      "validation": {
+        "can_execute": true,
+        "risk_level": "low",
+        "issues": [],
+        "warnings": []
+      },
+      "execution": {
+        "status": "executed",
+        "response_type": "table",
+        "row_count": 8,
+        "summary_text": "查询返回 8 行，字段包括：city, disbursement_amount。"
+      },
+      "answer": {
+        "business_answer": "本次返回 8 条排序结果，深圳 排名第一，放款金额为 61.00 万。",
+        "key_findings": [
+          "深圳 的放款金额最高，为 61.00 万。",
+          "北京 的放款金额最低，为 32.00 万。"
+        ],
+        "risk_notes": [
+          "分组结果只能说明当前查询周期内的表现，不能直接代表长期趋势。"
+        ],
+        "follow_up_questions": [
+          "是否需要继续按产品、城市或风险等级交叉拆分？"
+        ]
+      }
+    },
+    {
+      "question": "本周逾期率比上周变化多少？",
+      "final_status": "answered",
+      "query_type": "comparison",
+      "pipeline": {
+        "parse": "available",
+        "sql_generation": "passed",
+        "sql_validation": "passed",
+        "query_execution": "executed",
+        "result_interpretation": "available"
+      },
+      "parsed": {
+        "metrics": [
+          "overdue_rate"
+        ],
+        "dimensions": [],
+        "time_range": "this_week_vs_last_week",
+        "filters": {},
+        "risk_flags": []
+      },
+      "sql": "with current_period as (\n  select sum(overdue_amount) / nullif(sum(due_amount), 0) as current_value\n  from dws_repayment_overdue_daily\n  where dt >= date_trunc('week', current_date) and dt < current_date + interval '1' day\n),\nprevious_period as (\n  select sum(overdue_amount) / nullif(sum(due_amount), 0) as previous_value\n  from dws_repayment_overdue_daily\n  where dt between date_trunc('week', current_date) - interval '7' day and date_trunc('week', current_date) - interval '1' day\n)\nselect\n  current_value,\n  previous_value,\n  current_value - previous_value as diff_value\nfrom current_period\ncross join previous_period;",
+      "validation": {
+        "can_execute": true,
+        "risk_level": "low",
+        "issues": [],
+        "warnings": []
+      },
+      "execution": {
+        "status": "executed",
+        "response_type": "comparison",
+        "row_count": 1,
+        "summary_text": "当前值 0.0703，上期值 0.0856，差值 -0.0153。"
+      },
+      "answer": {
+        "business_answer": "当前周期逾期率为 7.03%，上期为 8.56%，较上期下降 1.53 个百分点。",
+        "key_findings": [
+          "当前值：7.03%。",
+          "上期值：8.56%。",
+          "变化值：-1.53 个百分点。"
+        ],
+        "risk_notes": [
+          "比例指标必须说明分子分母口径，不能只看差值判断风险已经改善。"
+        ],
+        "follow_up_questions": [
+          "是否需要按产品、风险等级或逾期账龄拆分变化原因？"
+        ]
+      }
+    },
+    {
+      "question": "查询申请 A123 的审批状态",
+      "final_status": "answered",
+      "query_type": "detail",
+      "pipeline": {
+        "parse": "available",
+        "sql_generation": "passed",
+        "sql_validation": "passed",
+        "query_execution": "executed",
+        "result_interpretation": "available"
+      },
+      "parsed": {
+        "metrics": [],
+        "dimensions": [
+          "application_status"
+        ],
+        "time_range": null,
+        "filters": {
+          "application_id": "A123"
+        },
+        "risk_flags": []
+      },
+      "sql": "select\n  application_id,\n  application_status,\n  approved_amount,\n  risk_level,\n  apply_time\nfrom dwd_credit_application_detail\nwhere application_id = 'A123'\nlimit 50;",
+      "validation": {
+        "can_execute": true,
+        "risk_level": "low",
+        "issues": [],
+        "warnings": []
+      },
+      "execution": {
+        "status": "executed",
+        "response_type": "detail_table",
+        "row_count": 1,
+        "summary_text": "查询返回 1 行，字段包括：application_id, application_status, approved_amount, risk_level, apply_time。"
+      },
+      "answer": {
+        "business_answer": "申请 A123 当前审批状态为审批通过，审批额度为 1.20 万，风险等级为 A。",
+        "key_findings": [
+          "审批状态：审批通过。",
+          "审批额度：1.20 万。",
+          "申请时间：2026-05-23 10:30:00。"
+        ],
+        "risk_notes": [
+          "明细结果涉及单个申请，生产环境需要确认当前用户是否有查看该申请的权限。"
+        ],
+        "follow_up_questions": [
+          "是否需要查看审批拒绝原因、规则命中情况或贷后表现？"
+        ]
+      }
+    },
+    {
+      "question": "导出客户手机号列表",
+      "final_status": "safely_blocked",
+      "query_type": "sensitive",
+      "pipeline": {
+        "parse": "available",
+        "sql_generation": "blocked",
+        "sql_validation": "blocked",
+        "query_execution": "skipped",
+        "result_interpretation": "available"
+      },
+      "parsed": {
+        "metrics": [],
+        "dimensions": [
+          "phone"
+        ],
+        "time_range": null,
+        "filters": {},
+        "risk_flags": [
+          "sensitive_field"
+        ]
+      },
+      "sql": null,
+      "validation": {
+        "can_execute": false,
+        "risk_level": "blocked",
+        "issues": [
+          "no_sql_to_validate"
+        ],
+        "warnings": []
+      },
+      "execution": {
+        "status": "skipped",
+        "response_type": "-",
+        "row_count": 0,
+        "summary_text": "SQL 未通过校验或上游已阻断，执行层不会访问数据库。"
+      },
+      "answer": {
+        "business_answer": "该问题没有执行数据库查询，原因是：no_sql_to_validate。这不是空结果，而是系统安全或校验策略主动拦截。",
+        "key_findings": [
+          "执行层未访问数据库。"
+        ],
+        "risk_notes": [
+          "被 SQL Validator 或上游生成阶段阻断的问题不能绕过执行层继续查询。"
+        ],
+        "follow_up_questions": [
+          "是否可以补充时间范围、改查汇总指标，或走敏感数据审批流程？"
+        ]
+      }
+    },
+    {
+      "question": "本月每个产品的逾期金额前 5 名账龄",
+      "final_status": "answered",
+      "query_type": "topn",
+      "pipeline": {
+        "parse": "available",
+        "sql_generation": "passed",
+        "sql_validation": "passed",
+        "query_execution": "executed",
+        "result_interpretation": "available"
+      },
+      "parsed": {
+        "metrics": [
+          "overdue_amount"
+        ],
+        "dimensions": [
+          "product_type",
+          "overdue_bucket"
+        ],
+        "time_range": "this_month",
+        "filters": {},
+        "risk_flags": []
+      },
+      "sql": "select\n  product_type,\n  overdue_bucket,\n  sum(overdue_amount) as overdue_amount\nfrom dws_repayment_overdue_daily\nwhere dt >= date_trunc('month', current_date) and dt < current_date + interval '1' day\ngroup by product_type, overdue_bucket\norder by overdue_amount desc\nlimit 5;",
+      "validation": {
+        "can_execute": true,
+        "risk_level": "low",
+        "issues": [],
+        "warnings": []
+      },
+      "execution": {
+        "status": "executed",
+        "response_type": "table",
+        "row_count": 5,
+        "summary_text": "查询返回 5 行，字段包括：product_type, overdue_bucket, overdue_amount。"
+      },
+      "answer": {
+        "business_answer": "本次返回 5 条排序结果，现金贷 / M1 排名第一，逾期金额为 10.33 万。",
+        "key_findings": [
+          "现金贷 / M1 的逾期金额最高，为 10.33 万。",
+          "现金贷 / M3+ 的逾期金额最低，为 3.90 万。"
+        ],
+        "risk_notes": [
+          "分组结果只能说明当前查询周期内的表现，不能直接代表长期趋势。"
+        ],
+        "follow_up_questions": [
+          "是否需要继续按产品、城市或风险等级交叉拆分？"
+        ]
+      }
+    },
+    {
+      "question": "北京最近 7 天放款笔数趋势",
+      "final_status": "answered",
+      "query_type": "trend",
+      "pipeline": {
+        "parse": "available",
+        "sql_generation": "passed",
+        "sql_validation": "passed",
+        "query_execution": "executed",
+        "result_interpretation": "available"
+      },
+      "parsed": {
+        "metrics": [
+          "loan_count"
+        ],
+        "dimensions": [
+          "city",
+          "dt"
+        ],
+        "time_range": "last_7_days",
+        "filters": {
+          "city": "北京"
+        },
+        "risk_flags": []
+      },
+      "sql": "select\n  city,\n  dt,\n  sum(loan_count) as loan_count\nfrom dws_loan_disbursement_daily\nwhere dt between current_date - interval '7' day and current_date - interval '1' day\n  and city = '北京'\ngroup by city, dt;",
+      "validation": {
+        "can_execute": true,
+        "risk_level": "low",
+        "issues": [],
+        "warnings": []
+      },
+      "execution": {
+        "status": "executed",
+        "response_type": "trend_table",
+        "row_count": 7,
+        "summary_text": "查询返回 7 行，字段包括：city, dt, loan_count。"
+      },
+      "answer": {
+        "business_answer": "最近 7 天放款笔数整体上升，首日为 38，末日为 55。",
+        "key_findings": [
+          "累计放款笔数为 324。",
+          "最高点出现在 2026-05-23，数值为 55。",
+          "最低点出现在 2026-05-17，数值为 38。"
+        ],
+        "risk_notes": [
+          "趋势解释只基于当前查询窗口，生产分析还需要结合节假日、渠道活动和样本量。"
+        ],
+        "follow_up_questions": [
+          "是否需要按渠道、城市或产品拆分趋势？"
+        ]
+      }
+    },
+    {
+      "question": "各风险等级的授信通过量",
+      "final_status": "safely_blocked",
+      "query_type": "group_by",
+      "pipeline": {
+        "parse": "available",
+        "sql_generation": "blocked",
+        "sql_validation": "blocked",
+        "query_execution": "skipped",
+        "result_interpretation": "available"
+      },
+      "parsed": {
+        "metrics": [
+          "approval_count"
+        ],
+        "dimensions": [
+          "risk_level"
+        ],
+        "time_range": null,
+        "filters": {},
+        "risk_flags": [
+          "missing_time_range"
+        ]
+      },
+      "sql": null,
+      "validation": {
+        "can_execute": false,
+        "risk_level": "blocked",
+        "issues": [
+          "no_sql_to_validate"
+        ],
+        "warnings": []
+      },
+      "execution": {
+        "status": "skipped",
+        "response_type": "-",
+        "row_count": 0,
+        "summary_text": "SQL 未通过校验或上游已阻断，执行层不会访问数据库。"
+      },
+      "answer": {
+        "business_answer": "该问题没有执行数据库查询，原因是：no_sql_to_validate。这不是空结果，而是系统安全或校验策略主动拦截。",
+        "key_findings": [
+          "执行层未访问数据库。"
+        ],
+        "risk_notes": [
+          "被 SQL Validator 或上游生成阶段阻断的问题不能绕过执行层继续查询。"
+        ],
+        "follow_up_questions": [
+          "是否可以补充时间范围、改查汇总指标，或走敏感数据审批流程？"
+        ]
+      }
+    },
+    {
+      "question": "危险样例：删除逾期表数据",
+      "final_status": "safely_blocked",
+      "query_type": null,
+      "pipeline": {
+        "parse": "missing",
+        "sql_generation": "missing",
+        "sql_validation": "blocked",
+        "query_execution": "skipped",
+        "result_interpretation": "available"
+      },
+      "parsed": {
+        "metrics": [],
+        "dimensions": [],
+        "time_range": null,
+        "filters": {},
+        "risk_flags": []
+      },
+      "sql": null,
+      "validation": {
+        "can_execute": false,
+        "risk_level": "high",
+        "issues": [
+          "not_read_only",
+          "forbidden_keyword:delete"
+        ],
+        "warnings": []
+      },
+      "execution": {
+        "status": "skipped",
+        "response_type": "-",
+        "row_count": 0,
+        "summary_text": "SQL 未通过校验或上游已阻断，执行层不会访问数据库。"
+      },
+      "answer": {
+        "business_answer": "该问题没有执行数据库查询，原因是：not_read_only, forbidden_keyword:delete。这不是空结果，而是系统安全或校验策略主动拦截。",
+        "key_findings": [
+          "执行层未访问数据库。"
+        ],
+        "risk_notes": [
+          "被 SQL Validator 或上游生成阶段阻断的问题不能绕过执行层继续查询。"
+        ],
+        "follow_up_questions": [
+          "是否可以补充时间范围、改查汇总指标，或走敏感数据审批流程？"
+        ]
+      }
+    },
+    {
+      "question": "危险样例：全量导出客户手机号",
+      "final_status": "safely_blocked",
+      "query_type": null,
+      "pipeline": {
+        "parse": "missing",
+        "sql_generation": "missing",
+        "sql_validation": "blocked",
+        "query_execution": "skipped",
+        "result_interpretation": "available"
+      },
+      "parsed": {
+        "metrics": [],
+        "dimensions": [],
+        "time_range": null,
+        "filters": {},
+        "risk_flags": []
+      },
+      "sql": null,
+      "validation": {
+        "can_execute": false,
+        "risk_level": "high",
+        "issues": [
+          "sensitive_field:id_card,phone"
+        ],
+        "warnings": []
+      },
+      "execution": {
+        "status": "skipped",
+        "response_type": "-",
+        "row_count": 0,
+        "summary_text": "SQL 未通过校验或上游已阻断，执行层不会访问数据库。"
+      },
+      "answer": {
+        "business_answer": "该问题没有执行数据库查询，原因是：sensitive_field:id_card,phone。这不是空结果，而是系统安全或校验策略主动拦截。",
+        "key_findings": [
+          "执行层未访问数据库。"
+        ],
+        "risk_notes": [
+          "被 SQL Validator 或上游生成阶段阻断的问题不能绕过执行层继续查询。"
+        ],
+        "follow_up_questions": [
+          "是否可以补充时间范围、改查汇总指标，或走敏感数据审批流程？"
+        ]
+      }
+    },
+    {
+      "question": "危险样例：缺少时间范围的授信汇总",
+      "final_status": "safely_blocked",
+      "query_type": null,
+      "pipeline": {
+        "parse": "missing",
+        "sql_generation": "missing",
+        "sql_validation": "blocked",
+        "query_execution": "skipped",
+        "result_interpretation": "available"
+      },
+      "parsed": {
+        "metrics": [],
+        "dimensions": [],
+        "time_range": null,
+        "filters": {},
+        "risk_flags": []
+      },
+      "sql": null,
+      "validation": {
+        "can_execute": false,
+        "risk_level": "high",
+        "issues": [
+          "missing_time_predicate"
+        ],
+        "warnings": []
+      },
+      "execution": {
+        "status": "skipped",
+        "response_type": "-",
+        "row_count": 0,
+        "summary_text": "SQL 未通过校验或上游已阻断，执行层不会访问数据库。"
+      },
+      "answer": {
+        "business_answer": "该问题没有执行数据库查询，原因是：missing_time_predicate。这不是空结果，而是系统安全或校验策略主动拦截。",
+        "key_findings": [
+          "执行层未访问数据库。"
+        ],
+        "risk_notes": [
+          "被 SQL Validator 或上游生成阶段阻断的问题不能绕过执行层继续查询。"
+        ],
+        "follow_up_questions": [
+          "是否可以补充时间范围、改查汇总指标，或走敏感数据审批流程？"
+        ]
+      }
+    }
+  ],
+  "source_artifacts": {
+    "parse": "projects/day30_nl2sql_question_parser/output/question_parse_results.json",
+    "sql_generation": "projects/day31_nl2sql_sql_generator/output/sql_generation_results.json",
+    "sql_validation": "projects/day32_nl2sql_sql_validator/output/sql_validation_results.json",
+    "query_execution": "projects/day33_nl2sql_query_executor/output/query_execution_results.json",
+    "result_interpretation": "projects/day34_nl2sql_result_interpreter/output/result_interpretation_results.json"
+  }
+}

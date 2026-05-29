@@ -1,0 +1,32 @@
+{
+  "roles": {
+    "credit_dev": {
+      "description": "信贷开发工程师，可以查看内部数仓表结构、授信流程和一般风控规则。",
+      "allowed_levels": ["public", "internal", "restricted"],
+      "allowed_domains": ["credit", "risk", "warehouse", "repayment", "compliance"]
+    },
+    "risk_analyst": {
+      "description": "风险分析师，可以查看风控规则、授信指标和逾期分析资料。",
+      "allowed_levels": ["public", "internal", "restricted"],
+      "allowed_domains": ["credit", "risk", "warehouse", "repayment", "compliance"]
+    },
+    "collection_operator": {
+      "description": "贷后催收运营，只能查看贷后、还款和逾期相关资料。",
+      "allowed_levels": ["public", "internal"],
+      "allowed_domains": ["repayment", "compliance"]
+    },
+    "customer_service": {
+      "description": "客服角色，只能查看公开说明和部分合规答复，不允许查看敏感字段和内部规则。",
+      "allowed_levels": ["public"],
+      "allowed_domains": ["compliance"]
+    },
+    "admin": {
+      "description": "管理员，用于演示和审计。",
+      "allowed_levels": ["public", "internal", "restricted", "sensitive"],
+      "allowed_domains": ["credit", "risk", "warehouse", "repayment", "compliance"]
+    }
+  },
+  "sensitive_terms": ["身份证", "手机号", "银行卡", "客户名单", "导出客户", "明文", "通讯录", "精确住址"],
+  "max_top_k": 8
+}
+

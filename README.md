@@ -6,6 +6,10 @@
 - [面试核心问题库](./docs/interview_core_questions.md)：每天学习内容沉淀成高频问题和详细精准回答。
 - [用户提问与完整回答](./docs/user_questions_answers.md)：保存学习过程中值得反复看的问题和完整回答。
 - [生产级 RAG 流程框架图](notes/rag_production_architecture.md)：生产 RAG 的在线问答链路、离线入库链路和各层解释。
+- [金融信贷数仓 RAG 助手](./projects/credit_rag_warehouse_assistant/README.md)：面向授信、风控、
+  还款、逾期和合规审计的生产级 RAG 项目。
+- [生产级 NL2SQL 流程框架图](notes/nl2sql_production_architecture.md)：生产 NL2SQL 的 Schema 治理、
+  SQL 生成校验、查询执行和结果解释链路。
 - [代码注释规则](./docs/code_commenting_guidelines.md)：旧代码和新代码都要用大白话说明用途、设计原因和风险。
 - [规则更新记录](./docs/rule_update_log.md)：记录规则什么时候更新、改了什么、影响哪些文档。
 
@@ -22,15 +26,14 @@
 
 ## 当前阶段
 
-Day 31：SQL 生成 - 从结构化解析到只读 SQL（进行中）
+Day 42：周复盘与部署说明 - 像产品一样交付（已完成）
 
-今天要完成：
+已完成：
 
-- 阅读 `notes/day31_nl2sql_sql_generation.md`
-- 跑通 `projects/day31_nl2sql_sql_generator/`
-- 理解 SQL 生成为什么必须受 Schema Catalog、只读约束和权限规则限制
-- 生成 SQL 草稿、阻断原因和静态校验报告
-- 在 `notes/day31_nl2sql_sql_generation.md` 中回答 Day 31 核心问题
+- 阅读 `notes/day42_week6_delivery_review.md`
+- 补齐 `projects/day36_42_nl2sql_service/` 部署说明
+- 跑通 Day 36-42 服务化项目回归测试
+- 完成 Day 42 每日核心问题自测
 
 ## 仓库结构
 
@@ -62,13 +65,12 @@ Day 31：SQL 生成 - 从结构化解析到只读 SQL（进行中）
 详细计划见：[plans/ai_56_day_plan.md](/Users/longfeiguo/PycharmProjects/bi_cube1/ai_transi
 tion/plans/ai_56_day_plan.md)
 
-## Day 31 完成标准
+## Day 36-42 完成标准
 
-- `projects/day31_nl2sql_sql_generator/main.py` 能运行
-- 生成 `projects/day31_nl2sql_sql_generator/output/sql_generation_results.json`
-- 生成 `projects/day31_nl2sql_sql_generator/output/sql_generation_report.md`
-- 能说清 SQL 生成为什么不能直接执行，必须经过校验层
-- `notes/day31_nl2sql_sql_generation.md` 中的 Day 31 核心问题已填写并通过校验
+- `projects/day36_42_nl2sql_service/` 能通过本地回归测试
+- README、API 契约、部署说明和故障排查路径完整
+- 能解释服务化、Docker、配置、审计存储和回归测试的生产价值
+- Day 42 核心问题已填写并通过校验
 
 ## 后续规则
 

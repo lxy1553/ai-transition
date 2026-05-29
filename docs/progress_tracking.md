@@ -6,10 +6,10 @@
 
 ## 📊 整体进度
 
-- 已完成天数：29 / 56
-- 进行中天数：2 / 56
-- 完成百分比：51.8%
-- 当前阶段：**Day 31 NL2SQL SQL 生成进行中**
+- 已完成天数：42 / 56
+- 进行中天数：0 / 56
+- 完成百分比：75.0%
+- 当前阶段：**Day 42 NL2SQL 服务化交付已完成**
 
 ---
 
@@ -493,7 +493,7 @@
 
 ---
 
-## 🔄 Day 30 - 问题解析：指标、维度、时间抽取（进行中）
+## ✅ Day 30 - 问题解析：指标、维度、时间抽取（已完成）
 
 **主题：** NL2SQL 用户问题解析、实体抽取、时间范围和过滤条件识别
 
@@ -503,18 +503,18 @@
 - [x] 抽取指标、维度、时间范围、TopN 和过滤条件
 - [x] 生成 JSON 与 Markdown 问题解析报告
 - [x] 补充 Day 30 面试题、术语和核心问题
-- [ ] 用户填写 Day 30 核心问题回答并通过校验
+- [x] 用户填写 Day 30 核心问题回答并通过校验
 
 **产出：** `notes/day30_nl2sql_question_parser.md`、
 `projects/day30_nl2sql_question_parser/`、
 `projects/day30_nl2sql_question_parser/output/question_parse_results.json`、
 `projects/day30_nl2sql_question_parser/output/question_parse_report.md`
 
-**状态：** 🔄 等待用户完成 Day 30 学习与核心问题回答
+**状态：** ✅ 已完成
 
 ---
 
-## 🔄 Day 31 - SQL 生成：从结构化解析到只读 SQL（进行中）
+## ✅ Day 31 - SQL 生成：从结构化解析到只读 SQL（已完成）
 
 **主题：** NL2SQL SQL 生成、只读 SQL、Schema 约束和生成前阻断
 
@@ -525,14 +525,237 @@
 - [x] 拦截敏感字段查询和缺少时间范围的问题
 - [x] 生成 JSON 与 Markdown SQL 生成报告
 - [x] 补充 Day 31 面试题、术语和核心问题
-- [ ] 用户填写 Day 31 核心问题回答并通过校验
+- [x] 用户填写 Day 31 核心问题回答并通过校验
 
 **产出：** `notes/day31_nl2sql_sql_generation.md`、
 `projects/day31_nl2sql_sql_generator/`、
 `projects/day31_nl2sql_sql_generator/output/sql_generation_results.json`、
 `projects/day31_nl2sql_sql_generator/output/sql_generation_report.md`
 
-**状态：** 🔄 等待用户完成 Day 31 学习与核心问题回答
+**状态：** ✅ 已完成
+
+---
+
+## ✅ Day 32 - SQL 校验：风控与约束（已完成）
+
+**主题：** NL2SQL SQL 校验、只读约束、敏感字段拦截、时间范围和执行前风控
+
+**计划任务：**
+- [x] 创建 Day 32 学习笔记：`notes/day32_nl2sql_sql_validation.md`
+- [x] 创建 SQL 校验项目：`projects/day32_nl2sql_sql_validator/`
+- [x] 读取 Day 31 SQL 生成结果并执行校验
+- [x] 校验只读、危险关键字、白名单表字段、敏感字段、时间范围和 limit
+- [x] 生成 JSON 与 Markdown SQL 校验报告
+- [x] 补充 Day 32 面试题、术语和核心问题
+- [x] 用户填写 Day 32 核心问题回答并通过校验
+
+**产出：** `notes/day32_nl2sql_sql_validation.md`、
+`projects/day32_nl2sql_sql_validator/`、
+`projects/day32_nl2sql_sql_validator/output/sql_validation_results.json`、
+`projects/day32_nl2sql_sql_validator/output/sql_validation_report.md`
+
+**当前结果：** 13 条样例中，8 条 SQL 校验通过，2 条在上游生成阶段已阻断，
+3 条手工高风险 SQL 被校验器阻断。
+
+**状态：** ✅ 已完成
+
+---
+
+## ✅ Day 33 - 查询执行：结果返回与格式化（已完成）
+
+**主题：** NL2SQL 查询执行、只读执行、本地 SQLite 演示和结果格式化
+
+**计划任务：**
+- [x] 创建 Day 33 学习笔记：`notes/day33_nl2sql_query_execution.md`
+- [x] 创建查询执行项目：`projects/day33_nl2sql_query_executor/`
+- [x] 读取 Day 32 SQL 校验结果，只执行 `can_execute = true` 的 SQL
+- [x] 创建本地 SQLite 演示库并写入信贷样例数据
+- [x] 生成 JSON 与 Markdown 查询执行报告
+- [x] 补充 Day 33 面试题、术语和核心问题
+- [x] 用户填写 Day 33 核心问题回答并通过校验
+
+**产出：** `notes/day33_nl2sql_query_execution.md`、
+`projects/day33_nl2sql_query_executor/`、
+`projects/day33_nl2sql_query_executor/output/nl2sql_demo.sqlite`、
+`projects/day33_nl2sql_query_executor/output/query_execution_results.json`、
+`projects/day33_nl2sql_query_executor/output/query_execution_report.md`
+
+**当前结果：** 13 条样例中，8 条 SQL 执行成功，5 条风险或上游阻断样例被跳过，
+执行错误 0 条。
+
+**状态：** ✅ 已完成
+
+---
+
+## ✅ Day 34 - 结果解释：业务语言化（已完成）
+
+**主题：** NL2SQL 结果解释、业务语言化、关键发现、风险提示和建议追问
+
+**计划任务：**
+- [x] 创建 Day 34 学习笔记：`notes/day34_nl2sql_result_interpretation.md`
+- [x] 创建结果解释项目：`projects/day34_nl2sql_result_interpreter/`
+- [x] 读取 Day 33 查询执行结果并生成业务解释
+- [x] 区分指标、分组、趋势、TopN、对比、明细和阻断结果
+- [x] 生成 JSON 与 Markdown 结果解释报告
+- [x] 补充 Day 34 面试题、术语和核心问题
+- [x] 用户填写 Day 34 核心问题回答并通过校验
+
+**产出：** `notes/day34_nl2sql_result_interpretation.md`、
+`projects/day34_nl2sql_result_interpreter/`、
+`projects/day34_nl2sql_result_interpreter/output/result_interpretation_results.json`、
+`projects/day34_nl2sql_result_interpreter/output/result_interpretation_report.md`
+
+**当前结果：** 13 条样例中，8 条执行结果生成业务解释，5 条阻断结果生成安全解释。
+
+**状态：** ✅ 已完成
+
+---
+
+## ✅ Day 35 - 项目 3 整合：NL2SQL 助手成型（已完成）
+
+**主题：** NL2SQL 端到端整合、链路追踪、可演示版本和安全阻断展示
+
+**计划任务：**
+- [x] 创建 Day 35 学习笔记：`notes/day35_nl2sql_project_integration.md`
+- [x] 创建 NL2SQL 助手整合项目：`projects/day35_nl2sql_assistant/`
+- [x] 串联 Day 30-Day 34 的解析、生成、校验、执行和解释产物
+- [x] 支持完整报告和单问题命令行演示
+- [x] 生成 JSON 与 Markdown 端到端演示报告
+- [x] 补充 Day 35 面试题、术语和核心问题
+- [x] 用户填写 Day 35 核心问题回答并通过校验
+
+**产出：** `notes/day35_nl2sql_project_integration.md`、
+`projects/day35_nl2sql_assistant/`、
+`projects/day35_nl2sql_assistant/output/nl2sql_assistant_demo_results.json`、
+`projects/day35_nl2sql_assistant/output/nl2sql_assistant_demo_report.md`
+
+**当前结果：** 13 条样例中，8 条成功回答，5 条安全阻断，执行错误 0 条，
+`demo_ready = true`。
+
+**状态：** ✅ 已完成
+
+---
+
+## ✅ Day 36 - 后端重构：项目服务化（已完成）
+
+**主题：** FastAPI 后端结构、模块拆分和服务入口
+
+**计划任务：**
+- [x] 创建 Day 36 学习笔记：`notes/day36_backend_refactor.md`
+- [x] 创建 Week 6 服务化项目：`projects/day36_42_nl2sql_service/`
+- [x] 拆分 `main / config / schemas / services / storage / errors`
+- [x] 封装 Day 35 NL2SQL 演示结果为 HTTP API
+- [x] 用户填写 Day 36 核心问题回答并通过校验
+
+**产出：** `projects/day36_42_nl2sql_service/app/`
+
+**状态：** ✅ 已完成
+
+---
+
+## ✅ Day 37 - 接口设计：错误处理与响应规范（已完成）
+
+**主题：** API 契约、Pydantic schema、统一错误响应和 request_id
+
+**计划任务：**
+- [x] 创建 Day 37 学习笔记：`notes/day37_api_design.md`
+- [x] 创建接口规范：`projects/day36_42_nl2sql_service/docs/api_contract.md`
+- [x] 实现 `/health`、`/nl2sql/questions`、`/nl2sql/ask`、`/nl2sql/trace/{request_id}`
+- [x] 统一业务错误和内部错误响应
+- [x] 补充 Day 37 面试题、术语和核心问题
+- [x] 用户填写 Day 37 核心问题回答并通过校验
+
+**产出：** `projects/day36_42_nl2sql_service/docs/api_contract.md`
+
+**状态：** ✅ 已完成
+
+---
+
+## ✅ Day 38 - Docker 化：本地部署（已完成）
+
+**主题：** Dockerfile、本地镜像构建和容器启动命令
+
+**计划任务：**
+- [x] 创建 Day 38 学习笔记：`notes/day38_dockerization.md`
+- [x] 创建 Dockerfile：`projects/day36_42_nl2sql_service/Dockerfile`
+- [x] 补充 Docker 构建和启动命令
+- [x] 补充 Day 38 面试题、术语和核心问题
+- [x] 用户填写 Day 38 核心问题回答并通过校验
+
+**产出：** `projects/day36_42_nl2sql_service/Dockerfile`
+
+**状态：** ✅ 已完成
+
+---
+
+## ✅ Day 39 - 配置管理：环境隔离与密钥管理（已完成）
+
+**主题：** 环境变量、`.env.example`、配置默认值和敏感信息边界
+
+**计划任务：**
+- [x] 创建 Day 39 学习笔记：`notes/day39_config_management.md`
+- [x] 创建 `.env.example`
+- [x] 创建 `app/config.py` 统一加载配置
+- [x] 补充 Day 39 面试题、术语和核心问题
+- [x] 用户填写 Day 39 核心问题回答并通过校验
+
+**产出：** `projects/day36_42_nl2sql_service/.env.example`
+
+**状态：** ✅ 已完成
+
+---
+
+## ✅ Day 40 - 数据存储：SQLite、Postgres 与审计数据（已完成）
+
+**主题：** 审计存储、SQLite 选型、生产数据库替换方向
+
+**计划任务：**
+- [x] 创建 Day 40 学习笔记：`notes/day40_storage_selection.md`
+- [x] 创建审计存储：`app/storage.py`
+- [x] 生成本地审计库：`projects/day36_42_nl2sql_service/output/audit.sqlite`
+- [x] 创建存储选型说明：`docs/storage_decision.md`
+- [x] 补充 Day 40 面试题、术语和核心问题
+- [x] 用户填写 Day 40 核心问题回答并通过校验
+
+**产出：** `projects/day36_42_nl2sql_service/docs/storage_decision.md`
+
+**状态：** ✅ 已完成
+
+---
+
+## ✅ Day 41 - 测试基础：接口测试与回归（已完成）
+
+**主题：** API 冒烟测试、成功样例、安全阻断和审计追踪回归
+
+**计划任务：**
+- [x] 创建 Day 41 学习笔记：`notes/day41_testing_regression.md`
+- [x] 创建 `unittest` 回归测试：`tests/test_api.py`
+- [x] 跑通 4 条 API 回归测试
+- [x] 补充 Day 41 面试题、术语和核心问题
+- [x] 用户填写 Day 41 核心问题回答并通过校验
+
+**产出：** `projects/day36_42_nl2sql_service/tests/test_api.py`
+
+**状态：** ✅ 已完成
+
+---
+
+## ✅ Day 42 - 周复盘与部署说明：像产品一样交付（已完成）
+
+**主题：** 部署说明、冒烟检查、交付清单和 Week 6 复盘
+
+**计划任务：**
+- [x] 创建 Day 42 学习笔记：`notes/day42_week6_delivery_review.md`
+- [x] 创建部署说明：`projects/day36_42_nl2sql_service/docs/deployment.md`
+- [x] 补充 README 启动、测试、Docker 和生产映射
+- [x] 补充 Day 42 面试题、术语和核心问题
+- [x] 用户填写 Day 42 核心问题回答并通过校验
+
+**产出：** `projects/day36_42_nl2sql_service/docs/deployment.md`
+
+**状态：** ✅ 已完成
+
+---
 
 ## 📈 周进度统计
 
@@ -561,9 +784,21 @@
 
 ### 第5周（Day 29-35）：NL2SQL 核心能力
 
-- 已完成：1 / 7 天
-- 进行中：2 / 7 天
-- 状态：🔄 Day 31 进行中；Day 30 / Day 31 等待核心问题回答
+- 已完成：7 / 7 天
+- 进行中：0 / 7 天
+- 状态：✅ 第 5 周已完成，NL2SQL 助手成型
+
+### 第6周（Day 36-42）：服务化、Docker、配置、测试、部署
+
+- 已完成：7 / 7 天
+- 进行中：0 / 7 天
+- 状态：✅ 第 6 周已完成，NL2SQL 服务化交付收口
+
+### 第7周（Day 43-49）：Agent 工作流、评测、作品扩展
+
+- 已完成：0 / 7 天
+- 进行中：0 / 7 天
+- 状态：⏳ 未开始
 
 ---
 
@@ -574,8 +809,8 @@
 - [x] **Day 14：** 第2周完成，SQL解释助手项目完成
 - [x] **Day 21：** 第3周完成，RAG项目可演示版本
 - [x] **Day 28：** 第4周完成，开始试投简历
-- [ ] **Day 35：** 第5周完成，NL2SQL助手成型
-- [ ] **Day 42：** 第6周完成，项目Docker化部署
+- [x] **Day 35：** 第5周完成，NL2SQL助手成型
+- [x] **Day 42：** 第6周完成，项目Docker化部署
 - [ ] **Day 49：** 第7周完成，作品集整理完成
 - [ ] **Day 56：** 第8周完成，收官总结
 
@@ -601,4 +836,4 @@
 
 ---
 
-*最后更新：2026-05-26（Day 31 进行中，SQL 生成阶段启动）*
+*最后更新：2026-05-29（Day 42 已完成，Week 6 服务化交付收口完成）*

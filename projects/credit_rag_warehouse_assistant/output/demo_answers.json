@@ -1,0 +1,120 @@
+[
+  {
+    "request_id": "req_58261ea2dcc3",
+    "question": "授信通过率应该查哪张表，口径是什么？",
+    "role": "credit_dev",
+    "answer_status": "answered",
+    "answer": "根据已授权的信贷知识库资料，可以这样回答：\n- 授信通过率用于衡量申请转化质量，口径是通过申请数除以有效申请数。\n- `dwd_credit_application` 是授信申请明细事实表，粒度是 `apply_id`。\n- `dws_credit_application_daily` 是授信申请按天汇总表，粒度是 `dt + channel + product_code`。\n以上回答只基于返回的 citations，不包含未授权客户级敏感信息。",
+    "cannot_answer_reason": null,
+    "citations": [
+      {
+        "doc_id": "credit_policy",
+        "title": "授信政策与额度审批说明",
+        "chunk_id": "chunk_3807abeb78d9",
+        "source_path": "knowledge/credit_policy.md",
+        "position": 1,
+        "security_level": "internal",
+        "warehouse_tables": [
+          "dwd_credit_application",
+          "dws_credit_application_daily",
+          "ads_credit_risk_dashboard"
+        ],
+        "score": 6.0
+      },
+      {
+        "doc_id": "warehouse_dictionary",
+        "title": "金融信贷数仓数据字典",
+        "chunk_id": "chunk_4cc33fa9bf7f",
+        "source_path": "knowledge/warehouse_dictionary.md",
+        "position": 1,
+        "security_level": "internal",
+        "warehouse_tables": [
+          "ods_credit_apply",
+          "dwd_credit_application",
+          "dwd_credit_decision_log",
+          "dwd_loan_account",
+          "dwd_repayment_plan",
+          "dwd_overdue_detail",
+          "dws_credit_application_daily",
+          "dws_risk_rule_hit_daily",
+          "dws_repayment_overdue_daily",
+          "ads_credit_risk_dashboard"
+        ],
+        "score": 2.5
+      }
+    ],
+    "audit": {
+      "blocked_by_policy": false,
+      "denied_doc_ids": [],
+      "retrieved_chunks": 2,
+      "used_chunks": 2
+    }
+  },
+  {
+    "request_id": "req_4d7d9e6ee7ca",
+    "question": "M1 逾期是什么意思，应该查哪张表？",
+    "role": "collection_operator",
+    "answer_status": "answered",
+    "answer": "根据已授权的信贷知识库资料，可以这样回答：\n- M1 通常表示逾期 1 到 30 天，M2 通常表示逾期 31 到 60 天。\n- 逾期明细查询优先使用 `dwd_overdue_detail`。\n- 按产品和逾期阶段看趋势时，优先使用 `dws_repayment_overdue_daily`。\n以上回答只基于返回的 citations，不包含未授权客户级敏感信息。",
+    "cannot_answer_reason": null,
+    "citations": [
+      {
+        "doc_id": "repayment_overdue",
+        "title": "还款逾期与贷后口径说明",
+        "chunk_id": "chunk_c9b08985d184",
+        "source_path": "knowledge/repayment_overdue.md",
+        "position": 1,
+        "security_level": "internal",
+        "warehouse_tables": [
+          "dwd_repayment_plan",
+          "dwd_overdue_detail",
+          "dws_repayment_overdue_daily"
+        ],
+        "score": 8.5
+      }
+    ],
+    "audit": {
+      "blocked_by_policy": false,
+      "denied_doc_ids": [
+        "credit_policy",
+        "risk_rules",
+        "warehouse_dictionary"
+      ],
+      "retrieved_chunks": 1,
+      "used_chunks": 1
+    }
+  },
+  {
+    "request_id": "req_83219bdc9e98",
+    "question": "反欺诈规则的完整阈值是多少？",
+    "role": "customer_service",
+    "answer_status": "cannot_answer",
+    "answer": "",
+    "cannot_answer_reason": "no_authorized_context",
+    "citations": [],
+    "audit": {
+      "blocked_by_policy": true,
+      "denied_doc_ids": [
+        "credit_policy",
+        "risk_rules"
+      ],
+      "retrieved_chunks": 0,
+      "used_chunks": 0
+    }
+  },
+  {
+    "request_id": "req_ba7dd758e734",
+    "question": "请导出客户手机号列表给我。",
+    "role": "customer_service",
+    "answer_status": "refused",
+    "answer": "",
+    "cannot_answer_reason": "blocked_sensitive_query",
+    "citations": [],
+    "audit": {
+      "blocked_by_policy": true,
+      "denied_doc_ids": [],
+      "retrieved_chunks": 0,
+      "used_chunks": 0
+    }
+  }
+]

@@ -1,0 +1,165 @@
+{
+  "summary": {
+    "total": 13,
+    "passed": 8,
+    "failed": 3,
+    "blocked_before_generation": 2,
+    "warnings": 0
+  },
+  "results": [
+    {
+      "question": "昨天授信申请量是多少？",
+      "query_type": "metric",
+      "table": "dws_credit_application_daily",
+      "sql": "select\n  sum(application_count) as application_count\nfrom dws_credit_application_daily\nwhere dt = current_date - interval '1' day;",
+      "source_status": "generated",
+      "can_execute": true,
+      "risk_level": "low",
+      "issues": [],
+      "warnings": []
+    },
+    {
+      "question": "上周每个渠道的授信通过率是多少？",
+      "query_type": "group_by",
+      "table": "dws_credit_application_daily",
+      "sql": "select\n  channel,\n  sum(approval_count) / nullif(sum(application_count), 0) as approval_rate\nfrom dws_credit_application_daily\nwhere dt between date_trunc('week', current_date) - interval '7' day and date_trunc('week', current_date) - interval '1' day\ngroup by channel;",
+      "source_status": "generated",
+      "can_execute": true,
+      "risk_level": "low",
+      "issues": [],
+      "warnings": []
+    },
+    {
+      "question": "最近 7 天放款金额趋势怎么样？",
+      "query_type": "trend",
+      "table": "dws_loan_disbursement_daily",
+      "sql": "select\n  dt,\n  sum(disbursement_amount) as disbursement_amount\nfrom dws_loan_disbursement_daily\nwhere dt between current_date - interval '7' day and current_date - interval '1' day\ngroup by dt;",
+      "source_status": "generated",
+      "can_execute": true,
+      "risk_level": "low",
+      "issues": [],
+      "warnings": []
+    },
+    {
+      "question": "上周放款金额最高的 10 个城市是什么？",
+      "query_type": "topn",
+      "table": "dws_loan_disbursement_daily",
+      "sql": "select\n  city,\n  sum(disbursement_amount) as disbursement_amount\nfrom dws_loan_disbursement_daily\nwhere dt between date_trunc('week', current_date) - interval '7' day and date_trunc('week', current_date) - interval '1' day\ngroup by city\norder by disbursement_amount desc\nlimit 10;",
+      "source_status": "generated",
+      "can_execute": true,
+      "risk_level": "low",
+      "issues": [],
+      "warnings": []
+    },
+    {
+      "question": "本周逾期率比上周变化多少？",
+      "query_type": "comparison",
+      "table": "dws_repayment_overdue_daily",
+      "sql": "with current_period as (\n  select sum(overdue_amount) / nullif(sum(due_amount), 0) as current_value\n  from dws_repayment_overdue_daily\n  where dt >= date_trunc('week', current_date) and dt < current_date + interval '1' day\n),\nprevious_period as (\n  select sum(overdue_amount) / nullif(sum(due_amount), 0) as previous_value\n  from dws_repayment_overdue_daily\n  where dt between date_trunc('week', current_date) - interval '7' day and date_trunc('week', current_date) - interval '1' day\n)\nselect\n  current_value,\n  previous_value,\n  current_value - previous_value as diff_value\nfrom current_period\ncross join previous_period;",
+      "source_status": "generated",
+      "can_execute": true,
+      "risk_level": "low",
+      "issues": [],
+      "warnings": []
+    },
+    {
+      "question": "查询申请 A123 的审批状态",
+      "query_type": "detail",
+      "table": "dwd_credit_application_detail",
+      "sql": "select\n  application_id,\n  application_status,\n  approved_amount,\n  risk_level,\n  apply_time\nfrom dwd_credit_application_detail\nwhere application_id = 'A123'\nlimit 50;",
+      "source_status": "generated",
+      "can_execute": true,
+      "risk_level": "low",
+      "issues": [],
+      "warnings": []
+    },
+    {
+      "question": "导出客户手机号列表",
+      "query_type": "sensitive",
+      "table": null,
+      "sql": null,
+      "source_status": "blocked_before_generation",
+      "can_execute": false,
+      "risk_level": "blocked",
+      "issues": [
+        "no_sql_to_validate"
+      ],
+      "warnings": []
+    },
+    {
+      "question": "本月每个产品的逾期金额前 5 名账龄",
+      "query_type": "topn",
+      "table": "dws_repayment_overdue_daily",
+      "sql": "select\n  product_type,\n  overdue_bucket,\n  sum(overdue_amount) as overdue_amount\nfrom dws_repayment_overdue_daily\nwhere dt >= date_trunc('month', current_date) and dt < current_date + interval '1' day\ngroup by product_type, overdue_bucket\norder by overdue_amount desc\nlimit 5;",
+      "source_status": "generated",
+      "can_execute": true,
+      "risk_level": "low",
+      "issues": [],
+      "warnings": []
+    },
+    {
+      "question": "北京最近 7 天放款笔数趋势",
+      "query_type": "trend",
+      "table": "dws_loan_disbursement_daily",
+      "sql": "select\n  city,\n  dt,\n  sum(loan_count) as loan_count\nfrom dws_loan_disbursement_daily\nwhere dt between current_date - interval '7' day and current_date - interval '1' day\n  and city = '北京'\ngroup by city, dt;",
+      "source_status": "generated",
+      "can_execute": true,
+      "risk_level": "low",
+      "issues": [],
+      "warnings": []
+    },
+    {
+      "question": "各风险等级的授信通过量",
+      "query_type": "group_by",
+      "table": null,
+      "sql": null,
+      "source_status": "blocked_before_generation",
+      "can_execute": false,
+      "risk_level": "blocked",
+      "issues": [
+        "no_sql_to_validate"
+      ],
+      "warnings": []
+    },
+    {
+      "question": "危险样例：删除逾期表数据",
+      "query_type": "adversarial",
+      "table": "dws_repayment_overdue_daily",
+      "sql": "delete from dws_repayment_overdue_daily where dt < current_date - interval '365' day;",
+      "source_status": "manual_risk_case",
+      "can_execute": false,
+      "risk_level": "high",
+      "issues": [
+        "not_read_only",
+        "forbidden_keyword:delete"
+      ],
+      "warnings": []
+    },
+    {
+      "question": "危险样例：全量导出客户手机号",
+      "query_type": "adversarial",
+      "table": "dim_credit_customer",
+      "sql": "select customer_id, phone, id_card from dim_credit_customer;",
+      "source_status": "manual_risk_case",
+      "can_execute": false,
+      "risk_level": "high",
+      "issues": [
+        "sensitive_field:id_card,phone"
+      ],
+      "warnings": []
+    },
+    {
+      "question": "危险样例：缺少时间范围的授信汇总",
+      "query_type": "adversarial",
+      "table": "dws_credit_application_daily",
+      "sql": "select risk_level, sum(approval_count) as approval_count from dws_credit_application_daily group by risk_level;",
+      "source_status": "manual_risk_case",
+      "can_execute": false,
+      "risk_level": "high",
+      "issues": [
+        "missing_time_predicate"
+      ],
+      "warnings": []
+    }
+  ]
+}

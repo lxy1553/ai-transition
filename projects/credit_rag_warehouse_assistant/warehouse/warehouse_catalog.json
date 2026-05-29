@@ -1,0 +1,108 @@
+{
+  "warehouse_name": "credit_dw",
+  "business_domains": ["授信", "风控", "放款", "还款", "逾期", "贷后", "催收"],
+  "layers": [
+    {
+      "layer": "ODS",
+      "description": "贴源层，保留业务系统原始数据。",
+      "tables": [
+        {
+          "table_name": "ods_credit_apply",
+          "grain": "apply_id",
+          "description": "授信申请原始表。",
+          "sensitive_level": "restricted",
+          "columns": ["apply_id", "customer_id", "apply_time", "channel", "product_code", "apply_amount", "id_no_masked", "mobile_masked"]
+        },
+        {
+          "table_name": "ods_repayment_transaction",
+          "grain": "repay_txn_id",
+          "description": "还款交易原始表。",
+          "sensitive_level": "restricted",
+          "columns": ["repay_txn_id", "loan_id", "customer_id", "repay_time", "repay_amount", "repay_channel", "txn_status"]
+        }
+      ]
+    },
+    {
+      "layer": "DWD",
+      "description": "明细层，清洗后形成统一业务事实。",
+      "tables": [
+        {
+          "table_name": "dwd_credit_application",
+          "grain": "apply_id",
+          "description": "授信申请明细事实表。",
+          "sensitive_level": "internal",
+          "columns": ["dt", "apply_id", "customer_id", "channel", "product_code", "apply_amount", "apply_status", "risk_level", "decision_code"]
+        },
+        {
+          "table_name": "dwd_credit_decision_log",
+          "grain": "decision_id",
+          "description": "风控决策日志明细表。",
+          "sensitive_level": "restricted",
+          "columns": ["dt", "decision_id", "apply_id", "rule_code", "rule_result", "risk_score", "decision_result", "manual_review_flag"]
+        },
+        {
+          "table_name": "dwd_loan_account",
+          "grain": "loan_id",
+          "description": "借据账户明细表。",
+          "sensitive_level": "restricted",
+          "columns": ["dt", "loan_id", "customer_id", "product_code", "loan_amount", "loan_status", "disburse_time", "loan_term"]
+        },
+        {
+          "table_name": "dwd_repayment_plan",
+          "grain": "loan_id + period_no",
+          "description": "还款计划明细表。",
+          "sensitive_level": "internal",
+          "columns": ["dt", "loan_id", "period_no", "due_date", "principal_due", "interest_due", "paid_amount", "repay_status"]
+        },
+        {
+          "table_name": "dwd_overdue_detail",
+          "grain": "loan_id + dt",
+          "description": "逾期明细表。",
+          "sensitive_level": "restricted",
+          "columns": ["dt", "loan_id", "customer_id", "dpd", "overdue_principal", "overdue_interest", "bucket"]
+        }
+      ]
+    },
+    {
+      "layer": "DWS",
+      "description": "汇总层，面向指标和分析场景。",
+      "tables": [
+        {
+          "table_name": "dws_credit_application_daily",
+          "grain": "dt + channel + product_code",
+          "description": "授信申请按天汇总表。",
+          "sensitive_level": "internal",
+          "columns": ["dt", "channel", "product_code", "application_count", "approval_count", "reject_count", "manual_review_count", "approval_rate"]
+        },
+        {
+          "table_name": "dws_risk_rule_hit_daily",
+          "grain": "dt + rule_code + channel",
+          "description": "风控规则命中按天汇总表。",
+          "sensitive_level": "restricted",
+          "columns": ["dt", "rule_code", "rule_name", "channel", "hit_count", "reject_count", "manual_review_count"]
+        },
+        {
+          "table_name": "dws_repayment_overdue_daily",
+          "grain": "dt + product_code + bucket",
+          "description": "还款逾期按天汇总表。",
+          "sensitive_level": "internal",
+          "columns": ["dt", "product_code", "bucket", "due_amount", "paid_amount", "overdue_amount", "overdue_rate", "m1_balance", "m2_balance"]
+        }
+      ]
+    },
+    {
+      "layer": "ADS",
+      "description": "应用层，面向看板、经营分析和 AI 问答。",
+      "tables": [
+        {
+          "table_name": "ads_credit_risk_dashboard",
+          "grain": "dt + product_code",
+          "description": "授信与风险经营看板宽表。",
+          "sensitive_level": "internal",
+          "columns": ["dt", "product_code", "application_count", "approval_rate", "rule_reject_rate", "disburse_amount", "overdue_rate"]
+        }
+      ]
+    }
+  ]
+}
+

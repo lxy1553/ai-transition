@@ -24,6 +24,8 @@
 | Q012 | Prompt。 |
 | Q013 | Ingestion 是什么？ |
 | Q014 | FastAPI 在 AI 服务化里承担什么角色？ |
+| Q015 | 模拟一条数据在代码里的真实流转，在 RAG 中。 |
+| Q016 | 模拟一条数据在代码里的真实流转，在 NL2SQL 中。 |
 
 ---
 
@@ -2190,3 +2192,776 @@ API 服务适合生产接入：
 一句话：
 
 **FastAPI 是把 AI 能力从“本地脚本”变成“可被系统调用的线上服务”的关键后端层。**
+
+---
+
+> ## Q015：模拟一条数据在代码里的真实流转，在 RAG 中。
+
+下面用信贷场景模拟一条数据在 RAG 代码里的真实流转。
+
+假设原始数据是一份授信政策文档里的一条规则：
+
+```text
+文档：credit_policy_2026_v3.pdf
+段落：近 90 天内出现 M2 及以上逾期记录的客户，原则上不得通过自动授信审批。
+业务域：授信准入
+权限：risk_policy
+版本：2026_v3
+```
+
+这条数据从进入系统到最终回答用户问题，大致会经历两条链路：
+
+```text
+离线入库链路：
+原始文档 -> 解析清洗 -> 切分 chunk -> 生成 metadata -> embedding -> 写入索引
+
+在线问答链路：
+用户问题 -> 鉴权 -> 问题改写 -> query embedding -> metadata filter
+-> 向量召回 -> rerank -> 拼 prompt -> LLM 生成 -> 安全校验 -> 返回答案
+```
+
+## 1. 原始文档进入 Loader
+
+代码里第一步通常不是模型，而是文档加载。
+
+```python
+raw_doc = Document(
+    doc_id="credit_policy_2026_v3",
+    source_path="credit_policy_2026_v3.pdf",
+    text="近 90 天内出现 M2 及以上逾期记录的客户，原则上不得通过自动授信审批。",
+    metadata={
+        "business_domain": "credit_approval",
+        "doc_type": "policy",
+        "version": "2026_v3",
+        "permission_level": "risk_policy"
+    }
+)
+```
+
+这时的数据还是“文档级数据”。它带着来源、版本、权限、业务域，但还不适合直接检索。
+
+生产里这一层要处理 PDF、Word、HTML、数据库配置表、知识库页面等不同来源。
+如果是信贷系统，还要特别关注政策版本、生效时间、产品线和权限级别。
+
+## 2. Parser 和 Cleaner 清洗正文
+
+接下来代码会解析文档正文，去掉页眉、页脚、乱码、重复空格和无意义字符。
+
+```python
+clean_text = clean_policy_text(raw_doc.text)
+```
+
+清洗后的结果可能是：
+
+```text
+近 90 天内出现 M2 及以上逾期记录的客户，原则上不得通过自动授信审批。
+```
+
+这一步看起来普通，但很关键。
+如果 PDF 解析错，把“不得通过”解析成“得通过”，后面 embedding、检索和生成都会建立在错误资料上。
+
+## 3. Chunker 把文档切成知识单元
+
+RAG 不会把整份政策文档都塞进向量库，而是切成 chunk。
+
+```python
+chunk = Chunk(
+    chunk_id="credit_policy_2026_v3_chunk_018",
+    doc_id=raw_doc.doc_id,
+    content="近 90 天内出现 M2 及以上逾期记录的客户，原则上不得通过自动授信审批。",
+    page_no=12,
+    start_offset=2380,
+    end_offset=2428
+)
+```
+
+这个 chunk 就是后续检索和引用的基本单位。
+
+在生产里，chunk 不能只追求固定长度。
+信贷政策、风控规则、指标口径这类内容，更适合按语义边界切分。
+例如一条准入规则、一条拒绝规则、一条例外规则，最好不要被切断。
+
+## 4. Metadata Tagger 给 chunk 打标签
+
+然后系统会补充 metadata。
+
+```python
+chunk.metadata = {
+    "business_domain": "credit_approval",
+    "product": "cash_loan",
+    "policy_type": "admission_rule",
+    "risk_topic": "overdue_history",
+    "permission_level": "risk_policy",
+    "effective_date": "2026-01-01",
+    "expire_date": None,
+    "source_path": "credit_policy_2026_v3.pdf",
+    "page_no": 12,
+    "version": "2026_v3"
+}
+```
+
+metadata 不是装饰字段，它决定后面能不能精准过滤。
+
+比如用户问“近 90 天逾期还能不能授信”，系统应该优先找：
+
+- `business_domain = credit_approval`
+- `policy_type = admission_rule`
+- `risk_topic = overdue_history`
+- 当前日期仍在 `effective_date` 和 `expire_date` 范围内
+- 用户权限允许访问 `risk_policy`
+
+这就是 metadata filter 在真实代码里的价值。
+它让 RAG 不是在全库里盲搜，而是在业务、权限、版本都正确的资料范围里检索。
+
+## 5. Embedding Service 把 chunk 变成向量
+
+接下来系统会调用 embedding 模型。
+
+```python
+vector = embedding_model.embed(chunk.content)
+```
+
+得到的不是文本，而是一组数字：
+
+```python
+vector = [0.021, -0.134, 0.088, ...]
+```
+
+这组数字表示这段文本的语义位置。
+
+用户后面问“有过 M2 逾期还能自动审批吗”，即使没有完全命中原文里的“近 90 天”，向量检索也可能知道两者语义相关。
+
+## 6. Index Writer 写入存储
+
+入库时通常至少写两类存储：
+
+```python
+vector_store.upsert(
+    id=chunk.chunk_id,
+    vector=vector,
+    metadata=chunk.metadata
+)
+
+doc_store.upsert(
+    chunk_id=chunk.chunk_id,
+    content=chunk.content,
+    doc_id=chunk.doc_id,
+    metadata=chunk.metadata
+)
+```
+
+向量库负责相似度检索。
+文档库或关系型数据库负责保存 chunk 正文、来源、版本、权限和审计字段。
+
+生产里常见组合是：
+
+- PostgreSQL：存文档、chunk、metadata、权限、版本、任务状态
+- pgvector / Milvus：存 embedding，做向量检索
+- OpenSearch：做关键词检索和日志检索
+- Redis：缓存高频问题、召回结果或答案
+- ClickHouse / Hive：分析日志、问题分布、召回效果和成本
+
+到这里，原始段落已经从“一段政策文字”变成了可检索、可过滤、可引用的知识单元。
+
+## 7. 用户发起在线问题
+
+现在风控运营同学在系统里问：
+
+```text
+近 90 天有 M2 逾期记录的客户还能自动授信吗？
+```
+
+API 层收到请求：
+
+```python
+request = AskRequest(
+    request_id="req_20260527_0001",
+    user_id="u_10086",
+    user_role="risk_operator",
+    question="近 90 天有 M2 逾期记录的客户还能自动授信吗？",
+    top_k=5
+)
+```
+
+这时进入在线问答链路。
+
+## 8. Auth Service 先做权限判断
+
+RAG 不是先检索再说，而是先判断用户能不能访问这类资料。
+
+```python
+allowed_permissions = auth_service.get_allowed_permissions(request.user_id)
+```
+
+返回：
+
+```python
+allowed_permissions = ["public", "internal", "risk_policy"]
+```
+
+后面检索时会带上权限过滤条件。
+如果用户只是客服角色，可能只能访问 `public` 和 `internal`，不能访问 `risk_policy`。
+
+## 9. Query Preprocessor 处理用户问题
+
+用户问题通常要先做标准化、意图识别和 query rewrite。
+
+```python
+normalized_query = normalize_question(request.question)
+intent = classify_intent(normalized_query)
+rewritten_query = rewrite_query(normalized_query, intent)
+```
+
+结果可能是：
+
+```python
+intent = "credit_policy_admission"
+
+rewritten_query = (
+    "授信准入 自动审批 近90天 M2逾期 逾期记录 风控政策"
+)
+```
+
+用户原话更口语，改写后的 query 更适合检索。
+但 rewrite 不能改变问题本意，只能补充业务同义词和检索关键词。
+
+## 10. Query Embedding 生成问题向量
+
+然后系统把改写后的 query 也变成向量。
+
+```python
+query_vector = embedding_model.embed(rewritten_query)
+```
+
+现在系统有两类向量：
+
+- 入库时生成的 chunk vector
+- 查询时生成的 query vector
+
+向量检索就是计算 query vector 和 chunk vector 的相似度。
+
+## 11. Retriever 带 metadata filter 检索
+
+检索时不会只传一个向量，还会带过滤条件。
+
+```python
+filter_expr = {
+    "business_domain": "credit_approval",
+    "policy_type": "admission_rule",
+    "permission_level": {"$in": allowed_permissions},
+    "effective_date": {"$lte": "2026-05-27"},
+    "expire_date": {"$is_null_or_gte": "2026-05-27"}
+}
+
+candidates = vector_store.search(
+    vector=query_vector,
+    top_k=20,
+    filter=filter_expr
+)
+```
+
+这一步会返回候选 chunk：
+
+```python
+candidates = [
+    {
+        "chunk_id": "credit_policy_2026_v3_chunk_018",
+        "score": 0.89,
+        "metadata": {
+            "business_domain": "credit_approval",
+            "policy_type": "admission_rule",
+            "risk_topic": "overdue_history",
+            "page_no": 12
+        }
+    }
+]
+```
+
+注意这里先返回的可能只是 chunk id、score 和 metadata。
+系统还要根据 chunk id 去 doc_store 取正文。
+
+```python
+chunks = doc_store.batch_get([item["chunk_id"] for item in candidates])
+```
+
+## 12. Reranker 对候选结果重新排序
+
+向量检索负责“找一批可能相关的资料”，reranker 负责“把最能回答问题的资料排前面”。
+
+```python
+ranked_chunks = reranker.rank(
+    query=request.question,
+    chunks=chunks
+)
+
+top_chunks = ranked_chunks[:5]
+```
+
+生产里常见做法是先召回 20 到 100 条，再 rerank 到 3 到 8 条。
+这样可以兼顾召回率和上下文成本。
+
+## 13. Context Builder 组装上下文
+
+系统会把 top chunks 组装成带引用编号的上下文。
+
+```python
+context_blocks = [
+    {
+        "citation_id": "C1",
+        "content": "近 90 天内出现 M2 及以上逾期记录的客户，原则上不得通过自动授信审批。",
+        "source": "credit_policy_2026_v3.pdf",
+        "page_no": 12
+    }
+]
+```
+
+真正进入 LLM 的不是向量，而是文本上下文。
+向量只负责找到资料，LLM 最终读的是 chunk 正文。
+
+## 14. Prompt Builder 拼接提示词
+
+系统把系统规则、用户问题、检索上下文和输出格式拼成 prompt。
+
+```python
+prompt = build_prompt(
+    system_rules=[
+        "你是信贷政策问答助手。",
+        "只能基于给定资料回答。",
+        "如果资料不足，必须说明无法确定。",
+        "回答必须给出引用。"
+    ],
+    question=request.question,
+    context_blocks=context_blocks,
+    output_schema={
+        "answer": "string",
+        "citations": "list",
+        "confidence": "float"
+    }
+)
+```
+
+拼出来的核心内容类似：
+
+```text
+资料：
+[C1] 近 90 天内出现 M2 及以上逾期记录的客户，原则上不得通过自动授信审批。
+来源：credit_policy_2026_v3.pdf，第 12 页
+
+问题：
+近 90 天有 M2 逾期记录的客户还能自动授信吗？
+
+要求：
+只基于资料回答，并给出引用。
+```
+
+## 15. LLM Client 生成答案
+
+LLM 接收 prompt 后生成结构化结果。
+
+```python
+llm_result = llm_client.generate(prompt)
+```
+
+可能返回：
+
+```json
+{
+  "answer": "根据现有授信政策，近 90 天内出现 M2 及以上逾期记录的客户，原则上不得通过自动授信审批。",
+  "citations": ["C1"],
+  "confidence": 0.86
+}
+```
+
+这里要注意：LLM 不是在数据库里查资料。
+数据库检索已经由 retriever 完成，LLM 的职责是基于上下文做阅读、归纳和表达。
+
+## 16. Guardrail 做安全和质量校验
+
+返回用户前，系统还要检查答案是否合规。
+
+```python
+checked = guardrail.validate(
+    question=request.question,
+    answer=llm_result["answer"],
+    citations=llm_result["citations"],
+    context_blocks=context_blocks,
+    user_role=request.user_role
+)
+```
+
+常见校验包括：
+
+- 是否引用了资料
+- 是否回答了资料里没有的信息
+- 是否泄露身份证号、手机号、银行卡号等敏感信息
+- 是否越权展示风险策略细节
+- 是否需要人工复核
+- confidence 是否低于阈值
+
+如果资料不足，系统应该拒答或要求补充条件，而不是编造。
+
+## 17. API 返回最终响应
+
+最终返回给前端的不是一段裸文本，而是结构化 JSON。
+
+```json
+{
+  "request_id": "req_20260527_0001",
+  "answer": "根据现有授信政策，近 90 天内出现 M2 及以上逾期记录的客户，原则上不得通过自动授信审批。",
+  "citations": [
+    {
+      "citation_id": "C1",
+      "source": "credit_policy_2026_v3.pdf",
+      "page_no": 12
+    }
+  ],
+  "confidence": 0.86,
+  "can_answer": true
+}
+```
+
+前端展示时，可以把引用来源展示出来，方便业务人员确认依据。
+
+## 18. Trace Logger 记录整条链路
+
+生产 RAG 必须记录链路日志，否则答错时无法排查。
+
+```python
+trace_logger.info({
+    "request_id": request.request_id,
+    "user_id": request.user_id,
+    "question": request.question,
+    "rewritten_query": rewritten_query,
+    "filters": filter_expr,
+    "retrieved_chunk_ids": [c["chunk_id"] for c in candidates],
+    "reranked_chunk_ids": [c.chunk_id for c in top_chunks],
+    "citations": llm_result["citations"],
+    "confidence": llm_result["confidence"],
+    "latency_ms": 830,
+    "token_usage": {
+        "prompt_tokens": 1320,
+        "completion_tokens": 120
+    }
+})
+```
+
+这些日志后面可以用于：
+
+- 排查某次回答为什么错
+- 分析哪些问题高频
+- 评估召回是否命中 expected source
+- 统计 token 成本
+- 优化 query rewrite、chunk、metadata 和 rerank
+- 满足审计要求
+
+## 一条数据的完整轨迹
+
+如果把上面压缩成一条线，就是：
+
+```text
+政策段落
+-> Document 对象
+-> clean_text
+-> Chunk 对象
+-> metadata
+-> embedding vector
+-> vector_store / doc_store 记录
+-> 用户 AskRequest
+-> rewritten_query
+-> query_vector
+-> metadata filter
+-> retrieved chunk_ids
+-> chunk 正文
+-> reranked context
+-> prompt
+-> LLM answer
+-> guardrail checked answer
+-> API response
+-> trace log
+```
+
+## 对应到真实代码模块
+
+生产项目里通常会拆成这些模块：
+
+```text
+api/rag_router.py          接收 HTTP 请求，返回 JSON
+services/rag_service.py    编排完整 RAG 链路
+ingestion/loader.py        读取原始文档
+ingestion/parser.py        解析和清洗正文
+ingestion/chunker.py       切分 chunk
+ingestion/metadata.py      生成业务标签、权限标签、版本标签
+stores/vector_store.py     写入和查询向量库
+stores/doc_store.py        保存 chunk 正文和来源
+retrieval/query_rewrite.py 改写用户问题
+retrieval/retriever.py     向量检索和 metadata filter
+retrieval/reranker.py      候选结果重排
+llm/prompt_builder.py      拼接 prompt
+llm/client.py              调用模型
+guardrails/validator.py    校验引用、权限、敏感信息和拒答逻辑
+observability/tracing.py   记录 request_id、耗时、召回和 token
+```
+
+所以，一条数据在 RAG 里不是“文档进去，答案出来”这么简单。
+
+它会不断变形：
+
+```text
+原始业务资料 -> 可解析文本 -> 可检索 chunk -> 可过滤 metadata
+-> 可计算相似度的 vector -> 可引用 context -> 可审计 answer
+```
+
+站在信贷开发视角，最重要的是理解：
+
+RAG 的核心不是让模型记住授信政策，而是让代码链路在正确权限、正确版本、正确业务域下，把最相关的政策片段找出来，再让模型基于这些片段生成可引用、可审计、可回放的回答。
+
+---
+
+> ## Q016：模拟一条数据在代码里的真实流转，在 NL2SQL 中。
+
+这条问题用下面这个真实样例来模拟：
+
+```text
+本周逾期率比上周变化多少？
+```
+
+当前项目里的真实链路不是一个函数直接一层层调用，而是 Day 30-Day 34 先各自产出 JSON，
+Day 35 再把这些 JSON 按 `question` 串起来。
+整合入口是：
+
+```text
+projects/day35_nl2sql_assistant/main.py
+```
+
+完整链路是：
+
+```text
+用户问题
+-> 问题解析
+-> SQL 生成
+-> SQL 校验
+-> 查询执行
+-> 结果解释
+-> 业务回答
+```
+
+## 1. 原始输入
+
+用户输入：
+
+```text
+本周逾期率比上周变化多少？
+```
+
+Day 35 会读取前面各阶段产物：
+
+```python
+parse_payload = load_json(PARSE_RESULT_PATH)
+generation_payload = load_json(GENERATION_RESULT_PATH)
+validation_payload = load_json(VALIDATION_RESULT_PATH)
+execution_payload = load_json(EXECUTION_RESULT_PATH)
+interpretation_payload = load_json(INTERPRETATION_RESULT_PATH)
+```
+
+然后按 `question` 建索引，把同一个问题在不同阶段的结果合并成一条 trace。
+
+## 2. 问题解析
+
+Day 30 把自然语言问题解析成结构化意图：
+
+```json
+{
+  "query_type": "comparison",
+  "metrics": ["overdue_rate"],
+  "dimensions": [],
+  "time_range": "this_week_vs_last_week",
+  "filters": {},
+  "risk_flags": []
+}
+```
+
+这说明系统已经理解到：
+
+```text
+这是一个对比查询；
+要看的指标是逾期率；
+时间范围是本周对比上周；
+没有额外过滤条件；
+没有命中敏感风险。
+```
+
+## 3. SQL 生成
+
+Day 31 根据 `overdue_rate` 和 `this_week_vs_last_week` 生成对比 SQL：
+
+```sql
+with current_period as (
+  select sum(overdue_amount) / nullif(sum(due_amount), 0) as current_value
+  from dws_repayment_overdue_daily
+  where dt >= date_trunc('week', current_date) and dt < current_date + interval '1' day
+),
+previous_period as (
+  select sum(overdue_amount) / nullif(sum(due_amount), 0) as previous_value
+  from dws_repayment_overdue_daily
+  where dt between date_trunc('week', current_date) - interval '7' day and date_trunc('week', current_date) - interval '1' day
+)
+select
+  current_value,
+  previous_value,
+  current_value - previous_value as diff_value
+from current_period
+cross join previous_period;
+```
+
+这里最关键的一点是：
+
+```text
+逾期率不是 avg(overdue_rate)，而是 sum(overdue_amount) / sum(due_amount)。
+```
+
+比例指标不能随便平均，否则业务口径会错。
+
+## 4. SQL 校验
+
+Day 32 对 SQL 做执行前校验：
+
+```json
+{
+  "can_execute": true,
+  "risk_level": "low",
+  "issues": [],
+  "warnings": []
+}
+```
+
+这表示：
+
+```text
+SQL 是只读查询；
+表在 Schema Catalog 白名单里；
+没有敏感字段；
+有时间范围；
+没有 delete、update、drop 等危险关键字；
+可以进入查询执行层。
+```
+
+## 5. 查询执行
+
+Day 33 执行通过校验的 SQL，并返回结构化结果：
+
+```json
+{
+  "status": "executed",
+  "response_type": "comparison",
+  "row_count": 1,
+  "summary_text": "当前值 0.0703，上期值 0.0856，差值 -0.0153。"
+}
+```
+
+数据库查询出的核心结果是：
+
+```json
+{
+  "current_value": 0.0703,
+  "previous_value": 0.0856,
+  "diff_value": -0.0153
+}
+```
+
+## 6. 结果解释
+
+Day 34 把结构化结果解释成业务语言：
+
+```json
+{
+  "business_answer": "当前周期逾期率为 7.03%，上期为 8.56%，较上期下降 1.53 个百分点。",
+  "key_findings": [
+    "当前值：7.03%。",
+    "上期值：8.56%。",
+    "变化值：-1.53 个百分点。"
+  ],
+  "risk_notes": [
+    "比例指标必须说明分子分母口径，不能只看差值判断风险已经改善。"
+  ],
+  "follow_up_questions": [
+    "是否需要按产品、风险等级或逾期账龄拆分变化原因？"
+  ]
+}
+```
+
+这一步只解释查询结果，不编造业务原因。
+比如它可以说“逾期率下降 1.53 个百分点”，但不能直接说“因为风控策略变好了”，
+除非继续查询产品、风险等级、账龄等拆分数据来验证。
+
+## 7. 最终 trace
+
+Day 35 整合后的链路状态是：
+
+```json
+{
+  "question": "本周逾期率比上周变化多少？",
+  "final_status": "answered",
+  "query_type": "comparison",
+  "pipeline": {
+    "parse": "available",
+    "sql_generation": "passed",
+    "sql_validation": "passed",
+    "query_execution": "executed",
+    "result_interpretation": "available"
+  }
+}
+```
+
+如果把它压成一条线，就是：
+
+```text
+用户问题
+-> comparison + overdue_rate + this_week_vs_last_week
+-> 生成本周/上周两个时间窗口 SQL
+-> SQL Validator 放行
+-> 执行层查出 0.0703、0.0856、-0.0153
+-> 解释层输出“逾期率下降 1.53 个百分点”
+```
+
+## 8. 对应代码模块
+
+当前项目里对应这些位置：
+
+```text
+projects/day30_nl2sql_question_parser/
+  负责问题解析：指标、时间、过滤条件、风险标记
+
+projects/day31_nl2sql_sql_generator/
+  负责根据结构化解析结果生成 SQL
+
+projects/day32_nl2sql_sql_validator/
+  负责执行前校验：只读、白名单、敏感字段、时间范围
+
+projects/day33_nl2sql_query_executor/
+  负责执行安全 SQL，并格式化结果
+
+projects/day34_nl2sql_result_interpreter/
+  负责把结构化查询结果解释成业务语言
+
+projects/day35_nl2sql_assistant/
+  负责把 Day 30-Day 34 的结果串成端到端演示 trace
+```
+
+所以，NL2SQL 中一条数据不是“问题进去，SQL 出来”这么简单。
+
+它会不断变形：
+
+```text
+自然语言问题
+-> 结构化意图
+-> 只读 SQL
+-> 校验结果
+-> 查询结果
+-> 业务解释
+-> 可审计 trace
+```
+
+站在信贷开发视角，最重要的是理解：
+
+NL2SQL 的核心不是让模型会写 SQL，而是让代码链路在正确表字段、正确指标口径、正确权限、
+正确时间范围和正确安全边界下，把用户问题变成可执行、可解释、可审计的数据问答结果。

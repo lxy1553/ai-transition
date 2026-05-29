@@ -4,157 +4,1267 @@
 > 新增术语时不能只写术语名，必须解释这个术语是什么意思；
 > 同时补充英文 / 缩写、大白话解释和真实项目例子。（2026-05-25 更新）
 
+## 笔记定位
+
+这不是每日学习笔记，而是所有 notes 共用的术语索引。 新增术语要优先使用金融信贷业务例子，说明它在授信、风控、放款、还款、逾期、贷后、 RAG、
+NL2SQL 或 SQL 校验里的真实用途。
+
+本文件不设置“每日核心问题自测”，每日自测保留在对应 Day 笔记中。
+
 ## 术语总表
 
-| 分类 | 术语 | 英文 / 缩写 | 大白话解释 | 真实场景 / 例子 | 学习阶段 |
-|------|------|-------------|------------|------------------|----------|
-| 后端与 API | FastAPI | FastAPI | 用 Python 快速写 Web API 的框架。 | 写 `/health`、`/users`、`/ask` 这类接口。 | Day 1 / Day 5 |
-| 后端与 API | API | Application Programming Interface | 系统之间约定好的办事窗口，传参数进去，拿结果出来。 | SQL 解释助手以后可以做成 `POST /sql/explain`。 | Day 4 |
-| 后端与 API | RESTful API | REST | 一种常见接口设计风格，用 GET、POST、PUT、DELETE 表达动作。 | `GET /users` 查询用户，`POST /users` 创建用户。 | Day 5 |
-| 后端与 API | JSON | JSON | 系统之间传数据的常见格式，长得像 Python 字典。 | `{"risk_level": "medium", "can_publish": false}` | Day 4 / Day 10 |
-| 后端与 API | Pydantic | Pydantic | Python 里的数据校验工具，检查字段和类型是否正确。 | 校验邮箱、年龄、请求体字段。 | Day 5 |
-| LLM 基础 | LLM | Large Language Model | 能理解和生成文字的大语言模型。 | 解释 SQL、总结文档、生成回答。 | Day 8 |
-| LLM 基础 | Model | model | 你选择让哪个模型来干活。 | 简单任务用小模型，复杂 RAG 问答用更强模型。 | Day 8 |
-| LLM 基础 | Prompt | prompt | 给模型的任务说明书。 | 告诉模型“你是 SQL 解释助手，请解释 SQL 风险”。 | Day 9 |
-| LLM 基础 | System Prompt | system prompt | 给模型的长期规矩，定义角色、边界和禁止事项。 | “你是 SQL 解释助手，不要编造表结构。” | Day 8 |
-| LLM 基础 | User Prompt | user prompt | 用户这一次具体要模型做的事。 | “请解释下面这段 SQL。” | Day 8 |
-| LLM 基础 | Parameters | parameters | 控制模型怎么回答的一组设置。 | `temperature`、`top_p`、`max_tokens`。 | Day 8 |
-| LLM 基础 | Response | response | 模型返回的结果。 | 模型返回 SQL 解释、JSON 或自然语言回答。 | Day 8 |
-| LLM 基础 | Token | token | 模型处理文字的计费和长度单位。 | 输入越长、输出越长，成本越高。 | Day 8 |
-| LLM 基础 | Temperature | temperature | 控制模型回答的发散程度。 | SQL 解释用低温度，文案创作用高温度。 | Day 8 |
-| LLM 基础 | Top-p | top_p | 控制模型候选词范围的参数。 | 初学阶段先固定 `top_p = 1`。 | Day 8 |
-| LLM 基础 | Max Tokens | max_tokens | 控制模型最多输出多长。 | 太小会截断，太大会啰嗦且更贵。 | Day 8 |
-| LLM 基础 | LLM API | LLM API | 调用大模型的接口。 | 把 prompt、模型名、参数发给模型服务，拿到回答。 | 第 3 周前补齐 |
-| LLM 基础 | API Key | API Key | 调用模型或外部服务的身份凭证。 | `OPENAI_API_KEY=xxx`，不能提交到 Git。 | 第 3 周前补齐 |
-| Prompt 工程 | Prompt 五要素 | Role / Task / Context / Constraints / Format | 好 Prompt 要说清角色、任务、上下文、约束和输出格式。 | SQL 解释 Prompt 要限制模型不要编造字段口径。 | Day 9 |
-| Prompt 工程 | Role | Role | 模型当前扮演的角色。 | “你是一个信贷数据 SQL 解释助手。” | Day 9 |
-| Prompt 工程 | Task | Task | 要模型完成的具体任务。 | “解释 SQL 的业务含义和风险。” | Day 9 |
-| Prompt 工程 | Context | Context | 模型回答问题需要参考的背景信息。 | 表结构、字段含义、指标口径、业务规则。 | Day 9 |
-| Prompt 工程 | Constraints | Constraints | 告诉模型哪些事不能乱做。 | “不要编造不存在的表结构。” | Day 9 |
-| Prompt 工程 | Output Format | Output Format | 要求模型按固定格式回答。 | 按“业务含义、字段解释、风险提示”输出。 | Day 9 |
-| Prompt 工程 | Prompt 模板 | Prompt Template | 可以反复复用的任务说明书。 | `sql_explain_v1`、`sql_risk_v1`。 | Day 9 |
-| Prompt 工程 | Prompt 模板版本管理 | Prompt Versioning | 把 Prompt 像代码一样管理版本，方便回滚和对比效果。 | `sql_explain_v1` 到 `sql_explain_v3`。 | 第 3 周前补齐 |
-| 结构化输出 | 结构化输出 | Structured Output | 让模型按固定字段返回，而不是随便写一段话。 | 返回 `risk_level`、`can_publish`、`risks`。 | Day 10 |
-| 结构化输出 | JSON 合法 | Valid JSON | 格式能被程序解析。 | `{"risk_level": "非常严重"}` 是合法 JSON，但业务不一定能用。 | Day 10 |
-| 结构化输出 | 业务校验通过 | Business Validation | 字段、类型、枚举和业务逻辑都符合系统要求。 | `risk_level` 必须是 `low / medium / high`。 | Day 10 |
-| 结构化输出 | 固定枚举 | Enum | 字段只能取规定好的几个值。 | `risk_level` 只能是 `low`、`medium`、`high`。 | Day 10 |
-| 结构化输出 | 风险等级 | risk_level | SQL 或任务的风险级别。 | `low` 放行，`medium` 复核，`high` 拦截。 | Day 10 |
-| 结构化输出 | 是否允许上线 | can_publish | 系统是否允许这段 SQL 或任务继续上线。 | 高风险 SQL 的 `can_publish` 应为 `false`。 | Day 10 |
-| 结构化输出 | JSON 输出失败 | JSON Output Failure | 模型没按要求返回可用 JSON。 | 缺字段、类型错、枚举值不合法。 | 第 3 周前补齐 |
-| 结构化输出 | 重试策略 | Retry Strategy | 模型输出不合格时，带着错误原因让模型再修正一次。 | 第一次 `risk_level=比较高`，第二次要求改成固定枚举。 | 第 3 周前补齐 |
-| Tool Use | Tool Use | Tool Use | 模型负责调度，工具负责真正干活。 | 模型决定调用 `check_sql_risk` 检查 SQL。 | Day 11 |
-| Tool Use | 函数调用 | Function Calling | Tool Use 的一种实现方式，模型决定调用哪个函数并生成参数。 | 调用 `check_sql_risk(sql, dialect)`。 | Day 11 |
-| Tool Use | Tool | Tool | 给模型使用的外部能力。 | 查表结构、查指标口径、检查 SQL 风险。 | Day 11 |
-| Tool Use | Tool Parameters | Tool Parameters | 调用工具时传入的参数。 | `{"sql": "select * from orders", "dialect": "hive"}` | Day 11 |
-| Tool Use | Tool Result | Tool Result | 工具执行后返回的结构化结果。 | `{"risk_level": "high", "risks": ["使用 select *"]}` | Day 11 |
-| 数据与 SQL | SQL | Structured Query Language | 查询数据库的语言。 | `select channel, approval_rate from dws_credit_application_daily`。 | Day 3 / Day 12 |
-| 数据与 SQL | SQL 解释助手 | SQL Explainer | 输入 SQL，输出它在做什么、有什么风险、怎么优化。 | 当前项目：`projects/day12_sql_explainer_cli/`。 | Day 12 |
-| 数据与 SQL | NL2SQL | Natural Language to SQL | 用户用人话问问题，系统自动生成 SQL。 | “上周每个渠道的授信通过率是多少？”转成 SQL。 | Day 14 |
-| 数据与 SQL | 数据问答 | Data Q&A | 业务人员直接问数据问题，系统查数并解释。 | “这个月放款金额环比上个月涨了多少？” | Day 14 |
-| 数据与 SQL | 指标口径 | Metric Definition | 一个指标到底怎么算。 | 授信通过率 = 审批通过申请数 / 有效授信申请数。 | Day 12 / RAG |
-| 数据与 SQL | 表结构 | Schema | 一张表有哪些字段、字段类型和字段含义。 | `application_id`、`customer_id`、`approval_status`、`dt`。 | Day 12 / RAG |
-| 数据与 SQL | Schema Catalog | Schema Catalog | 把可用表、字段、指标、维度、时间字段和权限信息整理成目录。 | NL2SQL 生成 SQL 前先查 Catalog，避免编造字段。 | Day 29 |
-| 数据与 SQL | 问题类型分类 | Question Classification | 先判断用户问题是指标、趋势、TopN、明细还是敏感查询。 | “最近 7 天放款金额趋势”归为趋势查询。 | Day 29 |
-| 数据与 SQL | 表粒度 | Grain | 一张表每一行代表什么业务粒度。 | 申请日表是 `channel + dt`，申请明细表是 `application_id`。 | Day 29 |
-| 数据与 SQL | 候选表选择 | Candidate Table Selection | 根据问题先找可能要查的表，不直接让模型自由选表。 | 问放款金额时优先推荐放款日汇总表。 | Day 29 |
-| 数据与 SQL | 实体抽取 | Entity Extraction | 从用户问题里抽出指标、维度、时间、过滤条件和排序限制。 | “上周每个渠道授信通过率”抽出 approval_rate、channel、上周。 | Day 30 |
-| 数据与 SQL | 时间范围解析 | Time Range Parsing | 把自然语言时间转成结构化查询时间范围。 | “最近 7 天”转成 start_date、end_date 和 granularity。 | Day 30 |
-| 数据与 SQL | 指标映射 | Metric Mapping | 把用户说的业务词映射到标准指标名。 | “审批通过率”映射为 approval_rate，“放款额”映射为 disbursement_amount。 | Day 30 |
-| 数据与 SQL | 维度抽取 | Dimension Extraction | 识别用户想按什么维度分组、过滤或展示。 | “每个渠道”抽出 group_by 维度 channel。 | Day 30 |
-| 数据与 SQL | SQL 生成 | SQL Generation | 把结构化问题解析结果和 Schema Catalog 转成 SQL 草稿。 | 将“上周每个渠道授信通过率”生成只读聚合 SQL。 | Day 31 |
-| 数据与 SQL | 只读 SQL | Read-only SQL | 只能查询数据，不能修改、删除或建表的 SQL。 | 只允许 `select` 或安全的 `with ... select`，拒绝 `delete`、`update`、`drop`。 | Day 31 |
-| 数据与 SQL | SQL 模板 | SQL Template | 按问题类型预先定义好的 SQL 结构。 | TopN 模板包含 `group by`、`order by` 和 `limit`。 | Day 31 |
-| 数据与 SQL | 时间条件 | Time Predicate | SQL 里限制查询时间范围的 where 条件。 | `dt between ...` 防止授信申请汇总表被全量扫描。 | Day 31 |
-| 数据与 SQL | SQL 校验 | SQL Validation | SQL 执行前检查是否合法、安全、低成本。 | 检查只读、字段白名单、时间范围、权限和危险关键字。 | Day 31 |
-| 数据与 SQL | 分区字段 | Partition Field | 大表里用来缩小扫描范围的字段。 | 常见分区字段是 `dt`。 | Day 12 |
-| 数据与 SQL | Group By | GROUP BY | 按字段分组统计。 | `group by city` 表示按城市统计。 | Day 12 |
-| 数据与 SQL | Order By | ORDER BY | 对结果排序。 | 大数据场景里全局排序可能很贵。 | Day 12 |
-| 数据与 SQL | Select * | SELECT * | 查询所有字段。 | 可能读取不必要字段，也可能暴露敏感字段。 | Day 12 |
-| 数据与 SQL | SQL 解析 | SQL Parsing | 让程序看懂 SQL 结构。 | 识别表名、字段、where、group by、order by。 | 第 3 周前补齐 |
-| 数据与 SQL | SQL 解析准确性 | SQL Parsing Accuracy | 程序理解 SQL 的结果准不准。 | 复杂 SQL 里正则可能识别错表名或字段。 | 第 3 周前补齐 |
-| 数据与 SQL | CTE | Common Table Expression | SQL 里的临时结果，通常用 `with ... as (...)` 写。 | `with t as (...) select * from t`。 | 第 3 周前补齐 |
-| RAG | RAG | Retrieval-Augmented Generation | 先从知识库找资料，再让模型基于资料回答。 | 问 active_users 口径时，先检索指标文档。 | Day 15+ |
-| RAG | Retrieval | Retrieval | 检索，从知识库里找相关资料。 | 找到和“授信通过率怎么算”最相关的文档片段。 | Day 15+ |
-| RAG | Generation | Generation | 生成，模型根据资料组织最终回答。 | 基于口径文档解释 active_users。 | Day 15+ |
-| RAG | Embedding | Embedding | 把文字变成一串数字，用来比较语义相似度。 | “授信通过率怎么算”和“approval_rate 口径”语义接近。 | Day 16+ |
-| RAG | 向量数据库 | Vector Database | 存向量并支持相似度搜索的数据库。 | RAG 用它找最相关文档片段。 | Day 16+ |
-| RAG | Chunk | Chunk | 文档切片，把长文档切成小段。 | 按标题、段落、问答、指标切分。 | Day 16+ |
-| RAG | Top-k | Top-k | 检索时取最相关的前 k 条结果。 | `top_k = 5` 表示取前 5 个片段。 | Day 16+ |
-| RAG | 召回 | Recall / Retrieval Recall | 从知识库里把可能相关的资料找出来。 | 用户问 SQL 风险时，先召回 SQL 风险规则相关 chunk。 | Day 16 |
-| RAG | 相似度 | Similarity | 衡量问题和文档片段有多相关。 | 相似度越高，越可能进入 top-k 结果。 | Day 16 |
-| RAG | 余弦相似度 | Cosine Similarity | 常见向量相似度算法，看两个向量方向是否接近。 | Day 16 Demo 用它计算问题和 chunk 的匹配程度。 | Day 16 |
-| RAG | Query Rewrite | Query Rewrite | 把用户问得不清楚的问题改写成更适合检索的问题。 | “这个怎么算？”改成“active_users 指标口径是什么？” | Day 19 |
-| RAG | 改写偏移 | Rewrite Drift | query rewrite 改变了用户原意，导致检索命中错误资料。 | 用户问“接口怎么设计”，被错误改成“前端页面怎么设计”。 | Day 22 |
-| RAG | 多查询召回 | Multi-query Retrieval | 一个用户问题生成多个 query，一起召回资料。 | 原始问题和补全后的 RAG API query 同时检索。 | Day 22 |
-| RAG | 评测集 | Evaluation Set | 固定的一批问题和期望答案，用来判断系统改动是否变好。 | 每次改 top-k、chunk、prompt 后都跑同一批问题。 | Day 23 |
-| RAG | 期望引用 | Expected Source | 测试问题应该命中的资料来源。 | “RAG 为什么要引用”应该命中 Day 18 笔记。 | Day 23 |
-| RAG | 召回命中率 | Retrieval Hit Rate | 正确资料进入 top-k 的样本比例。 | 20 条问题里 15 条命中 expected source，命中率是 75%。 | Day 23 |
-| RAG | 幻觉 | Hallucination | 模型在没有可靠依据时编造看似合理的答案。 | 知识库没有资料时，模型仍然猜测指标口径。 | Day 24 |
-| RAG | 拒答 | Refusal | 系统判断不能安全回答，并明确说明原因。 | 无依据、越权、敏感信息或危险操作时拒绝回答。 | Day 24 |
-| RAG | 边界控制 | Guardrail | 在模型生成前后限制风险行为的规则和流程。 | 先判断权限、敏感词、检索置信度，再决定是否调用 LLM。 | Day 24 |
-| RAG | 澄清 | Clarification | 问题不清楚时先追问，而不是直接猜答案。 | 用户问“这个怎么算”，系统要求补充指标名和时间范围。 | Day 24 |
-| RAG 安全 | 数据分级 | Data Classification | 按敏感程度给资料打等级。 | 公开文档、内部文档、薪酬资料和客户名单分开管理。 | Day 25 |
-| RAG 安全 | 脱敏 | Masking | 返回或入库前隐藏敏感字段。 | 手机号 `13812345678` 返回前改成 `138****5678`。 | Day 25 |
-| RAG 安全 | 权限标签 | Permission Tag | 写在 metadata 里的访问控制信息。 | chunk 标记 `allowed_roles=["hr","admin"]`。 | Day 25 |
-| RAG 安全 | 审计日志 | Audit Log | 记录谁在什么时间问了什么、召回了什么、返回了什么。 | 通过 request_id 回放一次越权风险。 | Day 25 |
-| RAG | Citation / 引用 | Citation | 回答时标明答案依据来自哪份文档。 | “依据：指标口径文档 - 授信通过率定义”。 | Day 16+ |
-| RAG | 知识库 | Knowledge Base | RAG 用来检索资料的文档集合。 | 表结构说明、指标口径、SQL 规范、FAQ。 | Day 15+ |
-| RAG | 文档切分 | Document Chunking | 把长文档切成适合检索的小片段。 | 按标题、段落、问答或指标切。 | Day 16+ |
-| RAG | 资料治理 | Document Governance | 在入库前先筛选、清洗、脱敏和确认资料是否可信。 | Day 15 先整理知识库清单，而不是直接写向量库代码。 | Day 15 |
-| RAG | 知识库清单 | Knowledge Base Inventory | 记录哪些文档要进入知识库、能回答什么问题、怎么切分。 | `docs/knowledge_base_inventory_day15.md`。 | Day 15 |
-| RAG | 测试问题 | Test Questions | 用来检查 RAG 是否能检索并回答的问题集合。 | “SQL 解释助手当前能识别哪些风险？” | Day 15 |
-| RAG | 入库 | Ingestion | 把原始资料解析、切分、向量化并写入知识库。 | Day 17 脚本把学习笔记写入 SQLite 索引。 | Day 17 |
-| RAG | 文档指纹 | Document Hash | 用 hash 标记文档内容，判断文档是否变化。 | 内容没变就不需要重复解析和生成 embedding。 | Day 17 |
-| RAG | 元数据 | Metadata | chunk 的附加信息，比如来源、权限、版本、业务域。 | 检索时按权限和业务域过滤结果。 | Day 17 |
-| RAG | 索引 | Index | 为了更快检索而建立的数据结构。 | 向量库索引用于快速找相似 chunk。 | Day 17 |
-| RAG | 增量更新 | Incremental Update | 只处理新增或变化的文档，不全量重建知识库。 | 文档 hash 变化时才重新入库。 | Day 17 |
-| RAG | 在线问答链路 | Online QA Pipeline | 用户提问后，系统检索资料、构造上下文、生成答案并返回引用。 | Day 18 脚本从 SQLite 索引检索 chunk 并返回 citations。 | Day 18 |
-| RAG | 引用来源 | Citation Source | 答案背后的资料出处，说明来自哪个文件、chunk 和位置。 | 回答里返回 `source_path`、`chunk_id`、`position`。 | Day 18 |
-| RAG | 可追溯 | Traceability | 答案出错时能回查依据，判断是资料错、检索错还是生成错。 | 通过 citations 和日志排查 RAG bad case。 | Day 18 |
-| RAG | 召回优化 | Retrieval Optimization | 让系统更容易找到正确资料，并把关键资料排到前面。 | Day 19 对比 top-k 和 query rewrite 的命中效果。 | Day 19 |
-| RAG | 命中率 | Hit Rate | 测试问题中成功召回期望资料的比例。 | 4 个测试问题命中 3 个，命中率是 75%。 | Day 19 |
-| RAG | Bad Case | Bad Case | 系统没有按预期工作的失败样例。 | 问 SQL 分区却召回了无关 FastAPI 文档。 | Day 19 |
-| RAG | 混合检索 | Hybrid Search | 同时使用关键词检索和向量检索。 | 表名字段用关键词，业务语义用向量。 | Day 19 |
-| RAG | 重排 | Rerank | 对召回候选重新排序，把最相关资料放前面。 | 先召回 top 30，再 rerank 选 top 5。 | Day 19 |
-| RAG | RAG API | RAG API | 把 RAG 问答能力封装成可调用的 HTTP 接口。 | `POST /rag/ask` 输入问题，返回答案和 citations。 | Day 20 |
-| 后端与 API | Request ID | Request ID | 每次请求的唯一编号，用来串起日志和排查链路。 | 用户反馈答错时，用 request_id 找到问题、召回和回答。 | Day 20 |
-| RAG | 项目收口 | Project Packaging | 把能跑的 Demo 整理成别人能看懂、能启动、能评估的项目。 | README 写清启动命令、接口示例、bad case 和限制。 | Day 21 |
-| RAG | 上下文控制 | Context Control | 控制放进模型 prompt 的资料数量和质量，避免又贵又乱。 | 去重 chunk，只放最相关的 3-5 段，并限制 token 上限。 | Day 26 |
-| 工程化 | 缓存 | Cache | 把高频问题的召回结果或答案临时存起来，重复请求直接复用。 | 相同问题命中缓存后不再重复检索和调用模型。 | Day 26 |
-| 成本治理 | Token 成本 | Token Cost | 模型输入和输出 token 带来的调用费用。 | RAG 上下文越长，单次请求越贵，延迟也越高。 | Day 26 |
-| RAG | 上下文去重 | Context Deduplication | 删除重复或高度相似的 chunk，减少无效上下文。 | 同一段 README 被召回多次时，只保留一份进入 prompt。 | Day 26 |
-| 工程化 | 演示稳定性 | Demo Stability | 演示前确认关键链路、错误提示和边界样例都能稳定运行。 | 面试前跑一键检查，确认 `/health`、问答样例和 no-answer 场景正常。 | Day 27 |
-| 工程化 | 回归冒烟 | Smoke Test | 用少量关键样例快速判断主链路有没有坏。 | 每次演示前跑 3-5 个问题，确认 answer、citations、request_id 都存在。 | Day 27 |
-| 工程化 | 演示脚本 | Demo Runbook | 演示时按固定顺序讲和操作的清单。 | 先讲目标，再讲入库、检索、API、引用和 bad case。 | Day 27 |
-| 求职 | 试投 | Trial Application | 先小批量投递高匹配岗位，用反馈验证简历和项目表达。 | 先投 5-10 个 RAG / AI 应用岗位，再根据反馈调整。 | Day 28 |
-| 求职 | 投递记录 | Application Tracking | 记录公司、岗位、渠道、状态和反馈，方便复盘。 | `docs/day28_application_tracking.md`。 | Day 28 |
-| 求职 | 项目包装 | Project Positioning | 把项目按岗位需求讲成可理解、可验证的能力证明。 | 把 RAG Demo 包装成离线入库、在线问答、评测、安全和成本治理。 | Day 28 |
-| 工程化 | CLI | Command Line Interface | 命令行工具，在终端输入命令执行。 | `python3 projects/day12_sql_explainer_cli/main.py --example` | Day 12 |
-| 工程化 | README | README | 项目说明书，告诉别人项目是什么、怎么运行。 | `projects/day12_sql_explainer_cli/README.md` | Day 13 |
-| 工程化 | 日志 | Logging | 程序运行时留下的记录，方便排查问题。 | 请求开始、接口报错、风险等级为 high。 | Day 6 |
-| 工程化 | 异常处理 | Exception Handling | 程序出错时不直接崩掉，而是返回清楚错误。 | API 返回统一错误 JSON。 | Day 6 |
-| 工程化 | 配置管理 | Configuration Management | 把端口、密钥、日志级别等设置从代码里拆出来。 | `.env`、环境变量、settings 类。 | Day 6 |
-| 工程化 | 环境变量 | Environment Variable | 系统级配置，常用来放密钥和环境开关。 | `APP_ENV=dev`、`OPENAI_API_KEY=xxx`。 | Day 6 |
-
+- 表格行 1
+  - 分类：后端与 API
+  - 术语：FastAPI
+  - 英文 / 缩写：FastAPI
+  - 大白话解释：用 Python 快速写 Web API 的框架。
+  - 真实场景 / 例子：写 `/health`、`/users`、`/ask` 这类接口。
+  - 学习阶段：Day 1 / Day 5
+- 表格行 2
+  - 分类：后端与 API
+  - 术语：API
+  - 英文 / 缩写：Application Programming Interface
+  - 大白话解释：系统之间约定好的办事窗口，传参数进去，拿结果出来。
+  - 真实场景 / 例子：SQL 解释助手以后可以做成 `POST /sql/explain`。
+  - 学习阶段：Day 4
+- 表格行 3
+  - 分类：后端与 API
+  - 术语：RESTful API
+  - 英文 / 缩写：REST
+  - 大白话解释：一种常见接口设计风格，用 GET、POST、PUT、DELETE 表达动作。
+  - 真实场景 / 例子：`GET /users` 查询用户，`POST /users` 创建用户。
+  - 学习阶段：Day 5
+- 表格行 4
+  - 分类：后端与 API
+  - 术语：JSON
+  - 英文 / 缩写：JSON
+  - 大白话解释：系统之间传数据的常见格式，长得像 Python 字典。
+  - 真实场景 / 例子：`{"risk_level": "medium", "can_publish": false}`
+  - 学习阶段：Day 4 / Day 10
+- 表格行 5
+  - 分类：后端与 API
+  - 术语：Pydantic
+  - 英文 / 缩写：Pydantic
+  - 大白话解释：Python 里的数据校验工具，检查字段和类型是否正确。
+  - 真实场景 / 例子：校验邮箱、年龄、请求体字段。
+  - 学习阶段：Day 5
+- 表格行 6
+  - 分类：LLM 基础
+  - 术语：LLM
+  - 英文 / 缩写：Large Language Model
+  - 大白话解释：能理解和生成文字的大语言模型。
+  - 真实场景 / 例子：解释 SQL、总结文档、生成回答。
+  - 学习阶段：Day 8
+- 表格行 7
+  - 分类：LLM 基础
+  - 术语：Model
+  - 英文 / 缩写：model
+  - 大白话解释：你选择让哪个模型来干活。
+  - 真实场景 / 例子：简单任务用小模型，复杂 RAG 问答用更强模型。
+  - 学习阶段：Day 8
+- 表格行 8
+  - 分类：LLM 基础
+  - 术语：Prompt
+  - 英文 / 缩写：prompt
+  - 大白话解释：给模型的任务说明书。
+  - 真实场景 / 例子：告诉模型“你是 SQL 解释助手，请解释 SQL 风险”。
+  - 学习阶段：Day 9
+- 表格行 9
+  - 分类：LLM 基础
+  - 术语：System Prompt
+  - 英文 / 缩写：system prompt
+  - 大白话解释：给模型的长期规矩，定义角色、边界和禁止事项。
+  - 真实场景 / 例子：“你是 SQL 解释助手，不要编造表结构。”
+  - 学习阶段：Day 8
+- 表格行 10
+  - 分类：LLM 基础
+  - 术语：User Prompt
+  - 英文 / 缩写：user prompt
+  - 大白话解释：用户这一次具体要模型做的事。
+  - 真实场景 / 例子：“请解释下面这段 SQL。”
+  - 学习阶段：Day 8
+- 表格行 11
+  - 分类：LLM 基础
+  - 术语：Parameters
+  - 英文 / 缩写：parameters
+  - 大白话解释：控制模型怎么回答的一组设置。
+  - 真实场景 / 例子：`temperature`、`top_p`、`max_tokens`。
+  - 学习阶段：Day 8
+- 表格行 12
+  - 分类：LLM 基础
+  - 术语：Response
+  - 英文 / 缩写：response
+  - 大白话解释：模型返回的结果。
+  - 真实场景 / 例子：模型返回 SQL 解释、JSON 或自然语言回答。
+  - 学习阶段：Day 8
+- 表格行 13
+  - 分类：LLM 基础
+  - 术语：Token
+  - 英文 / 缩写：token
+  - 大白话解释：模型处理文字的计费和长度单位。
+  - 真实场景 / 例子：输入越长、输出越长，成本越高。
+  - 学习阶段：Day 8
+- 表格行 14
+  - 分类：LLM 基础
+  - 术语：Temperature
+  - 英文 / 缩写：temperature
+  - 大白话解释：控制模型回答的发散程度。
+  - 真实场景 / 例子：SQL 解释用低温度，文案创作用高温度。
+  - 学习阶段：Day 8
+- 表格行 15
+  - 分类：LLM 基础
+  - 术语：Top-p
+  - 英文 / 缩写：top_p
+  - 大白话解释：控制模型候选词范围的参数。
+  - 真实场景 / 例子：初学阶段先固定 `top_p = 1`。
+  - 学习阶段：Day 8
+- 表格行 16
+  - 分类：LLM 基础
+  - 术语：Max Tokens
+  - 英文 / 缩写：max_tokens
+  - 大白话解释：控制模型最多输出多长。
+  - 真实场景 / 例子：太小会截断，太大会啰嗦且更贵。
+  - 学习阶段：Day 8
+- 表格行 17
+  - 分类：LLM 基础
+  - 术语：LLM API
+  - 英文 / 缩写：LLM API
+  - 大白话解释：调用大模型的接口。
+  - 真实场景 / 例子：把 prompt、模型名、参数发给模型服务，拿到回答。
+  - 学习阶段：第 3 周前补齐
+- 表格行 18
+  - 分类：LLM 基础
+  - 术语：API Key
+  - 英文 / 缩写：API Key
+  - 大白话解释：调用模型或外部服务的身份凭证。
+  - 真实场景 / 例子：`OPENAI_API_KEY=xxx`，不能提交到 Git。
+  - 学习阶段：第 3 周前补齐
+- 表格行 19
+  - 分类：Prompt 工程
+  - 术语：Prompt 五要素
+  - 英文 / 缩写：Role / Task / Context / Constraints / Format
+  - 大白话解释：好 Prompt 要说清角色、任务、上下文、约束和输出格式。
+  - 真实场景 / 例子：SQL 解释 Prompt 要限制模型不要编造字段口径。
+  - 学习阶段：Day 9
+- 表格行 20
+  - 分类：Prompt 工程
+  - 术语：Role
+  - 英文 / 缩写：Role
+  - 大白话解释：模型当前扮演的角色。
+  - 真实场景 / 例子：“你是一个信贷数据 SQL 解释助手。”
+  - 学习阶段：Day 9
+- 表格行 21
+  - 分类：Prompt 工程
+  - 术语：Task
+  - 英文 / 缩写：Task
+  - 大白话解释：要模型完成的具体任务。
+  - 真实场景 / 例子：“解释 SQL 的业务含义和风险。”
+  - 学习阶段：Day 9
+- 表格行 22
+  - 分类：Prompt 工程
+  - 术语：Context
+  - 英文 / 缩写：Context
+  - 大白话解释：模型回答问题需要参考的背景信息。
+  - 真实场景 / 例子：表结构、字段含义、指标口径、业务规则。
+  - 学习阶段：Day 9
+- 表格行 23
+  - 分类：Prompt 工程
+  - 术语：Constraints
+  - 英文 / 缩写：Constraints
+  - 大白话解释：告诉模型哪些事不能乱做。
+  - 真实场景 / 例子：“不要编造不存在的表结构。”
+  - 学习阶段：Day 9
+- 表格行 24
+  - 分类：Prompt 工程
+  - 术语：Output Format
+  - 英文 / 缩写：Output Format
+  - 大白话解释：要求模型按固定格式回答。
+  - 真实场景 / 例子：按“业务含义、字段解释、风险提示”输出。
+  - 学习阶段：Day 9
+- 表格行 25
+  - 分类：Prompt 工程
+  - 术语：Prompt 模板
+  - 英文 / 缩写：Prompt Template
+  - 大白话解释：可以反复复用的任务说明书。
+  - 真实场景 / 例子：`sql_explain_v1`、`sql_risk_v1`。
+  - 学习阶段：Day 9
+- 表格行 26
+  - 分类：Prompt 工程
+  - 术语：Prompt 模板版本管理
+  - 英文 / 缩写：Prompt Versioning
+  - 大白话解释：把 Prompt 像代码一样管理版本，方便回滚和对比效果。
+  - 真实场景 / 例子：`sql_explain_v1` 到 `sql_explain_v3`。
+  - 学习阶段：第 3 周前补齐
+- 表格行 27
+  - 分类：结构化输出
+  - 术语：结构化输出
+  - 英文 / 缩写：Structured Output
+  - 大白话解释：让模型按固定字段返回，而不是随便写一段话。
+  - 真实场景 / 例子：返回 `risk_level`、`can_publish`、`risks`。
+  - 学习阶段：Day 10
+- 表格行 28
+  - 分类：结构化输出
+  - 术语：JSON 合法
+  - 英文 / 缩写：Valid JSON
+  - 大白话解释：格式能被程序解析。
+  - 真实场景 / 例子：`{"risk_level": "非常严重"}` 是合法 JSON，但业务不一定能用。
+  - 学习阶段：Day 10
+- 表格行 29
+  - 分类：结构化输出
+  - 术语：业务校验通过
+  - 英文 / 缩写：Business Validation
+  - 大白话解释：字段、类型、枚举和业务逻辑都符合系统要求。
+  - 真实场景 / 例子：`risk_level` 必须是 `low / medium / high`。
+  - 学习阶段：Day 10
+- 表格行 30
+  - 分类：结构化输出
+  - 术语：固定枚举
+  - 英文 / 缩写：Enum
+  - 大白话解释：字段只能取规定好的几个值。
+  - 真实场景 / 例子：`risk_level` 只能是 `low`、`medium`、`high`。
+  - 学习阶段：Day 10
+- 表格行 31
+  - 分类：结构化输出
+  - 术语：风险等级
+  - 英文 / 缩写：risk_level
+  - 大白话解释：SQL 或任务的风险级别。
+  - 真实场景 / 例子：`low` 放行，`medium` 复核，`high` 拦截。
+  - 学习阶段：Day 10
+- 表格行 32
+  - 分类：结构化输出
+  - 术语：是否允许上线
+  - 英文 / 缩写：can_publish
+  - 大白话解释：系统是否允许这段 SQL 或任务继续上线。
+  - 真实场景 / 例子：高风险 SQL 的 `can_publish` 应为 `false`。
+  - 学习阶段：Day 10
+- 表格行 33
+  - 分类：结构化输出
+  - 术语：JSON 输出失败
+  - 英文 / 缩写：JSON Output Failure
+  - 大白话解释：模型没按要求返回可用 JSON。
+  - 真实场景 / 例子：缺字段、类型错、枚举值不合法。
+  - 学习阶段：第 3 周前补齐
+- 表格行 34
+  - 分类：结构化输出
+  - 术语：重试策略
+  - 英文 / 缩写：Retry Strategy
+  - 大白话解释：模型输出不合格时，带着错误原因让模型再修正一次。
+  - 真实场景 / 例子：第一次 `risk_level=比较高`，第二次要求改成固定枚举。
+  - 学习阶段：第 3 周前补齐
+- 表格行 35
+  - 分类：Tool Use
+  - 术语：Tool Use
+  - 英文 / 缩写：Tool Use
+  - 大白话解释：模型负责调度，工具负责真正干活。
+  - 真实场景 / 例子：模型决定调用 `check_sql_risk` 检查 SQL。
+  - 学习阶段：Day 11
+- 表格行 36
+  - 分类：Tool Use
+  - 术语：函数调用
+  - 英文 / 缩写：Function Calling
+  - 大白话解释：Tool Use 的一种实现方式，模型决定调用哪个函数并生成参数。
+  - 真实场景 / 例子：调用 `check_sql_risk(sql, dialect)`。
+  - 学习阶段：Day 11
+- 表格行 37
+  - 分类：Tool Use
+  - 术语：Tool
+  - 英文 / 缩写：Tool
+  - 大白话解释：给模型使用的外部能力。
+  - 真实场景 / 例子：查表结构、查指标口径、检查 SQL 风险。
+  - 学习阶段：Day 11
+- 表格行 38
+  - 分类：Tool Use
+  - 术语：Tool Parameters
+  - 英文 / 缩写：Tool Parameters
+  - 大白话解释：调用工具时传入的参数。
+  - 真实场景 / 例子：`{"sql": "select * from orders", "dialect": "hive"}`
+  - 学习阶段：Day 11
+- 表格行 39
+  - 分类：Tool Use
+  - 术语：Tool Result
+  - 英文 / 缩写：Tool Result
+  - 大白话解释：工具执行后返回的结构化结果。
+  - 真实场景 / 例子：`{"risk_level": "high", "risks": ["使用 select *"]}`
+  - 学习阶段：Day 11
+- 表格行 40
+  - 分类：数据与 SQL
+  - 术语：SQL
+  - 英文 / 缩写：Structured Query Language
+  - 大白话解释：查询数据库的语言。
+  - 真实场景 / 例子：`select channel, approval_rate from dws_credit_application_daily`。
+  - 学习阶段：Day 3 / Day 12
+- 表格行 41
+  - 分类：数据与 SQL
+  - 术语：SQL 解释助手
+  - 英文 / 缩写：SQL Explainer
+  - 大白话解释：输入 SQL，输出它在做什么、有什么风险、怎么优化。
+  - 真实场景 / 例子：当前项目：`projects/day12_sql_explainer_cli/`。
+  - 学习阶段：Day 12
+- 表格行 42
+  - 分类：数据与 SQL
+  - 术语：NL2SQL
+  - 英文 / 缩写：Natural Language to SQL
+  - 大白话解释：用户用人话问问题，系统自动生成 SQL。
+  - 真实场景 / 例子：“上周每个渠道的授信通过率是多少？”转成 SQL。
+  - 学习阶段：Day 14
+- 表格行 43
+  - 分类：数据与 SQL
+  - 术语：数据问答
+  - 英文 / 缩写：Data Q&A
+  - 大白话解释：业务人员直接问数据问题，系统查数并解释。
+  - 真实场景 / 例子：“这个月放款金额环比上个月涨了多少？”
+  - 学习阶段：Day 14
+- 表格行 44
+  - 分类：数据与 SQL
+  - 术语：指标口径
+  - 英文 / 缩写：Metric Definition
+  - 大白话解释：一个指标到底怎么算。
+  - 真实场景 / 例子：授信通过率 = 审批通过申请数 / 有效授信申请数。
+  - 学习阶段：Day 12 / RAG
+- 表格行 45
+  - 分类：数据与 SQL
+  - 术语：表结构
+  - 英文 / 缩写：Schema
+  - 大白话解释：一张表有哪些字段、字段类型和字段含义。
+  - 真实场景 / 例子：`application_id`、`customer_id`、`approval_status`、`dt`。
+  - 学习阶段：Day 12 / RAG
+- 表格行 46
+  - 分类：数据与 SQL
+  - 术语：Schema Catalog
+  - 英文 / 缩写：Schema Catalog
+  - 大白话解释：把可用表、字段、指标、维度、时间字段和权限信息整理成目录。
+  - 真实场景 / 例子：NL2SQL 生成 SQL 前先查 Catalog，避免编造字段。
+  - 学习阶段：Day 29
+- 表格行 47
+  - 分类：数据与 SQL
+  - 术语：问题类型分类
+  - 英文 / 缩写：Question Classification
+  - 大白话解释：先判断用户问题是指标、趋势、TopN、明细还是敏感查询。
+  - 真实场景 / 例子：“最近 7 天放款金额趋势”归为趋势查询。
+  - 学习阶段：Day 29
+- 表格行 48
+  - 分类：数据与 SQL
+  - 术语：表粒度
+  - 英文 / 缩写：Grain
+  - 大白话解释：一张表每一行代表什么业务粒度。
+  - 真实场景 / 例子：申请日表是 `channel + dt`，申请明细表是 `application_id`。
+  - 学习阶段：Day 29
+- 表格行 49
+  - 分类：数据与 SQL
+  - 术语：候选表选择
+  - 英文 / 缩写：Candidate Table Selection
+  - 大白话解释：根据问题先找可能要查的表，不直接让模型自由选表。
+  - 真实场景 / 例子：问放款金额时优先推荐放款日汇总表。
+  - 学习阶段：Day 29
+- 表格行 50
+  - 分类：数据与 SQL
+  - 术语：实体抽取
+  - 英文 / 缩写：Entity Extraction
+  - 大白话解释：从用户问题里抽出指标、维度、时间、过滤条件和排序限制。
+  - 真实场景 / 例子：“上周每个渠道授信通过率”抽出 approval_rate、channel、上周。
+  - 学习阶段：Day 30
+- 表格行 51
+  - 分类：数据与 SQL
+  - 术语：时间范围解析
+  - 英文 / 缩写：Time Range Parsing
+  - 大白话解释：把自然语言时间转成结构化查询时间范围。
+  - 真实场景 / 例子：“最近 7 天”转成 start_date、end_date 和 granularity。
+  - 学习阶段：Day 30
+- 表格行 52
+  - 分类：数据与 SQL
+  - 术语：指标映射
+  - 英文 / 缩写：Metric Mapping
+  - 大白话解释：把用户说的业务词映射到标准指标名。
+  - 真实场景 / 例子：“审批通过率”映射为 approval_rate，“放款额”映射为 disbursement_amount。
+  - 学习阶段：Day 30
+- 表格行 53
+  - 分类：数据与 SQL
+  - 术语：维度抽取
+  - 英文 / 缩写：Dimension Extraction
+  - 大白话解释：识别用户想按什么维度分组、过滤或展示。
+  - 真实场景 / 例子：“每个渠道”抽出 group_by 维度 channel。
+  - 学习阶段：Day 30
+- 表格行 54
+  - 分类：数据与 SQL
+  - 术语：SQL 生成
+  - 英文 / 缩写：SQL Generation
+  - 大白话解释：把结构化问题解析结果和 Schema Catalog 转成 SQL 草稿。
+  - 真实场景 / 例子：将“上周每个渠道授信通过率”生成只读聚合 SQL。
+  - 学习阶段：Day 31
+- 表格行 55
+  - 分类：数据与 SQL
+  - 术语：只读 SQL
+  - 英文 / 缩写：Read-only SQL
+  - 大白话解释：只能查询数据，不能修改、删除或建表的 SQL。
+  - 真实场景 / 例子：只允许 `select` 或安全的 `with ... select`，拒绝 `delete`、`update`、`drop`。
+  - 学习阶段：Day 31
+- 表格行 56
+  - 分类：数据与 SQL
+  - 术语：SQL 模板
+  - 英文 / 缩写：SQL Template
+  - 大白话解释：按问题类型预先定义好的 SQL 结构。
+  - 真实场景 / 例子：TopN 模板包含 `group by`、`order by` 和 `limit`。
+  - 学习阶段：Day 31
+- 表格行 57
+  - 分类：数据与 SQL
+  - 术语：时间条件
+  - 英文 / 缩写：Time Predicate
+  - 大白话解释：SQL 里限制查询时间范围的 where 条件。
+  - 真实场景 / 例子：`dt between ...` 防止授信申请汇总表被全量扫描。
+  - 学习阶段：Day 31
+- 表格行 58
+  - 分类：数据与 SQL
+  - 术语：SQL 校验
+  - 英文 / 缩写：SQL Validation
+  - 大白话解释：SQL 执行前检查是否合法、安全、低成本。
+  - 真实场景 / 例子：检查只读、字段白名单、时间范围、权限和危险关键字。
+  - 学习阶段：Day 31
+- 表格行 59
+  - 分类：数据与 SQL
+  - 术语：SQL 校验器
+  - 英文 / 缩写：SQL Validator
+  - 大白话解释：SQL 执行前的规则检查模块。
+  - 真实场景 / 例子：Day 32 校验只读、危险关键字、敏感字段和时间范围。
+  - 学习阶段：Day 32
+- 表格行 60
+  - 分类：数据与 SQL
+  - 术语：只读校验
+  - 英文 / 缩写：Read-only Check
+  - 大白话解释：判断 SQL 是否只查询数据，不修改数据。
+  - 真实场景 / 例子：允许 `select`，拦截 `delete`、`update`、`drop`。
+  - 学习阶段：Day 32
+- 表格行 61
+  - 分类：数据与 SQL
+  - 术语：危险关键字
+  - 英文 / 缩写：Forbidden Keyword
+  - 大白话解释：执行前必须拦截的高风险 SQL 关键字。
+  - 真实场景 / 例子：`delete`、`alter`、`truncate` 不能由 NL2SQL 自动执行。
+  - 学习阶段：Day 32
+- 表格行 62
+  - 分类：数据与 SQL
+  - 术语：字段白名单
+  - 英文 / 缩写：Field Allowlist
+  - 大白话解释：只允许查询 Catalog 中登记且有权限的字段。
+  - 真实场景 / 例子：拦截模型编造字段或查询手机号、身份证号。
+  - 学习阶段：Day 32
+- 表格行 63
+  - 分类：数据与 SQL
+  - 术语：成本护栏
+  - 英文 / 缩写：Cost Guardrail
+  - 大白话解释：防止 SQL 扫描过多数据或造成高延迟高成本的规则。
+  - 真实场景 / 例子：大表必须带 `dt` 时间范围，排序要配合 `limit`。
+  - 学习阶段：Day 32
+- 表格行 64
+  - 分类：数据与 SQL
+  - 术语：查询网关
+  - 英文 / 缩写：Query Gateway
+  - 大白话解释：数据库前面的统一查询入口，用来做权限、校验、限流和审计。
+  - 真实场景 / 例子：NL2SQL 通过网关执行 SQL，而不是直接连生产库。
+  - 学习阶段：Day 32
+- 表格行 65
+  - 分类：数据与 SQL
+  - 术语：查询执行器
+  - 英文 / 缩写：Query Executor
+  - 大白话解释：负责执行已放行 SQL 并返回结构化结果的组件。
+  - 真实场景 / 例子：Day 33 只执行 `can_execute = true` 的 SQL。
+  - 学习阶段：Day 33
+- 表格行 66
+  - 分类：数据与 SQL
+  - 术语：只读连接
+  - 英文 / 缩写：Read-only Connection
+  - 大白话解释：只能查询不能写入的数据库连接或账号。
+  - 真实场景 / 例子：NL2SQL 执行层用只读账号查数，避免误删或误改业务数据。
+  - 学习阶段：Day 33
+- 表格行 67
+  - 分类：数据与 SQL
+  - 术语：结果格式化
+  - 英文 / 缩写：Result Formatting
+  - 大白话解释：把数据库原始行整理成前端和业务能看懂的结构。
+  - 真实场景 / 例子：指标返回指标卡，趋势返回序列，明细返回受限表格。
+  - 学习阶段：Day 33
+- 表格行 68
+  - 分类：数据与 SQL
+  - 术语：查询超时
+  - 英文 / 缩写：Query Timeout
+  - 大白话解释：查询运行超过指定时间就中断。
+  - 真实场景 / 例子：防止大范围授信或逾期查询长期占用数据库资源。
+  - 学习阶段：Day 33
+- 表格行 69
+  - 分类：数据与 SQL
+  - 术语：返回行数限制
+  - 英文 / 缩写：Row Limit
+  - 大白话解释：控制一次查询最多返回多少行。
+  - 真实场景 / 例子：明细查询最多返回 50 行，导出更多数据走审批。
+  - 学习阶段：Day 33
+- 表格行 70
+  - 分类：数据与 SQL
+  - 术语：查询审计
+  - 英文 / 缩写：Query Audit
+  - 大白话解释：记录谁在什么时候执行了什么查询和结果状态。
+  - 真实场景 / 例子：记录用户、SQL、耗时、行数和 request_id，方便排查越权或慢查询。
+  - 学习阶段：Day 33
+- 表格行 70-1
+  - 分类：数据与 SQL
+  - 术语：结果解释
+  - 英文 / 缩写：Result Interpretation
+  - 大白话解释：把查询返回的行列结果翻译成业务能听懂的话。
+  - 真实场景 / 例子：把逾期率对比结果解释成“较上期下降 1.53 个百分点”。
+  - 学习阶段：Day 34
+- 表格行 70-2
+  - 分类：数据与 SQL
+  - 术语：业务回答
+  - 英文 / 缩写：Business Answer
+  - 大白话解释：直接给业务用户看的答案，不是裸 SQL 或裸表格。
+  - 真实场景 / 例子：告诉运营同学“APP 渠道授信通过率最高，为 64.87%”。
+  - 学习阶段：Day 34
+- 表格行 70-3
+  - 分类：数据与 SQL
+  - 术语：关键发现
+  - 英文 / 缩写：Key Findings
+  - 大白话解释：从查询结果里提炼出的最高、最低、变化值等事实。
+  - 真实场景 / 例子：TopN 查询里标出深圳放款金额排名第一。
+  - 学习阶段：Day 34
+- 表格行 70-4
+  - 分类：数据与 SQL
+  - 术语：有依据解释
+  - 英文 / 缩写：Grounded Explanation
+  - 大白话解释：解释只能基于查询结果和元数据，不能凭空猜原因。
+  - 真实场景 / 例子：只能说逾期率下降，不能直接说是催收策略改善导致。
+  - 学习阶段：Day 34
+- 表格行 70-5
+  - 分类：工程化
+  - 术语：端到端链路
+  - 英文 / 缩写：End-to-end Pipeline
+  - 大白话解释：从用户输入到最终答案的完整处理链路。
+  - 真实场景 / 例子：Day 35 串起问题解析、SQL 生成、校验、执行和解释。
+  - 学习阶段：Day 35
+- 表格行 70-6
+  - 分类：工程化
+  - 术语：链路追踪
+  - 英文 / 缩写：Pipeline Trace
+  - 大白话解释：记录每一步是否成功，以及失败发生在哪一层。
+  - 真实场景 / 例子：演示报告显示 parse、sql_generation、sql_validation、query_execution 的状态。
+  - 学习阶段：Day 35
+- 表格行 70-7
+  - 分类：工程化
+  - 术语：中间结果
+  - 英文 / 缩写：Intermediate Result
+  - 大白话解释：每个处理阶段输出的结构化结果，用来调试和审计。
+  - 真实场景 / 例子：保存 parsed、sql、validation issues、row_count 和 business_answer。
+  - 学习阶段：Day 35
+- 表格行 70-8
+  - 分类：安全
+  - 术语：安全阻断
+  - 英文 / 缩写：Safe Block
+  - 大白话解释：系统发现风险后主动拒绝执行，而不是继续查数据库。
+  - 真实场景 / 例子：导出客户手机号、删除逾期表、缺少时间范围的大表查询都被阻断。
+  - 学习阶段：Day 35
+- 表格行 70-9
+  - 分类：工程化
+  - 术语：审计轨迹
+  - 英文 / 缩写：Audit Trail
+  - 大白话解释：能回放一次请求从输入到输出的完整记录。
+  - 真实场景 / 例子：通过 request_id 查到用户问题、SQL、校验结果、执行状态和解释内容。
+  - 学习阶段：Day 35
+- 表格行 70-10
+  - 分类：后端与 API
+  - 术语：服务化
+  - 英文 / 缩写：Serviceization
+  - 大白话解释：把本地脚本整理成可被其他系统调用的后端服务。
+  - 真实场景 / 例子：把 Day 35 NL2SQL 演示包封装成 `/nl2sql/ask` API。
+  - 学习阶段：Day 36
+- 表格行 70-11
+  - 分类：后端与 API
+  - 术语：接口契约
+  - 英文 / 缩写：API Contract
+  - 大白话解释：前后端约定好的请求字段、响应字段和错误格式。
+  - 真实场景 / 例子：`AskRequest` 要求传 `question`，`AskResponse` 返回 `final_status` 和 `answer`。
+  - 学习阶段：Day 37
+- 表格行 70-11a
+  - 分类：后端与 API
+  - 术语：统一错误响应
+  - 英文 / 缩写：Unified Error Response
+  - 大白话解释：所有错误都按固定 JSON 结构返回，让调用方能稳定判断错误类型。
+  - 真实场景 / 例子：`question_not_supported` 返回 `success=false`、`error.code` 和 `error.message`。
+  - 学习阶段：Day 37
+- 表格行 70-11b
+  - 分类：后端与 API
+  - 术语：业务状态
+  - 英文 / 缩写：Business Status
+  - 大白话解释：描述业务链路最终结果的字段，不等同于 HTTP 状态码。
+  - 真实场景 / 例子：NL2SQL 返回 `final_status=answered` 或 `final_status=safely_blocked`。
+  - 学习阶段：Day 37
+- 表格行 70-11c
+  - 分类：后端与 API
+  - 术语：HTTP 状态码
+  - 英文 / 缩写：HTTP Status Code
+  - 大白话解释：HTTP 协议层用来表示请求处理结果的数字状态。
+  - 真实场景 / 例子：参数校验失败返回 422，查不到 trace 返回 404，服务内部异常返回 500。
+  - 学习阶段：Day 37
+- 表格行 70-11d
+  - 分类：工程化
+  - 术语：Trace API
+  - 英文 / 缩写：Trace API
+  - 大白话解释：按请求编号查询一次调用完整处理过程的排查接口。
+  - 真实场景 / 例子：通过 `/nl2sql/trace/{request_id}` 查看用户问题、最终状态和链路详情。
+  - 学习阶段：Day 37
+- 表格行 70-12
+  - 分类：工程化
+  - 术语：Dockerfile
+  - 英文 / 缩写：Dockerfile
+  - 大白话解释：描述如何构建容器镜像的部署脚本。
+  - 真实场景 / 例子：Week 6 服务用 Dockerfile 安装依赖并启动 Uvicorn。
+  - 学习阶段：Day 38
+- 表格行 70-12a
+  - 分类：工程化
+  - 术语：镜像
+  - 英文 / 缩写：Container Image
+  - 大白话解释：把代码、依赖和启动方式打包后的可分发运行包。
+  - 真实场景 / 例子：`nl2sql-week6` 镜像包含 Week 6 服务代码和 Python 依赖。
+  - 学习阶段：Day 38
+- 表格行 70-12b
+  - 分类：工程化
+  - 术语：容器
+  - 英文 / 缩写：Container
+  - 大白话解释：镜像启动后的运行实例。
+  - 真实场景 / 例子：`docker run -p 8000:8000 nl2sql-week6` 启动一个 NL2SQL 服务容器。
+  - 学习阶段：Day 38
+- 表格行 70-12c
+  - 分类：工程化
+  - 术语：Build Context
+  - 英文 / 缩写：Build Context
+  - 大白话解释：执行 `docker build` 时发送给 Docker 构建过程的文件范围。
+  - 真实场景 / 例子：从仓库根目录构建，Dockerfile 才能复制 `projects/` 和 `requirements.txt`。
+  - 学习阶段：Day 38
+- 表格行 70-12d
+  - 分类：工程化
+  - 术语：健康检查
+  - 英文 / 缩写：Health Check
+  - 大白话解释：用接口或命令确认服务是否可用。
+  - 真实场景 / 例子：访问 `/health` 确认 NL2SQL 服务和演示产物是否正常。
+  - 学习阶段：Day 38
+- 表格行 70-13
+  - 分类：工程化
+  - 术语：配置样例
+  - 英文 / 缩写：.env.example
+  - 大白话解释：告诉别人需要哪些环境变量，但不放真实密钥。
+  - 真实场景 / 例子：`EXPOSE_SQL=true`、`NL2SQL_AUDIT_DB_PATH=...`。
+  - 学习阶段：Day 39
+- 表格行 70-13a
+  - 分类：工程化
+  - 术语：密钥管理
+  - 英文 / 缩写：Secret Management
+  - 大白话解释：用专门机制保存 API key、数据库密码和 token，而不是写进代码。
+  - 真实场景 / 例子：生产环境通过密钥系统注入模型 API key。
+  - 学习阶段：Day 39
+- 表格行 70-13b
+  - 分类：工程化
+  - 术语：配置中心
+  - 英文 / 缩写：Configuration Center
+  - 大白话解释：集中管理不同环境配置的系统。
+  - 真实场景 / 例子：dev、test、prod 使用不同数据库地址和安全开关。
+  - 学习阶段：Day 39
+- 表格行 70-14
+  - 分类：工程化
+  - 术语：审计存储
+  - 英文 / 缩写：Audit Store
+  - 大白话解释：专门保存请求、状态和链路详情的存储。
+  - 真实场景 / 例子：Week 6 用 SQLite 保存 `request_id`、`question` 和 `details_json`。
+  - 学习阶段：Day 40
+- 表格行 70-14a
+  - 分类：数据存储
+  - 术语：SQLite
+  - 英文 / 缩写：SQLite
+  - 大白话解释：轻量级本地数据库，一个文件就能保存数据。
+  - 真实场景 / 例子：Week 6 本地用 `audit.sqlite` 保存审计记录。
+  - 学习阶段：Day 40
+- 表格行 70-14b
+  - 分类：数据存储
+  - 术语：Postgres
+  - 英文 / 缩写：PostgreSQL
+  - 大白话解释：生产常用关系型数据库，适合多用户、高并发和长期留存。
+  - 真实场景 / 例子：生产 NL2SQL 服务用 Postgres 保存请求审计和 trace 记录。
+  - 学习阶段：Day 40
+- 表格行 70-14c
+  - 分类：工程化
+  - 术语：数据留存
+  - 英文 / 缩写：Data Retention
+  - 大白话解释：按合规或排查要求保存数据一段时间。
+  - 真实场景 / 例子：信贷 NL2SQL 查询审计记录保留 180 天或按公司制度留存。
+  - 学习阶段：Day 40
+- 表格行 70-15
+  - 分类：工程化
+  - 术语：回归测试
+  - 英文 / 缩写：Regression Test
+  - 大白话解释：每次改动后重复跑的固定测试，确认主链路没坏。
+  - 真实场景 / 例子：Day 41 测 `/health`、成功查询、安全阻断和审计追踪。
+  - 学习阶段：Day 41
+- 表格行 70-15a
+  - 分类：工程化
+  - 术语：接口测试
+  - 英文 / 缩写：API Test
+  - 大白话解释：从 HTTP 接口层验证请求、响应和业务行为。
+  - 真实场景 / 例子：用 FastAPI TestClient 测 `/nl2sql/ask` 返回 `answered`。
+  - 学习阶段：Day 41
+- 表格行 70-15b
+  - 分类：工程化
+  - 术语：TestClient
+  - 英文 / 缩写：TestClient
+  - 大白话解释：FastAPI 提供的本地接口测试客户端。
+  - 真实场景 / 例子：`TestClient(app).post('/nl2sql/ask', json=...)`。
+  - 学习阶段：Day 41
+- 表格行 70-16
+  - 分类：工程化
+  - 术语：部署说明
+  - 英文 / 缩写：Deployment Guide
+  - 大白话解释：说明服务怎么启动、测试、部署和排查问题。
+  - 真实场景 / 例子：Day 42 的 `docs/deployment.md`。
+  - 学习阶段：Day 42
+- 表格行 70-16a
+  - 分类：工程化
+  - 术语：交付清单
+  - 英文 / 缩写：Delivery Checklist
+  - 大白话解释：列出项目交付前必须具备的代码、文档、测试和配置项。
+  - 真实场景 / 例子：Week 6 清单包含 API、Dockerfile、配置、审计、测试和部署说明。
+  - 学习阶段：Day 42
+- 表格行 70-16b
+  - 分类：工程化
+  - 术语：产品化交付
+  - 英文 / 缩写：Productized Delivery
+  - 大白话解释：把 Demo 整理成别人能理解、能运行、能验证的项目形态。
+  - 真实场景 / 例子：NL2SQL 服务提供 README、接口规范、测试命令和部署说明。
+  - 学习阶段：Day 42
+- 表格行 70-16c
+  - 分类：工程化
+  - 术语：生产化缺口
+  - 英文 / 缩写：Production Gap
+  - 大白话解释：学习版或演示版距离真实生产系统还缺的能力。
+  - 真实场景 / 例子：当前 Week 6 项目还缺真实权限系统、监控、生产数据库和发布回滚。
+  - 学习阶段：Day 42
+- 表格行 71
+  - 分类：数据与 SQL
+  - 术语：分区字段
+  - 英文 / 缩写：Partition Field
+  - 大白话解释：大表里用来缩小扫描范围的字段。
+  - 真实场景 / 例子：常见分区字段是 `dt`。
+  - 学习阶段：Day 12
+- 表格行 72
+  - 分类：数据与 SQL
+  - 术语：Group By
+  - 英文 / 缩写：GROUP BY
+  - 大白话解释：按字段分组统计。
+  - 真实场景 / 例子：`group by city` 表示按城市统计。
+  - 学习阶段：Day 12
+- 表格行 73
+  - 分类：数据与 SQL
+  - 术语：Order By
+  - 英文 / 缩写：ORDER BY
+  - 大白话解释：对结果排序。
+  - 真实场景 / 例子：大数据场景里全局排序可能很贵。
+  - 学习阶段：Day 12
+- 表格行 74
+  - 分类：数据与 SQL
+  - 术语：Select *
+  - 英文 / 缩写：SELECT *
+  - 大白话解释：查询所有字段。
+  - 真实场景 / 例子：可能读取不必要字段，也可能暴露敏感字段。
+  - 学习阶段：Day 12
+- 表格行 75
+  - 分类：数据与 SQL
+  - 术语：SQL 解析
+  - 英文 / 缩写：SQL Parsing
+  - 大白话解释：让程序看懂 SQL 结构。
+  - 真实场景 / 例子：识别表名、字段、where、group by、order by。
+  - 学习阶段：第 3 周前补齐
+- 表格行 76
+  - 分类：数据与 SQL
+  - 术语：SQL 解析准确性
+  - 英文 / 缩写：SQL Parsing Accuracy
+  - 大白话解释：程序理解 SQL 的结果准不准。
+  - 真实场景 / 例子：复杂 SQL 里正则可能识别错表名或字段。
+  - 学习阶段：第 3 周前补齐
+- 表格行 77
+  - 分类：数据与 SQL
+  - 术语：CTE
+  - 英文 / 缩写：Common Table Expression
+  - 大白话解释：SQL 里的临时结果，通常用 `with ... as (...)` 写。
+  - 真实场景 / 例子：`with t as (...) select * from t`。
+  - 学习阶段：第 3 周前补齐
+- 表格行 78
+  - 分类：RAG
+  - 术语：RAG
+  - 英文 / 缩写：Retrieval-Augmented Generation
+  - 大白话解释：先从知识库找资料，再让模型基于资料回答。
+  - 真实场景 / 例子：问 active_users 口径时，先检索指标文档。
+  - 学习阶段：Day 15+
+- 表格行 79
+  - 分类：RAG
+  - 术语：Retrieval
+  - 英文 / 缩写：Retrieval
+  - 大白话解释：检索，从知识库里找相关资料。
+  - 真实场景 / 例子：找到和“授信通过率怎么算”最相关的文档片段。
+  - 学习阶段：Day 15+
+- 表格行 80
+  - 分类：RAG
+  - 术语：Generation
+  - 英文 / 缩写：Generation
+  - 大白话解释：生成，模型根据资料组织最终回答。
+  - 真实场景 / 例子：基于口径文档解释 active_users。
+  - 学习阶段：Day 15+
+- 表格行 81
+  - 分类：RAG
+  - 术语：Embedding
+  - 英文 / 缩写：Embedding
+  - 大白话解释：把文字变成一串数字，用来比较语义相似度。
+  - 真实场景 / 例子：“授信通过率怎么算”和“approval_rate 口径”语义接近。
+  - 学习阶段：Day 16+
+- 表格行 82
+  - 分类：RAG
+  - 术语：向量数据库
+  - 英文 / 缩写：Vector Database
+  - 大白话解释：存向量并支持相似度搜索的数据库。
+  - 真实场景 / 例子：RAG 用它找最相关文档片段。
+  - 学习阶段：Day 16+
+- 表格行 83
+  - 分类：RAG
+  - 术语：Chunk
+  - 英文 / 缩写：Chunk
+  - 大白话解释：文档切片，把长文档切成小段。
+  - 真实场景 / 例子：按标题、段落、问答、指标切分。
+  - 学习阶段：Day 16+
+- 表格行 84
+  - 分类：RAG
+  - 术语：Top-k
+  - 英文 / 缩写：Top-k
+  - 大白话解释：检索时取最相关的前 k 条结果。
+  - 真实场景 / 例子：`top_k = 5` 表示取前 5 个片段。
+  - 学习阶段：Day 16+
+- 表格行 85
+  - 分类：RAG
+  - 术语：召回
+  - 英文 / 缩写：Recall / Retrieval Recall
+  - 大白话解释：从知识库里把可能相关的资料找出来。
+  - 真实场景 / 例子：用户问 SQL 风险时，先召回 SQL 风险规则相关 chunk。
+  - 学习阶段：Day 16
+- 表格行 86
+  - 分类：RAG
+  - 术语：相似度
+  - 英文 / 缩写：Similarity
+  - 大白话解释：衡量问题和文档片段有多相关。
+  - 真实场景 / 例子：相似度越高，越可能进入 top-k 结果。
+  - 学习阶段：Day 16
+- 表格行 87
+  - 分类：RAG
+  - 术语：余弦相似度
+  - 英文 / 缩写：Cosine Similarity
+  - 大白话解释：常见向量相似度算法，看两个向量方向是否接近。
+  - 真实场景 / 例子：Day 16 Demo 用它计算问题和 chunk 的匹配程度。
+  - 学习阶段：Day 16
+- 表格行 88
+  - 分类：RAG
+  - 术语：Query Rewrite
+  - 英文 / 缩写：Query Rewrite
+  - 大白话解释：把用户问得不清楚的问题改写成更适合检索的问题。
+  - 真实场景 / 例子：“这个怎么算？”改成“active_users 指标口径是什么？”
+  - 学习阶段：Day 19
+- 表格行 89
+  - 分类：RAG
+  - 术语：改写偏移
+  - 英文 / 缩写：Rewrite Drift
+  - 大白话解释：query rewrite 改变了用户原意，导致检索命中错误资料。
+  - 真实场景 / 例子：用户问“接口怎么设计”，被错误改成“前端页面怎么设计”。
+  - 学习阶段：Day 22
+- 表格行 90
+  - 分类：RAG
+  - 术语：多查询召回
+  - 英文 / 缩写：Multi-query Retrieval
+  - 大白话解释：一个用户问题生成多个 query，一起召回资料。
+  - 真实场景 / 例子：原始问题和补全后的 RAG API query 同时检索。
+  - 学习阶段：Day 22
+- 表格行 91
+  - 分类：RAG
+  - 术语：评测集
+  - 英文 / 缩写：Evaluation Set
+  - 大白话解释：固定的一批问题和期望答案，用来判断系统改动是否变好。
+  - 真实场景 / 例子：每次改 top-k、chunk、prompt 后都跑同一批问题。
+  - 学习阶段：Day 23
+- 表格行 92
+  - 分类：RAG
+  - 术语：期望引用
+  - 英文 / 缩写：Expected Source
+  - 大白话解释：测试问题应该命中的资料来源。
+  - 真实场景 / 例子：“RAG 为什么要引用”应该命中 Day 18 笔记。
+  - 学习阶段：Day 23
+- 表格行 93
+  - 分类：RAG
+  - 术语：召回命中率
+  - 英文 / 缩写：Retrieval Hit Rate
+  - 大白话解释：正确资料进入 top-k 的样本比例。
+  - 真实场景 / 例子：20 条问题里 15 条命中 expected source，命中率是 75%。
+  - 学习阶段：Day 23
+- 表格行 94
+  - 分类：RAG
+  - 术语：幻觉
+  - 英文 / 缩写：Hallucination
+  - 大白话解释：模型在没有可靠依据时编造看似合理的答案。
+  - 真实场景 / 例子：知识库没有资料时，模型仍然猜测指标口径。
+  - 学习阶段：Day 24
+- 表格行 95
+  - 分类：RAG
+  - 术语：拒答
+  - 英文 / 缩写：Refusal
+  - 大白话解释：系统判断不能安全回答，并明确说明原因。
+  - 真实场景 / 例子：无依据、越权、敏感信息或危险操作时拒绝回答。
+  - 学习阶段：Day 24
+- 表格行 96
+  - 分类：RAG
+  - 术语：边界控制
+  - 英文 / 缩写：Guardrail
+  - 大白话解释：在模型生成前后限制风险行为的规则和流程。
+  - 真实场景 / 例子：先判断权限、敏感词、检索置信度，再决定是否调用 LLM。
+  - 学习阶段：Day 24
+- 表格行 97
+  - 分类：RAG
+  - 术语：澄清
+  - 英文 / 缩写：Clarification
+  - 大白话解释：问题不清楚时先追问，而不是直接猜答案。
+  - 真实场景 / 例子：用户问“这个怎么算”，系统要求补充指标名和时间范围。
+  - 学习阶段：Day 24
+- 表格行 98
+  - 分类：RAG 安全
+  - 术语：数据分级
+  - 英文 / 缩写：Data Classification
+  - 大白话解释：按敏感程度给资料打等级。
+  - 真实场景 / 例子：公开文档、内部文档、薪酬资料和客户名单分开管理。
+  - 学习阶段：Day 25
+- 表格行 99
+  - 分类：RAG 安全
+  - 术语：脱敏
+  - 英文 / 缩写：Masking
+  - 大白话解释：返回或入库前隐藏敏感字段。
+  - 真实场景 / 例子：手机号 `13812345678` 返回前改成 `138****5678`。
+  - 学习阶段：Day 25
+- 表格行 100
+  - 分类：RAG 安全
+  - 术语：权限标签
+  - 英文 / 缩写：Permission Tag
+  - 大白话解释：写在 metadata 里的访问控制信息。
+  - 真实场景 / 例子：chunk 标记 `allowed_roles=["hr","admin"]`。
+  - 学习阶段：Day 25
+- 表格行 101
+  - 分类：RAG 安全
+  - 术语：审计日志
+  - 英文 / 缩写：Audit Log
+  - 大白话解释：记录谁在什么时间问了什么、召回了什么、返回了什么。
+  - 真实场景 / 例子：通过 request_id 回放一次越权风险。
+  - 学习阶段：Day 25
+- 表格行 102
+  - 分类：RAG
+  - 术语：Citation / 引用
+  - 英文 / 缩写：Citation
+  - 大白话解释：回答时标明答案依据来自哪份文档。
+  - 真实场景 / 例子：“依据：指标口径文档 - 授信通过率定义”。
+  - 学习阶段：Day 16+
+- 表格行 103
+  - 分类：RAG
+  - 术语：知识库
+  - 英文 / 缩写：Knowledge Base
+  - 大白话解释：RAG 用来检索资料的文档集合。
+  - 真实场景 / 例子：表结构说明、指标口径、SQL 规范、FAQ。
+  - 学习阶段：Day 15+
+- 表格行 104
+  - 分类：RAG
+  - 术语：文档切分
+  - 英文 / 缩写：Document Chunking
+  - 大白话解释：把长文档切成适合检索的小片段。
+  - 真实场景 / 例子：按标题、段落、问答或指标切。
+  - 学习阶段：Day 16+
+- 表格行 105
+  - 分类：RAG
+  - 术语：资料治理
+  - 英文 / 缩写：Document Governance
+  - 大白话解释：在入库前先筛选、清洗、脱敏和确认资料是否可信。
+  - 真实场景 / 例子：Day 15 先整理知识库清单，而不是直接写向量库代码。
+  - 学习阶段：Day 15
+- 表格行 106
+  - 分类：RAG
+  - 术语：知识库清单
+  - 英文 / 缩写：Knowledge Base Inventory
+  - 大白话解释：记录哪些文档要进入知识库、能回答什么问题、怎么切分。
+  - 真实场景 / 例子：`docs/knowledge_base_inventory_day15.md`。
+  - 学习阶段：Day 15
+- 表格行 107
+  - 分类：RAG
+  - 术语：测试问题
+  - 英文 / 缩写：Test Questions
+  - 大白话解释：用来检查 RAG 是否能检索并回答的问题集合。
+  - 真实场景 / 例子：“SQL 解释助手当前能识别哪些风险？”
+  - 学习阶段：Day 15
+- 表格行 108
+  - 分类：RAG
+  - 术语：入库
+  - 英文 / 缩写：Ingestion
+  - 大白话解释：把原始资料解析、切分、向量化并写入知识库。
+  - 真实场景 / 例子：Day 17 脚本把学习笔记写入 SQLite 索引。
+  - 学习阶段：Day 17
+- 表格行 109
+  - 分类：RAG
+  - 术语：文档指纹
+  - 英文 / 缩写：Document Hash
+  - 大白话解释：用 hash 标记文档内容，判断文档是否变化。
+  - 真实场景 / 例子：内容没变就不需要重复解析和生成 embedding。
+  - 学习阶段：Day 17
+- 表格行 110
+  - 分类：RAG
+  - 术语：元数据
+  - 英文 / 缩写：Metadata
+  - 大白话解释：chunk 的附加信息，比如来源、权限、版本、业务域。
+  - 真实场景 / 例子：检索时按权限和业务域过滤结果。
+  - 学习阶段：Day 17
+- 表格行 111
+  - 分类：RAG
+  - 术语：索引
+  - 英文 / 缩写：Index
+  - 大白话解释：为了更快检索而建立的数据结构。
+  - 真实场景 / 例子：向量库索引用于快速找相似 chunk。
+  - 学习阶段：Day 17
+- 表格行 112
+  - 分类：RAG
+  - 术语：增量更新
+  - 英文 / 缩写：Incremental Update
+  - 大白话解释：只处理新增或变化的文档，不全量重建知识库。
+  - 真实场景 / 例子：文档 hash 变化时才重新入库。
+  - 学习阶段：Day 17
+- 表格行 113
+  - 分类：RAG
+  - 术语：在线问答链路
+  - 英文 / 缩写：Online QA Pipeline
+  - 大白话解释：用户提问后，系统检索资料、构造上下文、生成答案并返回引用。
+  - 真实场景 / 例子：Day 18 脚本从 SQLite 索引检索 chunk 并返回 citations。
+  - 学习阶段：Day 18
+- 表格行 114
+  - 分类：RAG
+  - 术语：引用来源
+  - 英文 / 缩写：Citation Source
+  - 大白话解释：答案背后的资料出处，说明来自哪个文件、chunk 和位置。
+  - 真实场景 / 例子：回答里返回 `source_path`、`chunk_id`、`position`。
+  - 学习阶段：Day 18
+- 表格行 115
+  - 分类：RAG
+  - 术语：可追溯
+  - 英文 / 缩写：Traceability
+  - 大白话解释：答案出错时能回查依据，判断是资料错、检索错还是生成错。
+  - 真实场景 / 例子：通过 citations 和日志排查 RAG bad case。
+  - 学习阶段：Day 18
+- 表格行 116
+  - 分类：RAG
+  - 术语：召回优化
+  - 英文 / 缩写：Retrieval Optimization
+  - 大白话解释：让系统更容易找到正确资料，并把关键资料排到前面。
+  - 真实场景 / 例子：Day 19 对比 top-k 和 query rewrite 的命中效果。
+  - 学习阶段：Day 19
+- 表格行 117
+  - 分类：RAG
+  - 术语：命中率
+  - 英文 / 缩写：Hit Rate
+  - 大白话解释：测试问题中成功召回期望资料的比例。
+  - 真实场景 / 例子：4 个测试问题命中 3 个，命中率是 75%。
+  - 学习阶段：Day 19
+- 表格行 118
+  - 分类：RAG
+  - 术语：Bad Case
+  - 英文 / 缩写：Bad Case
+  - 大白话解释：系统没有按预期工作的失败样例。
+  - 真实场景 / 例子：问 SQL 分区却召回了无关 FastAPI 文档。
+  - 学习阶段：Day 19
+- 表格行 119
+  - 分类：RAG
+  - 术语：混合检索
+  - 英文 / 缩写：Hybrid Search
+  - 大白话解释：同时使用关键词检索和向量检索。
+  - 真实场景 / 例子：表名字段用关键词，业务语义用向量。
+  - 学习阶段：Day 19
+- 表格行 120
+  - 分类：RAG
+  - 术语：重排
+  - 英文 / 缩写：Rerank
+  - 大白话解释：对召回候选重新排序，把最相关资料放前面。
+  - 真实场景 / 例子：先召回 top 30，再 rerank 选 top 5。
+  - 学习阶段：Day 19
+- 表格行 121
+  - 分类：RAG
+  - 术语：RAG API
+  - 英文 / 缩写：RAG API
+  - 大白话解释：把 RAG 问答能力封装成可调用的 HTTP 接口。
+  - 真实场景 / 例子：`POST /rag/ask` 输入问题，返回答案和 citations。
+  - 学习阶段：Day 20
+- 表格行 122
+  - 分类：后端与 API
+  - 术语：Request ID
+  - 英文 / 缩写：Request ID
+  - 大白话解释：每次请求的唯一编号，用来串起日志和排查链路。
+  - 真实场景 / 例子：用户反馈答错时，用 request_id 找到问题、召回和回答。
+  - 学习阶段：Day 20
+- 表格行 123
+  - 分类：RAG
+  - 术语：项目收口
+  - 英文 / 缩写：Project Packaging
+  - 大白话解释：把能跑的 Demo 整理成别人能看懂、能启动、能评估的项目。
+  - 真实场景 / 例子：README 写清启动命令、接口示例、bad case 和限制。
+  - 学习阶段：Day 21
+- 表格行 124
+  - 分类：RAG
+  - 术语：上下文控制
+  - 英文 / 缩写：Context Control
+  - 大白话解释：控制放进模型 prompt 的资料数量和质量，避免又贵又乱。
+  - 真实场景 / 例子：去重 chunk，只放最相关的 3-5 段，并限制 token 上限。
+  - 学习阶段：Day 26
+- 表格行 125
+  - 分类：工程化
+  - 术语：缓存
+  - 英文 / 缩写：Cache
+  - 大白话解释：把高频问题的召回结果或答案临时存起来，重复请求直接复用。
+  - 真实场景 / 例子：相同问题命中缓存后不再重复检索和调用模型。
+  - 学习阶段：Day 26
+- 表格行 126
+  - 分类：成本治理
+  - 术语：Token 成本
+  - 英文 / 缩写：Token Cost
+  - 大白话解释：模型输入和输出 token 带来的调用费用。
+  - 真实场景 / 例子：RAG 上下文越长，单次请求越贵，延迟也越高。
+  - 学习阶段：Day 26
+- 表格行 127
+  - 分类：RAG
+  - 术语：上下文去重
+  - 英文 / 缩写：Context Deduplication
+  - 大白话解释：删除重复或高度相似的 chunk，减少无效上下文。
+  - 真实场景 / 例子：同一段 README 被召回多次时，只保留一份进入 prompt。
+  - 学习阶段：Day 26
+- 表格行 128
+  - 分类：工程化
+  - 术语：演示稳定性
+  - 英文 / 缩写：Demo Stability
+  - 大白话解释：演示前确认关键链路、错误提示和边界样例都能稳定运行。
+  - 真实场景 / 例子：面试前跑一键检查，确认 `/health`、问答样例和 no-answer 场景正常。
+  - 学习阶段：Day 27
+- 表格行 129
+  - 分类：工程化
+  - 术语：回归冒烟
+  - 英文 / 缩写：Smoke Test
+  - 大白话解释：用少量关键样例快速判断主链路有没有坏。
+  - 真实场景 / 例子：每次演示前跑 3-5 个问题，确认 answer、citations、request_id 都存在。
+  - 学习阶段：Day 27
+- 表格行 130
+  - 分类：工程化
+  - 术语：演示脚本
+  - 英文 / 缩写：Demo Runbook
+  - 大白话解释：演示时按固定顺序讲和操作的清单。
+  - 真实场景 / 例子：先讲目标，再讲入库、检索、API、引用和 bad case。
+  - 学习阶段：Day 27
+- 表格行 131
+  - 分类：求职
+  - 术语：试投
+  - 英文 / 缩写：Trial Application
+  - 大白话解释：先小批量投递高匹配岗位，用反馈验证简历和项目表达。
+  - 真实场景 / 例子：先投 5-10 个 RAG / AI 应用岗位，再根据反馈调整。
+  - 学习阶段：Day 28
+- 表格行 132
+  - 分类：求职
+  - 术语：投递记录
+  - 英文 / 缩写：Application Tracking
+  - 大白话解释：记录公司、岗位、渠道、状态和反馈，方便复盘。
+  - 真实场景 / 例子：`docs/day28_application_tracking.md`。
+  - 学习阶段：Day 28
+- 表格行 133
+  - 分类：求职
+  - 术语：项目包装
+  - 英文 / 缩写：Project Positioning
+  - 大白话解释：把项目按岗位需求讲成可理解、可验证的能力证明。
+  - 真实场景 / 例子：把 RAG Demo 包装成离线入库、在线问答、评测、安全和成本治理。
+  - 学习阶段：Day 28
+- 表格行 134
+  - 分类：工程化
+  - 术语：CLI
+  - 英文 / 缩写：Command Line Interface
+  - 大白话解释：命令行工具，在终端输入命令执行。
+  - 真实场景 / 例子：`python3 projects/day12_sql_explainer_cli/main.py --example`
+  - 学习阶段：Day 12
+- 表格行 135
+  - 分类：工程化
+  - 术语：README
+  - 英文 / 缩写：README
+  - 大白话解释：项目说明书，告诉别人项目是什么、怎么运行。
+  - 真实场景 / 例子：`projects/day12_sql_explainer_cli/README.md`
+  - 学习阶段：Day 13
+- 表格行 136
+  - 分类：工程化
+  - 术语：日志
+  - 英文 / 缩写：Logging
+  - 大白话解释：程序运行时留下的记录，方便排查问题。
+  - 真实场景 / 例子：请求开始、接口报错、风险等级为 high。
+  - 学习阶段：Day 6
+- 表格行 137
+  - 分类：工程化
+  - 术语：异常处理
+  - 英文 / 缩写：Exception Handling
+  - 大白话解释：程序出错时不直接崩掉，而是返回清楚错误。
+  - 真实场景 / 例子：API 返回统一错误 JSON。
+  - 学习阶段：Day 6
+- 表格行 138
+  - 分类：工程化
+  - 术语：配置管理
+  - 英文 / 缩写：Configuration Management
+  - 大白话解释：把端口、密钥、日志级别等设置从代码里拆出来。
+  - 真实场景 / 例子：`.env`、环境变量、settings 类。
+  - 学习阶段：Day 6
+- 表格行 139
+  - 分类：工程化
+  - 术语：环境变量
+  - 英文 / 缩写：Environment Variable
+  - 大白话解释：系统级配置，常用来放密钥和环境开关。
+  - 真实场景 / 例子：`APP_ENV=dev`、`OPENAI_API_KEY=xxx`。
+  - 学习阶段：Day 6
 ## 每日更新流程
 
-| 步骤 | 要做什么 |
-|------|----------|
-| 1 | 学完当天笔记后，找出新术语、新缩写、新工具名。 |
-| 2 | 判断它属于哪个分类：LLM、Prompt、RAG、SQL、工程化等。 |
-| 3 | 写清术语的含义，说明它到底是什么意思。 |
-| 4 | 补充英文名或缩写，避免只知道中文叫法。 |
-| 5 | 用一句大白话解释它。 |
-| 6 | 补一个真实场景或项目例子。 |
-| 7 | 写上首次学习阶段，例如 `Day 15` 或 `第 3 周前补齐`。 |
+- 表格行 1
+  - 步骤：1
+  - 要做什么：学完当天笔记后，找出新术语、新缩写、新工具名。
+- 表格行 2
+  - 步骤：2
+  - 要做什么：判断它属于哪个分类：LLM、Prompt、RAG、SQL、工程化等。
+- 表格行 3
+  - 步骤：3
+  - 要做什么：写清术语的含义，说明它到底是什么意思。
+- 表格行 4
+  - 步骤：4
+  - 要做什么：补充英文名或缩写，避免只知道中文叫法。
+- 表格行 5
+  - 步骤：5
+  - 要做什么：用一句大白话解释它。
+- 表格行 6
+  - 步骤：6
+  - 要做什么：补一个真实场景或项目例子。
+- 表格行 7
+  - 步骤：7
+  - 要做什么：写上首次学习阶段，例如 `Day 15` 或 `第 3 周前补齐`。
 
 ## 本阶段最重要的几句话
 
-| 编号 | 记忆句 |
-|------|--------|
-| 1 | Prompt 不是随便提问，而是任务说明书。 |
-| 2 | 结构化输出不是为了好看，而是为了让系统能继续处理。 |
-| 3 | Tool Use 是让模型做调度，工具做确定性工作。 |
-| 4 | NL2SQL 不只是生成 SQL，还包括理解口径、找表字段、校验风险和解释结果。 |
-| 5 | RAG 是先检索资料，再让模型基于资料回答。 |
-| 6 | 金融信贷开发经验可以迁移到 AI 应用：信贷流程、风控规则、权限合规、SQL 风险和业务系统落地都是核心能力。 |
+- 表格行 1
+  - 编号：1
+  - 记忆句：Prompt 不是随便提问，而是任务说明书。
+- 表格行 2
+  - 编号：2
+  - 记忆句：结构化输出不是为了好看，而是为了让系统能继续处理。
+- 表格行 3
+  - 编号：3
+  - 记忆句：Tool Use 是让模型做调度，工具做确定性工作。
+- 表格行 4
+  - 编号：4
+  - 记忆句：NL2SQL 不只是生成 SQL，还包括理解口径、找表字段、校验风险和解释结果。
+- 表格行 5
+  - 编号：5
+  - 记忆句：RAG 是先检索资料，再让模型基于资料回答。
+- 表格行 6
+  - 编号：6
+  - 记忆句：金融信贷开发经验可以迁移到 AI 应用：信贷流程、风控规则、权限合规、SQL 风险和业务系统落地都是核心能力。

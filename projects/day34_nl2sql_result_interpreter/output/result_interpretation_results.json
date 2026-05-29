@@ -1,0 +1,228 @@
+{
+  "summary": {
+    "total": 13,
+    "interpreted": 8,
+    "safe_explanations": 5
+  },
+  "results": [
+    {
+      "question": "昨天授信申请量是多少？",
+      "query_type": "metric",
+      "status": "executed",
+      "response_type": "scalar",
+      "business_answer": "查询结果为：授信申请量 380笔。",
+      "key_findings": [
+        "授信申请量 = 380笔"
+      ],
+      "risk_notes": [
+        "该结果来自本地演示数据，生产环境需要说明数据日期和统计口径。"
+      ],
+      "follow_up_questions": [
+        "是否需要按渠道、产品或风险等级继续拆分？"
+      ]
+    },
+    {
+      "question": "上周每个渠道的授信通过率是多少？",
+      "query_type": "group_by",
+      "status": "executed",
+      "response_type": "table",
+      "business_answer": "本次按 渠道 分组返回 3 行结果，APP 表现最高。",
+      "key_findings": [
+        "APP 的授信通过率最高，为 64.87%。",
+        "线下 的授信通过率最低，为 55.29%。"
+      ],
+      "risk_notes": [
+        "分组结果只能说明当前查询周期内的表现，不能直接代表长期趋势。"
+      ],
+      "follow_up_questions": [
+        "是否需要继续按产品、城市或风险等级交叉拆分？"
+      ]
+    },
+    {
+      "question": "最近 7 天放款金额趋势怎么样？",
+      "query_type": "trend",
+      "status": "executed",
+      "response_type": "trend_table",
+      "business_answer": "最近 7 天放款金额整体下降，首日为 65.00 万，末日为 47.00 万。",
+      "key_findings": [
+        "累计放款金额为 315.00 万。",
+        "最高点出现在 2026-05-17，数值为 65.00 万。",
+        "最低点出现在 2026-05-18，数值为 36.00 万。"
+      ],
+      "risk_notes": [
+        "趋势解释只基于当前查询窗口，生产分析还需要结合节假日、渠道活动和样本量。"
+      ],
+      "follow_up_questions": [
+        "是否需要按渠道、城市或产品拆分趋势？"
+      ]
+    },
+    {
+      "question": "上周放款金额最高的 10 个城市是什么？",
+      "query_type": "topn",
+      "status": "executed",
+      "response_type": "table",
+      "business_answer": "本次返回 8 条排序结果，深圳 排名第一，放款金额为 61.00 万。",
+      "key_findings": [
+        "深圳 的放款金额最高，为 61.00 万。",
+        "北京 的放款金额最低，为 32.00 万。"
+      ],
+      "risk_notes": [
+        "分组结果只能说明当前查询周期内的表现，不能直接代表长期趋势。"
+      ],
+      "follow_up_questions": [
+        "是否需要继续按产品、城市或风险等级交叉拆分？"
+      ]
+    },
+    {
+      "question": "本周逾期率比上周变化多少？",
+      "query_type": "comparison",
+      "status": "executed",
+      "response_type": "comparison",
+      "business_answer": "当前周期逾期率为 7.03%，上期为 8.56%，较上期下降 1.53 个百分点。",
+      "key_findings": [
+        "当前值：7.03%。",
+        "上期值：8.56%。",
+        "变化值：-1.53 个百分点。"
+      ],
+      "risk_notes": [
+        "比例指标必须说明分子分母口径，不能只看差值判断风险已经改善。"
+      ],
+      "follow_up_questions": [
+        "是否需要按产品、风险等级或逾期账龄拆分变化原因？"
+      ]
+    },
+    {
+      "question": "查询申请 A123 的审批状态",
+      "query_type": "detail",
+      "status": "executed",
+      "response_type": "detail_table",
+      "business_answer": "申请 A123 当前审批状态为审批通过，审批额度为 1.20 万，风险等级为 A。",
+      "key_findings": [
+        "审批状态：审批通过。",
+        "审批额度：1.20 万。",
+        "申请时间：2026-05-23 10:30:00。"
+      ],
+      "risk_notes": [
+        "明细结果涉及单个申请，生产环境需要确认当前用户是否有查看该申请的权限。"
+      ],
+      "follow_up_questions": [
+        "是否需要查看审批拒绝原因、规则命中情况或贷后表现？"
+      ]
+    },
+    {
+      "question": "导出客户手机号列表",
+      "query_type": "sensitive",
+      "status": "skipped",
+      "response_type": "-",
+      "business_answer": "该问题没有执行数据库查询，原因是：no_sql_to_validate。这不是空结果，而是系统安全或校验策略主动拦截。",
+      "key_findings": [
+        "执行层未访问数据库。"
+      ],
+      "risk_notes": [
+        "被 SQL Validator 或上游生成阶段阻断的问题不能绕过执行层继续查询。"
+      ],
+      "follow_up_questions": [
+        "是否可以补充时间范围、改查汇总指标，或走敏感数据审批流程？"
+      ]
+    },
+    {
+      "question": "本月每个产品的逾期金额前 5 名账龄",
+      "query_type": "topn",
+      "status": "executed",
+      "response_type": "table",
+      "business_answer": "本次返回 5 条排序结果，现金贷 / M1 排名第一，逾期金额为 10.33 万。",
+      "key_findings": [
+        "现金贷 / M1 的逾期金额最高，为 10.33 万。",
+        "现金贷 / M3+ 的逾期金额最低，为 3.90 万。"
+      ],
+      "risk_notes": [
+        "分组结果只能说明当前查询周期内的表现，不能直接代表长期趋势。"
+      ],
+      "follow_up_questions": [
+        "是否需要继续按产品、城市或风险等级交叉拆分？"
+      ]
+    },
+    {
+      "question": "北京最近 7 天放款笔数趋势",
+      "query_type": "trend",
+      "status": "executed",
+      "response_type": "trend_table",
+      "business_answer": "最近 7 天放款笔数整体上升，首日为 38，末日为 55。",
+      "key_findings": [
+        "累计放款笔数为 324。",
+        "最高点出现在 2026-05-23，数值为 55。",
+        "最低点出现在 2026-05-17，数值为 38。"
+      ],
+      "risk_notes": [
+        "趋势解释只基于当前查询窗口，生产分析还需要结合节假日、渠道活动和样本量。"
+      ],
+      "follow_up_questions": [
+        "是否需要按渠道、城市或产品拆分趋势？"
+      ]
+    },
+    {
+      "question": "各风险等级的授信通过量",
+      "query_type": "group_by",
+      "status": "skipped",
+      "response_type": "-",
+      "business_answer": "该问题没有执行数据库查询，原因是：no_sql_to_validate。这不是空结果，而是系统安全或校验策略主动拦截。",
+      "key_findings": [
+        "执行层未访问数据库。"
+      ],
+      "risk_notes": [
+        "被 SQL Validator 或上游生成阶段阻断的问题不能绕过执行层继续查询。"
+      ],
+      "follow_up_questions": [
+        "是否可以补充时间范围、改查汇总指标，或走敏感数据审批流程？"
+      ]
+    },
+    {
+      "question": "危险样例：删除逾期表数据",
+      "query_type": "adversarial",
+      "status": "skipped",
+      "response_type": "-",
+      "business_answer": "该问题没有执行数据库查询，原因是：not_read_only, forbidden_keyword:delete。这不是空结果，而是系统安全或校验策略主动拦截。",
+      "key_findings": [
+        "执行层未访问数据库。"
+      ],
+      "risk_notes": [
+        "被 SQL Validator 或上游生成阶段阻断的问题不能绕过执行层继续查询。"
+      ],
+      "follow_up_questions": [
+        "是否可以补充时间范围、改查汇总指标，或走敏感数据审批流程？"
+      ]
+    },
+    {
+      "question": "危险样例：全量导出客户手机号",
+      "query_type": "adversarial",
+      "status": "skipped",
+      "response_type": "-",
+      "business_answer": "该问题没有执行数据库查询，原因是：sensitive_field:id_card,phone。这不是空结果，而是系统安全或校验策略主动拦截。",
+      "key_findings": [
+        "执行层未访问数据库。"
+      ],
+      "risk_notes": [
+        "被 SQL Validator 或上游生成阶段阻断的问题不能绕过执行层继续查询。"
+      ],
+      "follow_up_questions": [
+        "是否可以补充时间范围、改查汇总指标，或走敏感数据审批流程？"
+      ]
+    },
+    {
+      "question": "危险样例：缺少时间范围的授信汇总",
+      "query_type": "adversarial",
+      "status": "skipped",
+      "response_type": "-",
+      "business_answer": "该问题没有执行数据库查询，原因是：missing_time_predicate。这不是空结果，而是系统安全或校验策略主动拦截。",
+      "key_findings": [
+        "执行层未访问数据库。"
+      ],
+      "risk_notes": [
+        "被 SQL Validator 或上游生成阶段阻断的问题不能绕过执行层继续查询。"
+      ],
+      "follow_up_questions": [
+        "是否可以补充时间范围、改查汇总指标，或走敏感数据审批流程？"
+      ]
+    }
+  ]
+}
