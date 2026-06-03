@@ -17,10 +17,14 @@
 - 必须补充“生产实际”，默认使用金融信贷业务例子；
 - 必须沉淀面试问题和术语；
 - 必须保留“每日核心问题自测”；
-- 每日自测要包含当天核心问题和前两天核心回顾；
+- 每日自测固定 10 个：A 区今日核心问题 7 个，B 区前三天核心回顾 3 个；
 - 每 7 天复盘日要额外包含周回顾问题。
 
 索引、术语表、架构长文这类非日更笔记不强行套每日自测， 但必须说明自身定位、适用范围和维护规则。
+
+## 专题补强笔记
+
+- [金融信贷离线/实时仓库如何支撑 Agent](./offline_warehouse_agent_basics.md)
 
 ## 每日学习笔记
 
@@ -67,3 +71,10 @@
 - [Day 40 - 数据存储：SQLite、Postgres 与审计数据](./day40_storage_selection.md)
 - [Day 41 - 测试基础：接口测试与回归](./day41_testing_regression.md)
 - [Day 42 - 周复盘与部署说明：像产品一样交付](./day42_week6_delivery_review.md)
+- [Day 43 - Agent 思路：流程编排](./day43_agent_workflow.md)
+- [Day 44 - 工具协同：多工具调用策略](./day44_tool_orchestration.md)
+- [Day 45 - Agent 评测：离线/实时仓库评测样例](./day45_e2e_evaluation.md)
+- [Day 46 - 错误治理：Prompt 与逻辑修正](./day46_error_governance.md)
+- [Day 47 - 离线仓库分层：ODS/DWD/DWS/ADS 与 Agent 离线路由](./day47_offline_warehouse_routing.md)
+- [Day 48 - 实时仓库基础：事件时间、窗口、延迟与 Agent 实时路由](./day48_realtime_warehouse_routing.md)
+- [Day 49 - 信贷主题域：授信/额度/风控/放款/还款/逾期与 Agent 意图识别](./day49_credit_domain_intent.md)

@@ -1,0 +1,202 @@
+[
+  {
+    "step_id": "intent",
+    "name": "意图识别",
+    "purpose": "判断用户是在问指标、查明细、问规则解释，还是提出敏感导出请求。",
+    "input_from": [
+      "user_question"
+    ],
+    "output": "intent_result",
+    "tools": [
+      "rule_classifier",
+      "llm_classifier"
+    ],
+    "risk_controls": [
+      "识别敏感字段",
+      "识别不支持问题",
+      "保留原始问题"
+    ],
+    "fallback": "无法识别时返回 clarification_required，不进入 SQL 生成。",
+    "audit_fields": [
+      "question",
+      "intent",
+      "confidence"
+    ]
+  },
+  {
+    "step_id": "context_retrieval",
+    "name": "Schema 与知识检索",
+    "purpose": "查找可用表、字段、指标口径和业务规则，为后续 SQL 或回答提供依据。",
+    "input_from": [
+      "intent_result"
+    ],
+    "output": "retrieved_context",
+    "tools": [
+      "schema_catalog",
+      "rag_retriever"
+    ],
+    "risk_controls": [
+      "按用户权限过滤 schema",
+      "只返回可引用知识片段"
+    ],
+    "fallback": "检索不到关键上下文时拒答或要求补充条件。",
+    "audit_fields": [
+      "matched_tables",
+      "matched_docs",
+      "permission_scope"
+    ]
+  },
+  {
+    "step_id": "question_parse",
+    "name": "问题结构化解析",
+    "purpose": "把自然语言拆成指标、维度、时间范围、过滤条件和查询类型。",
+    "input_from": [
+      "intent_result",
+      "retrieved_context"
+    ],
+    "output": "parsed_question",
+    "tools": [
+      "question_parser"
+    ],
+    "risk_controls": [
+      "强制时间范围",
+      "标记缺失指标",
+      "标记敏感维度"
+    ],
+    "fallback": "缺少关键条件时返回 clarification_required。",
+    "audit_fields": [
+      "metrics",
+      "dimensions",
+      "time_range",
+      "risk_flags"
+    ]
+  },
+  {
+    "step_id": "candidate_generation",
+    "name": "候选 SQL 或回答计划生成",
+    "purpose": "根据结构化问题生成候选 SQL，或者生成基于引用资料的回答计划。",
+    "input_from": [
+      "parsed_question",
+      "retrieved_context"
+    ],
+    "output": "candidate_action",
+    "tools": [
+      "sql_generator",
+      "answer_planner"
+    ],
+    "risk_controls": [
+      "只生成 select 查询",
+      "禁止拼接用户原始条件",
+      "保留生成理由"
+    ],
+    "fallback": "生成结果缺少表字段依据时拒答。",
+    "audit_fields": [
+      "candidate_sql",
+      "answer_plan",
+      "generation_reason"
+    ]
+  },
+  {
+    "step_id": "validation",
+    "name": "安全、权限、成本校验",
+    "purpose": "在执行前检查 SQL、字段、权限、扫描范围和成本风险。",
+    "input_from": [
+      "candidate_action"
+    ],
+    "output": "validation_result",
+    "tools": [
+      "sql_validator",
+      "permission_checker",
+      "cost_guard"
+    ],
+    "risk_controls": [
+      "敏感字段黑名单",
+      "只读限制",
+      "limit 约束",
+      "分区过滤"
+    ],
+    "fallback": "校验失败时返回 safely_blocked，并说明阻断原因。",
+    "audit_fields": [
+      "validation_status",
+      "blocked_reasons",
+      "estimated_cost"
+    ]
+  },
+  {
+    "step_id": "execution",
+    "name": "执行工具",
+    "purpose": "只在校验通过后调用查询、检索或业务工具。",
+    "input_from": [
+      "validation_result"
+    ],
+    "output": "tool_result",
+    "tools": [
+      "query_executor",
+      "rag_reader"
+    ],
+    "risk_controls": [
+      "超时控制",
+      "行数限制",
+      "只读账号",
+      "异常分类"
+    ],
+    "fallback": "执行失败时进入失败分类，不允许编造结果。",
+    "audit_fields": [
+      "tool_name",
+      "execution_status",
+      "row_count",
+      "error_type"
+    ]
+  },
+  {
+    "step_id": "interpretation",
+    "name": "结果解释与引用",
+    "purpose": "把工具返回的结构化结果解释成业务能读懂的回答，并附带限制说明。",
+    "input_from": [
+      "tool_result",
+      "retrieved_context"
+    ],
+    "output": "business_answer",
+    "tools": [
+      "result_interpreter",
+      "citation_builder"
+    ],
+    "risk_controls": [
+      "不得超出结果推断",
+      "保留引用来源",
+      "提示数据口径限制"
+    ],
+    "fallback": "结果为空或口径不明时输出保守解释和追问建议。",
+    "audit_fields": [
+      "answer_summary",
+      "citations",
+      "limitations"
+    ]
+  },
+  {
+    "step_id": "audit",
+    "name": "审计记录",
+    "purpose": "把问题、步骤、工具、SQL、校验、执行和最终回答串成可回放记录。",
+    "input_from": [
+      "business_answer",
+      "validation_result",
+      "tool_result"
+    ],
+    "output": "audit_record",
+    "tools": [
+      "audit_storage"
+    ],
+    "risk_controls": [
+      "记录 request_id",
+      "敏感字段脱敏",
+      "审计写入失败告警"
+    ],
+    "fallback": "审计写入失败时返回系统错误，不静默吞掉。",
+    "audit_fields": [
+      "request_id",
+      "user_id",
+      "steps",
+      "final_status"
+    ]
+  }
+]

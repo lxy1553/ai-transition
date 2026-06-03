@@ -1,0 +1,18 @@
+flowchart LR
+    question[用户问题] --> intent[intent_classifier]
+    intent --> domain[domain_classifier\n授信/额度/风控/放款/还款/逾期/催收]
+    domain --> offline{离线指标?}
+    domain --> realtime{实时状态?}
+    domain --> definition{口径解释?}
+    domain --> lineage{血缘追溯?}
+    domain --> sensitive{敏感导出?}
+    offline --> offline_route[ADS/DWS 路由 + SQL 校验]
+    realtime --> realtime_route[实时工具 + 延迟检查]
+    definition --> rag[RAG 口径问答 + 引用]
+    lineage --> lineagetool[血缘工具]
+    sensitive --> block[安全阻断 + 审计]
+    offline_route --> audit[audit_logger]
+    realtime_route --> audit
+    rag --> audit
+    lineagetool --> audit
+    block --> audit

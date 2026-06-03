@@ -1,0 +1,59 @@
+[
+  {
+    "event_name": "credit_apply_submitted",
+    "subject": "授信申请",
+    "event_time_field": "apply_event_time",
+    "processing_time_field": "ingest_time",
+    "key_fields": [
+      "apply_id",
+      "channel",
+      "product_code",
+      "customer_hash"
+    ],
+    "example_payload": {
+      "apply_id": "A202606030001",
+      "channel": "app",
+      "product_code": "cash_loan",
+      "event_type": "submitted"
+    },
+    "sensitive_level": "medium"
+  },
+  {
+    "event_name": "risk_decision_made",
+    "subject": "风控决策",
+    "event_time_field": "decision_event_time",
+    "processing_time_field": "process_time",
+    "key_fields": [
+      "apply_id",
+      "strategy_id",
+      "decision_result",
+      "risk_grade"
+    ],
+    "example_payload": {
+      "apply_id": "A202606030001",
+      "strategy_id": "STR_BLACKLIST",
+      "decision_result": "reject",
+      "risk_grade": "high"
+    },
+    "sensitive_level": "medium"
+  },
+  {
+    "event_name": "repayment_failed",
+    "subject": "还款失败",
+    "event_time_field": "repay_event_time",
+    "processing_time_field": "ingest_time",
+    "key_fields": [
+      "loan_id",
+      "repay_channel",
+      "failure_code",
+      "customer_hash"
+    ],
+    "example_payload": {
+      "loan_id": "L202606030009",
+      "repay_channel": "bank_card",
+      "failure_code": "balance_not_enough",
+      "event_type": "failed"
+    },
+    "sensitive_level": "high"
+  }
+]

@@ -1,0 +1,120 @@
+[
+  {
+    "intent": "offline_metric",
+    "trigger_signals": [
+      "昨天",
+      "近 7 天",
+      "上月",
+      "趋势",
+      "按渠道",
+      "按产品",
+      "日报"
+    ],
+    "required_context": [
+      "时间范围",
+      "指标",
+      "维度"
+    ],
+    "target_route": [
+      "intent_classifier",
+      "domain_classifier",
+      "offline_layer_router",
+      "schema_catalog",
+      "offline_sql_generator",
+      "sql_validator",
+      "offline_query_executor",
+      "result_interpreter",
+      "audit_logger"
+    ],
+    "fallback": "缺少时间范围或指标时进入 clarification。"
+  },
+  {
+    "intent": "realtime_metric",
+    "trigger_signals": [
+      "近 5 分钟",
+      "当前",
+      "实时",
+      "是否异常",
+      "突增"
+    ],
+    "required_context": [
+      "窗口",
+      "业务线或维度",
+      "实时指标"
+    ],
+    "target_route": [
+      "intent_classifier",
+      "domain_classifier",
+      "realtime_router",
+      "realtime_metric_tool",
+      "delay_checker",
+      "result_interpreter",
+      "audit_logger"
+    ],
+    "fallback": "缺少窗口或维度时进入 clarification。"
+  },
+  {
+    "intent": "metric_definition",
+    "trigger_signals": [
+      "口径",
+      "怎么算",
+      "定义",
+      "分子",
+      "分母"
+    ],
+    "required_context": [
+      "指标名"
+    ],
+    "target_route": [
+      "intent_classifier",
+      "domain_classifier",
+      "rag_retriever",
+      "result_interpreter",
+      "audit_logger"
+    ],
+    "fallback": "没有可靠引用时返回 insufficient_evidence。"
+  },
+  {
+    "intent": "lineage",
+    "trigger_signals": [
+      "来自哪些表",
+      "来源",
+      "血缘",
+      "上游",
+      "下游"
+    ],
+    "required_context": [
+      "指标或表名"
+    ],
+    "target_route": [
+      "intent_classifier",
+      "domain_classifier",
+      "lineage_tool",
+      "result_interpreter",
+      "audit_logger"
+    ],
+    "fallback": "找不到血缘时返回资料不足。"
+  },
+  {
+    "intent": "sensitive_export",
+    "trigger_signals": [
+      "导出",
+      "手机号",
+      "身份证",
+      "客户名单",
+      "银行卡",
+      "明细全部"
+    ],
+    "required_context": [
+      "用户权限"
+    ],
+    "target_route": [
+      "intent_classifier",
+      "domain_classifier",
+      "permission_checker",
+      "safe_block",
+      "audit_logger"
+    ],
+    "fallback": "默认安全阻断。"
+  }
+]

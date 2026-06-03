@@ -1,0 +1,32 @@
+[
+  {
+    "metric_name": "rt_apply_cnt_5m",
+    "subject": "授信申请量",
+    "window": "5 minutes",
+    "grain": "channel + product_code",
+    "source_event": "credit_apply_submitted",
+    "delay_threshold_minutes": 3,
+    "agent_tool": "realtime_metric_tool",
+    "usage": "查询近 5 分钟申请量、渠道突增和实时申请状态。"
+  },
+  {
+    "metric_name": "rt_risk_reject_rate_10m",
+    "subject": "风控拒绝率",
+    "window": "10 minutes",
+    "grain": "strategy_id + product_code",
+    "source_event": "risk_decision_made",
+    "delay_threshold_minutes": 3,
+    "agent_tool": "realtime_metric_tool",
+    "usage": "查询近 10 分钟策略拒绝率、实时风控异常和策略命中变化。"
+  },
+  {
+    "metric_name": "rt_repayment_failed_cnt_5m",
+    "subject": "还款失败数",
+    "window": "5 minutes",
+    "grain": "repay_channel + failure_code",
+    "source_event": "repayment_failed",
+    "delay_threshold_minutes": 2,
+    "agent_tool": "realtime_metric_tool",
+    "usage": "查询近 5 分钟还款失败数、扣款异常和告警触发依据。"
+  }
+]

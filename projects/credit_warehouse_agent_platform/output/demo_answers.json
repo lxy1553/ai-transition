@@ -1,0 +1,122 @@
+[
+  {
+    "request_id": "6249e097-b8dc-4ef8-a97c-3f95169c430c",
+    "final_status": "answered",
+    "route": [
+      "security_guard",
+      "intent_router",
+      "metric_resolver",
+      "permission_checker",
+      "sql_guard",
+      "warehouse_query",
+      "result_interpreter",
+      "audit_logger"
+    ],
+    "answer": "授信通过率最高的是 2026-06-01 的 web 渠道，通过率 1.0，申请 1 笔，通过 1 笔。",
+    "citations": [
+      {
+        "type": "metric",
+        "id": "credit_approval_rate",
+        "name": "授信通过率",
+        "source_table": "dws_credit_daily_metrics"
+      }
+    ],
+    "sql": "select dt, channel, apply_cnt, approved_cnt, approval_rate, loan_amount from dws_credit_daily_metrics"
+  },
+  {
+    "request_id": "7eddc958-6f11-4616-8bd2-89b119906d81",
+    "final_status": "answered",
+    "route": [
+      "security_guard",
+      "intent_router",
+      "metric_resolver",
+      "permission_checker",
+      "sql_guard",
+      "warehouse_query",
+      "result_interpreter",
+      "audit_logger"
+    ],
+    "answer": "放款金额最高渠道是 partner，样例周期累计放款 37000.0 元。",
+    "citations": [
+      {
+        "type": "metric",
+        "id": "loan_amount",
+        "name": "放款金额",
+        "source_table": "dws_credit_daily_metrics"
+      }
+    ],
+    "sql": null
+  },
+  {
+    "request_id": "f950aa7c-abc9-49cf-be58-cb71610d7955",
+    "final_status": "answered",
+    "route": [
+      "security_guard",
+      "intent_router",
+      "metric_catalog",
+      "audit_logger"
+    ],
+    "answer": "M1 逾期率：到期贷款中逾期天数大于等于 30 天的贷款笔数占比。 计算公式：m1_overdue_cnt / due_loan_cnt。来源表：dws_repayment_overdue_metrics。",
+    "citations": [
+      {
+        "type": "metric_definition",
+        "id": "m1_overdue_rate",
+        "source": "metrics_catalog.json"
+      }
+    ],
+    "sql": null
+  },
+  {
+    "request_id": "12e0a670-c22a-4ed2-abb7-61162e43ede2",
+    "final_status": "answered",
+    "route": [
+      "security_guard",
+      "intent_router",
+      "realtime_monitor",
+      "audit_logger"
+    ],
+    "answer": "实时链路共接入 8 条风控事件，其中 high 风险 4 条，当前触发 2 条告警。",
+    "citations": [
+      {
+        "type": "realtime_metric",
+        "source": "rt_risk_minute_metrics"
+      }
+    ],
+    "sql": null
+  },
+  {
+    "request_id": "c31102cf-e617-4f71-9de9-2c1e03bbccd0",
+    "final_status": "answered",
+    "route": [
+      "security_guard",
+      "intent_router",
+      "lineage_catalog",
+      "audit_logger"
+    ],
+    "answer": "授信通过率 血缘：ods_credit_applications -> dwd_credit_applications -> dws_credit_daily_metrics。核心来源表是 dws_credit_daily_metrics。",
+    "citations": [
+      {
+        "type": "lineage",
+        "metric": "credit_approval_rate",
+        "lineage": [
+          "ods_credit_applications",
+          "dwd_credit_applications",
+          "dws_credit_daily_metrics"
+        ]
+      }
+    ],
+    "sql": null
+  },
+  {
+    "request_id": "6d386189-dc10-455a-bc8c-eedd511a7f8e",
+    "final_status": "safely_blocked",
+    "route": [
+      "security_guard",
+      "intent_router",
+      "safe_block"
+    ],
+    "answer": "该问题涉及客户明细或敏感个人信息，当前角色不能查询。建议改查汇总指标或走审批脱敏流程。",
+    "citations": [],
+    "sql": null
+  }
+]

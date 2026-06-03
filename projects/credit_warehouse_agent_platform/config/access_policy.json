@@ -1,0 +1,55 @@
+{
+  "version": "2026-06-demo",
+  "sensitive_keywords": ["手机号", "身份证", "银行卡", "住址", "联系人", "客户名单", "客户明细", "导出", "customer_id"],
+  "roles": {
+    "guest": {
+      "allowed_domains": ["public_metric"],
+      "max_security_level": "public",
+      "can_view_sql": false,
+      "can_view_realtime": false,
+      "can_view_customer_detail": false
+    },
+    "customer_service": {
+      "allowed_domains": ["public_metric", "credit_metric"],
+      "max_security_level": "internal",
+      "can_view_sql": false,
+      "can_view_realtime": false,
+      "can_view_customer_detail": false
+    },
+    "collection_agent": {
+      "allowed_domains": ["post_loan_metric", "repayment_data"],
+      "max_security_level": "internal",
+      "can_view_sql": false,
+      "can_view_realtime": false,
+      "can_view_customer_detail": false
+    },
+    "credit_ops": {
+      "allowed_domains": ["credit_metric", "credit_data"],
+      "max_security_level": "internal",
+      "can_view_sql": false,
+      "can_view_realtime": false,
+      "can_view_customer_detail": false
+    },
+    "risk_analyst": {
+      "allowed_domains": ["credit_metric", "risk_realtime", "post_loan_metric", "credit_data"],
+      "max_security_level": "confidential",
+      "can_view_sql": true,
+      "can_view_realtime": true,
+      "can_view_customer_detail": false
+    },
+    "credit_dev": {
+      "allowed_domains": ["credit_metric", "credit_data", "risk_realtime", "post_loan_metric", "metadata"],
+      "max_security_level": "confidential",
+      "can_view_sql": true,
+      "can_view_realtime": true,
+      "can_view_customer_detail": false
+    },
+    "security_admin": {
+      "allowed_domains": ["credit_metric", "credit_data", "risk_realtime", "post_loan_metric", "security_audit"],
+      "max_security_level": "restricted",
+      "can_view_sql": true,
+      "can_view_realtime": true,
+      "can_view_customer_detail": true
+    }
+  }
+}

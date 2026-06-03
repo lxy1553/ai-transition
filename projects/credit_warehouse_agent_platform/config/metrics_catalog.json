@@ -1,0 +1,50 @@
+{
+  "version": "2026-06-demo",
+  "metrics": {
+    "credit_apply_cnt": {
+      "name": "授信申请量",
+      "definition": "统计时间范围内提交授信申请的申请单数量。",
+      "formula": "count(app_id)",
+      "source_table": "dws_credit_daily_metrics",
+      "security_level": "internal",
+      "lineage": ["ods_credit_applications", "dwd_credit_applications", "dws_credit_daily_metrics"],
+      "dimensions": ["dt", "channel", "product", "city"]
+    },
+    "credit_approval_rate": {
+      "name": "授信通过率",
+      "definition": "统计时间范围内审批通过申请数占授信申请数的比例，分母不剔除拒绝和待处理申请。",
+      "formula": "approved_cnt / apply_cnt",
+      "source_table": "dws_credit_daily_metrics",
+      "security_level": "internal",
+      "lineage": ["ods_credit_applications", "dwd_credit_applications", "dws_credit_daily_metrics"],
+      "dimensions": ["dt", "channel", "product", "risk_level"]
+    },
+    "loan_amount": {
+      "name": "放款金额",
+      "definition": "统计时间范围内审批通过并成功放款的金额总和，按放款成功金额统计。",
+      "formula": "sum(loan_amount)",
+      "source_table": "dws_credit_daily_metrics",
+      "security_level": "internal",
+      "lineage": ["ods_credit_applications", "dwd_credit_applications", "dws_credit_daily_metrics"],
+      "dimensions": ["dt", "channel", "product", "city"]
+    },
+    "m1_overdue_rate": {
+      "name": "M1 逾期率",
+      "definition": "到期贷款中逾期天数大于等于 30 天的贷款笔数占比。",
+      "formula": "m1_overdue_cnt / due_loan_cnt",
+      "source_table": "dws_repayment_overdue_metrics",
+      "security_level": "internal",
+      "lineage": ["ods_repayment_snapshots", "dwd_repayment_snapshots", "dws_repayment_overdue_metrics"],
+      "dimensions": ["dt", "product", "collection_queue"]
+    },
+    "realtime_risk_event_cnt": {
+      "name": "实时风险事件数",
+      "definition": "实时窗口内风控事件数量，按分钟、风险等级和事件类型聚合。",
+      "formula": "count(event_id)",
+      "source_table": "rt_risk_minute_metrics",
+      "security_level": "internal",
+      "lineage": ["ods_risk_events", "rt_risk_minute_metrics"],
+      "dimensions": ["event_minute", "risk_level", "event_type", "channel"]
+    }
+  }
+}

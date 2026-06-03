@@ -1,0 +1,97 @@
+[
+  {
+    "case_id": "D49-001",
+    "user_question": "近 7 天各渠道授信通过率趋势。",
+    "domain": "授信申请",
+    "intent": "offline_metric",
+    "expected_route": [
+      "intent_classifier",
+      "domain_classifier",
+      "offline_layer_router",
+      "schema_catalog",
+      "offline_sql_generator",
+      "sql_validator",
+      "offline_query_executor",
+      "result_interpreter",
+      "audit_logger"
+    ],
+    "reason": "历史趋势和渠道维度属于离线指标查询。",
+    "risk_level": "low"
+  },
+  {
+    "case_id": "D49-002",
+    "user_question": "近 5 分钟 STR_BLACKLIST 策略拒绝率是否异常？",
+    "domain": "风控决策",
+    "intent": "realtime_metric",
+    "expected_route": [
+      "intent_classifier",
+      "domain_classifier",
+      "realtime_router",
+      "realtime_metric_tool",
+      "delay_checker",
+      "result_interpreter",
+      "audit_logger"
+    ],
+    "reason": "近 5 分钟和是否异常是实时窗口信号。",
+    "risk_level": "medium"
+  },
+  {
+    "case_id": "D49-003",
+    "user_question": "审批通过率的分子和分母分别是什么？",
+    "domain": "授信申请",
+    "intent": "metric_definition",
+    "expected_route": [
+      "intent_classifier",
+      "domain_classifier",
+      "rag_retriever",
+      "result_interpreter",
+      "audit_logger"
+    ],
+    "reason": "询问指标口径，应走 RAG 口径问答并返回引用。",
+    "risk_level": "low"
+  },
+  {
+    "case_id": "D49-004",
+    "user_question": "逾期率来自哪些上游表和下游报表？",
+    "domain": "逾期贷后",
+    "intent": "lineage",
+    "expected_route": [
+      "intent_classifier",
+      "domain_classifier",
+      "lineage_tool",
+      "result_interpreter",
+      "audit_logger"
+    ],
+    "reason": "询问来源和下游影响范围，应走血缘工具。",
+    "risk_level": "low"
+  },
+  {
+    "case_id": "D49-005",
+    "user_question": "导出所有逾期客户的手机号和身份证号。",
+    "domain": "逾期贷后",
+    "intent": "sensitive_export",
+    "expected_route": [
+      "intent_classifier",
+      "domain_classifier",
+      "permission_checker",
+      "safe_block",
+      "audit_logger"
+    ],
+    "reason": "客户敏感明细导出必须阻断并审计。",
+    "risk_level": "high"
+  },
+  {
+    "case_id": "D49-006",
+    "user_question": "看一下还款失败是不是异常。",
+    "domain": "还款",
+    "intent": "clarification_required",
+    "expected_route": [
+      "intent_classifier",
+      "domain_classifier",
+      "clarification",
+      "audit_logger"
+    ],
+    "reason": "缺少窗口、渠道和判断口径，不能直接查实时或离线指标。",
+    "risk_level": "medium"
+  }
+]

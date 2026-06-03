@@ -1,0 +1,34 @@
+[
+  {
+    "case_id": "D45-003",
+    "failure_summary": "实时窗口问题误走离线 SQL。",
+    "owner_layer": "tool_routing",
+    "fix_type": "realtime_routing_rule",
+    "change_description": "问题包含近 5 分钟、实时指标或窗口状态时，必须路由到 realtime_metric_tool，禁止继续 offline_sql_generator 和 offline_query_executor。",
+    "regression_guard": "实时窗口样例不能出现 offline_query_executor。"
+  },
+  {
+    "case_id": "D45-011",
+    "failure_summary": "缺少时间范围却继续查询离线数据。",
+    "owner_layer": "clarification",
+    "fix_type": "missing_time_range_guard",
+    "change_description": "离线指标查询缺少日期、月份或明确时间范围时，必须先进入 clarification，禁止继续 offline_sql_generator 和 offline_query_executor。",
+    "regression_guard": "缺少时间范围样例必须保持 clarification_required。"
+  },
+  {
+    "case_id": "D45-014",
+    "failure_summary": "实时口径解释缺少可靠引用仍然回答。",
+    "owner_layer": "rag_retrieval",
+    "fix_type": "grounding_guardrail",
+    "change_description": "RAG 检索没有 citation 或引用置信度不足时，最终状态必须是 insufficient_evidence，不能让模型补全规则内容。",
+    "regression_guard": "需要引用的规则解释样例不能出现 missing_citation。"
+  },
+  {
+    "case_id": "D45-021",
+    "failure_summary": "实时链路延迟被包装成正常回答。",
+    "owner_layer": "realtime_status_check",
+    "fix_type": "realtime_delay_taxonomy",
+    "change_description": "实时指标工具返回链路延迟、窗口不可用或状态过期时，最终状态必须是 execution_failed，结果解释层不能把延迟数据改写成正常结论。",
+    "regression_guard": "实时延迟样例必须保留 execution_failed 状态。"
+  }
+]

@@ -1,0 +1,68 @@
+{
+  "version": "2026-06-demo",
+  "tables": [
+    {
+      "table_name": "ods_credit_applications",
+      "layer": "ODS",
+      "domain": "credit_data",
+      "grain": "one row per raw credit application event",
+      "security_level": "confidential",
+      "owner": "credit_data_team",
+      "description": "授信申请原始接入表，保留客户、渠道、产品、审批和放款字段。"
+    },
+    {
+      "table_name": "dwd_credit_applications",
+      "layer": "DWD",
+      "domain": "credit_data",
+      "grain": "one row per cleaned credit application",
+      "security_level": "confidential",
+      "owner": "credit_data_team",
+      "description": "授信申请清洗明细表，用于授信通过率、申请量和放款金额计算。"
+    },
+    {
+      "table_name": "dws_credit_daily_metrics",
+      "layer": "DWS",
+      "domain": "credit_metric",
+      "grain": "one row per day and channel",
+      "security_level": "internal",
+      "owner": "metric_platform_team",
+      "description": "授信日渠道汇总指标表，服务经营看板和 Agent 指标问答。"
+    },
+    {
+      "table_name": "dwd_repayment_snapshots",
+      "layer": "DWD",
+      "domain": "repayment_data",
+      "grain": "one row per loan repayment snapshot",
+      "security_level": "confidential",
+      "owner": "post_loan_data_team",
+      "description": "还款到期和逾期快照明细表，用于逾期率、账龄和催收分析。"
+    },
+    {
+      "table_name": "dws_repayment_overdue_metrics",
+      "layer": "DWS",
+      "domain": "post_loan_metric",
+      "grain": "one row per day and product",
+      "security_level": "internal",
+      "owner": "metric_platform_team",
+      "description": "贷后逾期汇总指标表，服务 M1 逾期率问答。"
+    },
+    {
+      "table_name": "ods_risk_events",
+      "layer": "ODS_RT",
+      "domain": "risk_realtime",
+      "grain": "one row per risk event",
+      "security_level": "confidential",
+      "owner": "risk_platform_team",
+      "description": "实时风控事件原始表，模拟 Kafka 接入。"
+    },
+    {
+      "table_name": "rt_risk_minute_metrics",
+      "layer": "RT_DWS",
+      "domain": "risk_realtime",
+      "grain": "one row per minute, risk level and event type",
+      "security_level": "internal",
+      "owner": "risk_platform_team",
+      "description": "实时风险分钟聚合指标表，用于告警和 Agent 实时问答。"
+    }
+  ]
+}

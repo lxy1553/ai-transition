@@ -1,0 +1,13 @@
+flowchart TD
+    U[用户问题]
+    U --> INTENT[意图识别]
+    INTENT --> CONTEXT_RETRIEVAL[Schema 与知识检索]
+    CONTEXT_RETRIEVAL --> QUESTION_PARSE[问题结构化解析]
+    QUESTION_PARSE --> CANDIDATE_GENERATION[候选 SQL 或回答计划生成]
+    CANDIDATE_GENERATION --> VALIDATION[安全、权限、成本校验]
+    VALIDATION -.异常或阻断.-> VALIDATION_F[失败回退: 校验失败时返回 safely_blocked，并说明阻断原因。]
+    VALIDATION --> EXECUTION[执行工具]
+    EXECUTION -.异常或阻断.-> EXECUTION_F[失败回退: 执行失败时进入失败分类，不允许编造结果。]
+    EXECUTION --> INTERPRETATION[结果解释与引用]
+    INTERPRETATION --> AUDIT[审计记录]
+    AUDIT --> O[返回业务答案]

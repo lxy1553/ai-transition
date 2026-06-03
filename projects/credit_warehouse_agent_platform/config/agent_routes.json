@@ -1,0 +1,30 @@
+{
+  "version": "2026-06-demo",
+  "routes": [
+    {
+      "intent": "metric_query",
+      "trigger_keywords": ["通过率", "申请量", "放款金额", "逾期率", "M1"],
+      "tool_route": ["security_guard", "metric_resolver", "sql_guard", "warehouse_query", "result_interpreter", "audit_logger"]
+    },
+    {
+      "intent": "metric_definition",
+      "trigger_keywords": ["口径", "怎么算", "定义", "公式"],
+      "tool_route": ["security_guard", "metric_catalog", "audit_logger"]
+    },
+    {
+      "intent": "realtime_monitor",
+      "trigger_keywords": ["实时", "告警", "风险事件", "高风险"],
+      "tool_route": ["security_guard", "realtime_monitor", "audit_logger"]
+    },
+    {
+      "intent": "lineage_query",
+      "trigger_keywords": ["血缘", "来源表", "来自哪些表", "数仓分层"],
+      "tool_route": ["security_guard", "lineage_catalog", "audit_logger"]
+    },
+    {
+      "intent": "sensitive_detail",
+      "trigger_keywords": ["手机号", "身份证", "客户名单", "客户明细", "导出"],
+      "tool_route": ["security_guard", "safe_block", "audit_logger"]
+    }
+  ]
+}

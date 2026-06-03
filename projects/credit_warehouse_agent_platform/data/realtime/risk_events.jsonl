@@ -1,0 +1,8 @@
+{"event_id":"EVT001","event_time":"2026-06-02 09:01:03","app_id":"APP006","customer_id":"CUST006","event_type":"rule_hit","risk_level":"low","channel":"app","decision":"pass","rule_code":"BASIC_SCORE_PASS"}
+{"event_id":"EVT002","event_time":"2026-06-02 09:02:10","app_id":"APP007","customer_id":"CUST007","event_type":"device_check","risk_level":"medium","channel":"web","decision":"pass","rule_code":"DEVICE_NORMAL"}
+{"event_id":"EVT003","event_time":"2026-06-02 09:03:21","app_id":"APP008","customer_id":"CUST008","event_type":"anti_fraud","risk_level":"high","channel":"partner","decision":"reject","rule_code":"AF_MULTI_DEVICE"}
+{"event_id":"EVT004","event_time":"2026-06-02 09:03:44","app_id":"APP008","customer_id":"CUST008","event_type":"anti_fraud","risk_level":"high","channel":"partner","decision":"reject","rule_code":"AF_BLACK_IP"}
+{"event_id":"EVT005","event_time":"2026-06-02 09:04:18","app_id":"APP009","customer_id":"CUST009","event_type":"manual_review","risk_level":"medium","channel":"app","decision":"review","rule_code":"REVIEW_RISK_MEDIUM"}
+{"event_id":"EVT006","event_time":"2026-06-02 09:05:02","app_id":"APP010","customer_id":"CUST010","event_type":"rule_hit","risk_level":"low","channel":"web","decision":"pass","rule_code":"BASIC_SCORE_PASS"}
+{"event_id":"EVT007","event_time":"2026-06-02 09:06:11","app_id":"APP012","customer_id":"CUST012","event_type":"overdue_history","risk_level":"high","channel":"app","decision":"reject","rule_code":"HIT_M2_OVERDUE"}
+{"event_id":"EVT008","event_time":"2026-06-02 09:06:20","app_id":"APP012","customer_id":"CUST012","event_type":"overdue_history","risk_level":"high","channel":"app","decision":"reject","rule_code":"HIT_M2_OVERDUE"}

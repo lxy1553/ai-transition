@@ -1,0 +1,130 @@
+[
+  {
+    "layer": "ODS",
+    "table_name": "ods_credit_apply_raw_di",
+    "subject": "授信申请",
+    "grain": "一条原始授信申请记录",
+    "partition_key": "dt",
+    "sensitive_level": "high",
+    "agent_usage": "不建议 Agent 直接查询；只用于排查明细和上游来源。",
+    "example_fields": [
+      "apply_id",
+      "customer_id",
+      "mobile_hash",
+      "apply_time",
+      "raw_channel"
+    ]
+  },
+  {
+    "layer": "ODS",
+    "table_name": "ods_repayment_raw_di",
+    "subject": "还款流水",
+    "grain": "一条原始还款流水",
+    "partition_key": "dt",
+    "sensitive_level": "high",
+    "agent_usage": "不建议直接查；涉及客户、银行卡和交易明细。",
+    "example_fields": [
+      "repay_id",
+      "loan_id",
+      "customer_id",
+      "repay_amount",
+      "repay_status"
+    ]
+  },
+  {
+    "layer": "DWD",
+    "table_name": "dwd_credit_apply_detail_di",
+    "subject": "授信申请",
+    "grain": "清洗后的授信申请明细",
+    "partition_key": "dt",
+    "sensitive_level": "medium",
+    "agent_usage": "只在需要明细过滤且有权限时使用，必须带时间范围和 limit。",
+    "example_fields": [
+      "apply_id",
+      "customer_type",
+      "channel",
+      "risk_grade",
+      "apply_status"
+    ]
+  },
+  {
+    "layer": "DWD",
+    "table_name": "dwd_loan_repayment_detail_di",
+    "subject": "还款",
+    "grain": "清洗后的还款明细",
+    "partition_key": "dt",
+    "sensitive_level": "medium",
+    "agent_usage": "用于还款明细分析；普通指标优先走 DWS 或 ADS。",
+    "example_fields": [
+      "loan_id",
+      "repay_date",
+      "repay_amount",
+      "overdue_days",
+      "repay_status"
+    ]
+  },
+  {
+    "layer": "DWS",
+    "table_name": "dws_credit_apply_channel_1d",
+    "subject": "授信经营",
+    "grain": "按日期、渠道汇总的授信申请指标",
+    "partition_key": "dt",
+    "sensitive_level": "low",
+    "agent_usage": "适合 Agent 查询渠道维度的申请量、通过率和拒绝率。",
+    "example_fields": [
+      "dt",
+      "channel",
+      "apply_cnt",
+      "approve_cnt",
+      "reject_cnt"
+    ]
+  },
+  {
+    "layer": "DWS",
+    "table_name": "dws_repayment_overdue_1d",
+    "subject": "贷后还款",
+    "grain": "按日期、产品汇总的还款和逾期指标",
+    "partition_key": "dt",
+    "sensitive_level": "low",
+    "agent_usage": "适合 Agent 查询逾期率、还款成功率和贷后趋势。",
+    "example_fields": [
+      "dt",
+      "product_code",
+      "due_cnt",
+      "repaid_cnt",
+      "overdue_cnt"
+    ]
+  },
+  {
+    "layer": "ADS",
+    "table_name": "ads_credit_daily_metrics",
+    "subject": "信贷日报",
+    "grain": "面向经营日报的一天一行应用指标",
+    "partition_key": "dt",
+    "sensitive_level": "low",
+    "agent_usage": "Agent 查询经营日报、总览指标和趋势时的首选入口。",
+    "example_fields": [
+      "dt",
+      "apply_cnt",
+      "approve_rate",
+      "loan_amount",
+      "overdue_rate"
+    ]
+  },
+  {
+    "layer": "ADS",
+    "table_name": "ads_risk_strategy_dashboard",
+    "subject": "风控看板",
+    "grain": "按日期、策略、产品汇总的风控看板指标",
+    "partition_key": "dt",
+    "sensitive_level": "low",
+    "agent_usage": "适合 Agent 查询策略命中率、拒绝率和风险看板指标。",
+    "example_fields": [
+      "dt",
+      "strategy_id",
+      "hit_cnt",
+      "reject_rate",
+      "approve_rate"
+    ]
+  }
+]

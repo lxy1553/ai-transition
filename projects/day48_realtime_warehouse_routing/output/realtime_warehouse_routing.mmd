@@ -1,0 +1,14 @@
+flowchart LR
+    source[业务事件\n授信申请/风控决策/还款失败] --> mq[Kafka / Event Bus]
+    mq --> stream[Flink 实时计算]
+    stream --> metrics[实时指标状态表\n窗口/事件时间/处理时间]
+    stream --> alerts[实时告警表\n等级/规则/证据]
+    metrics --> tool[realtime_metric_tool]
+    alerts --> alert_tool[alert_query_tool]
+    tool --> delay[delay_checker]
+    alert_tool --> delay
+    delay --> agent[Agent 结果解释]
+    delay -. 延迟超阈值 .-> fail[execution_failed / 降级说明]
+    agent --> audit[audit_logger]
+    offline[offline_sql_generator]:::blocked -. 实时问题禁止 .-> fail
+    classDef blocked fill:#ffecec,stroke:#b42318,color:#7a271a;

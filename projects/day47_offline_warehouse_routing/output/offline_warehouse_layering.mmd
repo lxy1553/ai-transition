@@ -1,0 +1,23 @@
+flowchart LR
+    source[业务系统\n授信/风控/放款/还款] --> ods[ODS 原始数据层]
+    ods --> dwd[DWD 明细事实层]
+    dwd --> dws[DWS 主题汇总层]
+    dws --> ads[ADS 应用指标层]
+    ads --> agent[Agent 离线指标问答]
+    dws --> agent
+    dwd -. 权限校验后明细查询 .-> agent
+    ods -. 默认禁止直接查询 .-> guard[安全阻断/人工排查]
+    ods:::layer
+    ods_tables[ods_credit_apply_raw_di\nods_repayment_raw_di]:::table
+    ods --> ods_tables
+    dwd:::layer
+    dwd_tables[dwd_credit_apply_detail_di\ndwd_loan_repayment_detail_di]:::table
+    dwd --> dwd_tables
+    dws:::layer
+    dws_tables[dws_credit_apply_channel_1d\ndws_repayment_overdue_1d]:::table
+    dws --> dws_tables
+    ads:::layer
+    ads_tables[ads_credit_daily_metrics\nads_risk_strategy_dashboard]:::table
+    ads --> ads_tables
+    classDef layer fill:#eef6ff,stroke:#2f6f9f,color:#102a43;
+    classDef table fill:#f7f7f2,stroke:#8a7f5a,color:#2d2a22;

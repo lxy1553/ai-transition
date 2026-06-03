@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # 这个脚本负责真正发送钉钉学习提醒。
-# 它既能发送一段手动传入的文本，也能根据 56 天学习计划自动生成早晚提醒。
+# 它既能发送一段手动传入的文本，也能根据 63 天学习计划自动生成早晚提醒。
 # 这里做参数校验和配置校验，是为了避免 webhook 地址缺失时静默失败。
 
 if [[ $# -lt 2 ]]; then
@@ -43,7 +43,7 @@ build_plan_message() {
   first_date="$(/usr/bin/awk -F '\t' 'NR==2 {print $1}' "$PLAN_FILE")"
   last_date="$(/usr/bin/awk -F '\t' 'END {print $1}' "$PLAN_FILE")"
 
-  # 超过 56 天计划后自动停止，避免一直发送过期学习任务。
+  # 超过计划最后一天后自动停止，避免一直发送过期学习任务。
   if [[ "$TODAY" > "$last_date" ]]; then
     echo ""
     return 0

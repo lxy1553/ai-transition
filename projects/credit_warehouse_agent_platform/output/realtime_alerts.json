@@ -1,0 +1,16 @@
+[
+  {
+    "alert_id": "ALERT-2026-06-02 09:03-anti_fraud",
+    "event_minute": "2026-06-02 09:03",
+    "severity": "P1",
+    "reason": "2026-06-02 09:03 高风险 anti_fraud 事件达到 2 条",
+    "recommended_action": "通知风控值班同事复核规则命中和渠道异常。"
+  },
+  {
+    "alert_id": "ALERT-2026-06-02 09:06-overdue_history",
+    "event_minute": "2026-06-02 09:06",
+    "severity": "P1",
+    "reason": "2026-06-02 09:06 高风险 overdue_history 事件达到 2 条",
+    "recommended_action": "通知风控值班同事复核规则命中和渠道异常。"
+  }
+]

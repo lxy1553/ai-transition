@@ -1,0 +1,139 @@
+[
+  {
+    "domain": "授信申请",
+    "description": "用户发起授信申请、提交资料、渠道进入和申请状态流转。",
+    "common_metrics": [
+      "申请量",
+      "审批通过率",
+      "拒绝率",
+      "渠道申请占比"
+    ],
+    "offline_tables": [
+      "dws_credit_apply_channel_1d",
+      "ads_credit_daily_metrics"
+    ],
+    "realtime_events": [
+      "credit_apply_submitted"
+    ],
+    "risk_notes": [
+      "申请明细包含客户标识，明细查询必须做权限校验。"
+    ]
+  },
+  {
+    "domain": "额度管理",
+    "description": "额度审批、额度调整、额度使用和额度冻结。",
+    "common_metrics": [
+      "授信额度",
+      "额度使用率",
+      "额度冻结数"
+    ],
+    "offline_tables": [
+      "dwd_credit_limit_detail_di",
+      "ads_credit_daily_metrics"
+    ],
+    "realtime_events": [
+      "credit_limit_changed"
+    ],
+    "risk_notes": [
+      "额度明细属于敏感业务数据，不能直接导出客户级明细。"
+    ]
+  },
+  {
+    "domain": "风控决策",
+    "description": "策略命中、审批拒绝、风险等级和实时反欺诈。",
+    "common_metrics": [
+      "策略命中率",
+      "实时拒绝率",
+      "高风险占比"
+    ],
+    "offline_tables": [
+      "ads_risk_strategy_dashboard",
+      "dws_credit_apply_channel_1d"
+    ],
+    "realtime_events": [
+      "risk_decision_made"
+    ],
+    "risk_notes": [
+      "策略和规则解释必须引用口径资料，不能编造原因。"
+    ]
+  },
+  {
+    "domain": "放款",
+    "description": "放款申请、放款成功、放款失败和放款金额。",
+    "common_metrics": [
+      "放款金额",
+      "放款成功率",
+      "放款失败数"
+    ],
+    "offline_tables": [
+      "ads_credit_daily_metrics",
+      "dwd_loan_disbursement_detail_di"
+    ],
+    "realtime_events": [
+      "loan_disbursed",
+      "loan_disbursement_failed"
+    ],
+    "risk_notes": [
+      "放款明细涉及合同和资金信息，必须限制权限和 limit。"
+    ]
+  },
+  {
+    "domain": "还款",
+    "description": "主动还款、自动扣款、还款失败和渠道异常。",
+    "common_metrics": [
+      "还款成功率",
+      "还款失败数",
+      "失败原因分布"
+    ],
+    "offline_tables": [
+      "dws_repayment_overdue_1d",
+      "dwd_loan_repayment_detail_di"
+    ],
+    "realtime_events": [
+      "repayment_succeeded",
+      "repayment_failed"
+    ],
+    "risk_notes": [
+      "还款流水涉及交易明细，敏感导出必须阻断。"
+    ]
+  },
+  {
+    "domain": "逾期贷后",
+    "description": "逾期天数、账龄、M1/M2、贷后表现和催收前置分析。",
+    "common_metrics": [
+      "逾期率",
+      "M1 余额",
+      "迁徙率",
+      "回收率"
+    ],
+    "offline_tables": [
+      "dws_repayment_overdue_1d",
+      "ads_postloan_daily_metrics"
+    ],
+    "realtime_events": [
+      "overdue_status_changed"
+    ],
+    "risk_notes": [
+      "逾期客户名单属于敏感明细，不能直接给普通用户导出。"
+    ]
+  },
+  {
+    "domain": "催收",
+    "description": "催收触达、承诺还款、催收结果和坐席效果。",
+    "common_metrics": [
+      "触达率",
+      "承诺还款率",
+      "催回金额"
+    ],
+    "offline_tables": [
+      "dwd_collection_action_detail_di",
+      "ads_collection_daily_metrics"
+    ],
+    "realtime_events": [
+      "collection_action_created"
+    ],
+    "risk_notes": [
+      "催收记录涉及客户沟通信息，必须做权限和审计。"
+    ]
+  }
+]

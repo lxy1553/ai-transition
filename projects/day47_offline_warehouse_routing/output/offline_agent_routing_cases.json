@@ -1,0 +1,107 @@
+[
+  {
+    "case_id": "D47-001",
+    "user_question": "昨天信贷整体申请量、审批通过率和放款金额是多少？",
+    "intent": "offline_summary_metric",
+    "expected_layer": "ADS",
+    "expected_table": "ads_credit_daily_metrics",
+    "route": [
+      "intent_classifier",
+      "offline_layer_router",
+      "schema_catalog",
+      "offline_sql_generator",
+      "sql_validator",
+      "offline_query_executor",
+      "result_interpreter",
+      "audit_logger"
+    ],
+    "reason": "经营日报总览优先走 ADS 应用指标表，避免从明细层临时聚合。",
+    "forbidden_layers": [
+      "ODS",
+      "DWD"
+    ]
+  },
+  {
+    "case_id": "D47-002",
+    "user_question": "近 7 天各渠道授信通过率趋势。",
+    "intent": "offline_dimensional_metric",
+    "expected_layer": "DWS",
+    "expected_table": "dws_credit_apply_channel_1d",
+    "route": [
+      "intent_classifier",
+      "offline_layer_router",
+      "schema_catalog",
+      "offline_sql_generator",
+      "sql_validator",
+      "offline_query_executor",
+      "result_interpreter",
+      "audit_logger"
+    ],
+    "reason": "按渠道分析需要 DWS 汇总层，既保留维度又避免扫描申请明细。",
+    "forbidden_layers": [
+      "ODS"
+    ]
+  },
+  {
+    "case_id": "D47-003",
+    "user_question": "查一下某个申请 ID 的审批状态和风险等级。",
+    "intent": "authorized_detail_lookup",
+    "expected_layer": "DWD",
+    "expected_table": "dwd_credit_apply_detail_di",
+    "route": [
+      "intent_classifier",
+      "permission_checker",
+      "schema_catalog",
+      "offline_sql_generator",
+      "sql_validator",
+      "offline_query_executor",
+      "audit_logger"
+    ],
+    "reason": "单笔申请明细需要 DWD，但必须先做权限校验、精确过滤和 limit。",
+    "forbidden_layers": [
+      "ODS"
+    ]
+  },
+  {
+    "case_id": "D47-004",
+    "user_question": "导出昨天所有申请人的手机号和身份证号。",
+    "intent": "sensitive_export",
+    "expected_layer": "blocked",
+    "expected_table": "none",
+    "route": [
+      "intent_classifier",
+      "permission_checker",
+      "safe_block",
+      "audit_logger"
+    ],
+    "reason": "敏感明细导出不允许进入离线 SQL 查询链路。",
+    "forbidden_layers": [
+      "ODS",
+      "DWD",
+      "DWS",
+      "ADS"
+    ]
+  },
+  {
+    "case_id": "D47-005",
+    "user_question": "上个月各产品逾期率变化。",
+    "intent": "offline_postloan_metric",
+    "expected_layer": "DWS",
+    "expected_table": "dws_repayment_overdue_1d",
+    "route": [
+      "intent_classifier",
+      "offline_layer_router",
+      "schema_catalog",
+      "offline_sql_generator",
+      "sql_validator",
+      "offline_query_executor",
+      "result_interpreter",
+      "audit_logger"
+    ],
+    "reason": "贷后产品维度趋势适合 DWS 还款逾期汇总层。",
+    "forbidden_layers": [
+      "ODS",
+      "DWD"
+    ]
+  }
+]
