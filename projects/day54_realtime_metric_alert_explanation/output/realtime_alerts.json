@@ -1,0 +1,16 @@
+[
+  {
+    "alert_id": "alert_risk_reject_rate_spike_001",
+    "metric_id": "rt_risk_reject_rate_10m",
+    "alert_name": "风控拒绝率突增告警",
+    "level": "P1",
+    "status": "triggered",
+    "rule": "reject_rate > 0.35 and delay_seconds <= 180",
+    "triggered_at": "2026-06-05 10:29:20",
+    "evidence": [
+      "metric_snapshot::rt_risk_reject_rate_10m::202606051029",
+      "rule::risk_reject_rate_spike_v3",
+      "source_event::risk_decision_made"
+    ]
+  }
+]

@@ -1,0 +1,32 @@
+[
+  {
+    "metric_id": "rt_risk_reject_rate_10m",
+    "metric_name": "实时风控拒绝率",
+    "domain": "风控决策",
+    "window": "10m",
+    "event_time": "2026-06-05 10:28:00",
+    "process_time": "2026-06-05 10:29:20",
+    "delay_seconds": 80,
+    "delay_threshold_seconds": 180,
+    "value": 0.42,
+    "threshold": 0.35,
+    "unit": "ratio",
+    "source_event": "risk_decision_made",
+    "evidence_id": "metric_snapshot::rt_risk_reject_rate_10m::202606051029"
+  },
+  {
+    "metric_id": "rt_repayment_failed_cnt_5m",
+    "metric_name": "实时还款失败数",
+    "domain": "还款",
+    "window": "5m",
+    "event_time": "2026-06-05 10:10:00",
+    "process_time": "2026-06-05 10:22:00",
+    "delay_seconds": 720,
+    "delay_threshold_seconds": 120,
+    "value": 86,
+    "threshold": 50,
+    "unit": "count",
+    "source_event": "repayment_failed",
+    "evidence_id": "metric_snapshot::rt_repayment_failed_cnt_5m::202606051022"
+  }
+]

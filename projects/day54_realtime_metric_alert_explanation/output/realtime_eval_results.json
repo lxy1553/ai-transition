@@ -1,0 +1,139 @@
+[
+  {
+    "case_id": "D54-001",
+    "question": "近 10 分钟实时风控拒绝率是否异常？",
+    "expected_status": "answered",
+    "actual_status": "answered",
+    "expected_answer_type": "realtime_metric_status",
+    "actual_answer_type": "realtime_metric_status",
+    "checks": {
+      "status_match": true,
+      "answer_type_match": true,
+      "contains_expected": true
+    },
+    "passed": true,
+    "answer": {
+      "status": "answered",
+      "answer_type": "realtime_metric_status",
+      "answer": "实时风控拒绝率 当前窗口 10m 的值为 0.42，阈值为 0.35，链路延迟 80 秒，低于阈值 180 秒，判断为异常。",
+      "evidence": [
+        "metric_snapshot::rt_risk_reject_rate_10m::202606051029",
+        "source_event::risk_decision_made"
+      ]
+    }
+  },
+  {
+    "case_id": "D54-002",
+    "question": "解释一下风控拒绝率突增告警。",
+    "expected_status": "answered",
+    "actual_status": "answered",
+    "expected_answer_type": "alert_explanation",
+    "actual_answer_type": "alert_explanation",
+    "checks": {
+      "status_match": true,
+      "answer_type_match": true,
+      "contains_expected": true
+    },
+    "passed": true,
+    "answer": {
+      "status": "answered",
+      "answer_type": "alert_explanation",
+      "answer": "风控拒绝率突增告警 当前等级为 P1，状态为 triggered。触发规则是 reject_rate > 0.35 and delay_seconds <= 180，对应指标值为 0.42，阈值为 0.35，窗口 10m，链路延迟 80 秒，证据包含 evidence: metric_snapshot::rt_risk_reject_rate_10m::202606051029, rule::risk_reject_rate_spike_v3, source_event::risk_decision_made。",
+      "evidence": [
+        "metric_snapshot::rt_risk_reject_rate_10m::202606051029",
+        "rule::risk_reject_rate_spike_v3",
+        "source_event::risk_decision_made"
+      ]
+    }
+  },
+  {
+    "case_id": "D54-003",
+    "question": "当前还款失败数是否异常？按近 5 分钟。",
+    "expected_status": "degraded",
+    "actual_status": "degraded",
+    "expected_answer_type": "realtime_delay_degraded",
+    "actual_answer_type": "realtime_delay_degraded",
+    "checks": {
+      "status_match": true,
+      "answer_type_match": true,
+      "contains_expected": true
+    },
+    "passed": true,
+    "answer": {
+      "status": "degraded",
+      "answer_type": "realtime_delay_degraded",
+      "answer": "实时还款失败数 当前窗口 5m 的链路延迟 720 秒，超过阈值 120 秒，当前数据不可信，不能给出确定结论。",
+      "evidence": [
+        "metric_snapshot::rt_repayment_failed_cnt_5m::202606051022",
+        "source_event::repayment_failed"
+      ]
+    }
+  },
+  {
+    "case_id": "D54-004",
+    "question": "看一下实时风控拒绝率。",
+    "expected_status": "need_clarification",
+    "actual_status": "need_clarification",
+    "expected_answer_type": "missing_window",
+    "actual_answer_type": "missing_window",
+    "checks": {
+      "status_match": true,
+      "answer_type_match": true,
+      "contains_expected": true
+    },
+    "passed": true,
+    "answer": {
+      "status": "need_clarification",
+      "answer_type": "missing_window",
+      "answer": "实时指标查询缺少窗口，需要澄清是近 5 分钟、近 10 分钟还是近 1 小时。",
+      "evidence": [
+        "precondition::window_required"
+      ]
+    }
+  },
+  {
+    "case_id": "D54-005",
+    "question": "导出实时还款失败客户手机号。",
+    "expected_status": "blocked",
+    "actual_status": "blocked",
+    "expected_answer_type": "safe_block",
+    "actual_answer_type": "safe_block",
+    "checks": {
+      "status_match": true,
+      "answer_type_match": true,
+      "contains_expected": true
+    },
+    "passed": true,
+    "answer": {
+      "status": "blocked",
+      "answer_type": "safe_block",
+      "answer": "问题要求导出实时事件里的手机号，属于敏感明细导出，必须阻断并写审计。",
+      "evidence": [
+        "policy::sensitive_export_block"
+      ]
+    }
+  },
+  {
+    "case_id": "D54-006",
+    "question": "实时风控拒绝率为什么升高？",
+    "expected_status": "answered",
+    "actual_status": "answered",
+    "expected_answer_type": "bounded_explanation",
+    "actual_answer_type": "bounded_explanation",
+    "checks": {
+      "status_match": true,
+      "answer_type_match": true,
+      "contains_expected": true
+    },
+    "passed": true,
+    "answer": {
+      "status": "answered",
+      "answer_type": "bounded_explanation",
+      "answer": "当前只能解释证据：实时风控拒绝率 0.42 高于阈值 0.35，窗口 10m，延迟 80 秒，数据可用。不能编造原因。建议排查策略变更、渠道流量、黑名单命中、规则版本和上游事件质量。",
+      "evidence": [
+        "metric_snapshot::rt_risk_reject_rate_10m::202606051029",
+        "rule::risk_reject_rate_spike_v3"
+      ]
+    }
+  }
+]
