@@ -1,0 +1,122 @@
+[
+  {
+    "chunk_id": "metric::credit_apply_cnt_1d",
+    "metric_id": "credit_apply_cnt_1d",
+    "title": "授信申请量 指标口径",
+    "text": "指标：授信申请量。类型：offline。主题域：授信申请。定义：统计指定日期或日期范围内提交授信申请的申请单数量。 分子：符合时间范围和过滤条件的授信申请单数。 分母：无分母，计数型指标。 窗口：离线 T+1 日分区，按 dt 统计。 粒度：dt + channel + product 来源：dws_credit_apply_channel_1d 维度：dt, channel, product, city, customer_type 使用注意：适合回答昨天、近 7 天、上月的申请量趋势。；必须带时间范围，避免扫描全量分区。",
+    "source": "metric_dictionary.json",
+    "security_level": "internal",
+    "keywords": [
+      "授信申请量",
+      "credit_apply_cnt_1d",
+      "授信申请",
+      "申请量",
+      "授信量",
+      "进件量",
+      "dt",
+      "channel",
+      "product",
+      "city",
+      "customer_type"
+    ]
+  },
+  {
+    "chunk_id": "metric::credit_approval_rate_1d",
+    "metric_id": "credit_approval_rate_1d",
+    "title": "授信通过率 指标口径",
+    "text": "指标：授信通过率。类型：offline。主题域：授信申请。定义：审批通过申请数占授信申请总数的比例，分母包含拒绝和待处理申请。 分子：approved_cnt，审批状态为 APPROVED 的申请数。 分母：apply_cnt，统计时间范围内的授信申请总数。 窗口：离线 T+1 日分区，按 dt 或日期范围统计。 粒度：dt + channel + product 来源：dws_credit_apply_channel_1d / ads_credit_daily_metrics 维度：dt, channel, product, risk_grade 使用注意：不能和放款成功率混用。；渠道趋势优先查 DWS，总览优先查 ADS。",
+    "source": "metric_dictionary.json",
+    "security_level": "internal",
+    "keywords": [
+      "授信通过率",
+      "credit_approval_rate_1d",
+      "授信申请",
+      "通过率",
+      "审批通过率",
+      "授信审批通过率",
+      "dt",
+      "channel",
+      "product",
+      "risk_grade"
+    ]
+  },
+  {
+    "chunk_id": "metric::loan_amount_1d",
+    "metric_id": "loan_amount_1d",
+    "title": "放款金额 指标口径",
+    "text": "指标：放款金额。类型：offline。主题域：放款。定义：审批通过并实际放款成功的金额总和。 分子：sum(loan_amount)，放款成功金额累计。 分母：无分母，金额型指标。 窗口：离线 T+1 日分区，按放款成功日期 dt 统计。 粒度：dt + channel + product 来源：ads_credit_daily_metrics / dwd_loan_disbursement_detail_di 维度：dt, channel, product, city 使用注意：按放款成功时间统计，不按授信申请时间统计。；明细层包含合同和资金信息，普通 Agent 不应直接查明细。",
+    "source": "metric_dictionary.json",
+    "security_level": "internal",
+    "keywords": [
+      "放款金额",
+      "loan_amount_1d",
+      "放款",
+      "放款额",
+      "放款金额",
+      "放款规模",
+      "dt",
+      "channel",
+      "product",
+      "city"
+    ]
+  },
+  {
+    "chunk_id": "metric::m1_overdue_rate_1d",
+    "metric_id": "m1_overdue_rate_1d",
+    "title": "M1 逾期率 指标口径",
+    "text": "指标：M1 逾期率。类型：offline。主题域：逾期贷后。定义：到期贷款中逾期天数大于等于 30 天的贷款笔数占比。 分子：m1_overdue_cnt，overdue_days >= 30 的到期贷款笔数。 分母：due_loan_cnt，统计范围内到期贷款总笔数。 窗口：离线 T+1 日分区，按还款到期日或贷后统计日 dt 统计。 粒度：dt + product + collection_queue 来源：dws_repayment_overdue_1d / ads_postloan_daily_metrics 维度：dt, product, collection_queue, overdue_bucket 使用注意：M1 是账龄口径，不等于任意逾期。；客户名单和手机号属于敏感明细，口径问答不能返回明细。",
+    "source": "metric_dictionary.json",
+    "security_level": "internal",
+    "keywords": [
+      "M1 逾期率",
+      "m1_overdue_rate_1d",
+      "逾期贷后",
+      "M1",
+      "M1逾期率",
+      "逾期率",
+      "dt",
+      "product",
+      "collection_queue",
+      "overdue_bucket"
+    ]
+  },
+  {
+    "chunk_id": "metric::rt_risk_reject_rate_10m",
+    "metric_id": "rt_risk_reject_rate_10m",
+    "title": "实时风控拒绝率 指标口径",
+    "text": "指标：实时风控拒绝率。类型：realtime。主题域：风控决策。定义：实时窗口内风控拒绝事件数占风控决策事件总数的比例。 分子：reject_event_cnt，窗口内 decision_result = reject 的风控决策事件数。 分母：risk_decision_event_cnt，窗口内风控决策事件总数。 窗口：实时 10 分钟滚动窗口，按事件时间聚合，延迟阈值 3 分钟。 粒度：window_start + strategy_id + product 来源：risk_decision_made event / rt_risk_reject_rate_10m 维度：strategy_id, product, channel, risk_grade 使用注意：必须返回窗口和延迟状态。；链路延迟超过阈值时不能给出当前异常结论。",
+    "source": "metric_dictionary.json",
+    "security_level": "internal",
+    "keywords": [
+      "实时风控拒绝率",
+      "rt_risk_reject_rate_10m",
+      "风控决策",
+      "实时拒绝率",
+      "风控拒绝率",
+      "策略拒绝率",
+      "strategy_id",
+      "product",
+      "channel",
+      "risk_grade"
+    ]
+  },
+  {
+    "chunk_id": "metric::rt_repayment_failed_cnt_5m",
+    "metric_id": "rt_repayment_failed_cnt_5m",
+    "title": "实时还款失败数 指标口径",
+    "text": "指标：实时还款失败数。类型：realtime。主题域：还款。定义：实时窗口内还款失败事件数量。 分子：repayment_failed_event_cnt，窗口内还款失败事件数。 分母：无分母，计数型实时指标。 窗口：实时 5 分钟滚动窗口，按事件时间聚合，延迟阈值 2 分钟。 粒度：window_start + repay_channel + failure_code 来源：repayment_failed event / rt_repayment_failed_cnt_5m 维度：repay_channel, failure_code, product 使用注意：适合告警解释和实时状态查询。；不能导出失败客户明细。",
+    "source": "metric_dictionary.json",
+    "security_level": "internal",
+    "keywords": [
+      "实时还款失败数",
+      "rt_repayment_failed_cnt_5m",
+      "还款",
+      "还款失败数",
+      "实时还款失败",
+      "扣款失败数",
+      "repay_channel",
+      "failure_code",
+      "product"
+    ]
+  }
+]

@@ -6,6 +6,7 @@
 """
 
 import sqlite3
+import json
 import pandas as pd
 
 
@@ -50,6 +51,8 @@ class DatabaseManager:
 
         这一步把内存里的分析数据变成可查询资产。
         默认覆盖同名表，是为了学习阶段每次重跑都得到最新结果。
+        SQLite 只能直接保存字符串、数字、日期这类基础类型。
+        清洗后的 `skills_list` 是列表，写库前要转成 JSON 字符串，否则会出现绑定参数失败。
 
         Args:
             df: pandas数据框
@@ -57,7 +60,14 @@ class DatabaseManager:
             if_exists: 如果表存在的处理方式 ('fail', 'replace', 'append')
         """
         try:
-            df.to_sql(table_name, self.conn, if_exists=if_exists, index=False)
+            df_to_save = df.copy()
+            for column in df_to_save.columns:
+                df_to_save[column] = df_to_save[column].apply(
+                    lambda value: json.dumps(value, ensure_ascii=False)
+                    if isinstance(value, (list, dict))
+                    else value
+                )
+            df_to_save.to_sql(table_name, self.conn, if_exists=if_exists, index=False)
             print(f"✅ 数据已保存到表: {table_name} ({len(df)} 行)")
         except Exception as e:
             print(f"❌ 保存数据失败: {e}")

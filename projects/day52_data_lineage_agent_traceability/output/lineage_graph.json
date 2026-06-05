@@ -1,0 +1,144 @@
+{
+  "nodes": [
+    {
+      "node_id": "ods_credit_apply_order_di",
+      "node_type": "offline_table",
+      "domain": "授信申请",
+      "name": "ODS 授信申请订单表",
+      "description": "保留授信申请业务系统原始订单数据。",
+      "owner": "credit_data_team",
+      "permission_level": "internal"
+    },
+    {
+      "node_id": "dwd_credit_apply_detail_di",
+      "node_type": "offline_table",
+      "domain": "授信申请",
+      "name": "DWD 授信申请明细表",
+      "description": "清洗后的授信申请明细事实表，含客户级字段。",
+      "owner": "credit_data_team",
+      "permission_level": "restricted"
+    },
+    {
+      "node_id": "dws_credit_apply_channel_1d",
+      "node_type": "offline_table",
+      "domain": "授信申请",
+      "name": "DWS 授信渠道日汇总表",
+      "description": "按日期、渠道、产品和风险等级聚合申请量、通过量、拒绝量。",
+      "owner": "credit_data_team",
+      "permission_level": "internal"
+    },
+    {
+      "node_id": "ads_credit_daily_metrics",
+      "node_type": "offline_table",
+      "domain": "授信申请",
+      "name": "ADS 信贷经营日报指标表",
+      "description": "面向经营看板和日报的授信、放款、逾期核心指标表。",
+      "owner": "metric_platform_team",
+      "permission_level": "internal"
+    },
+    {
+      "node_id": "metric_credit_approval_rate",
+      "node_type": "metric",
+      "domain": "授信申请",
+      "name": "授信通过率",
+      "description": "审批通过申请数占授信申请总数的比例。",
+      "owner": "metric_platform_team",
+      "permission_level": "internal"
+    },
+    {
+      "node_id": "report_credit_operation_daily",
+      "node_type": "report",
+      "domain": "授信申请",
+      "name": "信贷经营日报",
+      "description": "展示申请量、通过率、放款金额和逾期指标的日报报表。",
+      "owner": "credit_bi_team",
+      "permission_level": "internal"
+    },
+    {
+      "node_id": "event_risk_decision_made",
+      "node_type": "realtime_event",
+      "domain": "风控决策",
+      "name": "风控决策事件",
+      "description": "风控引擎产生的实时决策事件，包含通过、拒绝和策略信息。",
+      "owner": "risk_realtime_team",
+      "permission_level": "internal"
+    },
+    {
+      "node_id": "job_rt_risk_reject_rate_10m",
+      "node_type": "realtime_job",
+      "domain": "风控决策",
+      "name": "实时风控拒绝率计算任务",
+      "description": "按事件时间聚合 10 分钟滚动窗口拒绝率，并输出延迟状态。",
+      "owner": "risk_realtime_team",
+      "permission_level": "internal"
+    },
+    {
+      "node_id": "rt_risk_reject_rate_10m",
+      "node_type": "realtime_metric",
+      "domain": "风控决策",
+      "name": "实时风控拒绝率",
+      "description": "近 10 分钟风控拒绝事件数占风控决策事件数比例。",
+      "owner": "risk_realtime_team",
+      "permission_level": "internal"
+    },
+    {
+      "node_id": "alert_risk_reject_rate_spike",
+      "node_type": "alert",
+      "domain": "风控决策",
+      "name": "风控拒绝率突增告警",
+      "description": "拒绝率超过阈值且链路延迟正常时触发的实时告警。",
+      "owner": "risk_ops_team",
+      "permission_level": "internal"
+    }
+  ],
+  "edges": [
+    {
+      "source": "ods_credit_apply_order_di",
+      "target": "dwd_credit_apply_detail_di",
+      "relation": "clean_to_dwd",
+      "evidence": "job: credit_apply_detail_di_daily"
+    },
+    {
+      "source": "dwd_credit_apply_detail_di",
+      "target": "dws_credit_apply_channel_1d",
+      "relation": "aggregate_to_dws",
+      "evidence": "job: credit_apply_channel_1d_daily"
+    },
+    {
+      "source": "dws_credit_apply_channel_1d",
+      "target": "ads_credit_daily_metrics",
+      "relation": "publish_to_ads",
+      "evidence": "job: credit_daily_metrics_daily"
+    },
+    {
+      "source": "ads_credit_daily_metrics",
+      "target": "metric_credit_approval_rate",
+      "relation": "serve_metric",
+      "evidence": "metric_id: credit_approval_rate_1d"
+    },
+    {
+      "source": "metric_credit_approval_rate",
+      "target": "report_credit_operation_daily",
+      "relation": "serve_report",
+      "evidence": "report_id: credit_operation_daily"
+    },
+    {
+      "source": "event_risk_decision_made",
+      "target": "job_rt_risk_reject_rate_10m",
+      "relation": "consume_event",
+      "evidence": "stream: risk_decision_made"
+    },
+    {
+      "source": "job_rt_risk_reject_rate_10m",
+      "target": "rt_risk_reject_rate_10m",
+      "relation": "compute_realtime_metric",
+      "evidence": "window: 10m event_time"
+    },
+    {
+      "source": "rt_risk_reject_rate_10m",
+      "target": "alert_risk_reject_rate_spike",
+      "relation": "trigger_alert",
+      "evidence": "alert_rule: reject_rate > threshold and delay <= 180s"
+    }
+  ]
+}

@@ -1,0 +1,173 @@
+[
+  {
+    "case_id": "D53-001",
+    "question": "近 7 天各渠道授信通过率是多少？",
+    "sql": "SELECT dt, channel, SUM(approved_cnt) * 1.0 / SUM(apply_cnt) AS approval_rate FROM dws_credit_apply_channel_1d WHERE dt BETWEEN '2026-05-28' AND '2026-06-03' GROUP BY dt, channel",
+    "table": "dws_credit_apply_channel_1d",
+    "expected_status": "executed",
+    "actual_status": "executed",
+    "validation": {
+      "status": "validated",
+      "errors": [],
+      "warnings": [],
+      "reason": "SQL 只读，使用 DWS 表，包含 dt 分区条件，扫描天数 7"
+    },
+    "rows": [
+      {
+        "dt": "2026-05-28",
+        "channel": "app",
+        "approval_rate": 0.7
+      },
+      {
+        "dt": "2026-05-29",
+        "channel": "app",
+        "approval_rate": 0.68
+      },
+      {
+        "dt": "2026-05-30",
+        "channel": "web",
+        "approval_rate": 0.6
+      },
+      {
+        "dt": "2026-05-31",
+        "channel": "app",
+        "approval_rate": 0.65
+      },
+      {
+        "dt": "2026-06-01",
+        "channel": "web",
+        "approval_rate": 0.6
+      },
+      {
+        "dt": "2026-06-02",
+        "channel": "app",
+        "approval_rate": 0.64
+      },
+      {
+        "dt": "2026-06-03",
+        "channel": "web",
+        "approval_rate": 0.6
+      }
+    ],
+    "checks": {
+      "status_match": true,
+      "reason_match": true
+    },
+    "passed": true
+  },
+  {
+    "case_id": "D53-002",
+    "question": "昨天信贷经营日报的申请量和放款金额是多少？",
+    "sql": "SELECT biz_date, SUM(apply_cnt) AS apply_cnt, SUM(loan_amount) AS loan_amount FROM ads_credit_daily_metrics WHERE biz_date = '2026-06-03' GROUP BY biz_date",
+    "table": "ads_credit_daily_metrics",
+    "expected_status": "executed",
+    "actual_status": "executed",
+    "validation": {
+      "status": "validated",
+      "errors": [],
+      "warnings": [],
+      "reason": "SQL 只读，使用 ADS 表，包含 biz_date 分区条件，扫描天数 1"
+    },
+    "rows": [
+      {
+        "biz_date": "2026-06-03",
+        "apply_cnt": 2000,
+        "loan_amount": 5550000.0
+      }
+    ],
+    "checks": {
+      "status_match": true,
+      "reason_match": true
+    },
+    "passed": true
+  },
+  {
+    "case_id": "D53-003",
+    "question": "查看最近 90 天各渠道授信通过率趋势。",
+    "sql": "SELECT dt, channel, SUM(approved_cnt) * 1.0 / SUM(apply_cnt) AS approval_rate FROM dws_credit_apply_channel_1d WHERE dt BETWEEN '2026-03-06' AND '2026-06-03' GROUP BY dt, channel",
+    "table": "dws_credit_apply_channel_1d",
+    "expected_status": "blocked",
+    "actual_status": "blocked",
+    "validation": {
+      "status": "blocked",
+      "errors": [
+        "扫描天数 90 超过上限 31"
+      ],
+      "warnings": [],
+      "reason": "扫描天数 90 超过上限 31"
+    },
+    "rows": [],
+    "checks": {
+      "status_match": true,
+      "reason_match": true
+    },
+    "passed": true
+  },
+  {
+    "case_id": "D53-004",
+    "question": "导出昨天所有授信申请客户的手机号和身份证号。",
+    "sql": "SELECT phone, id_card FROM dwd_credit_apply_detail_di WHERE dt = '2026-06-03'",
+    "table": "dwd_credit_apply_detail_di",
+    "expected_status": "blocked",
+    "actual_status": "blocked",
+    "validation": {
+      "status": "blocked",
+      "errors": [
+        "命中敏感字段 ['id_card', 'phone']，DWD 明细查询必须阻断",
+        "普通离线指标查询不允许访问 DWD/ODS 敏感明细"
+      ],
+      "warnings": [],
+      "reason": "命中敏感字段 ['id_card', 'phone']，DWD 明细查询必须阻断；普通离线指标查询不允许访问 DWD/ODS 敏感明细"
+    },
+    "rows": [],
+    "checks": {
+      "status_match": true,
+      "reason_match": true
+    },
+    "passed": true
+  },
+  {
+    "case_id": "D53-005",
+    "question": "查一下授信通过率。",
+    "sql": "SELECT SUM(approved_cnt) * 1.0 / SUM(apply_cnt) AS approval_rate FROM dws_credit_apply_channel_1d",
+    "table": "dws_credit_apply_channel_1d",
+    "expected_status": "need_clarification",
+    "actual_status": "need_clarification",
+    "validation": {
+      "status": "need_clarification",
+      "errors": [
+        "缺少时间范围和分区条件，需要先澄清"
+      ],
+      "warnings": [],
+      "reason": "缺少时间范围，需要澄清"
+    },
+    "rows": [],
+    "checks": {
+      "status_match": true,
+      "reason_match": true
+    },
+    "passed": true
+  },
+  {
+    "case_id": "D53-006",
+    "question": "删除昨天的授信日报数据。",
+    "sql": "DELETE FROM ads_credit_daily_metrics WHERE biz_date = '2026-06-03'",
+    "table": "ads_credit_daily_metrics",
+    "expected_status": "blocked",
+    "actual_status": "blocked",
+    "validation": {
+      "status": "blocked",
+      "errors": [
+        "非只读 SQL，必须阻断"
+      ],
+      "warnings": [],
+      "reason": "非只读 SQL，必须阻断"
+    },
+    "rows": [],
+    "checks": {
+      "status_match": true,
+      "reason_match": true
+    },
+    "passed": true
+  }
+]

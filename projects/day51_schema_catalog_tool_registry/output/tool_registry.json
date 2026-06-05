@@ -1,0 +1,106 @@
+[
+  {
+    "tool_id": "metric_definition_rag",
+    "tool_name": "指标口径 RAG 工具",
+    "intent": "metric_definition",
+    "description": "回答指标定义、分子分母、时间口径、窗口和使用限制。",
+    "allowed_entity_types": [
+      "metric_definition"
+    ],
+    "required_inputs": [
+      "metric_name"
+    ],
+    "preconditions": [
+      "问题是口径解释，不是查当前数值",
+      "必须返回 citation"
+    ],
+    "risk_level": "medium",
+    "fallback": "无可靠口径资料时返回资料不足",
+    "audit_required": true
+  },
+  {
+    "tool_id": "offline_nl2sql_query",
+    "tool_name": "离线 NL2SQL 查询工具",
+    "intent": "offline_metric_query",
+    "description": "查询离线 ADS/DWS 指标表，回答历史指标、趋势和维度分析。",
+    "allowed_entity_types": [
+      "offline_table"
+    ],
+    "required_inputs": [
+      "metric",
+      "date_range",
+      "dimensions"
+    ],
+    "preconditions": [
+      "优先选择 ADS/DWS",
+      "必须有分区条件",
+      "不得选择 restricted 敏感明细字段"
+    ],
+    "risk_level": "high",
+    "fallback": "缺时间范围时先澄清，命中敏感字段时阻断",
+    "audit_required": true
+  },
+  {
+    "tool_id": "realtime_metric_query",
+    "tool_name": "实时指标查询工具",
+    "intent": "realtime_status_query",
+    "description": "查询实时窗口指标、延迟状态和异常状态。",
+    "allowed_entity_types": [
+      "realtime_metric"
+    ],
+    "required_inputs": [
+      "metric",
+      "window",
+      "dimension_filter"
+    ],
+    "preconditions": [
+      "必须有窗口",
+      "必须检查延迟",
+      "延迟超阈值时返回不可判断或降级"
+    ],
+    "risk_level": "high",
+    "fallback": "缺窗口时澄清，链路延迟时说明不可用原因",
+    "audit_required": true
+  },
+  {
+    "tool_id": "lineage_lookup",
+    "tool_name": "血缘追溯工具",
+    "intent": "lineage_query",
+    "description": "查询指标、表或报表的上游来源、加工任务和下游影响范围。",
+    "allowed_entity_types": [
+      "lineage_entry"
+    ],
+    "required_inputs": [
+      "metric_or_table_name"
+    ],
+    "preconditions": [
+      "问题关注来源、影响范围或加工链路",
+      "不返回敏感明细"
+    ],
+    "risk_level": "medium",
+    "fallback": "无血缘资料时返回资料不足",
+    "audit_required": true
+  },
+  {
+    "tool_id": "safe_block",
+    "tool_name": "安全阻断工具",
+    "intent": "sensitive_export",
+    "description": "阻断手机号、身份证号、银行卡号、客户名单等敏感明细导出请求。",
+    "allowed_entity_types": [
+      "offline_table",
+      "realtime_metric",
+      "lineage_entry"
+    ],
+    "required_inputs": [
+      "question",
+      "matched_sensitive_terms"
+    ],
+    "preconditions": [
+      "命中敏感导出或越权访问",
+      "必须写审计"
+    ],
+    "risk_level": "critical",
+    "fallback": "提示需要授权流程，不执行查询",
+    "audit_required": true
+  }
+]

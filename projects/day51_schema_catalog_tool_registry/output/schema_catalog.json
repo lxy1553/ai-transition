@@ -1,0 +1,264 @@
+[
+  {
+    "entity_id": "ads_credit_daily_metrics",
+    "entity_type": "offline_table",
+    "layer": "ADS",
+    "domain": "授信申请",
+    "name": "ads_credit_daily_metrics",
+    "description": "信贷经营日报指标表，服务经营看板和总览查询。",
+    "grain": "biz_date + channel + product_code",
+    "time_field": "biz_date",
+    "partition_field": "biz_date",
+    "fields": [
+      {
+        "name": "biz_date",
+        "type": "date",
+        "desc": "业务日期"
+      },
+      {
+        "name": "channel",
+        "type": "string",
+        "desc": "渠道"
+      },
+      {
+        "name": "product_code",
+        "type": "string",
+        "desc": "产品编码"
+      },
+      {
+        "name": "apply_cnt",
+        "type": "int",
+        "desc": "授信申请量"
+      },
+      {
+        "name": "approved_cnt",
+        "type": "int",
+        "desc": "授信通过量"
+      },
+      {
+        "name": "approval_rate",
+        "type": "decimal",
+        "desc": "授信通过率"
+      },
+      {
+        "name": "loan_amount",
+        "type": "decimal",
+        "desc": "放款金额"
+      }
+    ],
+    "sensitive_fields": [],
+    "permission_level": "internal",
+    "query_constraints": [
+      "必须带 biz_date 条件",
+      "优先用于日报总览",
+      "不包含客户明细"
+    ],
+    "owner": "credit_data_team"
+  },
+  {
+    "entity_id": "dws_credit_apply_channel_1d",
+    "entity_type": "offline_table",
+    "layer": "DWS",
+    "domain": "授信申请",
+    "name": "dws_credit_apply_channel_1d",
+    "description": "按渠道和产品汇总的授信申请主题宽表，适合趋势和维度分析。",
+    "grain": "dt + channel + product_code + risk_grade",
+    "time_field": "dt",
+    "partition_field": "dt",
+    "fields": [
+      {
+        "name": "dt",
+        "type": "date",
+        "desc": "分区日期"
+      },
+      {
+        "name": "channel",
+        "type": "string",
+        "desc": "渠道"
+      },
+      {
+        "name": "product_code",
+        "type": "string",
+        "desc": "产品编码"
+      },
+      {
+        "name": "risk_grade",
+        "type": "string",
+        "desc": "风险等级"
+      },
+      {
+        "name": "apply_cnt",
+        "type": "int",
+        "desc": "申请量"
+      },
+      {
+        "name": "approved_cnt",
+        "type": "int",
+        "desc": "审批通过量"
+      },
+      {
+        "name": "rejected_cnt",
+        "type": "int",
+        "desc": "审批拒绝量"
+      }
+    ],
+    "sensitive_fields": [],
+    "permission_level": "internal",
+    "query_constraints": [
+      "必须带 dt 条件",
+      "适合渠道、产品、风险等级维度分析"
+    ],
+    "owner": "credit_data_team"
+  },
+  {
+    "entity_id": "dwd_credit_apply_detail_di",
+    "entity_type": "offline_table",
+    "layer": "DWD",
+    "domain": "授信申请",
+    "name": "dwd_credit_apply_detail_di",
+    "description": "授信申请明细事实表，只用于授权排查和明细核对。",
+    "grain": "apply_id",
+    "time_field": "apply_time",
+    "partition_field": "dt",
+    "fields": [
+      {
+        "name": "apply_id",
+        "type": "string",
+        "desc": "申请单 ID"
+      },
+      {
+        "name": "customer_id",
+        "type": "string",
+        "desc": "客户 ID"
+      },
+      {
+        "name": "phone",
+        "type": "string",
+        "desc": "手机号"
+      },
+      {
+        "name": "id_card",
+        "type": "string",
+        "desc": "身份证号"
+      },
+      {
+        "name": "apply_time",
+        "type": "timestamp",
+        "desc": "申请时间"
+      },
+      {
+        "name": "approve_status",
+        "type": "string",
+        "desc": "审批状态"
+      }
+    ],
+    "sensitive_fields": [
+      "phone",
+      "id_card",
+      "customer_id"
+    ],
+    "permission_level": "restricted",
+    "query_constraints": [
+      "普通 Agent 不可直接查询",
+      "必须有明细授权和审计原因",
+      "禁止批量导出敏感字段"
+    ],
+    "owner": "credit_data_team"
+  },
+  {
+    "entity_id": "rt_risk_reject_rate_10m",
+    "entity_type": "realtime_metric",
+    "layer": "REALTIME",
+    "domain": "风控决策",
+    "name": "rt_risk_reject_rate_10m",
+    "description": "实时 10 分钟滚动窗口风控拒绝率。",
+    "grain": "window_start + strategy_id + product_code",
+    "time_field": "event_time",
+    "partition_field": "window_start",
+    "fields": [
+      {
+        "name": "window_start",
+        "type": "timestamp",
+        "desc": "窗口开始时间"
+      },
+      {
+        "name": "strategy_id",
+        "type": "string",
+        "desc": "策略 ID"
+      },
+      {
+        "name": "product_code",
+        "type": "string",
+        "desc": "产品编码"
+      },
+      {
+        "name": "reject_event_cnt",
+        "type": "int",
+        "desc": "拒绝事件数"
+      },
+      {
+        "name": "risk_decision_event_cnt",
+        "type": "int",
+        "desc": "风控决策事件数"
+      },
+      {
+        "name": "reject_rate",
+        "type": "decimal",
+        "desc": "拒绝率"
+      },
+      {
+        "name": "delay_seconds",
+        "type": "int",
+        "desc": "链路延迟秒数"
+      }
+    ],
+    "sensitive_fields": [],
+    "permission_level": "internal",
+    "query_constraints": [
+      "必须带窗口",
+      "必须检查 delay_seconds",
+      "延迟超过阈值时不能给确定结论"
+    ],
+    "owner": "risk_realtime_team"
+  },
+  {
+    "entity_id": "lineage_credit_approval_rate",
+    "entity_type": "lineage_entry",
+    "layer": "METADATA",
+    "domain": "授信申请",
+    "name": "lineage_credit_approval_rate",
+    "description": "授信通过率从 ODS 到 ADS 的血缘入口。",
+    "grain": "metric_id",
+    "time_field": "version_time",
+    "partition_field": "none",
+    "fields": [
+      {
+        "name": "metric_id",
+        "type": "string",
+        "desc": "指标 ID"
+      },
+      {
+        "name": "upstream_tables",
+        "type": "array",
+        "desc": "上游表"
+      },
+      {
+        "name": "jobs",
+        "type": "array",
+        "desc": "加工任务"
+      },
+      {
+        "name": "downstream_reports",
+        "type": "array",
+        "desc": "下游报表"
+      }
+    ],
+    "sensitive_fields": [],
+    "permission_level": "internal",
+    "query_constraints": [
+      "用于回答来源和影响范围",
+      "不返回客户明细"
+    ],
+    "owner": "metadata_team"
+  }
+]

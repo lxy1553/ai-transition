@@ -1,88 +1,88 @@
 {
-  "run_id": "run_0b3996f7359a",
-  "created_at": "2026-05-25T10:15:19.997318+00:00",
+  "run_id": "run_aca4e1334e38",
+  "created_at": "2026-06-03T10:29:47.505533+00:00",
   "database_path": "projects/day17_rag_ingestion/output/rag_index.sqlite",
   "document_count": 21,
-  "chunk_count": 480,
+  "chunk_count": 569,
   "embedding_model": "local_keyword_embedding_v1",
   "documents": [
     {
-      "doc_id": "doc_d0d799389bf6",
+      "doc_id": "doc_00f3f0a6c26b",
       "source_path": "notes/day12_sql_explainer_cli.md",
       "title": "Day 12 - 项目 1 雏形：SQL 解释助手 CLI",
-      "content_hash": "d0d799389bf682860fd80aad6d6dad1631c4e93966f0b1781b1264a91a1c4eff"
+      "content_hash": "00f3f0a6c26ba30fefc5db16146328fe25447019995eabb86122b2a987d929da"
     },
     {
-      "doc_id": "doc_aacbce95f3b2",
+      "doc_id": "doc_fc3ecedef731",
       "source_path": "notes/day13_sql_explainer_enhancement.md",
       "title": "Day 13 - 项目 1 强化：风险规则与输出优化",
-      "content_hash": "aacbce95f3b26ecde999810472da8d9fda6aebb6c71709f31dbfeb08bdbffdb2"
+      "content_hash": "fc3ecedef731875e69da0fb880e22e275e519d9f3c8b5c47329db5b7e7be7887"
     },
     {
-      "doc_id": "doc_5127c421ae68",
+      "doc_id": "doc_8aa34bfd28e9",
       "source_path": "notes/day15_rag_preparation.md",
       "title": "Day 15 - RAG 准备：文档资料整理",
-      "content_hash": "5127c421ae68b0c7d544a6dd2bf4ae0d06750b63d0e4fde701caf3e14150351f"
+      "content_hash": "8aa34bfd28e92ecddf7902f5175a1af7b9018d9c395e58cc48b45c45fddf5a43"
     },
     {
-      "doc_id": "doc_b18ac00fbfbd",
+      "doc_id": "doc_fa9c1e22d352",
       "source_path": "notes/day16_rag_basics.md",
       "title": "Day 16 - RAG 基础：切分、Embedding、召回",
-      "content_hash": "b18ac00fbfbd0f0183182ee60491101ecad278cf1e41ba87682a4c0b5ebd6363"
+      "content_hash": "fa9c1e22d352739477637a066875dd925200bead4cfe50a9d1b6f85ae7414366"
     },
     {
-      "doc_id": "doc_cb88881cc5cb",
+      "doc_id": "doc_0e08aeb41152",
       "source_path": "notes/day17_rag_ingestion.md",
       "title": "Day 17 - RAG 知识入库：索引构建",
-      "content_hash": "cb88881cc5cb58845c8b07b852e4a94c39e740987eeb7f39c89366d8c1efbf30"
+      "content_hash": "0e08aeb411528101eaed17fbe9f651d32d62852d9b379dbf2aa3637681201b59"
     },
     {
-      "doc_id": "doc_0afeaedfa677",
+      "doc_id": "doc_ef5ad48d3ee1",
       "source_path": "notes/day18_rag_retrieval_citations.md",
       "title": "Day 18 - RAG 检索与引用：基础问答脚本",
-      "content_hash": "0afeaedfa677b745286bdd96108e6cdd96a6ba6b68d5240ff91265ca5d09bbed"
+      "content_hash": "ef5ad48d3ee1d58b0ca58b1c8c53ba474b43b65ac3ca2e806bb2262002e762a6"
     },
     {
-      "doc_id": "doc_0886e9a9e9e0",
+      "doc_id": "doc_a492de6fb219",
       "source_path": "notes/day19_rag_retrieval_optimization.md",
       "title": "Day 19 - RAG 优化：召回质量",
-      "content_hash": "0886e9a9e9e005b140c43f9624a5e4b444ea9dcd4fe5d2a375889f826f565db7"
+      "content_hash": "a492de6fb219837b155961e9dc6795738024d111f11e3b2697f536dae3e0cd2f"
     },
     {
-      "doc_id": "doc_3a3029c254f0",
+      "doc_id": "doc_017190f5a363",
       "source_path": "notes/day20_rag_api.md",
       "title": "Day 20 - 项目 2 接口化：RAG 问答 API",
-      "content_hash": "3a3029c254f036f1a382ca5bdf3ccf77a29eca7b9c0621c86e4d63399ea4efab"
+      "content_hash": "017190f5a363b9745d0fe4ff5a24afe18a0727a825c6620b1f7caaaaadcb4f4f"
     },
     {
-      "doc_id": "doc_ae6215c5a99f",
+      "doc_id": "doc_9747c7efa81b",
       "source_path": "notes/day21_rag_project_review.md",
       "title": "Day 21 - 周复盘与展示：RAG 项目收口",
-      "content_hash": "ae6215c5a99f415b3d4a70c3d0056efdbfd601211a8f6d256957149e6a7d41dc"
+      "content_hash": "9747c7efa81bf40a717f9d35553cc35a6563f21284577d423a1de66889a35eba"
     },
     {
-      "doc_id": "doc_d1d7a3b430cd",
+      "doc_id": "doc_e2aaf6395aa4",
       "source_path": "notes/day22_query_rewrite.md",
       "title": "Day 22 - RAG 进阶：Query Rewrite",
-      "content_hash": "d1d7a3b430cd369b60aa6cd71de5a15c1a269138449771ec9bd0d528d16f9706"
+      "content_hash": "e2aaf6395aa4cc18b8ba53fac8259fa6d4bf4be461964cb61cc56c3ae7162d12"
     },
     {
-      "doc_id": "doc_0156f8a166fd",
+      "doc_id": "doc_1fac993bd200",
       "source_path": "notes/day23_rag_eval_testset.md",
       "title": "Day 23 - 评测意识：构建 RAG 测试集",
-      "content_hash": "0156f8a166fd497deb77244ab7203ba4873559cad124e4818de00bb1e60f5717"
+      "content_hash": "1fac993bd200d25ed1be645d89b56ba4983feab2420c44a5dac199323d91b199"
     },
     {
-      "doc_id": "doc_15259ddcf8c8",
+      "doc_id": "doc_6d8bd61388a3",
       "source_path": "notes/day24_hallucination_guardrails.md",
       "title": "Day 24 - 幻觉控制：拒答与边界",
-      "content_hash": "15259ddcf8c88367dd3bd93d708e49e30cc80ffc79a3ae5077f930bfd807c47c"
+      "content_hash": "6d8bd61388a3030900e72491cdc3a767b5d5775258d3f8d7dc122b0100d0a296"
     },
     {
-      "doc_id": "doc_96cce06e50fe",
+      "doc_id": "doc_a66856af7892",
       "source_path": "notes/day25_security_controls.md",
       "title": "Day 25 - 权限与安全：敏感信息控制",
-      "content_hash": "96cce06e50fe9f58b95f7c0501ce33655b693c6d9ebae843a544be02d62b9177"
+      "content_hash": "a66856af7892fa6a84169ba2a5292b2aa5d715bb69bcb5621c9279e9bb39f22f"
     },
     {
       "doc_id": "doc_c463cfe1b7aa",
@@ -91,22 +91,22 @@
       "content_hash": "c463cfe1b7aa03b1bf49c925dd1eac58c5542d05744d755779267b1668e35f9b"
     },
     {
-      "doc_id": "doc_15ec7f7a67f0",
+      "doc_id": "doc_76c3a71bcd7a",
       "source_path": "notes/day26_rag_performance_cost.md",
       "title": "Day 26 - 性能与成本：缓存与上下文控制",
-      "content_hash": "15ec7f7a67f06867adc877f23a154b081487f2378e6614bfcf8eac62fa52a1de"
+      "content_hash": "76c3a71bcd7a6c44f3526d0ec52b1e42e7ebdb3772d044472f20d5874f5c7b36"
     },
     {
-      "doc_id": "doc_cad76464b7d9",
+      "doc_id": "doc_0b5a4a941d79",
       "source_path": "notes/day27_rag_demo_stability.md",
       "title": "Day 27 - 项目 2 打磨：演示与稳定性",
-      "content_hash": "cad76464b7d95d89fbc64721c1c37f45e394ab47737578dc27e0fa3ef0266bb2"
+      "content_hash": "0b5a4a941d797366de45e56434eb3d6c9a30553d1e581a3c335666cd22427c1a"
     },
     {
-      "doc_id": "doc_a4818995c339",
+      "doc_id": "doc_131c1620cf64",
       "source_path": "notes/day28_week4_review_application.md",
       "title": "Day 28 - 第 4 周复盘与试投启动",
-      "content_hash": "a4818995c3392a85e1c6002692560a74ceeb31e5668bb6c47943820d40e2062e"
+      "content_hash": "131c1620cf640202c67aa10f9a560bcd2c42f5d1fe3e7fee436b4abd63c9a22d"
     },
     {
       "doc_id": "doc_5f36a277c478",
@@ -115,10 +115,10 @@
       "content_hash": "5f36a277c47814bd6d681a20c22949ce4b5dd07c0e850b468aa7670f189a158e"
     },
     {
-      "doc_id": "doc_5f449949ba2b",
+      "doc_id": "doc_4a5b421f595a",
       "source_path": "notes/day29_nl2sql_schema_preparation.md",
       "title": "Day 29 - NL2SQL 准备：Schema 与问题类型",
-      "content_hash": "5f449949ba2bb5c837d46400cfe3ef36bd77dac6beedc0d08a5638eced12a62a"
+      "content_hash": "4a5b421f595a8a06fd17278e73ee24735b1201de67be772251608170efeec31c"
     },
     {
       "doc_id": "doc_e82e723e96cc",
@@ -127,10 +127,10 @@
       "content_hash": "e82e723e96cc9d6a1e44d8d7b8506ce3c26cd691c24a0fc4309d55f0fcb6e499"
     },
     {
-      "doc_id": "doc_76224e3cbb74",
+      "doc_id": "doc_67108a675f3e",
       "source_path": "notes/terminology_glossary.md",
       "title": "AI 转型学习术语表",
-      "content_hash": "76224e3cbb74b8c2f3f66ba6b3fc81b42e022b97313ee3359eeec97d67464c81"
+      "content_hash": "67108a675f3e552382f9ebfc04ec26c56cfe2a2a0ac279e52295fdf6071e6523"
     }
   ]
 }

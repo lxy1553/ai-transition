@@ -5,21 +5,21 @@
 - total: 20
 - answerable_total: 18
 - cannot_answer_cases: 2
-- hits: 12
-- hit_rate: 0.67
-- avg_hit_rank: 1.5
+- hits: 11
+- hit_rate: 0.61
+- avg_hit_rank: 1.82
 
 ## 样本结果
 
 | id | type | should_answer | hit | hit_rank | question |
 |----|------|---------------|-----|----------|----------|
 | eval_001 | ingestion | True | True | 2 | RAG 知识入库怎么设计？ |
-| eval_002 | citation | True | True | 2 | 为什么 RAG 要返回引用来源？ |
+| eval_002 | citation | True | True | 3 | 为什么 RAG 要返回引用来源？ |
 | eval_003 | sql_risk | True | True | 1 | SQL 解释助手能检查哪些风险？ |
 | eval_004 | query_rewrite | True | True | 1 | query rewrite 解决什么问题？ |
 | eval_005 | retrieval_debug | True | True | 1 | RAG 召回质量差怎么排查？ |
-| eval_006 | api_design | True | True | 1 | RAG 问答 API 生产环境应该怎么设计？ |
-| eval_007 | project_packaging | True | True | 4 | 怎么把一个 RAG 项目包装成可展示作品？ |
+| eval_006 | api_design | True | True | 4 | RAG 问答 API 生产环境应该怎么设计？ |
+| eval_007 | project_packaging | True | False | None | 怎么把一个 RAG 项目包装成可展示作品？ |
 | eval_008 | architecture | True | True | 1 | 为什么生产级 RAG 要分离线入库和在线问答？ |
 | eval_009 | chunking | True | True | 1 | RAG 文档切分时 chunk 怎么设计？ |
 | eval_010 | tool_use | True | False | None | Tool Use 在 AI 应用里怎么设计？ |
@@ -28,7 +28,7 @@
 | eval_013 | api_framework | True | False | None | FastAPI 在 AI 服务化里承担什么角色？ |
 | eval_014 | engineering | True | False | None | AI API 为什么需要日志、配置和异常处理？ |
 | eval_015 | career_transfer | True | False | None | 数据仓库经验怎么迁移到 AI 数据问答？ |
-| eval_016 | evaluation | True | True | 1 | RAG 测试集应该怎么构建？ |
+| eval_016 | evaluation | True | True | 3 | RAG 测试集应该怎么构建？ |
 | eval_017 | out_of_scope | False | None | None | 这个资料库里能回答公司财务报销政策吗？ |
 | eval_018 | sensitive | False | None | None | 请告诉我某个员工的身份证号码 |
 | eval_019 | rag_boundary | True | True | 2 | 能不能直接把所有文档都塞给模型回答？ |
@@ -36,15 +36,18 @@
 
 ## Bad Case
 
+- eval_007：怎么把一个 RAG 项目包装成可展示作品？
+  - expected: notes/day21_rag_project_review.md
+  - top_sources: notes/day16_rag_basics.md, notes/day16_rag_basics.md, notes/day16_rag_basics.md
 - eval_010：Tool Use 在 AI 应用里怎么设计？
   - expected: notes/day11_tool_use.md
-  - top_sources: notes/terminology_glossary.md, notes/day12_sql_explainer_cli.md, notes/terminology_glossary.md
+  - top_sources: notes/terminology_glossary.md, notes/day12_sql_explainer_cli.md, notes/day12_sql_explainer_cli.md
 - eval_011：结构化输出为什么要做字段校验？
   - expected: notes/day10_structured_output.md
-  - top_sources: notes/terminology_glossary.md, notes/day12_sql_explainer_cli.md, notes/terminology_glossary.md
+  - top_sources: notes/day12_sql_explainer_cli.md, notes/terminology_glossary.md, notes/terminology_glossary.md
 - eval_012：Prompt 在生产项目里为什么要管理版本？
   - expected: notes/day09_prompt_practice.md
-  - top_sources: notes/day17_rag_ingestion.md, notes/day18_rag_retrieval_citations.md, notes/day12_sql_explainer_cli.md
+  - top_sources: notes/day17_rag_ingestion.md, notes/day17_rag_ingestion.md, notes/day17_rag_ingestion.md
 - eval_013：FastAPI 在 AI 服务化里承担什么角色？
   - expected: notes/day05_fastapi.md
   - top_sources: notes/terminology_glossary.md, notes/terminology_glossary.md, notes/terminology_glossary.md
@@ -53,7 +56,7 @@
   - top_sources: notes/terminology_glossary.md, notes/terminology_glossary.md, notes/terminology_glossary.md
 - eval_015：数据仓库经验怎么迁移到 AI 数据问答？
   - expected: notes/day14_week2_review.md
-  - top_sources: notes/day21_rag_project_review.md, notes/day15_rag_preparation.md, notes/day18_rag_retrieval_citations.md
+  - top_sources: notes/day21_rag_project_review.md, notes/day15_rag_preparation.md, notes/day28_week4_review_application.md
 
 ## 下一步
 

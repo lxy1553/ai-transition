@@ -25,7 +25,7 @@
         "question": "RAG 知识入库怎么设计？",
         "citations": 3,
         "confidence": 0.816496,
-        "latency_ms": 4
+        "latency_ms": 6
       }
     },
     {
@@ -36,7 +36,7 @@
         "question": "RAG 为什么要返回引用来源？",
         "citations": 3,
         "confidence": 0.999999,
-        "latency_ms": 2
+        "latency_ms": 5
       }
     },
     {
@@ -47,7 +47,7 @@
         "question": "SQL 解释助手能检查哪些风险？",
         "citations": 3,
         "confidence": 1.0,
-        "latency_ms": 2
+        "latency_ms": 4
       }
     },
     {
@@ -62,7 +62,7 @@
         "retrieved_chunks": [],
         "confidence": 0.0,
         "cannot_answer_reason": "no_relevant_chunks",
-        "latency_ms": 1
+        "latency_ms": 4
       }
     },
     {

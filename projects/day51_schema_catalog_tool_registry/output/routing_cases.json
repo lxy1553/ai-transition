@@ -1,0 +1,62 @@
+[
+  {
+    "case_id": "D51-001",
+    "question": "近 7 天各渠道授信通过率是多少？",
+    "expected_tool_id": "offline_nl2sql_query",
+    "expected_entity_id": "dws_credit_apply_channel_1d",
+    "expected_status": "routed",
+    "expected_reason_contains": [
+      "离线指标",
+      "DWS",
+      "dt"
+    ]
+  },
+  {
+    "case_id": "D51-002",
+    "question": "看一下当前实时风控拒绝率是不是异常，按近 10 分钟。",
+    "expected_tool_id": "realtime_metric_query",
+    "expected_entity_id": "rt_risk_reject_rate_10m",
+    "expected_status": "routed",
+    "expected_reason_contains": [
+      "实时指标",
+      "窗口",
+      "延迟"
+    ]
+  },
+  {
+    "case_id": "D51-003",
+    "question": "授信通过率这个指标来自哪些上游表，会影响哪些报表？",
+    "expected_tool_id": "lineage_lookup",
+    "expected_entity_id": "lineage_credit_approval_rate",
+    "expected_status": "routed",
+    "expected_reason_contains": [
+      "血缘",
+      "上游",
+      "下游"
+    ]
+  },
+  {
+    "case_id": "D51-004",
+    "question": "导出昨天所有授信申请客户的手机号和身份证号。",
+    "expected_tool_id": "safe_block",
+    "expected_entity_id": "dwd_credit_apply_detail_di",
+    "expected_status": "blocked",
+    "expected_reason_contains": [
+      "敏感字段",
+      "阻断",
+      "restricted"
+    ]
+  },
+  {
+    "case_id": "D51-005",
+    "question": "查一下授信申请明细表里最近一个月所有客户记录。",
+    "expected_tool_id": "safe_block",
+    "expected_entity_id": "dwd_credit_apply_detail_di",
+    "expected_status": "blocked",
+    "expected_reason_contains": [
+      "明细",
+      "授权",
+      "审计"
+    ]
+  }
+]

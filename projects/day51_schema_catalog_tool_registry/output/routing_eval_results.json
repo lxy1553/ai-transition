@@ -1,0 +1,164 @@
+[
+  {
+    "case_id": "D51-001",
+    "question": "近 7 天各渠道授信通过率是多少？",
+    "expected_tool_id": "offline_nl2sql_query",
+    "actual_tool_id": "offline_nl2sql_query",
+    "expected_entity_id": "dws_credit_apply_channel_1d",
+    "actual_entity_id": "dws_credit_apply_channel_1d",
+    "expected_status": "routed",
+    "actual_status": "routed",
+    "checks": {
+      "tool_match": true,
+      "entity_match": true,
+      "status_match": true,
+      "reason_match": true
+    },
+    "passed": true,
+    "route_result": {
+      "status": "routed",
+      "tool_id": "offline_nl2sql_query",
+      "tool_name": "离线 NL2SQL 查询工具",
+      "entity_id": "dws_credit_apply_channel_1d",
+      "entity_type": "offline_table",
+      "permission_level": "internal",
+      "risk_level": "high",
+      "audit_required": true,
+      "preconditions": [
+        "优先选择 ADS/DWS",
+        "必须有分区条件",
+        "不得选择 restricted 敏感明细字段"
+      ],
+      "reason": "离线指标维度分析，优先选择 DWS，并要求 dt 分区条件。"
+    }
+  },
+  {
+    "case_id": "D51-002",
+    "question": "看一下当前实时风控拒绝率是不是异常，按近 10 分钟。",
+    "expected_tool_id": "realtime_metric_query",
+    "actual_tool_id": "realtime_metric_query",
+    "expected_entity_id": "rt_risk_reject_rate_10m",
+    "actual_entity_id": "rt_risk_reject_rate_10m",
+    "expected_status": "routed",
+    "actual_status": "routed",
+    "checks": {
+      "tool_match": true,
+      "entity_match": true,
+      "status_match": true,
+      "reason_match": true
+    },
+    "passed": true,
+    "route_result": {
+      "status": "routed",
+      "tool_id": "realtime_metric_query",
+      "tool_name": "实时指标查询工具",
+      "entity_id": "rt_risk_reject_rate_10m",
+      "entity_type": "realtime_metric",
+      "permission_level": "internal",
+      "risk_level": "high",
+      "audit_required": true,
+      "preconditions": [
+        "必须有窗口",
+        "必须检查延迟",
+        "延迟超阈值时返回不可判断或降级"
+      ],
+      "reason": "实时指标问题，必须带窗口并检查延迟状态。"
+    }
+  },
+  {
+    "case_id": "D51-003",
+    "question": "授信通过率这个指标来自哪些上游表，会影响哪些报表？",
+    "expected_tool_id": "lineage_lookup",
+    "actual_tool_id": "lineage_lookup",
+    "expected_entity_id": "lineage_credit_approval_rate",
+    "actual_entity_id": "lineage_credit_approval_rate",
+    "expected_status": "routed",
+    "actual_status": "routed",
+    "checks": {
+      "tool_match": true,
+      "entity_match": true,
+      "status_match": true,
+      "reason_match": true
+    },
+    "passed": true,
+    "route_result": {
+      "status": "routed",
+      "tool_id": "lineage_lookup",
+      "tool_name": "血缘追溯工具",
+      "entity_id": "lineage_credit_approval_rate",
+      "entity_type": "lineage_entry",
+      "permission_level": "internal",
+      "risk_level": "medium",
+      "audit_required": true,
+      "preconditions": [
+        "问题关注来源、影响范围或加工链路",
+        "不返回敏感明细"
+      ],
+      "reason": "血缘追溯问题，需要返回上游、加工任务和下游影响范围。"
+    }
+  },
+  {
+    "case_id": "D51-004",
+    "question": "导出昨天所有授信申请客户的手机号和身份证号。",
+    "expected_tool_id": "safe_block",
+    "actual_tool_id": "safe_block",
+    "expected_entity_id": "dwd_credit_apply_detail_di",
+    "actual_entity_id": "dwd_credit_apply_detail_di",
+    "expected_status": "blocked",
+    "actual_status": "blocked",
+    "checks": {
+      "tool_match": true,
+      "entity_match": true,
+      "status_match": true,
+      "reason_match": true
+    },
+    "passed": true,
+    "route_result": {
+      "status": "blocked",
+      "tool_id": "safe_block",
+      "tool_name": "安全阻断工具",
+      "entity_id": "dwd_credit_apply_detail_di",
+      "entity_type": "offline_table",
+      "permission_level": "restricted",
+      "risk_level": "critical",
+      "audit_required": true,
+      "preconditions": [
+        "命中敏感导出或越权访问",
+        "必须写审计"
+      ],
+      "reason": "命中敏感字段或明细导出，DWD 明细表为 restricted，缺少明细授权时必须阻断并写审计。"
+    }
+  },
+  {
+    "case_id": "D51-005",
+    "question": "查一下授信申请明细表里最近一个月所有客户记录。",
+    "expected_tool_id": "safe_block",
+    "actual_tool_id": "safe_block",
+    "expected_entity_id": "dwd_credit_apply_detail_di",
+    "actual_entity_id": "dwd_credit_apply_detail_di",
+    "expected_status": "blocked",
+    "actual_status": "blocked",
+    "checks": {
+      "tool_match": true,
+      "entity_match": true,
+      "status_match": true,
+      "reason_match": true
+    },
+    "passed": true,
+    "route_result": {
+      "status": "blocked",
+      "tool_id": "safe_block",
+      "tool_name": "安全阻断工具",
+      "entity_id": "dwd_credit_apply_detail_di",
+      "entity_type": "offline_table",
+      "permission_level": "restricted",
+      "risk_level": "critical",
+      "audit_required": true,
+      "preconditions": [
+        "命中敏感导出或越权访问",
+        "必须写审计"
+      ],
+      "reason": "命中敏感字段或明细导出，DWD 明细表为 restricted，缺少明细授权时必须阻断并写审计。"
+    }
+  }
+]

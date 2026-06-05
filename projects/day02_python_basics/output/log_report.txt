@@ -2,8 +2,8 @@
 日志分析报告
 ======================================================================
 
-📁 日志文件: examples/app.log
-📅 分析时间: 2026-05-21 18:59:03
+📁 日志文件: /Users/lxy/Documents/ai_transition/projects/day02_python_basics/examples/app.log
+📅 分析时间: 2026-06-03 18:29:36
 
 📊 总体统计:
   总日志数: 22

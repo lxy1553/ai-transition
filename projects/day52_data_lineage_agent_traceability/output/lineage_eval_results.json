@@ -1,0 +1,148 @@
+[
+  {
+    "case_id": "D52-001",
+    "question": "授信通过率来自哪些上游表？",
+    "expected_status": "answered",
+    "actual_status": "answered",
+    "expected_answer_type": "upstream_trace",
+    "actual_answer_type": "upstream_trace",
+    "checks": {
+      "status_match": true,
+      "answer_type_match": true,
+      "contains_expected": true
+    },
+    "passed": true,
+    "answer": {
+      "status": "answered",
+      "answer_type": "upstream_trace",
+      "answer": "授信通过率来自 ADS 信贷经营日报指标表，上游依次包含 DWS 授信渠道日汇总表、DWD 授信申请明细表和 ODS 授信申请订单表。",
+      "nodes": [
+        "ads_credit_daily_metrics",
+        "dws_credit_apply_channel_1d",
+        "dwd_credit_apply_detail_di",
+        "ods_credit_apply_order_di"
+      ],
+      "evidence": [
+        "job: credit_apply_detail_di_daily",
+        "job: credit_apply_channel_1d_daily",
+        "job: credit_daily_metrics_daily",
+        "metric_id: credit_approval_rate_1d"
+      ]
+    }
+  },
+  {
+    "case_id": "D52-002",
+    "question": "如果 dws_credit_apply_channel_1d 异常，会影响哪些下游？",
+    "expected_status": "answered",
+    "actual_status": "answered",
+    "expected_answer_type": "downstream_impact",
+    "actual_answer_type": "downstream_impact",
+    "checks": {
+      "status_match": true,
+      "answer_type_match": true,
+      "contains_expected": true
+    },
+    "passed": true,
+    "answer": {
+      "status": "answered",
+      "answer_type": "downstream_impact",
+      "answer": "DWS 授信渠道日汇总表异常会影响 ADS 日报指标表、授信通过率指标和信贷经营日报。",
+      "nodes": [
+        "ads_credit_daily_metrics",
+        "metric_credit_approval_rate",
+        "report_credit_operation_daily"
+      ],
+      "evidence": [
+        "job: credit_daily_metrics_daily",
+        "metric_id: credit_approval_rate_1d",
+        "report_id: credit_operation_daily"
+      ]
+    }
+  },
+  {
+    "case_id": "D52-003",
+    "question": "实时风控拒绝率告警来自哪些事件和任务？",
+    "expected_status": "answered",
+    "actual_status": "answered",
+    "expected_answer_type": "realtime_alert_trace",
+    "actual_answer_type": "realtime_alert_trace",
+    "checks": {
+      "status_match": true,
+      "answer_type_match": true,
+      "contains_expected": true
+    },
+    "passed": true,
+    "answer": {
+      "status": "answered",
+      "answer_type": "realtime_alert_trace",
+      "answer": "实时风控拒绝率告警来自风控决策事件，经实时 10 分钟窗口任务计算指标，再触发拒绝率突增告警。",
+      "nodes": [
+        "event_risk_decision_made",
+        "job_rt_risk_reject_rate_10m",
+        "rt_risk_reject_rate_10m",
+        "alert_risk_reject_rate_spike"
+      ],
+      "evidence": [
+        "stream: risk_decision_made",
+        "window: 10m event_time",
+        "alert_rule: reject_rate > threshold and delay <= 180s"
+      ]
+    }
+  },
+  {
+    "case_id": "D52-004",
+    "question": "昨天信贷经营日报通过率异常，应该先看哪些血缘节点？",
+    "expected_status": "answered",
+    "actual_status": "answered",
+    "expected_answer_type": "debug_trace",
+    "actual_answer_type": "debug_trace",
+    "checks": {
+      "status_match": true,
+      "answer_type_match": true,
+      "contains_expected": true
+    },
+    "passed": true,
+    "answer": {
+      "status": "answered",
+      "answer_type": "debug_trace",
+      "answer": "日报通过率异常应先看 ADS 产出任务，再回查 DWS 汇总、DWD 明细和 ODS 原始申请数据。",
+      "nodes": [
+        "ads_credit_daily_metrics",
+        "dws_credit_apply_channel_1d",
+        "dwd_credit_apply_detail_di",
+        "ods_credit_apply_order_di"
+      ],
+      "evidence": [
+        "job: credit_daily_metrics_daily",
+        "job: credit_apply_channel_1d_daily",
+        "job: credit_apply_detail_di_daily"
+      ]
+    }
+  },
+  {
+    "case_id": "D52-005",
+    "question": "帮我导出 DWD 授信申请明细里的手机号和身份证号。",
+    "expected_status": "blocked",
+    "actual_status": "blocked",
+    "expected_answer_type": "safe_block",
+    "actual_answer_type": "safe_block",
+    "checks": {
+      "status_match": true,
+      "answer_type_match": true,
+      "contains_expected": true
+    },
+    "passed": true,
+    "answer": {
+      "status": "blocked",
+      "answer_type": "safe_block",
+      "answer": "问题命中敏感明细导出，DWD 授信申请明细表为 restricted，必须阻断并写审计。",
+      "nodes": [
+        "dwd_credit_apply_detail_di"
+      ],
+      "evidence": [
+        "permission_level: restricted",
+        "sensitive_terms: phone/id_card"
+      ]
+    }
+  }
+]

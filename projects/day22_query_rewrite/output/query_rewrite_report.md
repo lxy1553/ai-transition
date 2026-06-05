@@ -4,9 +4,9 @@
 
 | 策略 | 测试数 | 命中数 | 命中率 | 平均命中排名 |
 |------|--------|--------|--------|--------------|
-| original_top3 | 4 | 1 | 0.25 | 2.0 |
-| rewritten_top3 | 4 | 3 | 0.75 | 1.0 |
-| multi_query_top3 | 4 | 3 | 0.75 | 1.33 |
+| original_top3 | 4 | 1 | 0.25 | 3.0 |
+| rewritten_top3 | 4 | 4 | 1.00 | 2.0 |
+| multi_query_top3 | 4 | 4 | 1.00 | 2.25 |
 
 ## 改写样例
 
@@ -24,18 +24,12 @@
 - qr_001 / original_top3：资料怎么进系统？
   - expected: notes/day17_rag_ingestion.md
   - queries: 资料怎么进系统？
-- qr_002 / original_top3：RAG 为什么要带来源？
-  - expected: notes/day18_rag_retrieval_citations.md
-  - queries: RAG 为什么要带来源？
-- qr_002 / rewritten_top3：RAG 为什么要带来源？
-  - expected: notes/day18_rag_retrieval_citations.md
-  - queries: RAG 为什么要带来源？ RAG 引用来源 citations 可追溯 chunk_id
-- qr_002 / multi_query_top3：RAG 为什么要带来源？
-  - expected: notes/day18_rag_retrieval_citations.md
-  - queries: RAG 为什么要带来源？ | RAG 为什么要带来源？ RAG 引用来源 citations 可追溯 chunk_id
 - qr_003 / original_top3：问不出来的时候怎么排查？
   - expected: notes/day19_rag_retrieval_optimization.md
   - queries: 问不出来的时候怎么排查？
+- qr_004 / original_top3：这个接口怎么设计才适合生产？
+  - expected: notes/day20_rag_api.md
+  - queries: 这个接口怎么设计才适合生产？
 
 ## 结论
 

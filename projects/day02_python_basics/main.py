@@ -20,6 +20,8 @@
 from pathlib import Path
 from utils import LogAnalyzer, Validator, DataCleaner
 
+PROJECT_DIR = Path(__file__).resolve().parent
+
 
 def demo_validator():
     """演示数据验证器的作用。
@@ -82,8 +84,8 @@ def demo_log_analyzer():
     print("=" * 70)
 
     # 设置路径
-    log_file = Path("examples/app.log")
-    output_file = Path("output/log_report.txt")
+    log_file = PROJECT_DIR / "examples" / "app.log"
+    output_file = PROJECT_DIR / "output" / "log_report.txt"
 
     # 确保输出目录存在
     output_file.parent.mkdir(exist_ok=True)

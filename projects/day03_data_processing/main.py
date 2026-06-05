@@ -22,6 +22,8 @@
 from pathlib import Path
 from utils import DataLoader, DataCleaner, DataAnalyzer, DatabaseManager
 
+PROJECT_DIR = Path(__file__).resolve().parent
+
 
 def main():
     """按数据处理的真实顺序运行完整流程。
@@ -37,7 +39,7 @@ def main():
     print("\n" + "=" * 70)
     print("步骤 1：加载数据")
     print("=" * 70)
-    data_file = Path("data/jobs.csv")
+    data_file = PROJECT_DIR / "data" / "jobs.csv"
     df = DataLoader.load_csv(data_file)
 
     if df is None:
@@ -66,7 +68,7 @@ def main():
     print("步骤 3：数据分析")
     print("=" * 70)
     analyzer = DataAnalyzer(df_clean)
-    report_file = Path("output/analysis_report.txt")
+    report_file = PROJECT_DIR / "output" / "analysis_report.txt"
     report_file.parent.mkdir(exist_ok=True)
     analyzer.run_analysis(output_file=report_file)
 
@@ -74,7 +76,7 @@ def main():
     print("\n" + "=" * 70)
     print("步骤 4：保存到数据库")
     print("=" * 70)
-    db_file = Path("output/jobs.db")
+    db_file = PROJECT_DIR / "output" / "jobs.db"
 
     with DatabaseManager(db_file) as db:
         # 原始表用于追溯来源，清洗错了还能回到最初数据重新处理。
