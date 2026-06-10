@@ -6,10 +6,10 @@
 
 ## 📊 整体进度
 
-- 已完成天数：49 / 63
+- 已完成天数：57 / 63
 - 进行中天数：0 / 63
-- 完成百分比：77.8%
-- 当前阶段：**Day 50 待开始**
+- 完成百分比：90.5%
+- 当前阶段：**Day 57 已完成；下一步 Day 58：服务化 + 审计存储**
 
 ---
 
@@ -891,6 +891,281 @@
 
 ---
 
+## ✅ Day 50 - 指标字典：离线/实时指标口径与 RAG 问答（已完成）
+
+**主题：** 离线指标字典、实时指标字典、分子分母、窗口口径、RAG 口径问答和引用来源
+
+**计划任务：**
+- [x] 创建 Day 50 学习笔记：`notes/day50_metric_dictionary_rag.md`
+- [x] 创建指标字典与 RAG 口径问答练习项目：`projects/day50_metric_dictionary_rag/`
+- [x] 建立 6 个离线/实时指标口径，覆盖授信、放款、逾期、风控和还款
+- [x] 生成指标 RAG chunk、口径问答样例和评测报告
+- [x] 补充 Day 50 面试题、术语和核心问题
+- [x] 用户填写 Day 50 核心问题回答并通过校验
+
+**产出：** `projects/day50_metric_dictionary_rag/output/metric_dictionary_rag_report.md`
+
+**当前评测结果：** 6 条口径问答样例全部通过，通过率 1.0
+
+**状态：** ✅ 已完成
+
+---
+
+## ✅ Day 51 - Schema Catalog：工具注册表与 Agent 调用约束（已完成）
+
+**主题：** 金融信贷 Schema Catalog、离线表/实时指标/血缘入口登记、Agent 工具注册表、前置条件、风险等级和安全阻断
+
+**计划任务：**
+- [x] 创建 Day 51 学习笔记：`notes/day51_schema_catalog_tool_registry.md`
+- [x] 创建 Schema Catalog 与工具注册表练习项目：`projects/day51_schema_catalog_tool_registry/`
+- [x] 登记 5 类信贷数据资产，覆盖 ADS、DWS、DWD、实时指标和血缘入口
+- [x] 登记 5 个 Agent 工具，覆盖口径 RAG、离线 NL2SQL、实时指标、血缘追溯和安全阻断
+- [x] 生成工具路由样例、评测结果和 Markdown 报告
+- [x] 补充 Day 51 面试题、术语和核心问题
+- [x] 用户填写 Day 51 核心问题回答并通过校验
+
+**产出：** `projects/day51_schema_catalog_tool_registry/output/schema_catalog_tool_registry_report.md`
+
+**当前评测结果：** 5 条工具路由样例全部通过，通过率 1.0
+
+**状态：** ✅ 已完成
+
+---
+
+## ✅ Day 52 - 数据血缘：Agent 可追溯与影响分析（已完成）
+
+**主题：** 金融信贷离线指标血缘、实时告警血缘、上游追溯、下游影响分析、证据返回和安全阻断
+
+**计划任务：**
+- [x] 创建 Day 52 学习笔记：`notes/day52_data_lineage_agent_traceability.md`
+- [x] 创建数据血缘与 Agent 可追溯练习项目：`projects/day52_data_lineage_agent_traceability/`
+- [x] 建立 10 个血缘节点，覆盖 ODS、DWD、DWS、ADS、指标、报表、实时事件、实时任务、实时指标和告警
+- [x] 建立 8 条血缘依赖边，覆盖离线指标链路和实时告警链路
+- [x] 生成血缘图、Mermaid 图、问答样例、评测结果和 Markdown 报告
+- [x] 补充 Day 52 面试题、术语和核心问题
+- [x] 用户填写 Day 52 核心问题回答并通过校验
+
+**产出：** `projects/day52_data_lineage_agent_traceability/output/data_lineage_agent_report.md`
+
+**当前评测结果：** 5 条血缘问答样例全部通过，通过率 1.0
+
+**状态：** ✅ 已完成
+
+---
+
+## ✅ Day 53 - 离线 NL2SQL：SQL 安全、分区裁剪与执行控制（已完成）
+
+**主题：** 金融信贷离线指标查询、ADS/DWS 表选择、SQL Validator、只读校验、分区裁剪、敏感字段阻断和扫描成本控制
+
+**计划任务：**
+- [x] 创建 Day 53 学习笔记：`notes/day53_offline_nl2sql_sql_safety.md`
+- [x] 创建离线 NL2SQL 与 SQL 安全练习项目：`projects/day53_offline_nl2sql_sql_safety/`
+- [x] 建立本地 SQLite 离线仓库样例，覆盖 ADS、DWS 和 DWD 表
+- [x] 设计 6 条 NL2SQL 评测样例，覆盖成功查询、缺时间范围、大范围扫描、敏感字段和非只读 SQL
+- [x] 生成 SQL 校验结果、执行结果和 Markdown 报告
+- [x] 补充 Day 53 面试题、术语和核心问题
+- [x] 用户填写 Day 53 核心问题回答并通过校验
+
+**产出：** `projects/day53_offline_nl2sql_sql_safety/output/offline_nl2sql_sql_safety_report.md`
+
+**当前评测结果：** 6 条离线 NL2SQL 安全样例全部通过，通过率 1.0
+
+**状态：** ✅ 已完成
+
+---
+
+## ✅ Day 54 - 实时指标查询：告警解释、延迟状态与证据来源（已完成）
+
+**主题：** 金融信贷实时指标查询、窗口校验、延迟状态、告警等级、告警规则、证据来源和有界原因解释
+
+**计划任务：**
+- [x] 创建 Day 54 学习笔记：`notes/day54_realtime_metric_alert_explanation.md`
+- [x] 创建实时指标查询与告警解释练习项目：`projects/day54_realtime_metric_alert_explanation/`
+- [x] 建立 2 个实时指标快照，覆盖实时风控拒绝率和实时还款失败数
+- [x] 建立 1 条实时告警记录，覆盖告警等级、触发规则和证据来源
+- [x] 设计 6 条实时查询评测样例，覆盖正常异常判断、告警解释、延迟降级、缺窗口澄清、敏感阻断和有界原因解释
+- [x] 生成实时指标、告警记录、评测结果和 Markdown 报告
+- [x] 补充 Day 54 面试题、术语和核心问题
+- [x] 用户填写 Day 54 核心问题回答并通过校验
+
+**产出：** `projects/day54_realtime_metric_alert_explanation/output/realtime_metric_alert_report.md`
+
+**当前评测结果：** 6 条实时查询和告警解释样例全部通过，通过率 1.0
+
+**状态：** ✅ 已完成
+
+---
+
+## ✅ Day 55 - 日报 + 实时告警 Agent：多工具编排、摘要生成与审计（已完成）
+
+**主题：** 金融信贷离线日报、近 1 小时实时告警、多工具编排、指标口径引用、有界解释和审计记录
+
+**计划任务：**
+- [x] 创建 Day 55 学习笔记：`notes/day55_daily_report_realtime_alert_agent.md`
+- [x] 创建日报 + 实时告警 Agent 练习项目：`projects/day55_daily_report_realtime_alert_agent/`
+- [x] 建立 4 个离线日报指标，覆盖授信申请量、授信通过率、放款金额和 M1 逾期率
+- [x] 建立 2 条实时告警，覆盖风控拒绝率突增和还款失败链路延迟
+- [x] 串联离线日报工具、实时告警工具、指标口径工具和审计日志
+- [x] 生成 Agent 摘要结果、审计日志和 Markdown 报告
+- [x] 补充 Day 55 面试题、术语和核心问题
+- [x] 用户填写 Day 55 核心问题回答并通过校验
+
+**产出：** `projects/day55_daily_report_realtime_alert_agent/output/daily_alert_agent_report.md`
+
+**当前运行结果：** 4 个日报指标、2 条实时告警、4 步审计记录、4 条风险提示
+
+**状态：** ✅ 已完成
+
+---
+
+## ✅ Day 56 - 仓库 Agent 端到端评测：回归、拒答与异常场景（已完成）
+
+**主题：** 金融信贷仓库 Agent 全链路评测、拒答、安全阻断、空分区、实时延迟、告警误报、口径冲突和回归保护
+
+**计划任务：**
+- [x] 创建 Day 56 学习笔记：`notes/day56_warehouse_agent_e2e_evaluation.md`
+- [x] 创建仓库 Agent 端到端评测项目：`projects/day56_warehouse_agent_e2e_evaluation/`
+- [x] 设计 10 条端到端评测样例，覆盖成功、空分区、实时延迟、敏感阻断、口径冲突、告警误报、血缘、SQL 安全、工具异常和有界解释
+- [x] 检查每条样例的状态、工具路线、证据和审计记录
+- [x] 生成评测集、评测结果、回归汇总和 Markdown 报告
+- [x] 补充 Day 56 面试题、术语和核心问题
+- [x] 用户填写 Day 56 核心问题回答并通过校验
+
+**产出：** `projects/day56_warehouse_agent_e2e_evaluation/output/warehouse_agent_e2e_eval_report.md`
+
+**当前评测结果：** 10 条端到端评测样例全部通过，通过率 1.0
+
+**状态：** ✅ 已完成
+
+---
+
+## ✅ Day 57 - 数据质量 + 错误治理：空值、重复、乱序、补偿与回归（已完成）
+
+**主题：** 金融信贷离线/实时仓库数据质量规则、质量状态、错误治理和回归 bad case
+
+**计划任务：**
+- [x] 创建 Day 57 学习笔记：`notes/day57_data_quality_error_governance.md`
+- [x] 创建 Day 57 本地练习项目骨架：`projects/day57_data_quality_error_governance/`
+- [x] 设计数据质量规则清单，覆盖空值、重复、乱序、补偿、延迟和幂等
+- [x] 设计质量状态字段和处理动作
+- [x] 把质量 bad case 接入回归样例
+- [x] 补充 Day 57 面试题、术语和核心问题
+- [x] 用户填写 Day 57 核心问题回答并通过校验
+
+**产出入口：** `projects/day57_data_quality_error_governance/README.md`
+
+**状态：** ✅ 已完成
+
+---
+
+## ⏳ Day 58 - 服务化 + 审计存储：API 契约、request_id、trace 回放（已启动）
+
+**主题：** 金融信贷仓库 Agent 服务接口、审计存储、状态码和链路回放
+
+**计划任务：**
+- [x] 创建 Day 58 学习笔记：`notes/day58_service_api_audit_storage.md`
+- [x] 创建 Day 58 本地练习项目骨架：`projects/day58_service_api_audit_storage/`
+- [ ] 设计最小 API 契约
+- [ ] 设计查询审计、告警审计、任务审计和权限审计字段
+- [ ] 定义 request_id、trace_id、status 和 error_code 规范
+- [ ] 补充 Day 58 面试题、术语和核心问题回答
+
+**产出入口：** `projects/day58_service_api_audit_storage/README.md`
+
+**状态：** ⏳ 已启动，待补接口和审计结构
+
+---
+
+## ⏳ Day 59 - 综合项目集成：统一离线/实时仓库 Agent 入口（已启动）
+
+**主题：** 统一入口、模块边界、工具整合和综合项目 README
+
+**计划任务：**
+- [x] 创建 Day 59 学习笔记：`notes/day59_integrated_project_integration.md`
+- [x] 创建 Day 59 本地练习项目骨架：`projects/day59_integrated_credit_warehouse_agent/`
+- [ ] 设计统一主流程
+- [ ] 划分模块边界和配置入口
+- [ ] 输出综合项目 README 初稿
+- [ ] 补充 Day 59 面试题、术语和核心问题回答
+
+**产出入口：** `projects/day59_integrated_credit_warehouse_agent/README.md`
+
+**状态：** ⏳ 已启动，待补集成实现
+
+---
+
+## ⏳ Day 60 - 项目演示 + 作品集包装：3 分钟讲清综合项目（已启动）
+
+**主题：** 演示脚本、作品集目录、bad case 展示和项目叙事
+
+**计划任务：**
+- [x] 创建 Day 60 学习笔记：`notes/day60_project_demo_portfolio_packaging.md`
+- [x] 创建 Day 60 本地练习项目骨架：`projects/day60_project_demo_portfolio_packaging/`
+- [ ] 编写 3 分钟演示脚本
+- [ ] 整理作品集目录和关键截图
+- [ ] 补成功路径和风险路径演示说明
+- [ ] 补充 Day 60 面试题、术语和核心问题回答
+
+**产出入口：** `projects/day60_project_demo_portfolio_packaging/README.md`
+
+**状态：** ⏳ 已启动，待补演示材料
+
+---
+
+## ⏳ Day 61 - SQL / Python / 仓库面试：用工程语言讲项目实现（已启动）
+
+**主题：** 高频问题整理、项目映射、工程语言表达
+
+**计划任务：**
+- [x] 创建 Day 61 学习笔记：`notes/day61_sql_python_warehouse_interview.md`
+- [x] 创建 Day 61 本地练习项目骨架：`projects/day61_sql_python_warehouse_interview_pack/`
+- [ ] 整理 SQL / Python / 仓库高频问题
+- [ ] 为每个问题补项目映射点
+- [ ] 区分基础题、深挖题和治理题
+- [ ] 补充 Day 61 面试题、术语和核心问题回答
+
+**产出入口：** `projects/day61_sql_python_warehouse_interview_pack/README.md`
+
+**状态：** ⏳ 已启动，待补问答清单
+
+---
+
+## ⏳ Day 62 - Agent / AI 应用模拟面试：RAG、NL2SQL、评测、安全深挖（已启动）
+
+**主题：** 模拟面试、追问题、短答案和展开答案
+
+**计划任务：**
+- [x] 创建 Day 62 学习笔记：`notes/day62_agent_ai_application_mock_interview.md`
+- [x] 创建 Day 62 本地练习项目骨架：`projects/day62_agent_ai_application_mock_interview/`
+- [ ] 整理 15-20 个模拟追问
+- [ ] 为每题补 30 秒短答案和 2 分钟展开答案
+- [ ] 单独整理 bad case 和安全追问
+- [ ] 补充 Day 62 面试题、术语和核心问题回答
+
+**产出入口：** `projects/day62_agent_ai_application_mock_interview/README.md`
+
+**状态：** ⏳ 已启动，待补模拟面试材料
+
+---
+
+## ⏳ Day 63 - 收官与精准投递：项目卖点、简历表达和岗位匹配（已启动）
+
+**主题：** 学习总结、简历项目表达、岗位匹配和 backlog 收口
+
+**计划任务：**
+- [x] 创建 Day 63 学习笔记：`notes/day63_final_review_targeted_delivery.md`
+- [x] 创建 Day 63 本地练习项目骨架：`projects/day63_final_review_targeted_delivery/`
+- [ ] 提炼一句话项目介绍和 3-5 条简历亮点
+- [ ] 按 JD 调整项目讲法
+- [ ] 整理后续 backlog
+- [ ] 补充 Day 63 面试题、术语和核心问题回答
+
+**产出入口：** `projects/day63_final_review_targeted_delivery/README.md`
+
+**状态：** ⏳ 已启动，待补收官材料
+
+---
+
 ## 🔗 金融信贷离线/实时仓库 + Agent 63 天计划（已同步）
 
 **定位：** 在当前 RAG、NL2SQL、服务化和 Agent 学习主线之上，补齐离线仓库、实时仓库和信贷数据底座能力。
@@ -949,15 +1224,16 @@
 
 ### 第8周（Day 50-56）：金融信贷离线/实时仓库 + Agent 综合项目
 
-- 已完成：0 / 7 天
+- 已完成：7 / 7 天
 - 进行中：0 / 7 天
-- 状态：⏳ 待启动
+- 状态：✅ Day 50-56 已完成，第 8 周收口
 
 ### 第9周（Day 57-63）：服务化、作品集、面试与投递收口
 
-- 已完成：0 / 7 天
+- 已完成：1 / 7 天
 - 进行中：0 / 7 天
-- 状态：⏳ 待启动
+- 已启动：7 / 7 天
+- 状态：Day 57 已完成；**下一步 Day 58**
 
 ---
 
@@ -971,7 +1247,7 @@
 - [x] **Day 35：** 第5周完成，NL2SQL助手成型
 - [x] **Day 42：** 第6周完成，项目Docker化部署
 - [x] **Day 49：** 第7周完成，信贷主题域和 Agent 意图分类完成
-- [ ] **Day 56：** 仓库 Agent 端到端评测完成
+- [x] **Day 56：** 仓库 Agent 端到端评测完成
 - [ ] **Day 63：** 第9周完成，63 天收官总结
 
 ---
@@ -980,9 +1256,13 @@
 
 - 每天必须留下代码、文档或演示产物。（2026-04-22 建立）
 - 每天必须完成当天 note 中的“每日核心问题自测”；（2026-05-15 建立，2026-05-20 完善）
-  按“我的回答 -> 回答评价 -> 参考答案”记录，才能把当天标记为完成
+  按“我的回答 -> 回答评价 -> 评分 -> 参考答案”记录，才能把当天标记为完成
 - 每日自测问题统一使用 `### 序号. 问题`；（2026-05-21 二次更新）
-  下一行写两个空格缩进的 `我的回答：`，后面留空行，下一题再另起标题
+  下一行写两个空格缩进的 `重要程度：x/5`，再写两个空格缩进的 `我的回答：`，后面留空行，下一题再另起标题
+- 每道核心自测题和面试沉淀题都必须标记 `重要程度：x/5`；（2026-06-03 更新）
+  今日核心题和 P0 高频面试题默认 5/5，前三天核心回顾和 P1 面试题默认 4/5，P2 辅助题默认 3/5
+- 每题回答评价后必须增加 `评分：x/10`；（2026-06-03 更新）
+  评分用于判断面试可用程度：9-10 分可直接使用，7-8 分需补关键点，5-6 分需重点复盘
 - 每日核心自测固定 10 个：A 区“今日核心问题”7 个，B 区“前三天核心回顾”3 个；
   前三天回顾按前 3 天每天 1 个问题选择。（2026-06-02 更新）
 - 每 7 天复盘日要在 10 个问题内体现上一周最核心问题，不额外加题。
@@ -999,4 +1279,4 @@
 
 ---
 
-*最后更新：2026-06-02（已同步为 63 天金融信贷离线/实时仓库 + Agent 学习计划）*
+*最后更新：2026-06-10（Day 57 核心问题自测已完成；下一步 Day 58）*

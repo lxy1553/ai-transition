@@ -1,0 +1,36 @@
+[
+  {
+    "alert_id": "alert_risk_reject_rate_spike_202606051030",
+    "alert_name": "风控拒绝率突增告警",
+    "level": "P1",
+    "status": "triggered",
+    "metric_id": "rt_risk_reject_rate_10m",
+    "window": "10m",
+    "metric_value": 0.42,
+    "threshold": 0.35,
+    "delay_seconds": 80,
+    "delay_threshold_seconds": 180,
+    "triggered_at": "2026-06-05 10:30:00",
+    "evidence": [
+      "metric_snapshot::rt_risk_reject_rate_10m::202606051030",
+      "rule::risk_reject_rate_spike_v3"
+    ]
+  },
+  {
+    "alert_id": "alert_repayment_failed_delay_202606051015",
+    "alert_name": "还款失败实时链路延迟告警",
+    "level": "P2",
+    "status": "degraded",
+    "metric_id": "rt_repayment_failed_cnt_5m",
+    "window": "5m",
+    "metric_value": 86,
+    "threshold": 50,
+    "delay_seconds": 720,
+    "delay_threshold_seconds": 120,
+    "triggered_at": "2026-06-05 10:15:00",
+    "evidence": [
+      "metric_snapshot::rt_repayment_failed_cnt_5m::202606051015",
+      "rule::realtime_delay_guard_v2"
+    ]
+  }
+]

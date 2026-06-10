@@ -1,0 +1,46 @@
+[
+  {
+    "biz_date": "2026-06-04",
+    "metric_id": "credit_apply_cnt_1d",
+    "metric_name": "授信申请量",
+    "value": 18600,
+    "unit": "count",
+    "wow_change": 0.08,
+    "source_table": "ads_credit_daily_metrics",
+    "partition_field": "biz_date",
+    "evidence_id": "ads::credit_daily::20260604::apply_cnt"
+  },
+  {
+    "biz_date": "2026-06-04",
+    "metric_id": "credit_approval_rate_1d",
+    "metric_name": "授信通过率",
+    "value": 0.638,
+    "unit": "ratio",
+    "wow_change": -0.032,
+    "source_table": "ads_credit_daily_metrics",
+    "partition_field": "biz_date",
+    "evidence_id": "ads::credit_daily::20260604::approval_rate"
+  },
+  {
+    "biz_date": "2026-06-04",
+    "metric_id": "loan_amount_1d",
+    "metric_name": "放款金额",
+    "value": 52800000,
+    "unit": "amount",
+    "wow_change": 0.041,
+    "source_table": "ads_credit_daily_metrics",
+    "partition_field": "biz_date",
+    "evidence_id": "ads::credit_daily::20260604::loan_amount"
+  },
+  {
+    "biz_date": "2026-06-04",
+    "metric_id": "m1_overdue_rate_1d",
+    "metric_name": "M1 逾期率",
+    "value": 0.027,
+    "unit": "ratio",
+    "wow_change": 0.004,
+    "source_table": "ads_postloan_daily_metrics",
+    "partition_field": "biz_date",
+    "evidence_id": "ads::postloan_daily::20260604::m1_overdue_rate"
+  }
+]

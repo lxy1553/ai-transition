@@ -18,6 +18,8 @@
 - 必须沉淀面试问题和术语；
 - 必须保留“每日核心问题自测”；
 - 每日自测固定 10 个：A 区今日核心问题 7 个，B 区前三天核心回顾 3 个；
+- 每道面试沉淀题和核心自测题都必须写 `重要程度：x/5`；
+- 用户回答后，每题必须按“回答评价 -> 评分 -> 参考答案”补齐，评分格式为 `评分：x/10`；
 - 每 7 天复盘日要额外包含周回顾问题。
 
 索引、术语表、架构长文这类非日更笔记不强行套每日自测， 但必须说明自身定位、适用范围和维护规则。
@@ -25,6 +27,8 @@
 ## 专题补强笔记
 
 - [金融信贷离线/实时仓库如何支撑 Agent](./offline_warehouse_agent_basics.md)
+- [LangChain / LangGraph / LangSmith 学习](./lang_series_framework_learning.md)
+- [Day55+ LangChain / LangGraph / LangSmith 学习计划](../docs/day55_plus_langchain_langgraph_langsmith_learning_plan.md)
 
 ## 每日学习笔记
 
@@ -78,3 +82,17 @@
 - [Day 47 - 离线仓库分层：ODS/DWD/DWS/ADS 与 Agent 离线路由](./day47_offline_warehouse_routing.md)
 - [Day 48 - 实时仓库基础：事件时间、窗口、延迟与 Agent 实时路由](./day48_realtime_warehouse_routing.md)
 - [Day 49 - 信贷主题域：授信/额度/风控/放款/还款/逾期与 Agent 意图识别](./day49_credit_domain_intent.md)
+- [Day 50 - 指标字典：离线/实时指标口径与 RAG 问答](./day50_metric_dictionary_rag.md)
+- [Day 51 - Schema Catalog：工具注册表与 Agent 调用约束](./day51_schema_catalog_tool_registry.md)
+- [Day 52 - 数据血缘：Agent 可追溯与影响分析](./day52_data_lineage_agent_traceability.md)
+- [Day 53 - 离线 NL2SQL：SQL 安全、分区裁剪与执行控制](./day53_offline_nl2sql_sql_safety.md)
+- [Day 54 - 实时指标查询：告警解释、延迟状态与证据来源](./day54_realtime_metric_alert_explanation.md)
+- [Day 55 - 日报 + 实时告警 Agent：多工具编排、摘要生成与审计](./day55_daily_report_realtime_alert_agent.md)
+- [Day 56 - 仓库 Agent 端到端评测：回归、拒答与异常场景](./day56_warehouse_agent_e2e_evaluation.md)
+- [Day 57 - 数据质量 + 错误治理：空值、重复、乱序、补偿与回归](./day57_data_quality_error_governance.md)
+- [Day 58 - 服务化 + 审计存储：API 契约、request_id、trace 回放](./day58_service_api_audit_storage.md)
+- [Day 59 - 综合项目集成：统一离线/实时仓库 Agent 入口](./day59_integrated_project_integration.md)
+- [Day 60 - 项目演示 + 作品集包装：3 分钟讲清综合项目](./day60_project_demo_portfolio_packaging.md)
+- [Day 61 - SQL / Python / 仓库面试：用工程语言讲项目实现](./day61_sql_python_warehouse_interview.md)
+- [Day 62 - Agent / AI 应用模拟面试：RAG、NL2SQL、评测、安全深挖](./day62_agent_ai_application_mock_interview.md)
+- [Day 63 - 收官与精准投递：项目卖点、简历表达和岗位匹配](./day63_final_review_targeted_delivery.md)

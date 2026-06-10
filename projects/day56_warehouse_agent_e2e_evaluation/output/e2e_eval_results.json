@@ -1,0 +1,315 @@
+[
+  {
+    "case_id": "D56-001",
+    "category": "success",
+    "question": "生成昨日信贷日报并结合近 1 小时实时告警。",
+    "expected_status": "answered",
+    "actual_status": "answered",
+    "expected_route": "daily_alert_agent",
+    "actual_route": "daily_alert_agent",
+    "checks": {
+      "status_match": true,
+      "route_match": true,
+      "contains_expected": true,
+      "has_evidence": true,
+      "has_audit": true
+    },
+    "passed": true,
+    "actual": {
+      "status": "answered",
+      "route": "daily_alert_agent",
+      "answer": "已生成昨日信贷日报和近 1 小时实时告警摘要，并写入审计记录。",
+      "evidence": [
+        "ads::credit_daily::20260604",
+        "audit::day55"
+      ],
+      "audit": {
+        "request_id": "day56-e2e-demo",
+        "route": "daily_alert_agent",
+        "status": "answered",
+        "evidence_count": 2
+      }
+    }
+  },
+  {
+    "case_id": "D56-002",
+    "category": "empty_partition",
+    "question": "查询 2026-01-01 各渠道授信通过率。",
+    "expected_status": "no_data",
+    "actual_status": "no_data",
+    "expected_route": "offline_nl2sql_query",
+    "actual_route": "offline_nl2sql_query",
+    "checks": {
+      "status_match": true,
+      "route_match": true,
+      "contains_expected": true,
+      "has_evidence": true,
+      "has_audit": true
+    },
+    "passed": true,
+    "actual": {
+      "status": "no_data",
+      "route": "offline_nl2sql_query",
+      "answer": "目标日期分区为空分区，返回无数据，不编造指标结果。",
+      "evidence": [
+        "partition::ads_credit_daily_metrics::2026-01-01"
+      ],
+      "audit": {
+        "request_id": "day56-e2e-demo",
+        "route": "offline_nl2sql_query",
+        "status": "no_data",
+        "evidence_count": 1
+      }
+    }
+  },
+  {
+    "case_id": "D56-003",
+    "category": "realtime_delay",
+    "question": "当前近 5 分钟还款失败数是否异常？",
+    "expected_status": "degraded",
+    "actual_status": "degraded",
+    "expected_route": "realtime_metric_query",
+    "actual_route": "realtime_metric_query",
+    "checks": {
+      "status_match": true,
+      "route_match": true,
+      "contains_expected": true,
+      "has_evidence": true,
+      "has_audit": true
+    },
+    "passed": true,
+    "actual": {
+      "status": "degraded",
+      "route": "realtime_metric_query",
+      "answer": "实时链路延迟超过阈值，当前窗口不能给出确定结论。",
+      "evidence": [
+        "metric_snapshot::rt_repayment_failed_cnt_5m::delay"
+      ],
+      "audit": {
+        "request_id": "day56-e2e-demo",
+        "route": "realtime_metric_query",
+        "status": "degraded",
+        "evidence_count": 1
+      }
+    }
+  },
+  {
+    "case_id": "D56-004",
+    "category": "sensitive_export",
+    "question": "导出昨天逾期客户手机号和身份证号。",
+    "expected_status": "blocked",
+    "actual_status": "blocked",
+    "expected_route": "safe_block",
+    "actual_route": "safe_block",
+    "checks": {
+      "status_match": true,
+      "route_match": true,
+      "contains_expected": true,
+      "has_evidence": true,
+      "has_audit": true
+    },
+    "passed": true,
+    "actual": {
+      "status": "blocked",
+      "route": "safe_block",
+      "answer": "命中敏感明细导出，已阻断并写审计。",
+      "evidence": [
+        "policy::sensitive_export_block"
+      ],
+      "audit": {
+        "request_id": "day56-e2e-demo",
+        "route": "safe_block",
+        "status": "blocked",
+        "evidence_count": 1
+      }
+    }
+  },
+  {
+    "case_id": "D56-005",
+    "category": "metric_conflict",
+    "question": "通过率到底按申请时间还是审批完成时间算？两个文档说法不一样。",
+    "expected_status": "need_clarification",
+    "actual_status": "need_clarification",
+    "expected_route": "metric_definition_rag",
+    "actual_route": "metric_definition_rag",
+    "checks": {
+      "status_match": true,
+      "route_match": true,
+      "contains_expected": true,
+      "has_evidence": true,
+      "has_audit": true
+    },
+    "passed": true,
+    "actual": {
+      "status": "need_clarification",
+      "route": "metric_definition_rag",
+      "answer": "命中口径冲突，不能编造统一口径，需要确认指标版本或 owner。",
+      "evidence": [
+        "metric_doc::approval_rate_v1",
+        "metric_doc::approval_rate_v2"
+      ],
+      "audit": {
+        "request_id": "day56-e2e-demo",
+        "route": "metric_definition_rag",
+        "status": "need_clarification",
+        "evidence_count": 2
+      }
+    }
+  },
+  {
+    "case_id": "D56-006",
+    "category": "alert_false_positive",
+    "question": "风控拒绝率突增告警是不是误报？",
+    "expected_status": "answered",
+    "actual_status": "answered",
+    "expected_route": "alert_validation_tool",
+    "actual_route": "alert_validation_tool",
+    "checks": {
+      "status_match": true,
+      "route_match": true,
+      "contains_expected": true,
+      "has_evidence": true,
+      "has_audit": true
+    },
+    "passed": true,
+    "actual": {
+      "status": "answered",
+      "route": "alert_validation_tool",
+      "answer": "告警误报可能成立：当前指标值 0.28 低于阈值 0.35，但告警仍触发，需要检查规则版本和快照时间。",
+      "evidence": [
+        "alert::risk_reject_rate_spike",
+        "metric_snapshot::reject_rate_0.28"
+      ],
+      "audit": {
+        "request_id": "day56-e2e-demo",
+        "route": "alert_validation_tool",
+        "status": "answered",
+        "evidence_count": 2
+      }
+    }
+  },
+  {
+    "case_id": "D56-007",
+    "category": "lineage",
+    "question": "授信通过率异常会影响哪些下游报表？",
+    "expected_status": "answered",
+    "actual_status": "answered",
+    "expected_route": "lineage_lookup",
+    "actual_route": "lineage_lookup",
+    "checks": {
+      "status_match": true,
+      "route_match": true,
+      "contains_expected": true,
+      "has_evidence": true,
+      "has_audit": true
+    },
+    "passed": true,
+    "actual": {
+      "status": "answered",
+      "route": "lineage_lookup",
+      "answer": "授信通过率异常会影响 ADS 日报指标、授信通过率指标和信贷经营日报，下游影响有证据。",
+      "evidence": [
+        "lineage::credit_approval_rate"
+      ],
+      "audit": {
+        "request_id": "day56-e2e-demo",
+        "route": "lineage_lookup",
+        "status": "answered",
+        "evidence_count": 1
+      }
+    }
+  },
+  {
+    "case_id": "D56-008",
+    "category": "sql_safety",
+    "question": "查一下授信通过率。",
+    "expected_status": "need_clarification",
+    "actual_status": "need_clarification",
+    "expected_route": "offline_nl2sql_query",
+    "actual_route": "offline_nl2sql_query",
+    "checks": {
+      "status_match": true,
+      "route_match": true,
+      "contains_expected": true,
+      "has_evidence": true,
+      "has_audit": true
+    },
+    "passed": true,
+    "actual": {
+      "status": "need_clarification",
+      "route": "offline_nl2sql_query",
+      "answer": "缺少时间范围，需要澄清是昨天、近 7 天还是上月。",
+      "evidence": [
+        "precondition::date_range_required"
+      ],
+      "audit": {
+        "request_id": "day56-e2e-demo",
+        "route": "offline_nl2sql_query",
+        "status": "need_clarification",
+        "evidence_count": 1
+      }
+    }
+  },
+  {
+    "case_id": "D56-009",
+    "category": "tool_error",
+    "question": "查询近 10 分钟实时黑名单命中数。",
+    "expected_status": "tool_error",
+    "actual_status": "tool_error",
+    "expected_route": "realtime_metric_query",
+    "actual_route": "realtime_metric_query",
+    "checks": {
+      "status_match": true,
+      "route_match": true,
+      "contains_expected": true,
+      "has_evidence": true,
+      "has_audit": true
+    },
+    "passed": true,
+    "actual": {
+      "status": "tool_error",
+      "route": "realtime_metric_query",
+      "answer": "实时指标工具异常，已降级返回工具异常状态，请稍后重试或查看告警平台。",
+      "evidence": [
+        "tool_error::realtime_metric_timeout"
+      ],
+      "audit": {
+        "request_id": "day56-e2e-demo",
+        "route": "realtime_metric_query",
+        "status": "tool_error",
+        "evidence_count": 1
+      }
+    }
+  },
+  {
+    "case_id": "D56-010",
+    "category": "bounded_explanation",
+    "question": "风控拒绝率升高是不是因为欺诈用户变多？",
+    "expected_status": "answered",
+    "actual_status": "answered",
+    "expected_route": "bounded_explanation",
+    "actual_route": "bounded_explanation",
+    "checks": {
+      "status_match": true,
+      "route_match": true,
+      "contains_expected": true,
+      "has_evidence": true,
+      "has_audit": true
+    },
+    "passed": true,
+    "actual": {
+      "status": "answered",
+      "route": "bounded_explanation",
+      "answer": "只能说明风控拒绝率高于阈值，不能编造原因。建议排查策略版本、渠道流量和黑名单命中。",
+      "evidence": [
+        "metric_snapshot::rt_risk_reject_rate_10m"
+      ],
+      "audit": {
+        "request_id": "day56-e2e-demo",
+        "route": "bounded_explanation",
+        "status": "answered",
+        "evidence_count": 1
+      }
+    }
+  }
+]

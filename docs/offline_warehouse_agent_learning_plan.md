@@ -85,3 +85,21 @@ Day 1-44 保留既有 Python、RAG、NL2SQL、服务化、测试和 Agent 基础
 - SQL 校验负责只读、权限、敏感字段、时间范围和扫描成本；
 - 端到端评测覆盖成功、拒答、补充条件、资料不足、系统异常、实时延迟和告警误报；
 - 金融信贷场景必须重视隐私、审计、合规、实时错误和错误答案风险。
+
+## Day55+ LangChain / LangGraph / LangSmith 补强线
+
+从 Day55 开始，Agent 学习需要从“手写流程 Demo”升级到“框架化编排 + 可观测评测”。
+
+专项计划文档：
+
+```text
+docs/day55_plus_langchain_langgraph_langsmith_learning_plan.md
+```
+
+三者在本项目里的定位：
+
+- LangChain：封装模型、Prompt、Tool、结构化输出和基础 Agent 调用；
+- LangGraph：把意图识别、权限校验、工具路由、SQL 安全、实时延迟判断、人工审核和审计写成显式状态机；
+- LangSmith：记录 trace、debug 调用链路、建设评测集、对比 Agent 版本和沉淀线上 bad case。
+
+这条补强线不替换原 Day55-63 主线，而是作为后续交付质量要求并入每一天的项目产出。

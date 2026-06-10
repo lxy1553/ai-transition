@@ -1,0 +1,82 @@
+{
+  "title": "金融信贷日报 + 近 1 小时实时告警摘要",
+  "offline_daily": {
+    "biz_date": "2026-06-04",
+    "apply_cnt": 18600,
+    "approval_rate": 0.638,
+    "loan_amount": 52800000,
+    "m1_overdue_rate": 0.027,
+    "evidence": [
+      "ads::credit_daily::20260604::apply_cnt",
+      "ads::credit_daily::20260604::approval_rate",
+      "ads::credit_daily::20260604::loan_amount",
+      "ads::postloan_daily::20260604::m1_overdue_rate"
+    ]
+  },
+  "realtime_alerts": [
+    {
+      "alert_id": "alert_risk_reject_rate_spike_202606051030",
+      "alert_name": "风控拒绝率突增告警",
+      "level": "P1",
+      "status": "triggered",
+      "metric_id": "rt_risk_reject_rate_10m",
+      "window": "10m",
+      "metric_value": 0.42,
+      "threshold": 0.35,
+      "delay_seconds": 80,
+      "delay_threshold_seconds": 180,
+      "triggered_at": "2026-06-05 10:30:00",
+      "evidence": [
+        "metric_snapshot::rt_risk_reject_rate_10m::202606051030",
+        "rule::risk_reject_rate_spike_v3"
+      ]
+    },
+    {
+      "alert_id": "alert_repayment_failed_delay_202606051015",
+      "alert_name": "还款失败实时链路延迟告警",
+      "level": "P2",
+      "status": "degraded",
+      "metric_id": "rt_repayment_failed_cnt_5m",
+      "window": "5m",
+      "metric_value": 86,
+      "threshold": 50,
+      "delay_seconds": 720,
+      "delay_threshold_seconds": 120,
+      "triggered_at": "2026-06-05 10:15:00",
+      "evidence": [
+        "metric_snapshot::rt_repayment_failed_cnt_5m::202606051015",
+        "rule::realtime_delay_guard_v2"
+      ]
+    }
+  ],
+  "metric_definitions": [
+    {
+      "metric_id": "credit_approval_rate_1d",
+      "definition": "授信通过率表示审批通过申请数占授信申请总数的比例。",
+      "numerator": "approved_cnt",
+      "denominator": "apply_cnt",
+      "time_scope": "离线 T+1 日分区，按 biz_date 统计。",
+      "citation": "metric_dictionary::credit_approval_rate_1d"
+    },
+    {
+      "metric_id": "m1_overdue_rate_1d",
+      "definition": "M1 逾期率表示到期贷款中逾期天数大于等于 30 天的占比。",
+      "numerator": "m1_overdue_cnt",
+      "denominator": "due_loan_cnt",
+      "time_scope": "离线 T+1 日分区，按贷后统计日统计。",
+      "citation": "metric_dictionary::m1_overdue_rate_1d"
+    }
+  ],
+  "risk_points": [
+    "授信通过率较前一日下降 3.2%，需要关注渠道质量、策略版本和风控拒绝率。",
+    "M1 逾期率较前一日上升 0.4%，需要关注贷后风险和催收队列变化。",
+    "风控拒绝率突增告警 触发 P1 告警，指标值 0.42 高于阈值 0.35。",
+    "还款失败实时链路延迟告警 链路延迟 720 秒超过阈值 120 秒，当前窗口不可给确定结论。"
+  ],
+  "bounded_explanation": "本摘要只基于离线日报指标、实时告警快照和指标口径证据。对于通过率下降或拒绝率升高的业务根因，只能给出排查方向，不能直接编造原因。",
+  "next_actions": [
+    "复核授信通过率口径和 ADS 分区产出状态。",
+    "排查风控拒绝率突增对应的策略版本、渠道流量和上游事件质量。",
+    "还款失败链路延迟超阈值时，先检查实时任务和消息积压，再判断是否业务异常。"
+  ]
+}
