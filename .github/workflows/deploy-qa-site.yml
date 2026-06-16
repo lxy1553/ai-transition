@@ -1,0 +1,37 @@
+# 面试题库网站自动部署到 GitHub Pages
+# 每次推送到 main 分支时，自动构建并部署
+name: Deploy Interview QA Site
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'projects/interview_qa_website/**'
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'projects/interview_qa_website'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

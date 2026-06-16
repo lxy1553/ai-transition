@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 面试题库 — AI 大模型 & 数据工程</title>
+  <link rel="stylesheet" href="css/style.css">
+  <!-- KaTeX 数学公式 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <!-- highlight.js 代码高亮 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/github.min.css">
+</head>
+<body>
+
+<!-- Loading -->
+<div id="loading-overlay" style="display:flex">
+  <div class="spinner"></div>
+  <div id="loading-msg">正在从 GitHub 加载最新题库…</div>
+</div>
+
+<!-- Header -->
+<header class="header">
+  <button class="mobile-menu-btn" onclick="document.querySelector('.sidebar').classList.toggle('open')" title="菜单">☰</button>
+  <div class="header-logo">📋 AI面试题库 <span>| 大模型 & 数据工程</span></div>
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="search-input" placeholder="搜索问题、关键词、标签… (Ctrl+K)">
+  </div>
+  <select id="filter-source" class="filter-select">
+    <option value="">全部来源</option>
+    <option value="mianshiya">面试鸭题库</option>
+    <option value="interview_core">核心题库</option>
+  </select>
+  <select id="filter-difficulty" class="filter-select">
+    <option value="">全部难度</option>
+    <option value="easy">简单</option>
+    <option value="medium">中等</option>
+    <option value="hard">困难</option>
+  </select>
+</header>
+
+<!-- Layout -->
+<div class="layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">📚 知识分类</div>
+    </div>
+    <div id="category-tree"></div>
+
+    <div class="sidebar-stats sidebar-section">
+      <div class="sidebar-title">📊 题库统计</div>
+      <div class="stat-row"><span><span class="stat-dot"></span>总题数</span> <span class="stat-val" id="stat-total">-</span></div>
+      <div class="stat-row"><span><span class="stat-dot hard"></span>困难</span> <span class="stat-val" id="stat-hard">-</span></div>
+      <div class="stat-row"><span><span class="stat-dot medium"></span>中等</span> <span class="stat-val" id="stat-medium">-</span></div>
+      <div class="stat-row"><span><span class="stat-dot easy"></span>简单</span> <span class="stat-val" id="stat-easy">-</span></div>
+      <div class="stat-row"><span><span class="stat-dot wrong"></span>错题数</span> <span class="stat-val" id="stat-wrong">-</span></div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+
+    <!-- Mode Bar -->
+    <div class="mode-bar">
+      <button class="mode-btn active" id="btn-browse">📋 浏览模式</button>
+      <button class="mode-btn" id="btn-sequential">🎯 顺序练习</button>
+      <button class="mode-btn" id="btn-random">🎲 随机练习</button>
+      <button class="mode-btn" id="btn-wrong">❌ 错题集</button>
+      <span style="margin-left:auto;font-size:13px;color:var(--text-secondary)" id="result-count"></span>
+    </div>
+
+    <!-- Browse Mode -->
+    <div id="browse-area">
+      <div id="question-list"></div>
+    </div>
+
+    <!-- Practice Mode (sequential / random / wrong) -->
+    <div id="practice-area" style="display:none">
+      <div class="practice-card">
+        <div class="practice-header">
+          <span class="practice-progress" id="practice-progress"></span>
+          <span class="q-badge" id="practice-id" style="font-size:12px"></span>
+        </div>
+        <div class="practice-title" id="practice-title"></div>
+        <div class="practice-meta" id="practice-meta"></div>
+
+        <div class="user-answer-section" id="user-answer-section">
+          <div class="user-answer-label">✍️ 我的回答</div>
+          <textarea id="user-answer-input" placeholder="在此输入你的回答，然后点击"显示答案"进行对比…"></textarea>
+        </div>
+
+        <button class="btn btn-show-answer" id="practice-show-btn">📖 显示答案</button>
+
+        <div class="practice-answer markdown-body" id="practice-answer" style="display:none"></div>
+
+        <div class="user-answer-display" id="user-answer-display" style="display:none">
+          <div class="user-answer-label">✍️ 你的回答</div>
+          <div class="user-answer-content" id="user-answer-content"></div>
+        </div>
+
+        <div class="practice-actions" id="practice-actions" style="display:none">
+          <button class="btn btn-mastered">✅ 已掌握</button>
+          <button class="btn btn-review">❌ 需复习</button>
+          <button class="btn btn-skip">⏭ 跳过</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Libraries -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+
+<!-- App Scripts -->
+<script src="js/parser.js"></script>
+<script src="js/store.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
