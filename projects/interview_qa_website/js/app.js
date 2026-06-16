@@ -25,10 +25,11 @@ const App = (() => {
   async function init() {
     showLoading(true);
     try {
-      const all = await Parser.loadAll();
-      Store.init(all);
+      const result = await Parser.loadAll();
+      Store.init(result.questions);
       renderAll();
       bindEvents();
+      updateCacheTime(result.cacheTime);
       // Ctrl+K 聚焦搜索
       document.addEventListener('keydown', e => {
         if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
@@ -41,6 +42,27 @@ const App = (() => {
         '\n请确认题库文件已推送到 GitHub，或检查网络连接。';
     }
     showLoading(false);
+  }
+
+  async function refreshQuestions() {
+    const btn = $('#btn-refresh');
+    btn.textContent = '⏳ 刷新中…';
+    btn.disabled = true;
+    try {
+      const result = await Parser.loadAll(true);
+      Store.init(result.questions);
+      renderAll();
+      updateCacheTime(result.cacheTime);
+    } catch (err) {
+      alert('刷新失败：' + err.message);
+    }
+    btn.textContent = '🔄 刷新题库';
+    btn.disabled = false;
+  }
+
+  function updateCacheTime(ts) {
+    const d = new Date(ts);
+    $('#cache-time').textContent = d.toLocaleString('zh-CN');
   }
 
   function showLoading(show) {
@@ -202,8 +224,8 @@ const App = (() => {
           answerEl.style.display = 'block';
           btn.textContent = '收起答案 ▲';
           btn.classList.add('expanded');
-          // AI评价按钮
-          if (userInput && userInput.value.trim() && aiEval) {
+          // AI评价按钮：始终显示
+          if (aiEval) {
             aiEval.style.display = 'block';
             aiEval.innerHTML = `<button class="btn-ai-eval" data-qid="${id}">🤖 AI 评价我的回答</button>`;
           }
@@ -501,6 +523,13 @@ const App = (() => {
   // ---- AI 评价 (DeepSeek) -----------------------------------------------
 
   async function triggerAiEval(card, qid) {
+    const userAnswer = card.querySelector('.q-user-content').textContent || '';
+    if (!userAnswer.trim()) {
+      const aiEval = card.querySelector('.q-ai-eval');
+      aiEval.innerHTML = '<div class="ai-eval-error">请先在「我的回答」中输入你的答案，再点击 AI 评价。</div>';
+      return;
+    }
+
     const apiKey = localStorage.getItem('qa_deepseek_key');
     if (!apiKey) {
       showApiKeyPrompt(card, qid);
@@ -513,7 +542,6 @@ const App = (() => {
     const q = Store.getById(qid);
     if (!q) return;
 
-    const userAnswer = card.querySelector('.q-user-content').textContent || '';
     const refAnswer = (card.querySelector('.q-answer')?.textContent || '').slice(0, 2000);
 
     try {
@@ -568,7 +596,7 @@ const App = (() => {
     });
   }
 
-  return { init, switchMode };
+  return { init, switchMode, refreshQuestions };
 })();
 
 // 页面加载完成后启动

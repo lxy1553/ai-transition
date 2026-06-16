@@ -14,25 +14,39 @@ const Parser = (() => {
 
   /**
    * 从 URL 拉取文本，支持本地缓存
-   * 缓存 key 用 URL hash，避免跨域问题
+   * 缓存 7 天，避免每次打开都重新下载（题库文件较大）
+   * force=true 时跳过缓存强制拉取
    */
-  async function fetchText(url) {
+  async function fetchText(url, force) {
     const cacheKey = 'qa_cache_' + btoa(url).slice(0, 32);
-    // 先尝试读缓存（5分钟内有效）
-    const cached = localStorage.getItem(cacheKey);
-    if (cached) {
-      try {
-        const data = JSON.parse(cached);
-        if (Date.now() - data.ts < 5 * 60 * 1000) {
-          return data.text;
-        }
-      } catch (_) { /* ignore */ }
+    // 7 天内读缓存（除非强制刷新）
+    if (!force) {
+      const cached = localStorage.getItem(cacheKey);
+      if (cached) {
+        try {
+          const data = JSON.parse(cached);
+          if (Date.now() - data.ts < 7 * 24 * 60 * 60 * 1000) {
+            return data.text;
+          }
+        } catch (_) { /* ignore */ }
+      }
     }
     const resp = await fetch(url);
     if (!resp.ok) throw new Error(`HTTP ${resp.status}: ${url}`);
     const text = await resp.text();
     localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), text }));
     return text;
+  }
+
+  /**
+   * 获取缓存的更新时间
+   */
+  function getCacheTime(url) {
+    try {
+      const cacheKey = 'qa_cache_' + btoa(url).slice(0, 32);
+      const data = JSON.parse(localStorage.getItem(cacheKey) || '{}');
+      return data.ts || 0;
+    } catch (_) { return 0; }
   }
 
   // ---- mianshiya 文件解析 ------------------------------------------------
@@ -190,20 +204,25 @@ const Parser = (() => {
   // ---- 公开 API ---------------------------------------------------------
 
   /**
-   * 拉取并解析所有题库，返回统一结构的题目数组
+   * 拉取并解析所有题库
+   * force=true 跳过缓存强制拉取
+   * 返回 { questions, cacheTime }，cacheTime 为缓存中最旧的时间戳
    */
-  async function loadAll() {
+  async function loadAll(force) {
     const [text1, text2] = await Promise.all([
-      fetchText(URL_MIANSHIYA),
-      fetchText(URL_CORE)
+      fetchText(URL_MIANSHIYA, force),
+      fetchText(URL_CORE, force)
     ]);
     const q1 = parseMianshiya(text1);
     const q2 = parseInterviewCore(text2);
-
-    // 合并去重（按 title 相似度？这里简单合并）
     const all = [...q1, ...q2];
-    return all;
+
+    const t1 = getCacheTime(URL_MIANSHIYA);
+    const t2 = getCacheTime(URL_CORE);
+    const cacheTime = Math.min(t1, t2) || Date.now();
+
+    return { questions: all, cacheTime };
   }
 
-  return { loadAll, URL_MIANSHIYA, URL_CORE };
+  return { loadAll, URL_MIANSHIYA, URL_CORE, getCacheTime };
 })();

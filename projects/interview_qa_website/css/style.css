@@ -107,6 +107,21 @@ body {
 }
 .filter-select:focus { border-color: var(--primary); }
 
+/* Refresh button & cache time */
+.btn-refresh {
+  padding: 6px 12px; border: 1px solid var(--border);
+  border-radius: 6px; background: #fff;
+  font-size: 12px; cursor: pointer;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  transition: all .15s;
+}
+.btn-refresh:hover { border-color: var(--primary); color: var(--primary); }
+.cache-time {
+  font-size: 11px; color: #9ca3af;
+  white-space: nowrap;
+}
+
 /* ---- Layout -------------------------------------------------------- */
 .layout {
   display: flex;
