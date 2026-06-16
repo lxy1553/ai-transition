@@ -118,15 +118,16 @@ const App = (() => {
         </div>
         <div class="q-title">${escapeHtml(q.title)}</div>
         ${q.day ? `<div class="q-meta">📅 ${q.day}</div>` : ''}
-        <div class="q-user-section" style="display:none">
+        <div class="q-user-section">
           <div class="q-user-label">✍️ 我的回答</div>
-          <textarea class="q-user-input" placeholder="在此输入你的回答，点击"展开答案"进行对比…">${prevAnswer ? escapeHtml(prevAnswer.answer) : ''}</textarea>
+          <textarea class="q-user-input" placeholder="在此输入你的回答…">${prevAnswer ? escapeHtml(prevAnswer.answer) : ''}</textarea>
           <div class="q-user-display" style="display:none">
             <div class="q-user-label">✍️ 你的回答</div>
             <div class="q-user-content"></div>
           </div>
         </div>
         <div class="q-answer markdown-body" style="display:none"></div>
+        <div class="q-ai-eval" style="display:none"></div>
         <div class="q-actions">
           <button class="btn-expand">展开答案 ▼</button>
         </div>
@@ -175,27 +176,22 @@ const App = (() => {
 
       const btn = e.target.closest('.btn-expand');
       const answerEl = card.querySelector('.q-answer');
-      const userSection = card.querySelector('.q-user-section');
       const userInput = card.querySelector('.q-user-input');
       const userDisplay = card.querySelector('.q-user-display');
       const userContent = card.querySelector('.q-user-content');
+      const aiEval = card.querySelector('.q-ai-eval');
 
       if (btn && answerEl) {
         const isHidden = answerEl.style.display === 'none';
         if (isHidden) {
           const id = card.dataset.id;
-          // 保存用户回答
+          // 保存并展示用户回答
           if (userInput && userInput.value.trim()) {
             Store.saveUserAnswer(id, userInput.value);
-            // 展示用户回答
             userContent.textContent = userInput.value.trim();
             userDisplay.style.display = 'block';
-            userInput.style.display = 'none';
           }
-          // 展开用户作答区
-          if (userSection) userSection.style.display = 'block';
-
-          // 懒渲染答案
+          // 懒渲染参考答案
           if (!answerEl.dataset.rendered) {
             const q = Store.getById(id);
             if (q) {
@@ -206,14 +202,24 @@ const App = (() => {
           answerEl.style.display = 'block';
           btn.textContent = '收起答案 ▲';
           btn.classList.add('expanded');
+          // AI评价按钮
+          if (userInput && userInput.value.trim() && aiEval) {
+            aiEval.style.display = 'block';
+            aiEval.innerHTML = `<button class="btn-ai-eval" data-qid="${id}">🤖 AI 评价我的回答</button>`;
+          }
         } else {
           answerEl.style.display = 'none';
-          if (userSection) userSection.style.display = 'none';
           if (userDisplay) userDisplay.style.display = 'none';
-          if (userInput) userInput.style.display = 'block';
+          if (aiEval) aiEval.style.display = 'none';
           btn.textContent = '展开答案 ▼';
           btn.classList.remove('expanded');
         }
+      }
+
+      // AI 评价按钮
+      if (e.target.closest('.btn-ai-eval')) {
+        const qid = e.target.closest('.btn-ai-eval').dataset.qid;
+        triggerAiEval(card, qid);
       }
     });
 
@@ -490,6 +496,76 @@ const App = (() => {
       [arr[i], arr[j]] = [arr[j], arr[i]];
     }
     return arr;
+  }
+
+  // ---- AI 评价 (DeepSeek) -----------------------------------------------
+
+  async function triggerAiEval(card, qid) {
+    const apiKey = localStorage.getItem('qa_deepseek_key');
+    if (!apiKey) {
+      showApiKeyPrompt(card, qid);
+      return;
+    }
+
+    const aiEval = card.querySelector('.q-ai-eval');
+    aiEval.innerHTML = '<div class="ai-eval-loading">🤖 AI 正在评价中…</div>';
+
+    const q = Store.getById(qid);
+    if (!q) return;
+
+    const userAnswer = card.querySelector('.q-user-content').textContent || '';
+    const refAnswer = (card.querySelector('.q-answer')?.textContent || '').slice(0, 2000);
+
+    try {
+      const resp = await fetch('https://api.deepseek.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model: 'deepseek-chat',
+          messages: [
+            { role: 'system', content: '你是面试官，根据以下面试题、参考答案和用户的回答，给出简短评价（50-150字）。评价要点：1）知识点覆盖是否完整 2）关键概念是否准确 3）遗漏了什么。语气客观、有建设性。直接输出评价，不要重复题目。' },
+            { role: 'user', content: `【题目】${q.title}\n【参考答案】${refAnswer}\n【用户回答】${userAnswer}\n请评价我的回答。` }
+          ],
+          temperature: 0.3,
+          max_tokens: 600
+        })
+      });
+      const data = await resp.json();
+      if (data.error) throw new Error(data.error.message || 'API错误');
+      const evalText = data.choices?.[0]?.message?.content || '评价失败，请重试';
+      aiEval.innerHTML = `<div class="ai-eval-result"><strong>🤖 AI 评价</strong><p>${escapeHtml(evalText)}</p></div>`;
+    } catch (err) {
+      aiEval.innerHTML = `<div class="ai-eval-error">评价失败：${escapeHtml(err.message)}</div>`;
+    }
+  }
+
+  function showApiKeyPrompt(card, qid) {
+    const aiEval = card.querySelector('.q-ai-eval');
+    aiEval.style.display = 'block';
+    aiEval.innerHTML = `
+      <div class="ai-eval-settings">
+        <p>需要 DeepSeek API Key 才能使用 AI 评价（<a href="https://platform.deepseek.com/api_keys" target="_blank">获取 Key</a>）</p>
+        <div style="display:flex;gap:8px;margin-top:8px;">
+          <input type="password" class="api-key-input" placeholder="粘贴 API Key…" style="flex:1;padding:6px 10px;border:1px solid var(--border);border-radius:4px;">
+          <button class="btn-save-key" style="padding:6px 12px;background:var(--primary);color:#fff;border:none;border-radius:4px;cursor:pointer;">保存</button>
+        </div>
+      </div>`;
+    // 绑定保存事件
+    const saveBtn = aiEval.querySelector('.btn-save-key');
+    const input = aiEval.querySelector('.api-key-input');
+    saveBtn.addEventListener('click', () => {
+      const key = input.value.trim();
+      if (key) {
+        localStorage.setItem('qa_deepseek_key', key);
+        triggerAiEval(card, qid);
+      }
+    });
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') saveBtn.click();
+    });
   }
 
   return { init, switchMode };
