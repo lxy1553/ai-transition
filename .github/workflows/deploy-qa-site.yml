@@ -27,10 +27,17 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
+      - name: Prepare deploy directory
+        run: |
+          mkdir -p _deploy/interview
+          cp -r projects/interview_qa_website/* _deploy/interview/
+          # 根目录重定向到 interview
+          echo '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=./interview/"></head></html>' > _deploy/index.html
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'projects/interview_qa_website'
+          path: '_deploy'
 
       - name: Deploy to GitHub Pages
         id: deployment
