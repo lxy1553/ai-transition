@@ -554,17 +554,17 @@ const App = (() => {
         body: JSON.stringify({
           model: 'deepseek-chat',
           messages: [
-            { role: 'system', content: '你是面试官，根据以下面试题、参考答案和用户的回答，给出简短评价（50-150字）。评价要点：1）知识点覆盖是否完整 2）关键概念是否准确 3）遗漏了什么。语气客观、有建设性。直接输出评价，不要重复题目。' },
-            { role: 'user', content: `【题目】${q.title}\n【参考答案】${refAnswer}\n【用户回答】${userAnswer}\n请评价我的回答。` }
+            { role: 'system', content: '你是一位资深面试官。请用中文按以下结构分步骤评价用户的面试回答：\n\n【知识点覆盖】\n- 用户是否覆盖了这道题的核心知识点？遗漏了哪些？\n\n【表述准确性】\n- 关键概念是否表述准确？有无明显错误？\n\n【改进建议】\n- 具体建议用户补充或修正什么内容。\n\n最后给出 1-10 分的评分。评价字数在 100-200 字之间，语气客观、有建设性。' },
+            { role: 'user', content: `【面试题】${q.title}\n【参考答案】${refAnswer}\n【我的回答】${userAnswer}\n\n请按上面的结构评价我的回答。` }
           ],
           temperature: 0.3,
-          max_tokens: 600
+          max_tokens: 800
         })
       });
       const data = await resp.json();
       if (data.error) throw new Error(data.error.message || 'API错误');
       const evalText = data.choices?.[0]?.message?.content || '评价失败，请重试';
-      aiEval.innerHTML = `<div class="ai-eval-result"><strong>🤖 AI 评价</strong><p>${escapeHtml(evalText)}</p></div>`;
+      aiEval.innerHTML = `<div class="ai-eval-result"><strong>🤖 AI 评价</strong><div class="ai-eval-body">${escapeHtml(evalText).replace(/\n/g, '<br>')}</div></div>`;
     } catch (err) {
       aiEval.innerHTML = `<div class="ai-eval-error">评价失败：${escapeHtml(err.message)}</div>`;
     }
