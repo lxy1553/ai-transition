@@ -1,0 +1,206 @@
+{
+  "meta": {
+    "project": "Day 57 - 数据质量 Bad Case 回归样例",
+    "description": "将数据质量问题转化为可回归的 bad case，与 Day 56 仓库 Agent 端到端评测联动。每个 bad case 对应具体的数据质量异常，用于评测 Agent 是否按质量状态正确降级或阻断。",
+    "total_cases": 10,
+    "linked_day56_scenarios": [
+      "空分区查询",
+      "实时延迟",
+      "口径冲突",
+      "告警误报",
+      "血缘追溯",
+      "有界解释"
+    ]
+  },
+  "bad_cases": [
+    {
+      "case_id": "BC-001",
+      "linked_rule_id": "DQ-009",
+      "linked_day56_scenario": "空分区查询",
+      "title": "空分区：日报指标查询",
+      "user_question": "昨天授信通过率是多少？",
+      "quality_issue": "dt={yesterday} 分区为空，ETL 任务未产出",
+      "expected_quality_status": "quality_blocked",
+      "expected_agent_behavior": "阻断回答，不给出任何指标值，说明空分区原因和 ETL 任务状态，建议使用上一个可用分区或等待 ETL 产出",
+      "wrong_behavior_example": "Agent 直接回答「昨天授信通过率为 0%」——这是严重错误，空分区不代表通过率为 0",
+      "regression_assertions": [
+        "回答中不应包含具体的通过率数值",
+        "必须提及分区为空的原因",
+        "必须给出排查建议（ETL 任务、上游数据源）",
+        "quality_status 必须为 quality_blocked"
+      ]
+    },
+    {
+      "case_id": "BC-002",
+      "linked_rule_id": "DQ-002",
+      "linked_day56_scenario": "告警误报",
+      "title": "重复事件：实时申请量虚高导致假告警",
+      "user_question": "最近 1 小时实时申请量为什么突然暴涨？",
+      "quality_issue": "同一 apply_id 在窗口内被重复写入 2-3 次，原始值虚高 15%",
+      "expected_quality_status": "quality_warning",
+      "expected_agent_behavior": "降级回答：给出原始值和去重值两个口径，说明重复来源和重复率，解释这不是真实增长而是数据质量问题",
+      "wrong_behavior_example": "Agent 回答「申请量暴涨可能是营销活动效果」——实际是重复写入造成，这将误导业务判断",
+      "regression_assertions": [
+        "必须同时给出原始和去重两个口径",
+        "必须标注重复率和来源系统",
+        "不能给出「正常增长」的错误结论",
+        "quality_status 必须为 quality_warning"
+      ]
+    },
+    {
+      "case_id": "BC-003",
+      "linked_rule_id": "DQ-004",
+      "linked_day56_scenario": "实时延迟",
+      "title": "分区延迟：日报指标偏低",
+      "user_question": "今天放款金额是多少？",
+      "quality_issue": "dt={today} 分区 ETL 还在运行中，行数只有前一天同分区的 40%",
+      "expected_quality_status": "quality_warning",
+      "expected_agent_behavior": "降级回答：说明分区还在产出中，给出当前部分数据和预计完成时间，标注数据不完整",
+      "wrong_behavior_example": "Agent 直接报出当前部分数据作为「今日放款金额」而不说明不完整——用户会误以为这就是全量",
+      "regression_assertions": [
+        "必须标注分区 ETL 任务状态",
+        "必须说明当前数据不完整（完成度百分比）",
+        "给出预计完成时间或建议稍后重查",
+        "quality_status 必须为 quality_warning"
+      ]
+    },
+    {
+      "case_id": "BC-004",
+      "linked_rule_id": "DQ-005",
+      "linked_day56_scenario": "口径冲突",
+      "title": "补偿未完成：逾期率口径差异",
+      "user_question": "昨天 M1 逾期率到底是多少？为什么实时和离线差这么多？",
+      "quality_issue": "离线分区存在未完成的补偿任务，预计还要回补 200 条逾期记录，当前快照值偏低",
+      "expected_quality_status": "quality_warning",
+      "expected_agent_behavior": "降级回答：给出当前快照值和补偿后预计范围，解释口径差异来源于补偿任务未完成，说明实时和离线差异原因",
+      "wrong_behavior_example": "Agent 只回答当前快照值而不提补偿——用户拿到偏低数据做经营判断，等补偿完后发现逾期率其实更高",
+      "regression_assertions": [
+        "必须给出当前快照值和补偿后预计范围",
+        "必须说明离线/实时差异原因",
+        "不能给出「这就是最终值」的确定结论",
+        "quality_status 必须为 quality_warning"
+      ]
+    },
+    {
+      "case_id": "BC-005",
+      "linked_rule_id": "DQ-001",
+      "linked_day56_scenario": "有界解释",
+      "title": "空值：风控拒绝率失真",
+      "user_question": "最近 7 天各渠道的风控拒绝率？",
+      "quality_issue": "渠道 B 的 risk_flag 字段空值率达 12%，导致该渠道拒绝率被严重低估",
+      "expected_quality_status": "quality_warning",
+      "expected_agent_behavior": "降级回答：正常渠道给精确值，渠道 B 标注空值率，说明实际拒绝率不低于当前值，不把渠道 B 和其他渠道直接比较",
+      "wrong_behavior_example": "Agent 把所有渠道放在一起排序对比而不说明渠道 B 的空值问题——用户可能误判渠道 B 风险最低",
+      "regression_assertions": [
+        "渠道 B 必须标注空值率和不确定性",
+        "不能将有空值的渠道与正常渠道直接排序对比",
+        "给出空值原因排查建议",
+        "quality_status 必须为 quality_warning"
+      ]
+    },
+    {
+      "case_id": "BC-006",
+      "linked_rule_id": "DQ-006",
+      "linked_day56_scenario": "口径冲突",
+      "title": "幂等失败：实时与离线日报不一致",
+      "user_question": "今天实时放款金额比离线日报多了 8%，以哪个为准？",
+      "quality_issue": "实时链路 event_id 去重未生效，同一条放款事件被写入了 2 次，而离线 ETL 已正确去重",
+      "expected_quality_status": "quality_blocked",
+      "expected_agent_behavior": "阻断回答：不给出确定结论，明确说明数据不一致、偏差幅度和原因，给出排查步骤",
+      "wrong_behavior_example": "Agent 建议「取平均值」或「以实时为准」——没有先确认数据质量就直接给建议，治标不治本",
+      "regression_assertions": [
+        "不能给出「以 X 为准」的确定建议",
+        "必须说明偏差原因（实时去重 vs 离线去重）",
+        "必须给出排查步骤（实时去重、离线 ETL 状态、口径差异）",
+        "quality_status 必须为 quality_blocked"
+      ]
+    },
+    {
+      "case_id": "BC-007",
+      "linked_rule_id": "DQ-003",
+      "linked_day56_scenario": "实时延迟",
+      "title": "乱序事件：窗口指标异常",
+      "user_question": "最近 15 分钟审批通过后立即放款的成功率？",
+      "quality_issue": "15 分钟窗口内有 30 个放款事件的时间戳早于对应的审批通过事件，时序颠倒",
+      "expected_quality_status": "quality_warning",
+      "expected_agent_behavior": "降级回答：给出已确认正常时序的链路的成功率，标注乱序事件数和比例，建议拉大到 30 分钟窗口",
+      "wrong_behavior_example": "Agent 直接计算「成功率=60%」而不说明 30 个乱序事件——指标被乱序拉低，业务误判放款链路有问题",
+      "regression_assertions": [
+        "必须标注乱序事件数量和比例",
+        "建议拉大窗口重新确认",
+        "不能把受乱序影响的指标当确定结论",
+        "quality_status 必须为 quality_warning"
+      ]
+    },
+    {
+      "case_id": "BC-008",
+      "linked_rule_id": "DQ-008",
+      "linked_day56_scenario": "实时延迟",
+      "title": "晚到数据：告警延迟",
+      "user_question": "最近 5 分钟风控拒绝率有没有突增？",
+      "quality_issue": "5 分钟窗口内还有 20% 的事件因上游 Kafka 积压尚未到达，当前窗口数据不完整",
+      "expected_quality_status": "quality_warning",
+      "expected_agent_behavior": "降级回答：给出当前可见数据的拒绝率，标注窗口内数据完整度（80%），说明晚到事件可能的影响方向和量级",
+      "wrong_behavior_example": "Agent 给出拒绝率后没有标注数据完整度——用户基于不完整数据判断告警是否误报",
+      "regression_assertions": [
+        "必须标注窗口数据完整度百分比",
+        "说明晚到数据可能的影响方向",
+        "建议使用更大窗口确认",
+        "quality_status 必须为 quality_warning"
+      ]
+    },
+    {
+      "case_id": "BC-009",
+      "linked_rule_id": "DQ-007",
+      "linked_day56_scenario": "有界解释",
+      "title": "状态不一致：离线/实时风控标记冲突",
+      "user_question": "用户 {user_id} 当前是否在风控黑名单中？",
+      "quality_issue": "实时表 risk_flag='Y'，离线表 risk_flag='N'（T+1 分区），状态不一致",
+      "expected_quality_status": "quality_warning",
+      "expected_agent_behavior": "降级回答：同时给出两个来源的状态和更新时间，说明差异原因（实时更新 vs T+1 延迟），建议以实时为准",
+      "wrong_behavior_example": "Agent 只查离线表就回答「不在黑名单」——忽略了实时表已标记为风险用户",
+      "regression_assertions": [
+        "必须同时展示离线/实时两个来源的状态",
+        "必须说明时效差异",
+        "对于风控状态建议以实时为准",
+        "quality_status 必须为 quality_warning"
+      ]
+    },
+    {
+      "case_id": "BC-010",
+      "linked_rule_id": "DQ-010",
+      "linked_day56_scenario": "告警误报",
+      "title": "数据倾斜：单渠道异常拉高整体指标",
+      "user_question": "最近 1 小时放款转化率突然飙升到 80%，是不是模型优化有效果了？",
+      "quality_issue": "某渠道因营销活动集中放款，申请量占比从 10% 飙升到 60%，且该渠道转化率天然高（85%），拉高了整体转化率",
+      "expected_quality_status": "quality_warning",
+      "expected_agent_behavior": "降级回答：拆分渠道分析，说明数据倾斜来自某渠道营销活动，排除该渠道后的真实转化率，不建议归因到模型优化",
+      "wrong_behavior_example": "Agent 直接回答「转化率提升说明模型在生效」——忽略了渠道结构变化，归因错误",
+      "regression_assertions": [
+        "必须拆分渠道展示",
+        "标注数据倾斜维度和原因",
+        "不能错误归因到模型效果",
+        "给出剔除倾斜渠道后的真实指标"
+      ]
+    }
+  ],
+  "regression_summary": {
+    "total_cases": 10,
+    "by_quality_status": {
+      "quality_blocked": 2,
+      "quality_warning": 8
+    },
+    "by_day56_scenario": {
+      "空分区查询": 1,
+      "告警误报": 2,
+      "实时延迟": 3,
+      "口径冲突": 2,
+      "有界解释": 2
+    },
+    "by_category": {
+      "空值": 1, "重复": 1, "乱序": 1, "延迟": 1,
+      "补偿": 1, "幂等": 1, "状态不一致": 1, "晚到数据": 1,
+      "空分区": 1, "数据倾斜": 1
+    }
+  }
+}

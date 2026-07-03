@@ -1,0 +1,171 @@
+{
+  "meta": {
+    "project": "Day 57 - 数据质量 + 错误治理",
+    "description": "金融信贷离线/实时仓库数据质量规则清单，供 Agent 判断质量状态和回答策略",
+    "total_rules": 10,
+    "quality_status_levels": {
+      "quality_ok": "数据质量正常，Agent 正常回答",
+      "quality_warning": "数据质量有疑点，Agent 降级说明并标注可信度",
+      "quality_blocked": "数据质量不可用，Agent 阻断回答并给出排查建议"
+    }
+  },
+  "rules": [
+    {
+      "rule_id": "DQ-001",
+      "rule_name": "审批结果字段空值检查",
+      "category": "空值",
+      "warehouse_type": "offline",
+      "risk_level": "high",
+      "trigger_condition": "核心业务字段（approval_result、risk_level、loan_amount）NULL 比例超过 5%",
+      "affected_agent_scenario": "风控拒绝率查询、授信通过率查询、额度分析",
+      "quality_status": "quality_warning",
+      "action": "降级回答：在回答中标注空值比例，说明指标可能偏低/偏高，并给出数据完整性修复建议",
+      "example_user_question": "昨天授信通过率是多少？",
+      "example_agent_response_template": "昨天授信通过率为 {rate}，但需注意：审批结果字段有 {null_pct}% 为空值（主要集中在 {channel} 渠道），实际通过率可能略有偏差。建议排查 {channel} 数据上报链路。",
+      "fix_suggestion": "检查上游业务系统数据上报完整性，排查特定渠道的空值原因"
+    },
+    {
+      "rule_id": "DQ-002",
+      "rule_name": "申请事件重复落库检查",
+      "category": "重复",
+      "warehouse_type": "realtime",
+      "risk_level": "high",
+      "trigger_condition": "同一 apply_id + event_type 在同一窗口内出现超过 1 次，去重后差异大于 3%",
+      "affected_agent_scenario": "实时申请量查询、实时风控命中率、经营大屏",
+      "quality_status": "quality_warning",
+      "action": "降级回答：同时给出原始值和去重值，说明重复可能原因（幂等失败、重放），标注差异幅度",
+      "example_user_question": "最近 1 小时实时申请量是多少？",
+      "example_agent_response_template": "最近 1 小时实时申请量：原始 {raw_count} 笔，去重后 {dedup_count} 笔，重复率 {dup_rate}%。重复主要来自 {source_system} 系统。建议按去重口径参考，同时排查 {source_system} 幂等机制。",
+      "fix_suggestion": "检查上游事件生产端的幂等写入逻辑，确认 event_id 去重是否生效"
+    },
+    {
+      "rule_id": "DQ-003",
+      "rule_name": "事件乱序检查（结果先于明细）",
+      "category": "乱序",
+      "warehouse_type": "realtime",
+      "risk_level": "medium",
+      "trigger_condition": "event_result 时间戳早于 event_detail 时间戳，或同一 apply_id 的 event 顺序颠倒",
+      "affected_agent_scenario": "实时审批流追踪、事件链路回溯",
+      "quality_status": "quality_warning",
+      "action": "降级回答：说明事件顺序存在乱序，给出窗口内已确认的事件数，建议拉大窗口重查",
+      "example_user_question": "最近 30 分钟审批通过后放款的笔数？",
+      "example_agent_response_template": "最近 30 分钟「审批通过→放款」链路中，确认审批通过 {approved} 笔、放款 {loaned} 笔。但检测到 {disorder_count} 个事件的时序异常（放款时间早于审批通过时间），可能受上游时钟偏差或重放影响。建议以 1 小时窗口重新查询确认。",
+      "fix_suggestion": "检查上游事件时间戳生成逻辑，确认是否使用了事件发生时间而非处理时间"
+    },
+    {
+      "rule_id": "DQ-004",
+      "rule_name": "离线分区延迟检查",
+      "category": "延迟",
+      "warehouse_type": "offline",
+      "risk_level": "high",
+      "trigger_condition": "当天期望分区（如 dt={today}）的 ETL 任务未完成，或分区行数相比前一天同分区偏差超过 30%",
+      "affected_agent_scenario": "日报指标查询、昨日经营数据、逾期率计算",
+      "quality_status": "quality_warning",
+      "action": "降级回答：如果分区未产出则明确说明并给出最新可用分区数据；如果行数偏差则标注并给出修正参考",
+      "example_user_question": "昨天放款金额是多少？",
+      "example_agent_response_template": "昨天（dt={today-1}）分区当前还在产出中（ETL 任务状态：{task_status}，预计 {eta} 完成）。目前最近可用分区为 dt={latest_available}，该日放款金额为 {amount}。建议等待分区产出后重新查询，或以 {latest_available} 数据作为临时参考。",
+      "fix_suggestion": "检查 ETL 调度是否延迟，确认分区依赖链是否有卡住的任务"
+    },
+    {
+      "rule_id": "DQ-005",
+      "rule_name": "补偿任务完成状态检查",
+      "category": "补偿",
+      "warehouse_type": "offline",
+      "risk_level": "high",
+      "trigger_condition": "存在针对查询分区的未完成补偿任务（回补/修正），或补偿任务状态为 running/failed",
+      "affected_agent_scenario": "逾期率查询、经营日报、风控指标",
+      "quality_status": "quality_warning",
+      "action": "降级回答：标注当前分区存在未完成补偿任务，给出当前快照值和预计补偿后范围",
+      "example_user_question": "昨天的 M1 逾期率是多少？",
+      "example_agent_response_template": "昨天 M1 逾期率当前快照为 {current_rate}%，但需要注意：该分区有 1 个补偿任务（{task_name}）尚未完成，预计回补 {estimated_rows} 条逾期记录。补偿完成后逾期率预计在 {range_min}% ~ {range_max}% 之间。建议 {compensation_eta} 后重新查询。",
+      "fix_suggestion": "确认补偿任务的依赖是否就绪，优先补齐核心逾期数据"
+    },
+    {
+      "rule_id": "DQ-006",
+      "rule_name": "幂等写入失败检查",
+      "category": "幂等",
+      "warehouse_type": "both",
+      "risk_level": "high",
+      "trigger_condition": "同一 event_id/流水号 在目标表中出现多行，且关键字段不一致，说明去重逻辑未生效",
+      "affected_agent_scenario": "经营日报与实时快照一致性、放款金额核对",
+      "quality_status": "quality_blocked",
+      "action": "阻断回答：离线日报和实时快照差异不可忽略时，不给出确定结论，明确说明数据不一致并给出排查项",
+      "example_user_question": "今天实时放款金额和离线日报放款金额不一致怎么办？",
+      "example_agent_response_template": "检测到实时放款金额（{realtime_amount}）与离线日报（{offline_amount}）存在 {diff_pct}% 偏差，已超过 3% 的可接受阈值。这通常由以下原因导致：1）实时链路存在未去重的重复事件；2）离线分区存在未完成的补偿任务；3）离线/实时口径差异。建议按以下顺序排查：\n- 先检查实时链路 event_id 去重是否生效\n- 再确认离线分区 dt={today-1} 的 ETL 和补偿任务状态\n- 最后核对离线/实时的放款口径是否一致",
+      "fix_suggestion": "检查实时写入端和离线 ETL 的去重逻辑是否一致，确认 event_id 主键约束"
+    },
+    {
+      "rule_id": "DQ-007",
+      "rule_name": "离线/实时状态字段不一致检查",
+      "category": "状态不一致",
+      "warehouse_type": "both",
+      "risk_level": "high",
+      "trigger_condition": "同一 apply_id 在离线表和实时表中的状态字段（如 loan_status、risk_flag）不一致",
+      "affected_agent_scenario": "授信状态查询、风控标记查询、催收状态",
+      "quality_status": "quality_warning",
+      "action": "降级回答：同时给出离线状态和实时状态，说明差异原因（时效差异、补偿差异），给出建议参考哪个来源",
+      "example_user_question": "这个申请单当前放款状态是什么？",
+      "example_agent_response_template": "申请单 {apply_id} 的放款状态：\n- 实时链路：{realtime_status}（更新时间：{realtime_update_time}）\n- 离线链路：{offline_status}（分区：dt={offline_dt}）\n\n两个来源存在不一致，通常是因为离线分区尚未更新（T+1 延迟）或实时状态已被异步任务修改。对于当前状态，建议以实时链路为准。",
+      "fix_suggestion": "确认离线分区的更新频率，在 T+0 场景优先使用实时链路"
+    },
+    {
+      "rule_id": "DQ-008",
+      "rule_name": "实时窗口晚到数据检查",
+      "category": "晚到数据",
+      "warehouse_type": "realtime",
+      "risk_level": "medium",
+      "trigger_condition": "事件实际发生时间与写入时间之差超过窗口允许的延迟阈值（如 5 分钟），且该事件影响窗口聚合结果",
+      "affected_agent_scenario": "实时窗口指标、告警阈值判定",
+      "quality_status": "quality_warning",
+      "action": "降级回答：标注窗口内可能未包含的晚到数据量，说明当前窗口指标可能偏保守",
+      "example_user_question": "最近 5 分钟风控拒绝率有没有异常？",
+      "example_agent_response_template": "最近 5 分钟风控拒绝率为 {rate}%（拒绝 {rejected}/{total} 笔）。但检测到当前窗口有 {late_count} 条事件写入延迟超过 5 分钟（最大延迟 {max_delay}），这些事件可能未被计入。如果晚到事件中包含较多拒绝案例，实际拒绝率可能略高。建议拉大窗口到 15 分钟重新确认。",
+      "fix_suggestion": "检查上游事件采集延迟原因（网络、序列化、Kafka 积压），评估 watermark 设置是否合理"
+    },
+    {
+      "rule_id": "DQ-009",
+      "rule_name": "空分区检查",
+      "category": "空分区",
+      "warehouse_type": "offline",
+      "risk_level": "critical",
+      "trigger_condition": "查询指定分区的行数为 0，而前一天同分区的行数正常（>0）",
+      "affected_agent_scenario": "所有离线指标查询",
+      "quality_status": "quality_blocked",
+      "action": "阻断回答：明确告知分区为空，不给任何指标值，说明原因、影响范围和排查建议",
+      "example_user_question": "昨天的授信申请量是多少？",
+      "example_agent_response_template": "无法回答：dt={yesterday} 分区当前为空（0 行），而上一个可用分区 dt={day_before} 有 {normal_count} 行数据。这可能是以下原因导致：\n1）ETL 任务 {task_name} 尚未产出或产出失败\n2）上游数据源在昨天无数据写入（可能性较低，需确认）\n\n建议：\n- 去调度平台确认任务 {task_name} 的执行状态\n- 检查上游 ODS 层 dt={yesterday} 分区是否有数据\n- 如果紧急，可使用 dt={day_before} 的分区数据作为临时参考",
+      "fix_suggestion": "检查 ETL 调度状态、上游数据源是否有数据、分区是否被误删"
+    },
+    {
+      "rule_id": "DQ-010",
+      "rule_name": "窗口数据倾斜检查",
+      "category": "数据倾斜",
+      "warehouse_type": "realtime",
+      "risk_level": "medium",
+      "trigger_condition": "单个窗口内某个 channel / product_type 的事件量占比超过历史均值的 3 倍标准差",
+      "affected_agent_scenario": "实时渠道分析、产品维度指标",
+      "quality_status": "quality_warning",
+      "action": "降级回答：标注倾斜维度，拆开正常维度和异常维度分别说明，避免聚合值被单维度异常主导",
+      "example_user_question": "最近 1 小时各渠道放款情况？",
+      "example_agent_response_template": "最近 1 小时各渠道放款情况：\n- {channel_a}：{amount_a}（与历史均值持平）\n- {channel_b}：{amount_b}（与历史均值持平）\n- {channel_c}：{amount_c} ⚠️ 异常偏高，是历史均值的 {ratio}x，占当前窗口总量的 {pct}%\n\n{channel_c} 的数据倾斜导致整体放款金额被拉高。建议：\n1）去掉 {channel_c} 后再看整体趋势\n2）排查 {channel_c} 是否有促销活动或数据异常",
+      "fix_suggestion": "检查倾斜渠道是否存在刷量、营销活动或数据上报异常"
+    }
+  ],
+  "error_category_summary": {
+    "空值": {"count": 1, "risk_distribution": {"high": 1}, "primary_action": "降级回答 + 标注空值比例"},
+    "重复": {"count": 1, "risk_distribution": {"high": 1}, "primary_action": "降级回答 + 给出原始/去重双口径"},
+    "乱序": {"count": 1, "risk_distribution": {"medium": 1}, "primary_action": "降级回答 + 建议拉大窗口"},
+    "延迟": {"count": 1, "risk_distribution": {"high": 1}, "primary_action": "降级回答 + 给出最新可用分区"},
+    "补偿": {"count": 1, "risk_distribution": {"high": 1}, "primary_action": "降级回答 + 给出补偿前后范围"},
+    "幂等": {"count": 1, "risk_distribution": {"high": 1}, "primary_action": "阻断回答 + 给出排查项"},
+    "状态不一致": {"count": 1, "risk_distribution": {"high": 1}, "primary_action": "降级回答 + 双来源对比"},
+    "晚到数据": {"count": 1, "risk_distribution": {"medium": 1}, "primary_action": "降级回答 + 说明窗口外数据"},
+    "空分区": {"count": 1, "risk_distribution": {"critical": 1}, "primary_action": "阻断回答 + 说明原因和排查建议"},
+    "数据倾斜": {"count": 1, "risk_distribution": {"medium": 1}, "primary_action": "降级回答 + 拆分维度说明"}
+  },
+  "action_distribution": {
+    "quality_ok_continue": {"count": 0, "description": "正常回答，无质量异常"},
+    "quality_warning_degrade": {"count": 8, "description": "降级说明，标注不确定性和可信度"},
+    "quality_blocked_stop": {"count": 2, "description": "阻断回答，不给确定结论，给排查建议"}
+  }
+}
