@@ -60,15 +60,15 @@ const Parser = (() => {
     // 按 "### Q" 或 "### 附-" 分割条目
     const blocks = text.split(/\n(?=### (?:Q\d+|附-\d+))/);
     for (const block of blocks) {
-      const q = parseMianshiyaBlock(block);
+      const q = parseGenericBlock(block);
       if (q && q.title) questions.push(q);
     }
     return questions;
   }
 
-  function parseMianshiyaBlock(block) {
-    // 提取 ID
-    const idMatch = block.match(/###\s+(Q\d+|附-\d+)/);
+  function parseGenericBlock(block) {
+    // 提取 ID（支持 Q/X/L 前缀 + 附- 前缀）
+    const idMatch = block.match(/###\s+([QXL]\d+|附-\d+)/);
     if (!idMatch) return null;
     const id = idMatch[1];
 
@@ -211,7 +211,7 @@ const Parser = (() => {
     const questions = [];
     const blocks = text.split(/\n(?=### X\d+)/);
     for (const block of blocks) {
-      const q = parseMianshiyaBlock(block);
+      const q = parseGenericBlock(block);
       if (q && q.title) {
         q.source = 'xiaolinnote';
         // 根据分类调整难度
@@ -238,7 +238,7 @@ const Parser = (() => {
     const questions = [];
     const blocks = text.split(/\n(?=### L\d+)/);
     for (const block of blocks) {
-      const q = parseMianshiyaBlock(block);
+      const q = parseGenericBlock(block);
       if (q && q.title) {
         q.source = 'learning';
         // 根据分类调整难度
