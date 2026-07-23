@@ -11,6 +11,8 @@ const Parser = (() => {
     'https://raw.githubusercontent.com/lxy1553/ai-transition/main/docs/mianshiya_llm_interview_questions.md';
   const URL_CORE =
     'https://raw.githubusercontent.com/lxy1553/ai-transition/main/docs/interview_core_questions.md';
+  const URL_XIAOLIN =
+    'https://raw.githubusercontent.com/lxy1553/ai-transition/main/docs/xiaolinnote_questions.md';
 
   /**
    * 从 URL 拉取文本，支持本地缓存
@@ -201,6 +203,26 @@ const Parser = (() => {
     return tags;
   }
 
+  // ---- xiaolinnote 文件解析 --------------------------------------------
+
+  function parseXiaolin(text) {
+    const questions = [];
+    const blocks = text.split(/\n(?=### X\d+)/);
+    for (const block of blocks) {
+      const q = parseMianshiyaBlock(block);
+      if (q && q.title) {
+        q.source = 'xiaolinnote';
+        // 根据分类调整难度
+        if (q.category === '大模型工程') q.difficulty = 'hard';
+        else if (q.category === 'LLM工具调用与协议') q.difficulty = 'medium';
+        else if (q.category === 'Agent图解专栏' || q.category === 'Claude Code图解专栏') q.difficulty = 'easy';
+        else q.difficulty = 'medium';
+        questions.push(q);
+      }
+    }
+    return questions;
+  }
+
   // ---- 公开 API ---------------------------------------------------------
 
   /**
@@ -209,20 +231,23 @@ const Parser = (() => {
    * 返回 { questions, cacheTime }，cacheTime 为缓存中最旧的时间戳
    */
   async function loadAll(force) {
-    const [text1, text2] = await Promise.all([
+    const [text1, text2, text3] = await Promise.all([
       fetchText(URL_MIANSHIYA, force),
-      fetchText(URL_CORE, force)
+      fetchText(URL_CORE, force),
+      fetchText(URL_XIAOLIN, force)
     ]);
     const q1 = parseMianshiya(text1);
     const q2 = parseInterviewCore(text2);
-    const all = [...q1, ...q2];
+    const q3 = parseXiaolin(text3);
+    const all = [...q1, ...q2, ...q3];
 
     const t1 = getCacheTime(URL_MIANSHIYA);
     const t2 = getCacheTime(URL_CORE);
-    const cacheTime = Math.min(t1, t2) || Date.now();
+    const t3 = getCacheTime(URL_XIAOLIN);
+    const cacheTime = Math.min(t1, t2, t3) || Date.now();
 
     return { questions: all, cacheTime };
   }
 
-  return { loadAll, URL_MIANSHIYA, URL_CORE, getCacheTime };
+  return { loadAll, URL_MIANSHIYA, URL_CORE, URL_XIAOLIN, getCacheTime };
 })();
