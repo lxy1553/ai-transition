@@ -295,29 +295,13 @@ const Parser = (() => {
   // ---- 公开 API ---------------------------------------------------------
 
   async function loadAll(force) {
-    const allTexts = await Promise.all([
-      fetchText(URL_MIANSHIYA, force),
-      fetchText(URL_CORE, force),
-      fetchText(URL_XIAOLIN, force),
-      fetchText(URL_LEARNING, force),
+    const [text] = await Promise.all([
       fetchText(URL_MERGED, force)
     ]);
-    const q1 = parseMianshiya(allTexts[0]);
-    const q2 = parseInterviewCore(allTexts[1]);
-    const q3 = parseXiaolin(allTexts[2]);
-    const q4 = parseLearning(allTexts[3]);
-    const q5 = parseMerged(allTexts[4]);
-    const all = [...q1, ...q2, ...q3, ...q4, ...q5];
-
-    const t1 = getCacheTime(URL_MIANSHIYA);
-    const t2 = getCacheTime(URL_CORE);
-    const t3 = getCacheTime(URL_XIAOLIN);
-    const t4 = getCacheTime(URL_LEARNING);
-    const t5 = getCacheTime(URL_MERGED);
-    const cacheTime = Math.min(t1, t2, t3, t4, t5) || Date.now();
-
-    return { questions: all, cacheTime };
+    const questions = parseMerged(text);
+    const cacheTime = getCacheTime(URL_MERGED) || Date.now();
+    return { questions, cacheTime };
   }
 
-  return { loadAll, URL_MIANSHIYA, URL_CORE, URL_XIAOLIN, URL_LEARNING, URL_MERGED, getCacheTime };
+  return { loadAll, URL_MERGED, getCacheTime };
 })();
