@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-将所有题库按来源→分类→单题md文件，重组到 interview/ 目录
+将所有题库按来源→分类，每个分类一个 md 文件，存入 interview/ 目录
 """
 
 import re
@@ -13,7 +13,6 @@ from datetime import datetime
 DOCS_DIR = Path("/Users/lxy/Documents/ai_transition/docs")
 INTERVIEW_DIR = Path("/Users/lxy/Documents/ai_transition/interview")
 
-# 4 个题库来源
 SOURCES = {
     "mianshiya": {
         "file": DOCS_DIR / "mianshiya_llm_interview_questions.md",
@@ -43,55 +42,39 @@ SOURCES = {
 
 
 def sanitize(name: str) -> str:
-    """清理文件名"""
     name = re.sub(r'[\\/*?:"<>|#&]', '_', name)
     name = re.sub(r'\s+', ' ', name).strip()
     return name[:80]
 
 
 def parse_generic(block: str, source: str):
-    """解析 mianshiya/xiaolinnote/learning 格式的 block"""
     id_match = re.search(r'###\s+([QXL]\d+|附-\d+)', block)
     if not id_match:
         return None
     qid = id_match.group(1)
-
     cat_match = re.search(r'\*\*分类：\*\*\s*(.+)', block)
     category = cat_match.group(1).strip() if cat_match else "未分类"
-
     title_match = re.search(r'\*\*题目：\*\*\s*(.+)', block)
     if not title_match:
         return None
     title = title_match.group(1).strip()
-
     ans_start = block.find("**参考答案：**")
     if ans_start == -1:
         return None
     answer = block[ans_start + len("**参考答案：**"):].strip()
     answer = re.sub(r'\n---\s*$', '', answer).strip()
-
-    return {
-        "id": qid,
-        "source": source,
-        "category": category,
-        "title": title,
-        "answer": answer,
-    }
+    return {"id": qid, "source": source, "category": category, "title": title, "answer": answer}
 
 
 def parse_core(block: str):
-    """解析 interview_core 格式的 block（HTML 锚点）"""
     id_match = re.search(r'<a id="(q\d+)">', block)
     if not id_match:
         return None
     qid = id_match.group(1).upper()
-
     title_match = re.search(r'##\s+Q\d+\s*[：:]\s*(.+)', block)
     if not title_match:
         return None
     title = title_match.group(1).strip()
-
-    # 从标题推断分类
     t = title.lower()
     if any(w in t for w in ['rag', '检索', '召回', 'chunk', 'embed', '向量']):
         category = "RAG检索增强"
@@ -115,102 +98,100 @@ def parse_core(block: str):
         category = "金融信贷"
     else:
         category = "综合"
-
     ans_start = block.find("### 回答")
     if ans_start == -1:
         return None
     answer = block[ans_start + len("### 回答"):].strip()
     answer = re.sub(r'\n---\s*$', '', answer).strip()
-
-    return {
-        "id": qid,
-        "source": "interview_core",
-        "category": category,
-        "title": title,
-        "answer": answer,
-    }
+    return {"id": qid, "source": "interview_core", "category": category, "title": title, "answer": answer}
 
 
 def main():
-    # 清空 interview 目录（保留旧文件）
+    # 清空旧文件
     if INTERVIEW_DIR.exists():
-        # 删除之前爬取的子目录，保留README
-        for item in INTERVIEW_DIR.iterdir():
-            if item.is_dir() and item.name not in [".git"]:
+        for item in list(INTERVIEW_DIR.iterdir()):
+            if item.name == ".git":
+                continue
+            if item.is_dir():
                 shutil.rmtree(item)
-        for item in INTERVIEW_DIR.iterdir():
-            if item.is_file() and item.name.endswith(".md") and item.name != "README.md":
-                item.unlink()
-        for item in INTERVIEW_DIR.iterdir():
-            if item.name.endswith(".json"):
+            else:
                 item.unlink()
 
     INTERVIEW_DIR.mkdir(parents=True, exist_ok=True)
 
+    all_categories = {}  # {source_key: {category: [questions]}}
     total = 0
-    index = []
 
     for source_key, cfg in SOURCES.items():
         source_label = cfg["label"]
         filepath = cfg["file"]
 
         if not filepath.exists():
-            print(f"⚠️ 跳过 {source_label}: 文件不存在 {filepath}")
+            print(f"⚠️ 跳过 {source_label}: 文件不存在")
             continue
 
         with open(filepath, "r", encoding="utf-8") as f:
             text = f.read()
 
-        # 按题目分割
         blocks = re.split(cfg["split_pattern"], text)
-        # 第一块可能是文件头（介绍文字），跳过
         blocks = [b for b in blocks if re.search(cfg["id_pattern"], b)]
 
-        source_dir = INTERVIEW_DIR / source_key
-        source_dir.mkdir(exist_ok=True)
-
-        source_count = 0
+        cats = {}
         for block in blocks:
-            if source_key == "interview_core":
-                q = parse_core(block)
-            else:
-                q = parse_generic(block, source_key)
-
+            q = parse_core(block) if source_key == "interview_core" else parse_generic(block, source_key)
             if not q or not q["title"] or len(q["answer"]) < 50:
                 continue
+            cats.setdefault(q["category"], []).append(q)
 
-            # 分类子目录
-            cat_dir = source_dir / sanitize(q["category"])
-            cat_dir.mkdir(exist_ok=True)
+        all_categories[source_key] = cats
+        total += sum(len(v) for v in cats.values())
+        print(f"  ✅ {source_label}: {sum(len(v) for v in cats.values())} 题, {len(cats)} 个分类")
 
-            # 文件名：ID_标题.md
-            filename = f"{q['id']}_{sanitize(q['title'])}.md"
-            filepath = cat_dir / filename
+    # 写入文件：每个来源一个子目录，每个分类一个 md 文件
+    print(f"\n📝 写入文件...")
+
+    for source_key, cats in all_categories.items():
+        source_label = SOURCES[source_key]["label"]
+        src_dir = INTERVIEW_DIR / source_key
+        src_dir.mkdir(exist_ok=True)
+
+        for cat_name, questions in sorted(cats.items()):
+            filename = f"{sanitize(cat_name)}.md"
+            filepath = src_dir / filename
 
             with open(filepath, "w", encoding="utf-8") as f:
+                # 文件头
                 f.write(f"---\n")
-                f.write(f"id: {q['id']}\n")
-                f.write(f"source: {q['source']}\n")
-                f.write(f"category: {q['category']}\n")
-                f.write(f"title: {q['title']}\n")
+                f.write(f"source: {source_key}\n")
+                f.write(f"source_label: {source_label}\n")
+                f.write(f"category: {cat_name}\n")
+                f.write(f"count: {len(questions)}\n")
                 f.write(f"generated: {datetime.now().isoformat()}\n")
                 f.write(f"---\n\n")
-                f.write(f"# {q['title']}\n\n")
-                f.write(f"> 来源: {source_label} | 分类: {q['category']}\n\n")
-                f.write(q['answer'])
+                f.write(f"# {source_label} · {cat_name}\n\n")
+                f.write(f"> 共 {len(questions)} 题\n\n")
+                f.write(f"---\n\n")
 
-            source_count += 1
+                for i, q in enumerate(questions, 1):
+                    f.write(f"## {i}. {q['title']}\n\n")
+                    f.write(f"> ID: `{q['id']}`\n\n")
+                    f.write(q['answer'])
+                    f.write(f"\n\n---\n\n")
+
+            print(f"  📄 {source_key}/{filename} ({len(questions)} 题)")
+
+    # 写总索引
+    index = []
+    for source_key, cats in all_categories.items():
+        for cat_name, questions in cats.items():
             index.append({
-                "id": q["id"],
                 "source": source_key,
-                "category": q["category"],
-                "title": q["title"],
+                "source_label": SOURCES[source_key]["label"],
+                "category": cat_name,
+                "count": len(questions),
+                "file": f"{source_key}/{sanitize(cat_name)}.md",
             })
 
-        total += source_count
-        print(f"  ✅ {source_label}: {source_count} 题 → interview/{source_key}/")
-
-    # 写索引
     index_path = INTERVIEW_DIR / "_index.json"
     with open(index_path, "w", encoding="utf-8") as f:
         json.dump(index, f, ensure_ascii=False, indent=2)
@@ -220,25 +201,21 @@ def main():
     with open(readme_path, "w", encoding="utf-8") as f:
         f.write("# AI 面试题库\n\n")
         f.write(f"> 生成时间: {datetime.now().isoformat()}\n")
-        f.write(f"> 总题数: {total}\n\n")
+        f.write(f"> 总题数: {total} 题\n")
+        f.write(f"> 总分类: {len(index)} 个\n\n")
         f.write("---\n\n")
         for source_key, cfg in SOURCES.items():
-            src_index = [i for i in index if i["source"] == source_key]
-            if not src_index:
+            cats = all_categories.get(source_key, {})
+            if not cats:
                 continue
-            f.write(f"## {cfg['label']}（{len(src_index)} 题）\n\n")
-            cats = {}
-            for item in src_index:
-                cats.setdefault(item["category"], []).append(item)
-            for cat, items in sorted(cats.items()):
-                f.write(f"### {cat}（{len(items)} 题）\n\n")
-                for item in items:
-                    f.write(f"- [{item['title']}]({source_key}/{sanitize(cat)}/{item['id']}_{sanitize(item['title'])}.md)\n")
-                f.write("\n")
+            src_total = sum(len(v) for v in cats.values())
+            f.write(f"## {cfg['label']}（{src_total} 题 / {len(cats)} 个分类）\n\n")
+            for cat_name, questions in sorted(cats.items()):
+                f.write(f"- [{cat_name}（{len(questions)} 题）]({source_key}/{sanitize(cat_name)}.md)\n")
+            f.write("\n")
 
-    print(f"\n✅ 完成！共 {total} 题，输出到 {INTERVIEW_DIR}")
-    print(f"   索引: {index_path}")
-    print(f"   目录: {readme_path}")
+    file_count = sum(1 for _ in INTERVIEW_DIR.rglob("*.md") if _.name != "README.md")
+    print(f"\n✅ 完成！共 {total} 题 → {file_count} 个 md 文件 → {INTERVIEW_DIR}")
 
 
 if __name__ == "__main__":
