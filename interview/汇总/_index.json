@@ -1,0 +1,93 @@
+[
+  {
+    "category": "AI 安全与合规",
+    "total": 1,
+    "deduped": 0,
+    "sources": "interview_core",
+    "file": "AI 安全与合规.md"
+  },
+  {
+    "category": "AI 应用工程化",
+    "total": 26,
+    "deduped": 14,
+    "sources": "interview_core, learning, mianshiya",
+    "file": "AI 应用工程化.md"
+  },
+  {
+    "category": "Agent 智能体",
+    "total": 63,
+    "deduped": 12,
+    "sources": "interview_core, learning, mianshiya, xiaolinnote",
+    "file": "Agent 智能体.md"
+  },
+  {
+    "category": "Claude Code 开发实战",
+    "total": 22,
+    "deduped": 1,
+    "sources": "xiaolinnote",
+    "file": "Claude Code 开发实战.md"
+  },
+  {
+    "category": "MCP 工具调用与协议",
+    "total": 21,
+    "deduped": 3,
+    "sources": "mianshiya, xiaolinnote",
+    "file": "MCP 工具调用与协议.md"
+  },
+  {
+    "category": "NL2SQL 自然语言查询",
+    "total": 32,
+    "deduped": 3,
+    "sources": "interview_core",
+    "file": "NL2SQL 自然语言查询.md"
+  },
+  {
+    "category": "Prompt 工程",
+    "total": 5,
+    "deduped": 0,
+    "sources": "interview_core, mianshiya",
+    "file": "Prompt 工程.md"
+  },
+  {
+    "category": "RAG 检索增强生成",
+    "total": 75,
+    "deduped": 4,
+    "sources": "interview_core, mianshiya, xiaolinnote",
+    "file": "RAG 检索增强生成.md"
+  },
+  {
+    "category": "信贷风控建模",
+    "total": 23,
+    "deduped": 7,
+    "sources": "interview_core, learning",
+    "file": "信贷风控建模.md"
+  },
+  {
+    "category": "大模型工程与训练",
+    "total": 56,
+    "deduped": 18,
+    "sources": "learning, mianshiya, xiaolinnote",
+    "file": "大模型工程与训练.md"
+  },
+  {
+    "category": "数据仓库与治理",
+    "total": 26,
+    "deduped": 14,
+    "sources": "interview_core, learning",
+    "file": "数据仓库与治理.md"
+  },
+  {
+    "category": "模型可解释性与评估",
+    "total": 2,
+    "deduped": 2,
+    "sources": "learning",
+    "file": "模型可解释性与评估.md"
+  },
+  {
+    "category": "综合",
+    "total": 33,
+    "deduped": 1,
+    "sources": "interview_core, learning, mianshiya",
+    "file": "综合.md"
+  }
+]
