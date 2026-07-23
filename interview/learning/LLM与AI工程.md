@@ -4,7 +4,46 @@ source_label: 学习复习计划
 category: LLM与AI工程
 count: 33
 generated: 2026-07-23T15:44:23.593415
+
 ---
+
+## 📑 目录
+
+1. [1. RAG 解决了什么问题？（20min）](#1.-rag-解决了什么问题（20min）)
+2. [2. 请讲讲RAG 全链路详解：从文档到问答中的RAG 的核心步骤（1.5h）](#2.-请讲讲rag-全链路详解：从文档到问答中的rag-的核心步骤（1.5h）)
+3. [3. 请讲讲RAG 全链路详解：从文档到问答中的要求](#3.-请讲讲rag-全链路详解：从文档到问答中的要求)
+4. [4. 请讲讲RAG 全链路详解：从文档到问答中的动手练习：构建一个最小 RAG 系统（1.5h）](#4.-请讲讲rag-全链路详解：从文档到问答中的动手练习：构建一个最小-rag-系统（1.5h）)
+5. [5. 请讲讲RAG 全链路详解：从文档到问答中的RAG 的常见陷阱](#5.-请讲讲rag-全链路详解：从文档到问答中的rag-的常见陷阱)
+6. [6. 请讲讲featureservice 和 ruleengine 作为依赖注入中的FastAPI 的核心特性](#6.-请讲讲featureservice-和-ruleengine-作为依赖注入中的fastapi-的核心特性)
+7. [7. 请讲讲featureservice 和 ruleengine 作为依赖注入中的在 AI/ML 系统中的具体作用](#7.-请讲讲featureservice-和-ruleengine-作为依赖注入中的在-ai/ml-系统中的具体作用)
+8. [8. 为什么选 FastAPI 而不是 Flask？](#8.-为什么选-fastapi-而不是-flask)
+9. [9. 什么是向量数据库？（20min）](#9.-什么是向量数据库（20min）)
+10. [10. 请说说主流向量数据库对比（15min）](#10.-请说说主流向量数据库对比（15min）)
+11. [11. 请详细讲解核心概念与原理（40min）](#11.-请详细讲解核心概念与原理（40min）)
+12. [12. 请举例说明动手实战：用 Chroma 搭建 RAG 知识库（1h）如何实现？](#12.-请举例说明动手实战：用-chroma-搭建-rag-知识库（1h）如何实现)
+13. [13. 请讲讲向量数据库：从概念到实战中的进阶：Milvus 生产部署](#13.-请讲讲向量数据库：从概念到实战中的进阶：milvus-生产部署)
+14. [14. 面试官问：常见问题你会怎么回答？](#14.-面试官问：常见问题你会怎么回答)
+15. [15. 请说说主流 LLM API 对比（15min）](#15.-请说说主流-llm-api-对比（15min）)
+16. [16. 请讲讲LLM API 调用：从 Prompt 到 Function Calling中的API 调用的四种模式（1h）](#16.-请讲讲llm-api-调用：从-prompt-到-function-calling中的api-调用的四种模式（1h）)
+17. [17. 请讲讲LLM API 调用：从 Prompt 到 Function Calling中的输出](#17.-请讲讲llm-api-调用：从-prompt-到-function-calling中的输出)
+18. [18. 请讲讲LLM API 调用：从 Prompt 到 Function Calling中的Token 管理与成本控制](#18.-请讲讲llm-api-调用：从-prompt-到-function-calling中的token-管理与成本控制)
+19. [19. 请讲讲LLM API 调用：从 Prompt 到 Function Calling中的动手练习](#19.-请讲讲llm-api-调用：从-prompt-到-function-calling中的动手练习)
+20. [20. 面试官问：常见问题你会怎么回答？](#20.-面试官问：常见问题你会怎么回答)
+21. [21. 什么是微调？（20min）](#21.-什么是微调（20min）)
+22. [22. 请讲讲PyTorch 微调：从原理到 LoRA中的PyTorch 基础：训练三板斧（40min）](#22.-请讲讲pytorch-微调：从原理到-lora中的pytorch-基础：训练三板斧（40min）)
+23. [23. 请讲讲PyTorch 微调：从原理到 LoRA中的LoRA：高效微调（1h）](#23.-请讲讲pytorch-微调：从原理到-lora中的lora：高效微调（1h）)
+24. [24. 请说说LoRA 参数选择指南](#24.-请说说lora-参数选择指南)
+25. [25. 请讲讲PyTorch 微调：从原理到 LoRA中的动手练习](#25.-请讲讲pytorch-微调：从原理到-lora中的动手练习)
+26. [26. 面试官问：常见问题你会怎么回答？](#26.-面试官问：常见问题你会怎么回答)
+27. [27. 为什么需要 LangChain（20min）](#27.-为什么需要-langchain（20min）)
+28. [28. 请讲讲LangChain / LangGraph：LLM 应用开发框架实战中的LangChain 核心概念（40min）](#28.-请讲讲langchain-/-langgraph：llm-应用开发框架实战中的langchain-核心概念（40min）)
+29. [29. 请讲讲LangChain / LangGraph：LLM 应用开发框架实战中的LangGraph：状态机工作流（1h）](#29.-请讲讲langchain-/-langgraph：llm-应用开发框架实战中的langgraph：状态机工作流（1h）)
+30. [30. 请讲讲LangChain / LangGraph：LLM 应用开发框架实战中的LangGraph 的进阶功能](#30.-请讲讲langchain-/-langgraph：llm-应用开发框架实战中的langgraph-的进阶功能)
+31. [31. 请说说LangChain vs LangGraph 选择指南](#31.-请说说langchain-vs-langgraph-选择指南)
+32. [32. 请讲讲LangChain / LangGraph：LLM 应用开发框架实战中的动手练习（1h）](#32.-请讲讲langchain-/-langgraph：llm-应用开发框架实战中的动手练习（1h）)
+33. [33. 面试官问：常见问题你会怎么回答？](#33.-面试官问：常见问题你会怎么回答)
+
+
 
 # 学习复习计划 · LLM与AI工程
 
@@ -19,7 +58,7 @@ generated: 2026-07-23T15:44:23.593415
 ### 1.1 LLM 的三个"不知道"
 
 
-```
+```text
 问题 1: "什么是 night_ops_ratio_30d？"
   LLM 知识截止在训练数据 — 不知道你这个项目的特定概念
 
@@ -29,12 +68,11 @@ generated: 2026-07-23T15:44:23.593415
 问题 3: "user_000042 为什么被拒？"
   LLM 没有企业内部数据的访问权限 — 这是隐私数据
 
-```
-
+```text
 ### 1.2 RAG 的解决方案
 
 
-```
+```text
 用户提问
   │
   ▼
@@ -58,7 +96,7 @@ generated: 2026-07-23T15:44:23.593415
 │  引用来源          │
 └─────────────────┘
 
-```
+```text
 
 ---
 
@@ -86,8 +124,7 @@ generated: 2026-07-23T15:44:23.593415
 # SQL:  每个 CREATE TABLE 一个 chunk
 # MD:   每个 ## 标题一个 chunk
 
-```
-
+```text
 **不同文档类型的切片策略**：
 
 
@@ -127,8 +164,7 @@ def chunk_document(file_path: str) -> list[dict]:
         # 其他: 按段落切（每段至少 100 字）
         ...
 
-```
-
+```text
 ### 2.2 向量化（Embedding）
 
 
@@ -160,8 +196,7 @@ def embed_chunks(chunks: list[dict], embedding_model: str = "text-embedding-3-sm
 
     return chunks
 
-```
-
+```text
 ### 2.3 向量检索（Similarity Search）
 
 
@@ -202,8 +237,7 @@ def search(query: str, chunk_embeddings: list[dict],
     results.sort(key=lambda x: x["score"], reverse=True)
     return results[:k]
 
-```
-
+```text
 ### 2.4 Prompt 构造 + LLM 回答
 
 
@@ -245,8 +279,7 @@ def rag_answer(query: str, chunk_embeddings: list[dict]):
 
     return response.choices[0].message.content
 
-```
-
+```text
 ### 2.5 重排序（Re-ranking）— 进阶优化
 
 
@@ -276,7 +309,7 @@ def rerank(query: str, candidates: list[dict]) -> list[dict]:
     candidates.sort(key=lambda x: x["rerank_score"], reverse=True)
     return candidates
 
-```
+```text
 
 ---
 
@@ -357,7 +390,7 @@ rag = MiniRAG("credit_risk_control_system/config/schemas")
 result = rag.answer("什么是 night_ops_ratio_30d？")
 print(result)
 
-```
+```text
 
 ---
 
@@ -433,7 +466,7 @@ async def predict(request: LoanRequest):
     score = model.predict(features)[0]
     return {"score": float(score), "decision": "PASS" if score > 600 else "REJECT"}
 
-```
+```text
 当上游业务系统发起 HTTP 请求时，FastAPI 自动校验字段类型、缺失值，省去大量手工判断。
 
 ### 2. 集成特征获取与规则引擎
@@ -457,8 +490,7 @@ async def apply(
     # 3. 返回决策
     ...
 
-```
-
+```text
 ### 3. 高性能异步处理
 在线推理时，服务往往要并发请求多个服务（如 Redis 查用户画像、HTTP 调三方征信），
 使用 `async/await` 可以让这些 I/O 操作并发执行，大幅降低单次请求的总耗时。
@@ -487,7 +519,7 @@ FastAPI 自动生成的文档就是一份“活的接口规范”，所有人都
 
 ---
 
-**一句话总结：FastAPI 是现代 Python 构建高性能、类型安全 API 的事实标准，
+**一句话**总结**：FastAPI 是现代 Python 构建高性能、类型安全 API 的事实标准，
 它在 AI 系统中充当推理网关，通过异步能力、自动校验和文档生成，将模型服务化过程变得极其高效和可靠。**
 
 ---
@@ -499,7 +531,7 @@ FastAPI 自动生成的文档就是一份“活的接口规范”，所有人都
 ### 1.1 关系型数据库 vs 向量数据库
 
 
-```
+```text
 关系型数据库 (MySQL/PostgreSQL):
   数据: 结构化数据（行 + 列）
   查询: "SELECT * FROM users WHERE age > 18"
@@ -510,12 +542,11 @@ FastAPI 自动生成的文档就是一份“活的接口规范”，所有人都
   查询: "找到和这个向量最相似的 10 个向量"
   比较: 余弦相似度 / 欧氏距离 / 内积
 
-```
-
+```text
 ### 1.2 向量数据库解决什么问题？
 
 
-```
+```text
 传统搜索的问题:
   用户搜 "深夜操作多的用户" → MySQL 不知道你在说什么
   SQL 只能处理精确匹配: "WHERE night_ops_ratio > 0.6"
@@ -526,7 +557,7 @@ FastAPI 自动生成的文档就是一份“活的接口规范”，所有人都
 
 核心: 把"语义"变成"向量距离" — 语义相近 → 向量距离近
 
-```
+```text
 
 ---
 
@@ -549,7 +580,7 @@ FastAPI 自动生成的文档就是一份“活的接口规范”，所有人都
 
 ---
 
-## 11. 请详细讲解核心概念与原理（40min）
+## 11. 请详细讲解**核心概念**与原理（40min）
 
 > ID: `L105`
 
@@ -568,8 +599,7 @@ BERT base                       768     约 3 GB
 # 维度越高 → 表达力越强 → 存储和计算越大 → 检索越慢
 # 1536 维是当前性价比最高的选择
 
-```
-
+```text
 ### 3.2 索引算法
 
 
@@ -589,12 +619,11 @@ BERT base                       768     约 3 GB
 # HNSW (Hierarchical Navigable Small World) — 图搜索，最推荐
 # PQ (Product Quantization) — 压缩向量，减少存储
 
-```
-
+```text
 ### 3.3 HNSW 算法原理（面试常问）
 
 
-```
+```text
 HNSW 像一个"高速公路系统":
 Level 3: 只有主要城市之间有高速公路（概括信息）
 Level 2: 更多城市 + 高速公路 + 省道
@@ -607,7 +636,7 @@ Level 1: 全部道路，精确到街道（详细信息）
 
 效果: 100 万条向量，5ms 内找到最近邻
 
-```
+```text
 
 ---
 
@@ -623,8 +652,7 @@ Level 1: 全部道路，精确到街道（详细信息）
 ```bash
 pip install chromadb sentence-transformers
 
-```
-
+```text
 ### 4.2 完整代码
 
 
@@ -739,12 +767,11 @@ def demo_query():
 if __name__ == "__main__":
     demo_query()
 
-```
-
+```text
 ### 4.3 查询结果示例
 
 
-```
+```text
 🔍 查询: night_ops_ratio_30d 超过多少算异常？
   [相似度 0.89] type: DOUBLE | 范围: [0.0, 1.0] | >60%→高度可疑
   [相似度 0.72] aggregation: mean(event_time.hour IN [22,23,0,1,2,3,4,5])
@@ -753,7 +780,7 @@ if __name__ == "__main__":
   [相似度 0.83] id: BLACKLIST_HIT | condition: user_id_in_blacklist == True
   [相似度 0.76] id: FRAUD_SCORE_HIGH | condition: fraud_score > 0.8
 
-```
+```text
 
 ---
 
@@ -788,8 +815,7 @@ services:
     ports:
       - "19530:19530"
 
-```
-
+```text
 ### 5.2 连接 Milvus
 
 
@@ -819,7 +845,7 @@ index_params = {
 }
 collection.create_index(field_name="embedding", index_params=index_params)
 
-```
+```text
 
 ---
 
@@ -832,7 +858,7 @@ collection.create_index(field_name="embedding", index_params=index_params)
 ### Q1: 向量数据库能替代 MySQL 吗？
 
 
-```
+```text
 不能。它们解决不同的问题:
 
 MySQL: "user_000042 的 on_time_rate 是多少？" → 精确查询 ✅
@@ -843,12 +869,11 @@ MySQL: "user_000042 的 on_time_rate 是多少？" → 精确查询 ✅
   Step 2: MySQL 做精确查询（找到具体的数据值）
   Step 3: LLM 综合回答
 
-```
-
+```text
 ### Q2: 100 万条向量查询需要多快？
 
 
-```
+```text
 硬件: 32GB RAM, 8 核 CPU
 算法: HNSW
 时间: ~10ms
@@ -858,17 +883,16 @@ MySQL: "user_000042 的 on_time_rate 是多少？" → 精确查询 ✅
   IVF (100桶): ~30ms
   HNSW: ~5-10ms（最快，推荐）
 
-```
-
+```text
 ### Q3: 什么时候需要升级到 Milvus？
 
 
-```
+```text
 Chroma 适合: < 10 万条，单机开发验证
 Milvus 适合: > 100 万条，分布式生产
 Qdrant 适合: 想用 Docker 解决的中等规模
 
-```
+```text
 
 ---
 
@@ -924,8 +948,7 @@ def chat(prompt: str, model: str = "deepseek-chat",
     )
     return response.choices[0].message.content
 
-```
-
+```text
 ### 模式 2：流式输出（Streaming）
 
 
@@ -952,8 +975,7 @@ def chat_stream(prompt: str):
 for text in chat_stream("写一段 SQL 查询最近 7 天的通过率"):
     print(text, end="", flush=True)
 
-```
-
+```text
 ### 模式 3：多轮对话
 
 
@@ -997,8 +1019,7 @@ def multi_turn_chat():
             # 丢弃最早的消息，但保留 system prompt
             messages = [messages[0]] + messages[-19:]
 
-```
-
+```text
 ### 模式 4：Function Calling
 
 
@@ -1115,7 +1136,7 @@ def agent(query: str) -> str:
 print(agent("查询 2026-07-01 各渠道通过率"))
 print(agent("帮我查一下 user_000042 的基本信息"))
 
-```
+```text
 
 ---
 
@@ -1127,8 +1148,7 @@ print(agent("帮我查一下 user_000042 的基本信息"))
 
 只输出 SQL 代码，不要任何解释。"""
 
-```
-
+```text
 ### 3.2 Few-shot Prompt（少样本学习）
 
 
@@ -1152,7 +1172,7 @@ FEW_SHOT_PROMPT = """将自然语言转为 SQL。
   问题: "昨天的总申请数是多少？"
   SQL: """
 
-```
+```text
 
 ---
 
@@ -1185,7 +1205,7 @@ def estimate_cost(prompt_tokens: int, response_tokens: int,
 # 1 条 SQL 生成 ≈ 50-100 output token
 # 1 天 1000 次 NL2SQL 调用 ≈ 1-2 元（DeepSeek）
 
-```
+```text
 
 ---
 
@@ -1214,7 +1234,7 @@ def estimate_cost(prompt_tokens: int, response_tokens: int,
 要求: 让用户问"昨天的 GMV""最畅销品类"等，LLM 生成正确的 SQL
 """
 
-```
+```text
 
 ---
 
@@ -1227,18 +1247,17 @@ def estimate_cost(prompt_tokens: int, response_tokens: int,
 ### Q1: temperature 不同值的效果？
 
 
-```
+```text
 temperature=0.0 → 每次输出完全一样（确定性的）→ SQL 生成 ✅
 temperature=0.3 → 稍有变化 → 客服回复 ✅
 temperature=0.7 → 富有创意 → 文案生成 ✅
 temperature=1.0 → 高度随机 → 创作 ✅
 
-```
-
+```text
 ### Q2: System Prompt 和 User Message 有什么区别？
 
 
-```
+```text
 System Prompt:  指导 LLM 行为的"指令" — 通常不被用户看到
 User Message:  用户的实际问题
 
@@ -1247,7 +1266,7 @@ User Message:  用户的实际问题
 
 好的 System Prompt 是 RAG 和 NL2SQL 成功的一半。
 
-```
+```text
 
 ---
 
@@ -1258,7 +1277,7 @@ User Message:  用户的实际问题
 ### 1.1 预训练 vs 微调
 
 
-```
+```text
 预训练（Pre-training）:
   用海量数据（万亿 token）训练基础能力
   "学会了语法、推理、知识"
@@ -1271,12 +1290,11 @@ User Message:  用户的实际问题
   成本: 几十元, 只需要 1 张消费级 GPU
   个人开发者也能做
 
-```
-
+```text
 ### 1.2 什么场景需要微调？
 
 
-```
+```text
 场景 A: 你的项目用 LLM 做如下事 → 需要微调
   - 生成特定格式的 SQL（你的数仓有自己的列名和命名规范）
   - 识别你项目中的特定概念（night_ops_ratio, on_time_rate）
@@ -1287,8 +1305,7 @@ User Message:  用户的实际问题
   - 不需要控制输出格式
   - 不需要学习新的概念（知识库里都有）
 
-```
-
+```text
 **总结：RAG 解决"知道什么"，微调解决"怎么回答"**。
 
 ---
@@ -1354,7 +1371,7 @@ def evaluate(model, dataloader):
 
     return correct / total
 
-```
+```text
 
 ---
 
@@ -1367,7 +1384,7 @@ def evaluate(model, dataloader):
 ### 3.1 为什么需要 LoRA？
 
 
-```
+```text
 全量微调的问题:
   一个大模型有 70 亿参数（7B）
   每次微调都要更新全部 70 亿参数
@@ -1385,12 +1402,11 @@ LoRA 的核心思想:
   模型体积: 14GB → 20MB
   切换任务: 只需要换 20MB 的适配器文件
 
-```
-
+```text
 ### 3.2 LoRA 原理
 
 
-```
+```text
 原始:
   W (70亿参数矩阵)
   y = W × x  (全量更新)
@@ -1408,8 +1424,7 @@ LoRA:
   为什么 A×B 能模拟大矩阵变化？
   因为参数更新通常是"低秩"的（变化量可以压缩到很小的维度）
 
-```
-
+```text
 ### 3.3 使用 HuggingFace PEFT 实现 LoRA 微调
 
 
@@ -1536,7 +1551,7 @@ def generate_sql(question: str) -> str:
 
 print(generate_sql("昨天申请总数是多少？"))
 
-```
+```text
 
 ---
 
@@ -1546,7 +1561,7 @@ print(generate_sql("昨天申请总数是多少？"))
 
 > ID: `L118`
 
-```
+```text
 r（秩）:
   r=4  → 最快，效果最差 → 简单的格式转换
   r=8  → 推荐，效果不错 → 通用场景
@@ -1563,7 +1578,7 @@ target_modules（微调哪些层）:
   进阶: ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]
   → 模块越多，效果越好，显存需求越大
 
-```
+```text
 
 ---
 
@@ -1595,7 +1610,7 @@ target_modules（微调哪些层）:
 | 回答需要非常精确（不能有幻觉） | | |
 """
 
-```
+```text
 
 ---
 
@@ -1608,7 +1623,7 @@ target_modules（微调哪些层）:
 ### Q1: 微调后模型会忘记原来的能力吗？
 
 
-```
+```text
 会，这叫"灾难性遗忘"。
 
 解决方案:
@@ -1616,12 +1631,11 @@ target_modules（微调哪些层）:
 2. LoRA: 灾难性遗忘比全量微调轻很多（原始参数没变）
 3. 学习率不要太大: 2e-4 是 LoRA 的安全值
 
-```
-
+```text
 ### Q2: 消费级显卡（RTX 3060 12GB）能微调多大的模型？
 
 
-```
+```text
 Qwen2.5-1.5B  ← ✅ 12GB 显存足够
 Qwen2.5-3B    ← ✅ 需要量化 + LoRA
 Qwen2.5-7B    ← ⚠️ 需要量化 + LoRA + 梯度累积
@@ -1629,7 +1643,7 @@ LLaMA-13B     ← ❌ 显存不够
 
 建议从 1.5B 开始尝试，跑通流程后再上更大的模型。
 
-```
+```text
 
 ---
 
@@ -1657,12 +1671,11 @@ def my_agent(query):
     # 每次都重复这个模式
     # 没有标准的结构
 
-```
-
+```text
 ### 1.2 LangChain 解决了什么
 
 
-```
+```text
 LangChain 提供:
 1. 标准化接口 — 所有 LLM（OpenAI/DeepSeek/Claude）用同一套 API
 2. 链式编程 — 像搭积木一样组合功能
@@ -1671,13 +1684,13 @@ LangChain 提供:
 
 LangChain 不是必须的，但它是目前最主流的 LLM 应用框架（JD 出现率 71%）
 
-```
+```text
 
 ---
 
 ---
 
-## 28. 请讲讲LangChain / LangGraph：LLM 应用开发框架实战中的LangChain 核心概念（40min）
+## 28. 请讲讲LangChain / LangGraph：LLM 应用开发框架实战中的LangChain **核心概念**（40min）
 
 > ID: `L122`
 
@@ -1707,8 +1720,7 @@ llm = ChatDeepSeek(
 response = llm.invoke("什么是 night_ops_ratio_30d？")
 print(response.content)
 
-```
-
+```text
 ### 2.2 Prompt Templates
 
 
@@ -1732,8 +1744,7 @@ messages = prompt.invoke({
     "question": "上周通过率最高的渠道是什么？",
 })
 
-```
-
+```text
 ### 2.3 Chains（链）
 
 
@@ -1790,8 +1801,7 @@ result = full_chain.invoke({"question": "上周通过率最高渠道？"})
 print(f"SQL: {result['sql']}")
 print(f"解释: {result['explanation']}")
 
-```
-
+```text
 ### 2.4 Tools（工具调用）
 
 
@@ -1813,8 +1823,7 @@ from langchain_community.tools import DuckDuckGoSearchRun
 # 把工具绑定到 LLM
 llm_with_tools = llm.bind_tools([query_warehouse, DuckDuckGoSearchRun()])
 
-```
-
+```text
 ### 2.5 Agents（智能体）
 
 
@@ -1854,7 +1863,7 @@ agent_executor.invoke({
 # > 结果: [('APP_IOS', 0.723), ('APP_ANDROID', 0.651)]
 # > 回答: APP_IOS 渠道通过率最高，为 72.3%...
 
-```
+```text
 
 ---
 
@@ -1867,7 +1876,7 @@ agent_executor.invoke({
 ### 3.1 Chain vs Graph 的区别
 
 
-```
+```text
 Chain (串行): A → B → C → D
   固定的、线性的执行路径
   不能分支、不能循环、不能等待
@@ -1879,11 +1888,10 @@ Graph (有向图):
   可以循环（状态机）
   可以等待人工输入（异步）
 
-```
-
+```text
 **LangGraph 用 StateGraph 来定义有状态的工作流。**
 
-### 3.2 核心概念
+### 3.2 **核心概念**
 
 
 ```python
@@ -1964,8 +1972,7 @@ workflow.add_edge("rejection", END)
 # 编译
 app = workflow.compile()
 
-```
-
+```text
 ### 3.3 实战：信贷审批完整工作流
 
 
@@ -2136,7 +2143,7 @@ result = workflow.invoke({
 })
 print(f"决策: {result['decision']} — 原因: {result['reason'][:30]}...")
 
-```
+```text
 
 ---
 
@@ -2170,8 +2177,7 @@ result = app.invoke(input_data, config=config)
 app.update_state(config, {"required_docs": []})
 result = app.invoke(None, config=config)
 
-```
-
+```text
 ### 4.2 可视化
 
 
@@ -2182,7 +2188,7 @@ from IPython.display import Image, display
 display(Image(workflow.get_graph().draw_mermaid_png()))
 # → 直接看到审批流程图
 
-```
+```text
 
 ---
 
@@ -2202,10 +2208,10 @@ display(Image(workflow.get_graph().draw_mermaid_png()))
 | 复杂状态机 | ❌ | ✅ |
 
 
-```
+```text
 一句话: 顺序执行用 Chain，条件分支用 Graph，人工干预用 Graph + Checkpointer。
 
-```
+```text
 
 ---
 
@@ -2232,7 +2238,7 @@ display(Image(workflow.get_graph().draw_mermaid_png()))
                     [复杂问题] → Escalate → END
 """
 
-```
+```text
 
 ---
 
@@ -2245,15 +2251,14 @@ display(Image(workflow.get_graph().draw_mermaid_png()))
 ### Q1: LangChain 值得学吗？还是直接用 Python 调 API 更好？
 
 
-```
+```text
 如果只是调 LLM API（NL2SQL、聊天）→ 直接调 API 更简单，不需要 LangChain
 如果需要工具调用（Agent）→ LangChain 让代码结构更清晰
 如果面试要求（JD 出现率 71%）→ 值得学
 
 最佳实践: 学会 LanfgChain 的概念，小项目手写，大项目用框架。
 
-```
-
+```text
 ### Q2: LangGraph 和 FastAPI 的异步兼容吗？
 
 
@@ -2275,7 +2280,6 @@ async def credit_apply(user_id: str):
     })
     return {"decision": result["decision"]}
 
-```
+```text
 
 ---
-

@@ -4,7 +4,16 @@ source_label: 面试鸭题库
 category: Prompt 与结构化输出
 count: 3
 generated: 2026-07-23T15:44:23.586502
+
 ---
+
+## 📑 目录
+
+1. [1. 什么是 GPT Structured Outputs？](#1.-什么是-gpt-structured-outputs)
+2. [2. ⼤模型的结构化输出指的是什么？](#2.-⼤模型的结构化输出指的是什么)
+3. [3. 什么是护栏技术？](#3.-什么是护栏技术)
+
+
 
 # 面试鸭题库 · Prompt 与结构化输出
 
@@ -79,4 +88,3 @@ SphU.entry("getOrder")
 底。真正的稳定性不是不出问题，⽽是出问题时系统还能活着。
 
 ---
-
