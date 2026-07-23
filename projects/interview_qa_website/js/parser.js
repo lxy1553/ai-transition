@@ -13,6 +13,8 @@ const Parser = (() => {
     'https://raw.githubusercontent.com/lxy1553/ai-transition/main/docs/interview_core_questions.md';
   const URL_XIAOLIN =
     'https://raw.githubusercontent.com/lxy1553/ai-transition/main/docs/xiaolinnote_questions.md';
+  const URL_MERGED =
+    'https://raw.githubusercontent.com/lxy1553/ai-transition/main/docs/merged_questions.md';
   const URL_LEARNING =
     'https://raw.githubusercontent.com/lxy1553/ai-transition/main/docs/learning_review_questions.md';
 
@@ -225,6 +227,25 @@ const Parser = (() => {
     return questions;
   }
 
+  // ---- merged 汇总文件解析 ------------------------------------------
+
+  function parseMerged(text) {
+    const questions = [];
+    const blocks = text.split(/\n(?=### M\d+)/);
+    for (const block of blocks) {
+      const q = parseGenericBlock(block);
+      if (q && q.title) {
+        q.source = 'merged';
+        const cat = q.category;
+        if (/RAG|Agent|大模型/.test(cat)) q.difficulty = 'hard';
+        else if (/数据仓库|NL2SQL|信贷/.test(cat)) q.difficulty = 'medium';
+        else q.difficulty = 'medium';
+        questions.push(q);
+      }
+    }
+    return questions;
+  }
+
   // ---- 公开 API ---------------------------------------------------------
 
   /**
@@ -252,29 +273,51 @@ const Parser = (() => {
     return questions;
   }
 
+  // ---- merged 汇总文件解析 ------------------------------------------
+
+  function parseMerged(text) {
+    const questions = [];
+    const blocks = text.split(/\n(?=### M\d+)/);
+    for (const block of blocks) {
+      const q = parseGenericBlock(block);
+      if (q && q.title) {
+        q.source = 'merged';
+        const cat = q.category;
+        if (/RAG|Agent|大模型/.test(cat)) q.difficulty = 'hard';
+        else if (/数据仓库|NL2SQL|信贷/.test(cat)) q.difficulty = 'medium';
+        else q.difficulty = 'medium';
+        questions.push(q);
+      }
+    }
+    return questions;
+  }
+
   // ---- 公开 API ---------------------------------------------------------
 
   async function loadAll(force) {
-    const [text1, text2, text3, text4] = await Promise.all([
+    const allTexts = await Promise.all([
       fetchText(URL_MIANSHIYA, force),
       fetchText(URL_CORE, force),
       fetchText(URL_XIAOLIN, force),
-      fetchText(URL_LEARNING, force)
+      fetchText(URL_LEARNING, force),
+      fetchText(URL_MERGED, force)
     ]);
-    const q1 = parseMianshiya(text1);
-    const q2 = parseInterviewCore(text2);
-    const q3 = parseXiaolin(text3);
-    const q4 = parseLearning(text4);
-    const all = [...q1, ...q2, ...q3, ...q4];
+    const q1 = parseMianshiya(allTexts[0]);
+    const q2 = parseInterviewCore(allTexts[1]);
+    const q3 = parseXiaolin(allTexts[2]);
+    const q4 = parseLearning(allTexts[3]);
+    const q5 = parseMerged(allTexts[4]);
+    const all = [...q1, ...q2, ...q3, ...q4, ...q5];
 
     const t1 = getCacheTime(URL_MIANSHIYA);
     const t2 = getCacheTime(URL_CORE);
     const t3 = getCacheTime(URL_XIAOLIN);
     const t4 = getCacheTime(URL_LEARNING);
-    const cacheTime = Math.min(t1, t2, t3, t4) || Date.now();
+    const t5 = getCacheTime(URL_MERGED);
+    const cacheTime = Math.min(t1, t2, t3, t4, t5) || Date.now();
 
     return { questions: all, cacheTime };
   }
 
-  return { loadAll, URL_MIANSHIYA, URL_CORE, URL_XIAOLIN, URL_LEARNING, getCacheTime };
+  return { loadAll, URL_MIANSHIYA, URL_CORE, URL_XIAOLIN, URL_LEARNING, URL_MERGED, getCacheTime };
 })();
