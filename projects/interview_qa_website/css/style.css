@@ -251,6 +251,9 @@ body {
 .difficulty-hard { background: #fce4ec; color: #e11d48; }
 .source-mianshiya { background: #f3e8ff; color: #7c3aed; }
 .source-interview_core { background: #cffafe; color: #0891b2; }
+.source-merged { background: #ecfdf5; color: #059669; }
+.source-xiaolinnote { background: #fff7ed; color: #ea580c; }
+.source-learning { background: #fef2f2; color: #dc2626; }
 .importance { background: #e0e7ff; color: #4338ca; }
 .wrong-mark { background: #fff7ed; color: #ea580c; font-weight: 700; }
 .q-tags { display: inline-flex; gap: 4px; flex-wrap: wrap; margin-left: 4px; }

@@ -125,7 +125,7 @@ const App = (() => {
     const diffLabel = { easy: '简单', medium: '中等', hard: '困难' };
     const diffClass = q.difficulty;
     const isW = Store.isWrong(q.id);
-    const sourceLabel = q.source === 'mianshiya' ? '面试鸭' : '核心题库';
+    const sourceLabel = q.category;
     const prevAnswer = Store.getUserAnswer(q.id);
 
     return `
@@ -338,7 +338,7 @@ const App = (() => {
     $('#practice-title').textContent = q.title;
     $('#practice-meta').innerHTML = `
       <span class="q-badge difficulty-${q.difficulty}">${{easy:'简单',medium:'中等',hard:'困难'}[q.difficulty]}</span>
-      <span class="q-badge source-${q.source}">${q.source === 'mianshiya' ? '面试鸭' : '核心题库'}</span>
+      <span class="q-badge source-${q.source}">${q.category}</span>
       <span class="q-tags">${(q.tags||[]).slice(0,3).map(t=>`<span class="tag">${t}</span>`).join('')}</span>
     `;
 

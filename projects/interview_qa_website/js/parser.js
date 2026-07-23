@@ -1,307 +1,125 @@
 /**
- * Markdown 题库解析器
- *
- * 负责从 GitHub Raw 拉取并解析两份 md 文件，输出统一结构的题目数组。
- * 两份文件的格式不同，需要分别解析。
+ * 题库解析器 — 从 GitHub Raw 加载 interview/汇总/ 下 10 个分类文件
  */
-
 const Parser = (() => {
-  // GitHub Raw 地址（发布到 GitHub Pages 后也能拉取最新内容）
-  const URL_MIANSHIYA =
-    'https://raw.githubusercontent.com/lxy1553/ai-transition/main/docs/mianshiya_llm_interview_questions.md';
-  const URL_CORE =
-    'https://raw.githubusercontent.com/lxy1553/ai-transition/main/docs/interview_core_questions.md';
-  const URL_XIAOLIN =
-    'https://raw.githubusercontent.com/lxy1553/ai-transition/main/docs/xiaolinnote_questions.md';
-  const URL_MERGED =
-    'https://raw.githubusercontent.com/lxy1553/ai-transition/main/docs/merged_questions.md';
-  const URL_LEARNING =
-    'https://raw.githubusercontent.com/lxy1553/ai-transition/main/docs/learning_review_questions.md';
+  const BASE =
+    'https://raw.githubusercontent.com/lxy1553/ai-transition/main/interview/%E6%B1%87%E6%80%BB/';
 
-  /**
-   * 从 URL 拉取文本，支持本地缓存
-   * 缓存 7 天，避免每次打开都重新下载（题库文件较大）
-   * force=true 时跳过缓存强制拉取
-   */
+  // 分类文件名（GitHub URL 编码）
+  const CATEGORIES = [
+    'RAG%20%E6%A3%80%E7%B4%A2%E5%A2%9E%E5%BC%BA%E7%94%9F%E6%88%90.md',
+    'Agent%20%E6%99%BA%E8%83%BD%E4%BD%93.md',
+    '%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%B7%A5%E7%A8%8B%E4%B8%8E%E8%AE%AD%E7%BB%83.md',
+    '%E7%BB%BC%E5%90%88.md',
+    'NL2SQL%20%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E6%9F%A5%E8%AF%A2.md',
+    'AI%20%E5%BA%94%E7%94%A8%E5%B7%A5%E7%A8%8B%E5%8C%96.md',
+    '%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E4%B8%8E%E6%B2%BB%E7%90%86.md',
+    '%E4%BF%A1%E8%B4%B7%E9%A3%8E%E6%8E%A7%E5%BB%BA%E6%A8%A1.md',
+    'Claude%20Code%20%E5%BC%80%E5%8F%91%E5%AE%9E%E6%88%98.md',
+    'MCP%20%E5%B7%A5%E5%85%B7%E8%B0%83%E7%94%A8%E4%B8%8E%E5%8D%8F%E8%AE%AE.md'
+  ];
+
+  // ---- 缓存 -----------------------------------------------------------
+
+  function cacheKey(url) {
+    return 'qa_cache_' + btoa(url).slice(0, 32);
+  }
+
   async function fetchText(url, force) {
-    const cacheKey = 'qa_cache_' + btoa(url).slice(0, 32);
-    // 7 天内读缓存（除非强制刷新）
     if (!force) {
-      const cached = localStorage.getItem(cacheKey);
+      const cached = localStorage.getItem(cacheKey(url));
       if (cached) {
         try {
           const data = JSON.parse(cached);
-          if (Date.now() - data.ts < 7 * 24 * 60 * 60 * 1000) {
-            return data.text;
-          }
+          if (Date.now() - data.ts < 7 * 24 * 60 * 60 * 1000) return data.text;
         } catch (_) { /* ignore */ }
       }
     }
     const resp = await fetch(url);
     if (!resp.ok) throw new Error(`HTTP ${resp.status}: ${url}`);
     const text = await resp.text();
-    localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), text }));
+    localStorage.setItem(cacheKey(url), JSON.stringify({ ts: Date.now(), text }));
     return text;
   }
 
-  /**
-   * 获取缓存的更新时间
-   */
   function getCacheTime(url) {
     try {
-      const cacheKey = 'qa_cache_' + btoa(url).slice(0, 32);
-      const data = JSON.parse(localStorage.getItem(cacheKey) || '{}');
-      return data.ts || 0;
+      return JSON.parse(localStorage.getItem(cacheKey(url)) || '{}').ts || 0;
     } catch (_) { return 0; }
   }
 
-  // ---- mianshiya 文件解析 ------------------------------------------------
+  // ---- 解析单个分类文件 -----------------------------------------------
 
-  function parseMianshiya(text) {
+  function parseCategoryFile(text, filename) {
     const questions = [];
-    // 按 "### Q" 或 "### 附-" 分割条目
-    const blocks = text.split(/\n(?=### (?:Q\d+|附-\d+))/);
-    for (const block of blocks) {
-      const q = parseGenericBlock(block);
-      if (q && q.title) questions.push(q);
+
+    // 提取 frontmatter category
+    const fmMatch = text.match(/^category:\s*(.+)$/m);
+    const category = fmMatch ? fmMatch[1].trim() : filename.replace('.md', '');
+
+    // 按 ## N. 题目 分割
+    const re = /^## (\d+)\. (.+)$/gm;
+    const matches = [...text.matchAll(re)];
+
+    for (let i = 0; i < matches.length; i++) {
+      const num = matches[i][1];
+      const title = matches[i][2].trim();
+      const start = matches[i].index + matches[i][0].length;
+      const end = i + 1 < matches.length ? matches[i + 1].index : text.length;
+      let answer = text.slice(start, end).trim();
+
+      // 清理 > ID / > 📚 / > 来源 等元数据行
+      answer = answer.replace(/^> .*\n?/gm, '');
+      answer = answer.replace(/\n---\s*$/, '');
+      answer = answer.trim();
+
+      if (answer.length < 50) continue;
+
+      // 难度判定
+      let difficulty = 'medium';
+      if (/RAG|Agent|大模型工程|信贷/.test(category)) difficulty = 'hard';
+      else if (/综合|Claude/.test(category)) difficulty = 'easy';
+
+      // 标签
+      const tags = [category];
+
+      questions.push({
+        id: `M${questions.length + 1}`,
+        source: 'merged',
+        category,
+        title,
+        answer,
+        difficulty,
+        importance: difficulty === 'hard' ? 5 : difficulty === 'medium' ? 4 : 3,
+        frequency: '',
+        day: '',
+        tags
+      });
     }
+
     return questions;
   }
 
-  function parseGenericBlock(block) {
-    // 提取 ID（支持 Q/X/L 前缀 + 附- 前缀）
-    const idMatch = block.match(/###\s+([QXL]\d+|附-\d+)/);
-    if (!idMatch) return null;
-    const id = idMatch[1];
-
-    // 提取分类
-    const catMatch = block.match(/\*\*分类：\*\*\s*(.+)/);
-    const category = catMatch ? catMatch[1].trim() : '其他';
-
-    // 提取题目
-    const titleMatch = block.match(/\*\*题目：\*\*\s*(.+)/);
-    if (!titleMatch) return null;
-    const title = titleMatch[1].trim();
-
-    // 提取参考答案（从 "**参考答案：**" 到下一个 --- 或结尾）
-    const answerStart = block.indexOf('**参考答案：**');
-    if (answerStart === -1) return null;
-    let answer = block.slice(answerStart + '**参考答案：**'.length);
-
-    // 清理答案：去掉尾部多余的分隔线和重复内容
-    answer = answer
-      .replace(/\n---\s*$/, '')
-      .replace(/\n{3,}/g, '\n\n')
-      .trim();
-
-    return {
-      id,
-      source: 'mianshiya',
-      category,
-      title,
-      answer,
-      difficulty: 'medium',    // mianshiya 无原始难度，默认中等
-      importance: 4,
-      frequency: '',
-      day: '',
-      tags: extractTags(category)
-    };
-  }
-
-  // ---- interview_core 文件解析 -------------------------------------------
-
-  function parseInterviewCore(text) {
-    const questions = [];
-    // 按 <a id="q 分割
-    const blocks = text.split(/(?=<a id="q\d+">)/);
-    for (const block of blocks) {
-      const q = parseCoreBlock(block);
-      if (q && q.title) questions.push(q);
-    }
-    return questions;
-  }
-
-  function parseCoreBlock(block) {
-    // 提取 ID
-    const idMatch = block.match(/<a id="(q\d+)">/);
-    if (!idMatch) return null;
-    const id = idMatch[1].toUpperCase();
-
-    // 提取标题: ## Qxxx：xxxx
-    const titleMatch = block.match(/##\s+Q\d+\s*[：:]\s*(.+)/);
-    if (!titleMatch) return null;
-    const title = titleMatch[1].trim();
-
-    // 提取来源 Day
-    const dayMatch = block.match(/来源\s*Day\s*[：:]\s*(.+)/);
-    const day = dayMatch ? dayMatch[1].trim() : '';
-
-    // 提取重要程度
-    const impMatch = block.match(/重要程度\s*[：:]\s*(\d+)\/5/);
-    const importance = impMatch ? parseInt(impMatch[1]) : 4;
-
-    // 提取回答（### 回答 之后的内容）
-    const answerStart = block.indexOf('### 回答');
-    if (answerStart === -1) return null;
-    let answer = block.slice(answerStart + '### 回答'.length);
-
-    // 清理
-    answer = answer
-      .replace(/\n---\s*$/, '')
-      .replace(/\n<a id="[^"]*"><\/a>\s*$/, '')
-      .trim();
-
-    // 难度映射
-    let difficulty = 'medium';
-    if (importance >= 5) difficulty = 'hard';
-    else if (importance <= 3) difficulty = 'easy';
-
-    // 从标题推断分类标签
-    const tags = inferTagsFromTitle(title, id);
-
-    return {
-      id,
-      source: 'interview_core',
-      category: tags[0] || '综合',
-      title,
-      answer,
-      difficulty,
-      importance,
-      frequency: '',    // 需从索引表补充
-      day,
-      tags: tags.slice(0, 4)
-    };
-  }
-
-  // ---- 辅助函数 ---------------------------------------------------------
-
-  function extractTags(category) {
-    // 从分类名拆解标签
-    const map = {
-      '微调与 PEFT': ['微调', 'PEFT', 'Fine-tuning', 'LoRA'],
-      'RAG 检索增强': ['RAG', '检索', 'Embedding', '向量'],
-      'Prompt 与结构化输出': ['Prompt', '结构化输出', '护栏'],
-      'Agent 与框架': ['Agent', 'LangChain', 'LangGraph', 'ReAct'],
-      'MCP 与协议': ['MCP', 'A2A', '协议', 'Function Calling'],
-      '工程与场景': ['工程化', '生产', '优化', '架构'],
-      '其他': ['综合'],
-      '附录': ['附录']
-    };
-    return map[category] || [category];
-  }
-
-  function inferTagsFromTitle(title, id) {
-    const tags = [];
-    const t = title.toLowerCase();
-    if (/rag|检索|召回|chunk|embed|向量|rerank|分块/i.test(t)) tags.push('RAG');
-    if (/nl2sql|sql|查询|表|字段|schema|口径/i.test(t)) tags.push('NL2SQL');
-    if (/agent|工具|编排|工作流|tool/i.test(t)) tags.push('Agent');
-    if (/仓库|ods|dwd|dws|ads|离线|实时|分区/i.test(t)) tags.push('数据仓库');
-    if (/微调|peft|lora|fine.tun/i.test(t)) tags.push('微调');
-    if (/prompt|提示|结构化/i.test(t)) tags.push('Prompt');
-    if (/权限|安全|敏感|脱敏|阻断|拒答/i.test(t)) tags.push('安全');
-    if (/服务|api|docker|部署|配置/i.test(t)) tags.push('工程化');
-    if (/血缘|指标|告警|监控/i.test(t)) tags.push('治理');
-    if (/信贷|风控|授信|放款|还款|逾期/i.test(t)) tags.push('金融信贷');
-    if (tags.length === 0) tags.push('综合');
-    return tags;
-  }
-
-  // ---- xiaolinnote 文件解析 --------------------------------------------
-
-  function parseXiaolin(text) {
-    const questions = [];
-    const blocks = text.split(/\n(?=### X\d+)/);
-    for (const block of blocks) {
-      const q = parseGenericBlock(block);
-      if (q && q.title) {
-        q.source = 'xiaolinnote';
-        // 根据分类调整难度
-        if (q.category === '大模型工程') q.difficulty = 'hard';
-        else if (q.category === 'LLM工具调用与协议') q.difficulty = 'medium';
-        else if (q.category === 'Agent图解专栏' || q.category === 'Claude Code图解专栏') q.difficulty = 'easy';
-        else q.difficulty = 'medium';
-        questions.push(q);
-      }
-    }
-    return questions;
-  }
-
-  // ---- merged 汇总文件解析 ------------------------------------------
-
-  function parseMerged(text) {
-    const questions = [];
-    const blocks = text.split(/\n(?=### M\d+)/);
-    for (const block of blocks) {
-      const q = parseGenericBlock(block);
-      if (q && q.title) {
-        q.source = 'merged';
-        const cat = q.category;
-        if (/RAG|Agent|大模型/.test(cat)) q.difficulty = 'hard';
-        else if (/数据仓库|NL2SQL|信贷/.test(cat)) q.difficulty = 'medium';
-        else q.difficulty = 'medium';
-        questions.push(q);
-      }
-    }
-    return questions;
-  }
-
-  // ---- 公开 API ---------------------------------------------------------
-
-  /**
-   * 拉取并解析所有题库
-   * force=true 跳过缓存强制拉取
-   * 返回 { questions, cacheTime }，cacheTime 为缓存中最旧的时间戳
-   */
-  // ---- learning_review 文件解析 ---------------------------------------
-
-  function parseLearning(text) {
-    const questions = [];
-    const blocks = text.split(/\n(?=### L\d+)/);
-    for (const block of blocks) {
-      const q = parseGenericBlock(block);
-      if (q && q.title) {
-        q.source = 'learning';
-        // 根据分类调整难度
-        if (q.category === 'AI应用开发' || q.category === 'LLM与AI工程') q.difficulty = 'hard';
-        else if (q.category === '数据仓库') q.difficulty = 'medium';
-        else if (q.category === '信贷风控建模') q.difficulty = 'hard';
-        else q.difficulty = 'medium';
-        questions.push(q);
-      }
-    }
-    return questions;
-  }
-
-  // ---- merged 汇总文件解析 ------------------------------------------
-
-  function parseMerged(text) {
-    const questions = [];
-    const blocks = text.split(/\n(?=### M\d+)/);
-    for (const block of blocks) {
-      const q = parseGenericBlock(block);
-      if (q && q.title) {
-        q.source = 'merged';
-        const cat = q.category;
-        if (/RAG|Agent|大模型/.test(cat)) q.difficulty = 'hard';
-        else if (/数据仓库|NL2SQL|信贷/.test(cat)) q.difficulty = 'medium';
-        else q.difficulty = 'medium';
-        questions.push(q);
-      }
-    }
-    return questions;
-  }
-
-  // ---- 公开 API ---------------------------------------------------------
+  // ---- 公开 API -------------------------------------------------------
 
   async function loadAll(force) {
-    const [text] = await Promise.all([
-      fetchText(URL_MERGED, force)
-    ]);
-    const questions = parseMerged(text);
-    const cacheTime = getCacheTime(URL_MERGED) || Date.now();
-    return { questions, cacheTime };
+    const urls = CATEGORIES.map(f => BASE + f);
+    const texts = await Promise.all(urls.map(u => fetchText(u, force)));
+
+    const all = [];
+    for (let i = 0; i < texts.length; i++) {
+      const qs = parseCategoryFile(texts[i], decodeURIComponent(CATEGORIES[i]));
+      all.push(...qs);
+    }
+
+    // 重新分配 ID
+    all.forEach((q, i) => { q.id = `M${String(i + 1).padStart(3, '0')}`; });
+
+    const times = urls.map(u => getCacheTime(u));
+    const cacheTime = Math.min(...times) || Date.now();
+
+    return { questions: all, cacheTime };
   }
 
-  return { loadAll, URL_MERGED, getCacheTime };
+  return { loadAll, getCacheTime };
 })();
