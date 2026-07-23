@@ -1,0 +1,21 @@
+{
+  "total_portfolio": 457,
+  "total_credit_exposure": 7822000.0,
+  "avg_credit_limit": 17115.97,
+  "score_distribution": {
+    "C": 140,
+    "B": 111,
+    "B+": 95,
+    "A": 50,
+    "D": 36,
+    "A+": 25
+  },
+  "avg_score_by_bucket": {
+    "A": 724.5,
+    "A+": 781.2,
+    "B": 625.0,
+    "B+": 674.5,
+    "C": 558.3,
+    "D": 455.1
+  }
+}

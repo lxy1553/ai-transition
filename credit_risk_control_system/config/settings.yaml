@@ -1,0 +1,142 @@
+# ============================================================
+# 系统全局配置
+# 环境切换: export APP_ENV=dev|staging|production
+# ============================================================
+
+app:
+  name: credit_risk_control
+  env: ${APP_ENV:-dev}
+  version: "1.0.0"
+
+# ── 推理引擎 ──────────────────────────────────────────────
+inference:
+  # P99 延迟目标 (ms)
+  target_latency_p99_ms: 300
+  # 各数据源超时 (ms)
+  feature_fetch_timeout_ms: 50
+  credit_report_timeout_ms: 200
+  multi_head_timeout_ms: 150
+  device_fingerprint_timeout_ms: 30
+  # 降级策略
+  degradation:
+    feature_ttl_cache_seconds: 3600     # 特征缓存有效期
+    credit_report_cache_ttl_hours: 24   # 征信报告缓存
+
+# ── 模型配置 ──────────────────────────────────────────────
+model:
+  # 评分卡参数
+  scorecard:
+    base_score: 600
+    base_odds: 20         # 基准 odds (good:bad)
+    pdo: 50               # Points to Double Odds
+    min_score: 300
+    max_score: 900
+    pass_threshold: 500   # 通过最低分
+
+  # A/B 测试（百分比，总和=100）
+  ab_test:
+    enabled: false
+    buckets:
+      - name: champion
+        model: credit_a_card_xgb
+        version: production
+        weight: 80
+      - name: challenger_v2
+        model: credit_a_card_xgb
+        version: staging
+        weight: 15
+      - name: challenger_lgb
+        model: credit_a_card_lgb
+        version: staging
+        weight: 5
+
+# ── 特征存储配置 ──────────────────────────────────────────
+feature_store:
+  # PRODUCTION: Redis Cluster
+  # DEV: fakeredis / local Redis
+  online_store:
+    type: ${FEATURE_STORE_TYPE:-redis}   # redis | memory
+    redis:
+      host: ${REDIS_HOST:-localhost}
+      port: ${REDIS_PORT:-6379}
+      db: 0
+      # PRODUCTION: Redis Cluster mode
+      cluster_mode: false
+      cluster_nodes: []
+    # 特征 TTL (秒)
+    default_ttl: 604800       # 7天
+    feature_ttl_overrides:
+      apply_cnt_7d: 604800
+      apply_cnt_30d: 2592000
+      night_ops_ratio_30d: 2592000
+
+  offline_store:
+    type: ${OFFLINE_STORE_TYPE:-parquet}  # iceberg | parquet
+    # PRODUCTION: Apache Iceberg on S3/HDFS
+    iceberg:
+      catalog_type: hive
+      warehouse_path: s3://credit-warehouse/
+    # DEV: local parquet files
+    parquet:
+      path: ./data/offline_features/
+
+  # 特征血缘追踪
+  lineage:
+    enabled: true
+    # PRODUCTION: DataHub / Apache Atlas
+    backend: file  # file | datahub
+
+# ── Kafka 配置 ────────────────────────────────────────────
+kafka:
+  # PRODUCTION: 真实 Kafka Cluster (SASL认证)
+  # DEV: 消失消费者模式 (不阻塞)
+  bootstrap_servers: ${KAFKA_BOOTSTRAP:-localhost:9092}
+  # DEV fallback: 使用内存队列
+  dev_fallback: ${KAFKA_DEV_FALLBACK:-true}
+  topics:
+    application_event: credit_application_event
+    user_behavior: credit_user_behavior
+    decision_log: credit_decision_log
+    repayment_event: credit_repayment_event
+
+# ── MLflow 配置 ───────────────────────────────────────────
+mlflow:
+  tracking_uri: ${MLFLOW_TRACKING_URI:-http://localhost:5000}
+  # DEV: 本地文件存储
+  dev_tracking_uri: file://./data/mlflow
+  experiment_name: credit_risk_a_card
+  model_registry:
+    champion_model: credit_a_card_xgb
+    stages: [Staging, Production]
+
+# ── 监控告警 ──────────────────────────────────────────────
+monitoring:
+  prometheus:
+    port: 9090
+    metrics_path: /metrics
+
+  alert_thresholds:
+    psi_warning: 0.10       # PSI > 0.10 黄色告警
+    psi_critical: 0.25      # PSI > 0.25 红色告警（可能触发熔断）
+    null_rate_change: 0.30  # 空值率变化 > 30%
+
+  circuit_breaker:
+    delinquency_spike_pct: 0.30   # 逾期率突增 30% 触发熔断
+    observation_window_seconds: 300
+    fallback_mode: rule_only      # rule_only | backup_model
+
+# ── 数据源配置 ────────────────────────────────────────────
+data_sources:
+  credit_report:
+    # PRODUCTION: 央行征信/百行征信 HTTP API
+    base_url: ${CREDIT_REPORT_URL:-https://credit-report.example.com}
+    api_key: ${CREDIT_REPORT_API_KEY:-dev-key}
+    timeout_seconds: 5
+
+  multi_head:
+    # PRODUCTION: 第三方多头借贷数据
+    base_url: ${MULTI_HEAD_URL:-https://multi-head.example.com}
+
+  device_fingerprint:
+    # PRODUCTION: 设备指纹 SDK 上报
+    base_url: ${DEVICE_FP_URL:-https://device-fp.example.com}

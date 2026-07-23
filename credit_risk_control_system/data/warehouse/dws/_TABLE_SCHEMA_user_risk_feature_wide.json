@@ -1,0 +1,178 @@
+{
+  "table_name": "user_risk_feature_wide",
+  "layer": "dws",
+  "description": "用户风险特征宽表。将散落在3张DWD明细表中的同一用户数据， 按时间窗口聚合为17维特征向量。下游ADS层的模型训练样本直接 取自此表，实时推理的在线特征也是这些字段。\n",
+  "primary_key": [
+    "user_id",
+    "dt"
+  ],
+  "partition_key": "dt",
+  "source_table": null,
+  "grain": "用户 × 日期",
+  "columns": [
+    {
+      "name": "apply_amount_avg",
+      "type": "DOUBLE",
+      "nullable": false,
+      "description": "历史平均申请金额(元)。反映用户的借款习惯",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": "mean(apply_amount)"
+    },
+    {
+      "name": "apply_amount_max",
+      "type": "DOUBLE",
+      "nullable": false,
+      "description": "历史最大申请金额(元)。峰值反映借款激进程度",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": "max(apply_amount)"
+    },
+    {
+      "name": "monthly_income",
+      "type": "DOUBLE",
+      "nullable": false,
+      "description": "月收入(元)。多次申请取最高值（保守估计）",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": "max(monthly_income)"
+    },
+    {
+      "name": "total_apply_cnt",
+      "type": "INTEGER",
+      "nullable": false,
+      "description": "历史总申请次数（所有时间）",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": "nunique(application_id)"
+    },
+    {
+      "name": "distinct_device_cnt",
+      "type": "INTEGER",
+      "nullable": false,
+      "description": "关联的不同设备数。>2 可能账号被盗或共享",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": "nunique(device_id)"
+    },
+    {
+      "name": "distinct_city_cnt",
+      "type": "INTEGER",
+      "nullable": false,
+      "description": "关联的不同城市数。频繁跨城→异常",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": "nunique(city)"
+    },
+    {
+      "name": "apply_cnt_7d",
+      "type": "INTEGER",
+      "nullable": false,
+      "description": "近7天提交申请次数。反映短期资金需求强度",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": "sum(event_type == 'submit' AND event_time >= ref_date-7d)"
+    },
+    {
+      "name": "apply_cnt_30d",
+      "type": "INTEGER",
+      "nullable": false,
+      "description": "近30天提交申请次数",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": "sum(event_type == 'submit' AND event_time >= ref_date-30d)"
+    },
+    {
+      "name": "night_ops_ratio_30d",
+      "type": "DOUBLE",
+      "nullable": false,
+      "description": "★ 深夜操作占比 = 夜间(22:00-05:00)事件数 / 总事件数。 这是风控强特征——正常用户深夜操作少，欺诈团伙常在夜间批量操作。\n",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": "mean(event_time.hour IN [22,23,0,1,2,3,4,5])"
+    },
+    {
+      "name": "page_view_cnt_7d",
+      "type": "INTEGER",
+      "nullable": false,
+      "description": "近7天页面浏览次数。反映App使用频率",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": "sum(event_type == 'page_view' AND event_time >= ref_date-7d)"
+    },
+    {
+      "name": "input_cnt_7d",
+      "type": "INTEGER",
+      "nullable": false,
+      "description": "近7天输入操作次数。填写表单的活跃度",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": "sum(event_type == 'input' AND event_time >= ref_date-7d)"
+    },
+    {
+      "name": "error_event_cnt_7d",
+      "type": "INTEGER",
+      "nullable": false,
+      "description": "近7天错误事件次数。频繁报错→可能是脚本或异常操作",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": "sum(event_type == 'error' AND event_time >= ref_date-7d)"
+    },
+    {
+      "name": "overdue_cnt_hist",
+      "type": "INTEGER",
+      "nullable": false,
+      "description": "历史逾期次数。最直接的还款意愿指标",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": "sum(status == 'OVERDUE')"
+    },
+    {
+      "name": "total_due_amount",
+      "type": "DOUBLE",
+      "nullable": false,
+      "description": "历史总应还金额(元)。反映总的负债规模",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": "sum(due_amount)"
+    },
+    {
+      "name": "total_paid_amount",
+      "type": "DOUBLE",
+      "nullable": false,
+      "description": "历史总实还金额(元)。应与total_due_amount对比",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": "sum(paid_amount)"
+    },
+    {
+      "name": "repayment_cnt",
+      "type": "INTEGER",
+      "nullable": false,
+      "description": "总还款笔数。用于计算on_time_rate的分母",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": "count(repayment_id)"
+    },
+    {
+      "name": "on_time_rate",
+      "type": "DOUBLE",
+      "nullable": false,
+      "description": "按时还款率 = 1 - 逾期次数/总还款次数。 新用户(无还款记录)默认为1.0。 例如: 3笔还款中2笔逾期 → 0.33 → 高风险。\n",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": "np.where(repayment_cnt > 0,\n         1 - overdue_cnt_hist / repayment_cnt,\n         1.0)\n"
+    },
+    {
+      "name": "dt",
+      "type": "STRING",
+      "nullable": false,
+      "description": "分区键 — 特征快照日期 YYYY-MM-DD",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    }
+  ],
+  "_generated_by": "SchemaRegistry",
+  "_schema_version": "1.0"
+}

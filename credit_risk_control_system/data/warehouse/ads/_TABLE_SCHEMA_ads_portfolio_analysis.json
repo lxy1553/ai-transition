@@ -1,0 +1,12 @@
+{
+  "table_name": "ads_portfolio_analysis",
+  "layer": "ads",
+  "description": "当日资产组合的全景视图。JSON格式，供风控报表使用。",
+  "primary_key": [],
+  "partition_key": "dt",
+  "source_table": null,
+  "grain": null,
+  "columns": [],
+  "_generated_by": "SchemaRegistry",
+  "_schema_version": "1.0"
+}

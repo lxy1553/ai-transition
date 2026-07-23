@@ -1,4 +1,4 @@
-# Day 06：LLM 应用架构 — NL2SQL + RAG + LangGraph
+ # Day 06：LLM 应用架构 — NL2SQL + RAG + LangGraph
 
 > 目标：理解 LLM 不是"调个 API"，而是"设计架构"。掌握 NL2SQL 四步骤、RAG 切片策略、LangGraph 状态机。
 
@@ -160,49 +160,126 @@ LangGraph:
 ### 练习 1：实现 NL2SQL 的 validate_sql()（30min）
 
 ```python
+# ★ 参考答案
+FORBIDDEN_KW = ['DROP', 'DELETE', 'TRUNCATE', 'INSERT', 'UPDATE',
+                'ALTER', 'CREATE', 'GRANT', 'REVOKE']
+
 def validate_sql(sql: str) -> tuple[bool, str]:
-    """
-    安全校验 — 永远不信任 LLM 的输出。
+    sql_up = sql.upper().strip()
 
-    三道检查:
-    1. 禁止 DROP/DELETE/INSERT/UPDATE/ALTER/CREATE
-    2. 必须包含 dt 或 WHERE dt（分区过滤）
-    3. 必须以 SELECT 开头
+    # 校验1: 禁止危险关键字
+    for kw in FORBIDDEN_KW:
+        if kw in sql_up:
+            return False, f"禁止关键字: {kw}"
 
-    测试:
-    >>> validate_sql("SELECT * FROM t WHERE dt='2026-07-01'")
-    (True, 'OK')
-    >>> validate_sql("DROP TABLE t")
-    (False, '禁止关键字: DROP')
-    >>> validate_sql("SELECT * FROM t")
-    (False, '必须包含分区过滤 dt')
-    """
-    pass
+    # 校验2: 必须是 SELECT
+    if not sql_up.startswith('SELECT'):
+        return False, "只允许 SELECT"
 
-# 写 5 个测试用例，覆盖正常和异常场景
+    # 校验3: 必须有分区过滤（dt）
+    if 'DT' not in sql_up:
+        return False, "必须包含 dt 分区过滤（防全表扫描）"
+
+    return True, "OK"
+
+
+# 5 个测试用例
+tests = [
+    ("SELECT * FROM t WHERE dt='2026-07-01'", True, "正常查询"),
+    ("DROP TABLE t", False, "危险关键字"),
+    ("SELECT * FROM t", False, "无 dt 分区"),
+    ("  select channel, avg(rate) from t where dt > '2026-07-01'", True, "小写SELECT"),
+    ("DELETE FROM t WHERE dt='2026-07-01'", False, "DELETE 应拦截"),
+]
+for sql, expected, desc in tests:
+    ok, msg = validate_sql(sql)
+    assert ok == expected, f"[{desc}] {sql} → {msg}"
+print("✅ 所有测试用例通过")
 ```
 
 ### 练习 2：设计 RAG 的切片策略（30min）
 
 ```
-你有以下文档需要索引为 RAG 知识库:
-  - config/schemas/ods_tables.yaml (3张表的定义)
-  - config/schemas/dws_wide_table.yaml (17个特征的定义)
-  - config/rules/credit_policy.yaml (10条规则)
-  - study/模拟数据的完整项目流转过程.md (长文档)
+★ 参考答案:
 
-问题:
-1. 每个文件应该用什么切片策略？
-2. YAML 按什么切？MD 按什么切？
-3. 切完后每个 chunk 应该带什么 metadata？
+| 文件 | 切片策略 | chunk 数 | metadata |
+|------|---------|:--------:|---------|
+| ods_tables.yaml | 按顶级 key 切（ods_application/ods_user_behavior/ods_repayment 各一段） | 3 | source, table_name |
+| dws_wide_table.yaml | 按 category 切（profile/behavior/repayment 三大类，每类一个 chunk） | 3 | source, category |
+| credit_policy.yaml | 按 rule group 切（hard_reject/risk_assessment/credit_limit 各一段） | 3 | source, group_name |
+| 流转过程.md | 按 ## 标题切（每站一个 chunk） | 5 | source, chapter |
+
+YAML 按顶级 key 切的原因:
+  → 每个 key 是一段自包含的定义（一张表、一条规则）
+  → key 本身是 chunk 的"标题"，LLM 能理解这段在说什么
+
+MD 按 ## 标题切的原因:
+  → 文档作者的标题层级 = 自然语义边界
+  → 按 # 切太粗（全文），按 ### 切太碎（可能不完整）
+  → ## 是"章节"级别，刚好自包含
+
+chunk metadata 必须包含 source 的原因:
+  → LLM 引用时可以说"根据 ods_tables.yaml 中的描述..."
+  → 来源可追溯 = 可信度可验证
 ```
 
 ### 练习 3：画出审批工作流的状态图（20min）
 
-用 ASCII 或 Mermaid 画出信贷审批的 LangGraph 状态图，标注：
-- 每个节点的名称和职责
-- 条件路由的判定条件
-- LLM 节点 vs 普通函数节点的区别
+```
+★ 参考答案（ASCII 状态图）:
+
+               ┌─────────────────────────┐
+               │    rule_check (普通)      │
+               │    规则引擎检查           │
+               └────────┬───────────────┘
+                        │
+               ┌────────┴────────┐
+               │ 条件: 是否硬拒绝? │
+               └────────┬────────┘
+                        │
+        ┌───────────────┼───────────────┐
+        │               │               │
+    REJECT            PASS             (通往下一节点)
+        │               │
+        ▼               ▼
+┌─────────────────┐  ┌─────────────────────────┐
+│ rejection_letter│  │    model_score (普通)    │
+│ (LLM 节点)       │  │    XGBoost 模型推理      │
+│ 生成拒绝函       │  └────────┬────────────────┘
+└────────┬────────┘           │
+         │            ┌────────┴────────┐
+         │            │ 条件: 评分判定?  │
+         │            └────────┬────────┘
+         │                     │
+         │        ┌────────────┼────────────┐
+         │        │            │            │
+         │    APPROVE      MANUAL      REJECT
+         │        │         REVIEW         │
+         │        ▼            │            │
+         │  ┌──────────┐       │            │
+         │  │ disburse  │       │            │
+         │  │ (普通)    │       ▼            │
+         │  │ 放款     │  ┌──────────────┐  │
+         │  └──────────┘  │ request_docs  │  │
+         │                │ (LLM 节点)     │──┤
+         │                │ 生成补充材料清单│  │
+         │                └──────────────┘  │
+         └──────────────────────────────────┘
+                              │
+                              ▼
+                           ┌──────┐
+                           │ END  │
+                           └──────┘
+
+LLM 节点 vs 普通函数节点的区别:
+  LLM 节点: 需要调用大模型（如生成拒绝函、生成材料清单）
+    特点: 有延迟、不稳定（可能输出不符合格式）
+    应对: temperature=0 保证确定性、失败后重试
+
+  普通节点: 纯计算/规则（如规则引擎、模型推理）
+    特点: 低延迟、确定性的
+    优势: 没有 LLM 的"幻觉"风险和延迟问题
+```
 
 ---
 

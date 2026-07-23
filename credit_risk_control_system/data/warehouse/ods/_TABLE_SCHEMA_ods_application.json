@@ -1,0 +1,157 @@
+{
+  "table_name": "ods_application",
+  "layer": "ods",
+  "description": "用户贷款申请记录，一份申请一行",
+  "primary_key": [],
+  "partition_key": "dt",
+  "source_table": "mysql_credit_core",
+  "grain": null,
+  "columns": [
+    {
+      "name": "user_id",
+      "type": "STRING",
+      "nullable": false,
+      "description": "用户唯一标识，来自业务库主键",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "application_id",
+      "type": "STRING",
+      "nullable": false,
+      "description": "申请单号，业务库自增或UUID",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "apply_amount",
+      "type": "DOUBLE",
+      "nullable": true,
+      "description": "申请金额(元)。ODS层不做校验，可能为负数/0/超大值/空",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "product_type",
+      "type": "STRING",
+      "nullable": true,
+      "description": "产品类型原始值。可能为空/NULL/异常枚举值",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "user_name",
+      "type": "STRING",
+      "nullable": true,
+      "description": "★ 用户真实姓名(明文)。必须在DWD层脱敏",
+      "pii": true,
+      "sensitivity": "PII_NAME",
+      "aggregation": null
+    },
+    {
+      "name": "id_card",
+      "type": "STRING",
+      "nullable": true,
+      "description": "★ 身份证号(明文)。必须在DWD层脱敏",
+      "pii": true,
+      "sensitivity": "PII_ID_CARD",
+      "aggregation": null
+    },
+    {
+      "name": "phone",
+      "type": "STRING",
+      "nullable": true,
+      "description": "★ 手机号(明文)。必须在DWD层脱敏",
+      "pii": true,
+      "sensitivity": "PII_PHONE",
+      "aggregation": null
+    },
+    {
+      "name": "occupation",
+      "type": "STRING",
+      "nullable": true,
+      "description": "职业。原始值，未标准化",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "monthly_income",
+      "type": "DOUBLE",
+      "nullable": true,
+      "description": "月收入(元)。可能为0/空",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "education",
+      "type": "STRING",
+      "nullable": true,
+      "description": "学历。原始值",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "city",
+      "type": "STRING",
+      "nullable": true,
+      "description": "所在城市",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "ip_address",
+      "type": "STRING",
+      "nullable": true,
+      "description": "★ 客户端IP地址(明文)。需在DWD层脱敏",
+      "pii": true,
+      "sensitivity": "PII_IP",
+      "aggregation": null
+    },
+    {
+      "name": "device_id",
+      "type": "STRING",
+      "nullable": true,
+      "description": "设备指纹ID。SDK上报，可能为空/异常值",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "channel",
+      "type": "STRING",
+      "nullable": true,
+      "description": "渠道标识: app_android/app_ios/h5/partner_a/partner_b",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "apply_time",
+      "type": "TIMESTAMP",
+      "nullable": false,
+      "description": "申请提交时间",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "dt",
+      "type": "STRING",
+      "nullable": false,
+      "description": "分区键 — 申请日期 YYYY-MM-DD",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    }
+  ],
+  "_generated_by": "SchemaRegistry",
+  "_schema_version": "1.0"
+}

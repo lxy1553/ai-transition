@@ -1,0 +1,2 @@
+dt,total_applications,approval_rate,reject_rate,manual_review_rate,avg_score,score_std,score_p10,score_p50,score_p90,avg_credit_limit,avg_latency_ms
+2026-07-01,453,0.6512,0.2649,0.0839,616.17,77.0,517.27,613.22,716.4,19048.57,81.84

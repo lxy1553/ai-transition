@@ -1,0 +1,25 @@
+{
+  "application": {
+    "total": 500,
+    "passed": 457,
+    "quarantined": 43,
+    "null_rates": {
+      "user_id": 0.0,
+      "apply_amount": 0.0,
+      "product_type": 0.0,
+      "occupation": 0.0,
+      "monthly_income": 0.0,
+      "device_id": 0.0
+    }
+  },
+  "behavior": {
+    "total": 5000,
+    "passed": 5000,
+    "quarantined": 0
+  },
+  "repayment": {
+    "total": 500,
+    "passed": 500,
+    "quarantined": 0
+  }
+}

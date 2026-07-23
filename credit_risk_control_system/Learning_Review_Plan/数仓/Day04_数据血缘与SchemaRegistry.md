@@ -148,10 +148,17 @@ night_ops_ratio_30d = 0.27
 在纸上画出 `on_time_rate` 的完整血缘链：
 
 ```
-on_time_rate = 1 - overdue_cnt_hist / repayment_cnt
+★ 参考答案:
 
-overdue_cnt_hist 的来源: → ... → 一直追溯到 App 的还款页面
-repayment_cnt 的来源: → ... → 一直追溯到 MySQL 还款表的 repayment_id
+on_time_rate (DWS 特征)
+  ↑ AGG: 1 - SUM(status='OVERDUE') / COUNT(*), 新用户=1.0
+  ← dwd_repayment.status + dwd_repayment.repayment_id
+    ↑ DWD 清洗: status 标准化 overdue→OVERDUE
+    ← ods_repayment.status + ods_repayment.repayment_id
+      ↑ ODS 镜像: 从 MySQL binlog 1:1 同步
+      ← 还款系统 MySQL 表: repayment.status, repayment.repayment_id
+        ↑ 用户点击"立即还款"按钮
+        ← App 还款页面 → 支付网关回调 → 写入还款系统
 ```
 
 ---

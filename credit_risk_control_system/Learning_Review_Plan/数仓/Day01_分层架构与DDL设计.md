@@ -136,13 +136,26 @@ class ODSTable:
     partition_key: str = "dt"
     description: str = ""
 
-# TODO: 完成电商 ODS 三张表的定义
-# 提示:
-# - 订单表 ← MySQL 订单中心, binlog 同步
-# - 用户轨迹表 ← 埋点 SDK, SDK 上报
-# - 库存表 ← WMS 仓库系统, API 同步
+# ★ 参考答案
 电商_ODS_TABLES = {
-    # 补全以下三张表
+    "ods_order": ODSTable(
+        name="ods_order",
+        source_system="mysql_order_center",
+        ingest_method="binlog",
+        description="用户订单表（来自 MySQL 订单中心 Binlog）",
+    ),
+    "ods_user_track": ODSTable(
+        name="ods_user_track",
+        source_system="sdk_analytics",
+        ingest_method="sdk",
+        description="用户行为轨迹（埋点 SDK 实时上报）",
+    ),
+    "ods_inventory": ODSTable(
+        name="ods_inventory",
+        source_system="wms_system",
+        ingest_method="api_log",
+        description="库存表（WMS 仓库系统 API 同步）",
+    ),
 }
 ```
 
@@ -282,6 +295,33 @@ TBLPROPERTIES (
 - 每个字段有 COMMENT
 - TBLPROPERTIES 包含 source_system、retention_days
 - 标注 PII 列
+
+```sql
+-- ★ 参考答案
+CREATE TABLE IF NOT EXISTS dwd.dwd_order (
+    order_id          STRING    COMMENT '订单ID。原始为空→MISSING',
+    user_id           STRING    COMMENT '用户ID。必填字段',
+    pay_amount        DOUBLE    COMMENT '支付金额(元)。已修正: 负数→0',
+    shipping_address  STRING    COMMENT '★ 收货地址(已脱敏: 北京市朝阳区→北京市**区)',
+    phone             STRING    COMMENT '★ 手机号(已脱敏: 138****0000)',
+    status            STRING    COMMENT '订单状态(已标准化): PAID/SHIPPED/DELIVERED/RETURNED/UNKNOWN',
+    category          STRING    COMMENT '商品品类: 电子/服装/食品/图书',
+    province          STRING    COMMENT '省份(从address解析)。未知→UNKNOWN',
+    order_time        TIMESTAMP COMMENT '下单时间',
+    dq_score          INT       COMMENT '★ 数据质量评分 0-100。≥60通过',
+    dt                STRING    COMMENT '分区键 — 下单日期 YYYY-MM-DD'
+)
+COMMENT '清洗后的电商订单明细 — dq_score<60隔离'
+PARTITIONED BY (dt)
+STORED AS parquet
+TBLPROPERTIES (
+    'source_table' = 'ods.ods_order',
+    'transformation' = 'clean_order()',
+    'pii_columns' = 'shipping_address,phone',
+    'retention_days' = '365',
+    'update_frequency' = 'daily'
+);
+```
 
 ---
 

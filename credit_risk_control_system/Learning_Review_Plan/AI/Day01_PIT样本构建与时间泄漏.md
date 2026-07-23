@@ -154,32 +154,30 @@ def detect_time_leakage(
 ) -> dict:
     """
     检测训练样本中是否存在时间泄漏。
-
-    Args:
-        samples: 训练样本 DataFrame
-        feature_time_col: 特征时间列名（如 'feature_dt'）
-        label_time_col: 标签时间列名（如 'label_dt'）
-
-    Returns:
-        {
-            "total_samples": 总样本数,
-            "leaked_samples": 泄漏样本数,
-            "leak_rate": 泄漏比例,
-            "leaked_indices": [泄漏的行索引],
-            "is_critical": 泄漏率 > 1% → True（需要立即修复）,
-        }
-
-    时间泄漏判定: feature_time >= label_time
     """
-    # TODO: 实现
-    pass
+    # ★ 参考答案
+    feature_dt = pd.to_datetime(samples[feature_time_col])
+    label_dt = pd.to_datetime(samples[label_time_col])
+
+    leaked = feature_dt >= label_dt
+    leaked_indices = samples.index[leaked].tolist()
+    n_leaked = len(leaked_indices)
+    n_total = len(samples)
+
+    return {
+        "total_samples": n_total,
+        "leaked_samples": n_leaked,
+        "leak_rate": round(n_leaked / n_total, 4) if n_total > 0 else 0.0,
+        "leaked_indices": leaked_indices,
+        "is_critical": (n_leaked / n_total > 0.01) if n_total > 0 else False,
+    }
 
 
 # 测试用例
 test_samples = pd.DataFrame({
     'user_id': ['u1', 'u2', 'u3', 'u4', 'u5'],
     'feature_dt': [
-        '2026-07-01', '2026-08-05',  # u4: 正常, u5: 时间泄漏！
+        '2026-07-01', '2026-07-01',
         '2026-07-01', '2026-07-01', '2026-08-01'
     ],
     'label_dt': [
@@ -188,7 +186,8 @@ test_samples = pd.DataFrame({
     ],
 })
 result = detect_time_leakage(test_samples, 'feature_dt', 'label_dt')
-assert result['leaked_samples'] == 1  # u3 和 u5 的特征时间 >= 标签时间
+print(result)
+# 预期: total=5, leaked=1 (u5: 2026-08-01 >= 2026-07-15), is_critical=False (20% > 1%)
 ```
 
 ### 练习 2：为电商推荐写 PIT 样本构建（45min）
@@ -200,21 +199,21 @@ def build_电商推荐_训练样本(
 ) -> pd.DataFrame:
     """
     电商推荐场景的 PIT 样本构建。
-
-    场景: 用户 u1 在 07-01 看到商品 A → 07-05 购买了
-         用户 u2 在 07-01 看到商品 B → 一直没有买
-
-    特征时间 = 曝光时刻（show_time）
-    标签时间 = 曝光后 7 天（show_time + 7d）
-    标签 = 1（购买了）/ 0（没购买）
-
-    要求:
-    1. 用 merge 关联 user_id + item_id
-    2. 显式过滤 feature_time < label_time
-    3. 一个用户对多个商品的曝光 → 每个(user, item, time)是一条样本
     """
-    # TODO: 实现
-    pass
+    # ★ 参考答案
+    # 1. merge 按 user_id + item_id 关联（比信贷多一维）
+    samples = user_features.merge(
+        click_labels,
+        on=['user_id', 'item_id'],
+        how='inner',           # 必须两个时间点都有数据
+    )
+
+    # 2. 显式过滤时间泄漏
+    samples['show_time'] = pd.to_datetime(samples['show_time'])
+    samples['click_time'] = pd.to_datetime(samples['click_time'])
+    samples = samples[samples['show_time'] < samples['click_time']]
+
+    return samples
 
 
 # 测试数据
@@ -227,12 +226,15 @@ user_features = pd.DataFrame({
 click_labels = pd.DataFrame({
     'user_id': ['u1', 'u2'],
     'item_id': ['A', 'A'],
-    'label': [1, 0],  # u1 买了 A, u2 没买 A
-    'click_time': ['2026-07-05', '2026-07-10'],  # ← 注意：u2 的 click_time > show_time+7
+    'label': [1, 0],
+    'click_time': ['2026-07-05', '2026-07-10'],
 })
 
 samples = build_电商推荐_训练样本(user_features, click_labels)
-# 预期: u1-A 保留(label=1), u1-B 没有标签→丢弃, u2-A → 取决于时间过滤
+print(samples[['user_id', 'item_id', 'label', 'show_time', 'click_time']])
+# 预期: u1-A 保留(label=1, 07-01 < 07-05), u2-A 保留(label=0, 07-01 < 07-10)
+# u1-B 没有标签行 → inner join 自动丢弃
+print(f"\n样本数: {len(samples)}")  # 预期: 2
 ```
 
 ### 练习 3：时间泄漏会怎样？（15min）

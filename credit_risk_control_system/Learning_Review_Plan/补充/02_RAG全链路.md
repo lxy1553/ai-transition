@@ -284,8 +284,15 @@ class MiniRAG:
 
     def _load_docs(self, docs_dir):
         """加载 YAML 文档，按顶级 key 切分"""
-        # TODO: 实现
-        pass
+        from pathlib import Path
+        for yaml_file in Path(docs_dir).glob("*.yaml"):
+            with open(yaml_file) as f:
+                data = yaml.safe_load(f)
+            for key, value in data.items():
+                self.chunks.append({
+                    "text": yaml.dump({key: value}),
+                    "metadata": {"source": str(yaml_file), "key": key}
+                })
 
     def search(self, query: str, k: int = 3) -> list[dict]:
         """用关键词匹配检索（生产中用向量检索）"""

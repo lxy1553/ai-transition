@@ -1,0 +1,236 @@
+# ============================================================
+# ODS 层表结构定义 (Operational Data Store)
+# 原则: 1:1 镜像源系统，列名/类型与源系统完全一致
+# 分区键: dt (日期分区，格式 YYYY-MM-DD)
+# ============================================================
+
+tables:
+
+  # ── 1. 用户申请表（来自信贷核心库 MySQL binlog）──
+  ods_application:
+    source_system: mysql_credit_core
+    ingest_method: binlog        # Kafka Connect / Flink CDC
+    partition_key: dt
+    description: "用户贷款申请记录，一份申请一行"
+    columns:
+      - name: user_id
+        type: STRING
+        nullable: false
+        description: "用户唯一标识，来自业务库主键"
+        pii: false
+
+      - name: application_id
+        type: STRING
+        nullable: false
+        description: "申请单号，业务库自增或UUID"
+        pii: false
+
+      - name: apply_amount
+        type: DOUBLE
+        nullable: true
+        description: "申请金额(元)。ODS层不做校验，可能为负数/0/超大值/空"
+        pii: false
+
+      - name: product_type
+        type: STRING
+        nullable: true
+        description: "产品类型原始值。可能为空/NULL/异常枚举值"
+        pii: false
+
+      - name: user_name
+        type: STRING
+        nullable: true
+        description: "★ 用户真实姓名(明文)。必须在DWD层脱敏"
+        pii: true
+        sensitivity: PII_NAME
+
+      - name: id_card
+        type: STRING
+        nullable: true
+        description: "★ 身份证号(明文)。必须在DWD层脱敏"
+        pii: true
+        sensitivity: PII_ID_CARD
+
+      - name: phone
+        type: STRING
+        nullable: true
+        description: "★ 手机号(明文)。必须在DWD层脱敏"
+        pii: true
+        sensitivity: PII_PHONE
+
+      - name: occupation
+        type: STRING
+        nullable: true
+        description: "职业。原始值，未标准化"
+        pii: false
+
+      - name: monthly_income
+        type: DOUBLE
+        nullable: true
+        description: "月收入(元)。可能为0/空"
+        pii: false
+
+      - name: education
+        type: STRING
+        nullable: true
+        description: "学历。原始值"
+        pii: false
+
+      - name: city
+        type: STRING
+        nullable: true
+        description: "所在城市"
+        pii: false
+
+      - name: ip_address
+        type: STRING
+        nullable: true
+        description: "★ 客户端IP地址(明文)。需在DWD层脱敏"
+        pii: true
+        sensitivity: PII_IP
+
+      - name: device_id
+        type: STRING
+        nullable: true
+        description: "设备指纹ID。SDK上报，可能为空/异常值"
+        pii: false
+
+      - name: channel
+        type: STRING
+        nullable: true
+        description: "渠道标识: app_android/app_ios/h5/partner_a/partner_b"
+        pii: false
+
+      - name: apply_time
+        type: TIMESTAMP
+        nullable: false
+        description: "申请提交时间"
+        pii: false
+
+      - name: dt
+        type: STRING
+        nullable: false
+        description: "分区键 — 申请日期 YYYY-MM-DD"
+        pii: false
+
+  # ── 2. 用户行为埋点表（来自埋点SDK实时流）──
+  ods_user_behavior:
+    source_system: sdk_analytics
+    ingest_method: sdk           # 客户端SDK → Kafka
+    partition_key: dt
+    description: "用户App内行为事件流（点击、浏览、提交等）"
+    columns:
+      - name: user_id
+        type: STRING
+        nullable: true
+        description: "用户ID。未登录用户可能为空或'anonymous'"
+        pii: false
+
+      - name: event_type
+        type: STRING
+        nullable: false
+        description: "事件类型: page_view/click/input/submit/app_install/app_uninstall/error"
+        pii: false
+
+      - name: event_detail
+        type: STRING
+        nullable: true
+        description: "事件详情JSON: {x, y, duration_ms, ...}"
+        pii: false
+
+      - name: device_id
+        type: STRING
+        nullable: true
+        description: "设备指纹ID"
+        pii: false
+
+      - name: session_id
+        type: STRING
+        nullable: true
+        description: "会话ID，用于关联同一次访问"
+        pii: false
+
+      - name: page_url
+        type: STRING
+        nullable: true
+        description: "页面路径: /apply, /products, /mine, /repay等"
+        pii: false
+
+      - name: ip
+        type: STRING
+        nullable: true
+        description: "客户端IP"
+        pii: true
+
+      - name: event_time
+        type: TIMESTAMP
+        nullable: false
+        description: "事件发生时间（客户端时间戳）"
+        pii: false
+
+      - name: dt
+        type: STRING
+        nullable: false
+        description: "分区键 — 事件日期"
+        pii: false
+
+  # ── 3. 还款记录表（来自还款系统 MySQL binlog）──
+  ods_repayment:
+    source_system: mysql_credit_core
+    ingest_method: binlog
+    partition_key: dt
+    description: "还款计划与还款记录"
+    columns:
+      - name: repayment_id
+        type: STRING
+        nullable: false
+        description: "还款记录唯一ID"
+        pii: false
+
+      - name: application_id
+        type: STRING
+        nullable: false
+        description: "关联的申请单号"
+        pii: false
+
+      - name: user_id
+        type: STRING
+        nullable: false
+        description: "用户ID"
+        pii: false
+
+      - name: due_date
+        type: TIMESTAMP
+        nullable: false
+        description: "应还款日期"
+        pii: false
+
+      - name: paid_date
+        type: TIMESTAMP
+        nullable: true
+        description: "实际还款日期。未还则为NULL"
+        pii: false
+
+      - name: due_amount
+        type: DOUBLE
+        nullable: false
+        description: "应还金额(元)"
+        pii: false
+
+      - name: paid_amount
+        type: DOUBLE
+        nullable: true
+        description: "实还金额(元)"
+        pii: false
+
+      - name: status
+        type: STRING
+        nullable: false
+        description: "还款状态原始值: pending/paid/overdue/ERROR_STATUS"
+        pii: false
+
+      - name: dt
+        type: STRING
+        nullable: false
+        description: "分区键 — 日期"
+        pii: false

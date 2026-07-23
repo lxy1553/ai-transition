@@ -135,20 +135,37 @@ DEFAULTS = {"f1": 0.5, "f2": 0.5}
 
 async def fetch_features_with_fallback(user_id):
     """
-    要求实现三层降级，和项目中的代码结构一致:
-    1. 在线查询(50ms超时) → 2. 缓存 → 3. 默认值
-
-    关键: 每层降级都要记录 degraded_features
+    要求实现三层降级，和项目中的代码结构一致。
     """
-    # TODO: 实现
-    pass
+    # ★ 参考答案
+    t0 = time.perf_counter()
+
+    try:
+        # 路径1: 在线 — 50ms 超时
+        features = await asyncio.wait_for(
+            service.get_online_features(user_id), timeout=0.050
+        )
+        return {"features": features, "source": "online", "degraded": False}
+    except (asyncio.TimeoutError, ConnectionError):
+        pass  # 降级下一层
+
+    # 路径2: 缓存
+    cached = service.get_cached_features(user_id)
+    if cached:
+        return {"features": cached, "source": "cache",
+                "degraded": True, "degraded_features": list(cached.keys())}
+
+    # 路径3: 默认值（最保守）
+    return {"features": DEFAULTS, "source": "defaults",
+            "degraded": True, "degraded_features": list(DEFAULTS.keys())}
+
 
 # 测试
 async def test():
     for i in range(10):
         result = await fetch_features_with_fallback(f"user_{i}")
-        print(f"user_{i}: features={result['features']}, "
-              f"degraded={result.get('degraded', False)}")
+        print(f"user_{i}: source={result['source']:10s} "
+              f"features={result['features']}")
 
 asyncio.run(test())
 ```

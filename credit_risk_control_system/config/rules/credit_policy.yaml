@@ -1,0 +1,123 @@
+# ============================================================
+# 信贷审批策略规则表
+# 三层决策: 硬拒绝 → 风险评估 → 额度策略
+# ============================================================
+
+rule_groups:
+  # ── 第一层: 硬拒绝规则（命中任意一条直接拒绝，不可覆盖）────
+  - name: hard_reject
+    priority: 1
+    description: 硬拒绝规则——命中任意一条直接拒绝
+    rules:
+      - id: BLACKLIST_HIT
+        condition: "user_id_in_blacklist == True"
+        decision: REJECT
+        reason_code: "RC_BL001"
+        reason_desc: "命中内部黑名单"
+        overridable: false
+
+      - id: AGE_RESTRICTION
+        condition: "age < 18 or age > 65"
+        decision: REJECT
+        reason_code: "RC_AG001"
+        reason_desc: "年龄不在授信范围(18-65岁)"
+        overridable: false
+
+      - id: FRAUD_SCORE_HIGH
+        condition: "fraud_score > 0.8"
+        decision: REJECT
+        reason_code: "RC_FR001"
+        reason_desc: "反欺诈评分过高(>0.8)"
+        overridable: false
+
+      - id: DEVICE_ROOTED
+        condition: "device_rooted_flag == 1"
+        decision: REJECT
+        reason_code: "RC_DV001"
+        reason_desc: "设备已Root/越狱"
+        overridable: false
+
+      - id: IDENTITY_VERIFY_FAIL
+        condition: "identity_verified == False"
+        decision: REJECT
+        reason_code: "RC_ID001"
+        reason_desc: "身份核验未通过"
+        overridable: false
+
+  # ── 第二层: 风险评估规则（触发后进入人工审核或降额）────
+  - name: risk_assessment
+    priority: 2
+    description: 风险评估——通过硬规则后进行风险判别
+    rules:
+      - id: MULTI_HEAD_SPIKE
+        condition: "multi_head_cnt_7d >= 5"
+        decision: MANUAL_REVIEW
+        reason_code: "RC_MH001"
+        reason_desc: "近7天多头借贷次数>=5，需人工审核"
+
+      - id: MULTI_HEAD_WARNING
+        condition: "multi_head_cnt_7d >= 3 and multi_head_cnt_7d < 5"
+        decision: REDUCE_LIMIT
+        reason_code: "RC_MH002"
+        reason_desc: "近7天多头借贷3-4次，额度降低30%"
+
+      - id: DEBT_RATIO_CRITICAL
+        condition: "debt_to_income_ratio > 0.7"
+        decision: REDUCE_LIMIT
+        reason_code: "RC_DT001"
+        reason_desc: "负债率>70%，额度降低50%"
+
+      - id: DEBT_RATIO_HIGH
+        condition: "debt_to_income_ratio > 0.5 and debt_to_income_ratio <= 0.7"
+        decision: REDUCE_LIMIT
+        reason_code: "RC_DT002"
+        reason_desc: "负债率50-70%，额度降低20%"
+
+      - id: DEVICE_MULTI_ACCOUNT
+        condition: "device_linked_users >= 3"
+        decision: MANUAL_REVIEW
+        reason_code: "RC_DV002"
+        reason_desc: "同设备关联>=3个账号，疑似团伙欺诈"
+
+      - id: NIGHT_OPS_SUSPICIOUS
+        condition: "night_ops_ratio_30d > 0.6"
+        decision: MANUAL_REVIEW
+        reason_code: "RC_BH001"
+        reason_desc: "近30天夜间操作占比>60%，行为异常"
+
+  # ── 第三层: 额度策略 ──────────────────────────────────
+  - name: credit_limit_strategy
+    priority: 3
+    description: 根据风险等级确定授信额度
+    rules:
+      - id: LIMIT_TIER_1
+        condition: "score >= 700"
+        action:
+          type: SET_LIMIT
+          formula: "min(monthly_income * 18, 200000)"
+        reason_code: "RC_LM_T1"
+        reason_desc: "优质客户，最高额度20万"
+
+      - id: LIMIT_TIER_2
+        condition: "score >= 600 and score < 700"
+        action:
+          type: SET_LIMIT
+          formula: "min(monthly_income * 12, 100000)"
+        reason_code: "RC_LM_T2"
+        reason_desc: "良好客户，最高额度10万"
+
+      - id: LIMIT_TIER_3
+        condition: "score >= 500 and score < 600"
+        action:
+          type: SET_LIMIT
+          formula: "min(monthly_income * 6, 30000)"
+        reason_code: "RC_LM_T3"
+        reason_desc: "一般客户，最高额度3万"
+
+      - id: LIMIT_TIER_REJECT
+        condition: "score < 500"
+        action:
+          type: REJECT
+          formula: "0"
+        reason_code: "RC_LM_RJ"
+        reason_desc: "评分不足(<500)，拒绝授信"

@@ -1,0 +1,94 @@
+{
+  "table_name": "ods_user_behavior",
+  "layer": "ods",
+  "description": "用户App内行为事件流（点击、浏览、提交等）",
+  "primary_key": [],
+  "partition_key": "dt",
+  "source_table": "sdk_analytics",
+  "grain": null,
+  "columns": [
+    {
+      "name": "user_id",
+      "type": "STRING",
+      "nullable": true,
+      "description": "用户ID。未登录用户可能为空或'anonymous'",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "event_type",
+      "type": "STRING",
+      "nullable": false,
+      "description": "事件类型: page_view/click/input/submit/app_install/app_uninstall/error",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "event_detail",
+      "type": "STRING",
+      "nullable": true,
+      "description": "事件详情JSON: {x, y, duration_ms, ...}",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "device_id",
+      "type": "STRING",
+      "nullable": true,
+      "description": "设备指纹ID",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "session_id",
+      "type": "STRING",
+      "nullable": true,
+      "description": "会话ID，用于关联同一次访问",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "page_url",
+      "type": "STRING",
+      "nullable": true,
+      "description": "页面路径: /apply, /products, /mine, /repay等",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "ip",
+      "type": "STRING",
+      "nullable": true,
+      "description": "客户端IP",
+      "pii": true,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "event_time",
+      "type": "TIMESTAMP",
+      "nullable": false,
+      "description": "事件发生时间（客户端时间戳）",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "dt",
+      "type": "STRING",
+      "nullable": false,
+      "description": "分区键 — 事件日期",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    }
+  ],
+  "_generated_by": "SchemaRegistry",
+  "_schema_version": "1.0"
+}

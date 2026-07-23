@@ -1,0 +1,116 @@
+# ============================================================
+# Docker Compose — 本地开发环境
+#
+# ★ 所有服务为生产选型，本地开发时部分使用容器化替代
+# ★ 标注 "PRODUCTION" 的服务在生产环境中替换为托管/集群版本
+#
+# 启动: docker-compose -f docker/docker-compose.yml up -d
+# ============================================================
+
+version: '3.8'
+
+services:
+  # ── 推理网关 ──────────────────────────────────────────
+  inference-gateway:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_ENV=dev
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - KAFKA_BOOTSTRAP=kafka:9092
+      - MLFLOW_TRACKING_URI=http://mlflow:5000
+    depends_on:
+      - redis
+      - kafka
+    volumes:
+      - ../config:/app/config
+      - ../data:/app/data
+    command: python scripts/run_inference.py
+
+  # ── Redis (在线特征存储) ─────────────────────────────
+  # PRODUCTION: Redis Cluster (3主3从) + Sentinel 高可用
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
+
+  # ── Kafka (消息队列) ─────────────────────────────────
+  # PRODUCTION: Kafka Cluster (3+ broker) + SASL认证
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    depends_on:
+      - zookeeper
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  # ── MLflow (模型管理) ────────────────────────────────
+  # PRODUCTION: MLflow Server + PostgreSQL + S3 artifact store
+  mlflow:
+    image: python:3.11-slim
+    ports:
+      - "5000:5000"
+    volumes:
+      - ../data/mlflow:/mlflow
+    command: >
+      sh -c "pip install mlflow && mlflow server
+      --backend-store-uri file:///mlflow
+      --default-artifact-root file:///mlflow/artifacts
+      --host 0.0.0.0 --port 5000"
+
+  # ── Prometheus (监控) ────────────────────────────────
+  # PRODUCTION: Prometheus + Grafana + Alertmanager 全套
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+
+  # ── ClickHouse (实时数仓) ─────────────────────────────
+  # PRODUCTION: ClickHouse Cluster (3 shard × 2 replica)
+  clickhouse:
+    image: clickhouse/clickhouse-server:latest
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+
+volumes:
+  redis_data:
+  prometheus_data:
+  grafana_data:
+  clickhouse_data:

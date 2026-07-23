@@ -1,0 +1,202 @@
+{
+  "table_name": "ads_training_samples",
+  "layer": "ads",
+  "description": "DWS宽表 + 逾期标签 = 训练样本。 这是模型训练的最终输入——每条样本 = 某个用户在某天的特征向量 + T+30的逾期标签。\n",
+  "primary_key": [],
+  "partition_key": "dt",
+  "source_table": null,
+  "grain": null,
+  "columns": [
+    {
+      "name": "user_id",
+      "type": "STRING",
+      "nullable": true,
+      "description": "用户ID",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "apply_amount_avg",
+      "type": "DOUBLE",
+      "nullable": true,
+      "description": "← DWS宽表特征",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "apply_amount_max",
+      "type": "DOUBLE",
+      "nullable": true,
+      "description": "",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "monthly_income",
+      "type": "DOUBLE",
+      "nullable": true,
+      "description": "",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "total_apply_cnt",
+      "type": "INTEGER",
+      "nullable": true,
+      "description": "",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "distinct_device_cnt",
+      "type": "INTEGER",
+      "nullable": true,
+      "description": "",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "distinct_city_cnt",
+      "type": "INTEGER",
+      "nullable": true,
+      "description": "",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "apply_cnt_7d",
+      "type": "INTEGER",
+      "nullable": true,
+      "description": "",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "apply_cnt_30d",
+      "type": "INTEGER",
+      "nullable": true,
+      "description": "",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "night_ops_ratio_30d",
+      "type": "DOUBLE",
+      "nullable": true,
+      "description": "",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "page_view_cnt_7d",
+      "type": "INTEGER",
+      "nullable": true,
+      "description": "",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "input_cnt_7d",
+      "type": "INTEGER",
+      "nullable": true,
+      "description": "",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "error_event_cnt_7d",
+      "type": "INTEGER",
+      "nullable": true,
+      "description": "",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "overdue_cnt_hist",
+      "type": "INTEGER",
+      "nullable": true,
+      "description": "",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "total_due_amount",
+      "type": "DOUBLE",
+      "nullable": true,
+      "description": "",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "total_paid_amount",
+      "type": "DOUBLE",
+      "nullable": true,
+      "description": "",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "repayment_cnt",
+      "type": "INTEGER",
+      "nullable": true,
+      "description": "",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "on_time_rate",
+      "type": "DOUBLE",
+      "nullable": true,
+      "description": "",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "label",
+      "type": "INTEGER",
+      "nullable": false,
+      "description": "★ 逾期标签。0=好样本(30天内正常还款), 1=坏样本(DPD30+逾期)。 这是XGBoost的预测目标(y)，必须严格保证 dt_特征 < dt_标签 (PIT原则)。\n",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "label_date",
+      "type": "STRING",
+      "nullable": true,
+      "description": "标签观察日期 = dt + 30天。特征快照日期=T，标签日期=T+30",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "dt",
+      "type": "STRING",
+      "nullable": true,
+      "description": "分区键 — 特征快照日期",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    }
+  ],
+  "_generated_by": "SchemaRegistry",
+  "_schema_version": "1.0"
+}

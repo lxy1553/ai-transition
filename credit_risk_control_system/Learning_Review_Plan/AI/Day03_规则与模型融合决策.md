@@ -174,41 +174,76 @@ def decision_v4(score, rules):
     ...
 # → u1 结果是 MANUAL_REVIEW（和版本C一致），但规则多时可能不一致
 
-# 任务: 分析四个版本的优劣，填表:
+# ★ 参考答案:
 # | 版本 | 安全性 | 效率 | 可解释性 | 适用场景 |
-# | A    | ?      | ?    | ?        | ?        |
-# | B    | ?      | ?    | ?        | ?        |
-# | C    | ?      | ?    | ?        | ?        |
-# | D    | ?      | ?    | ?        | ?        |
+# | A    | 低 (忽略规则) | 高 (只跑模型) | 高 (只看评分) | 无安全红线、纯评分场景 |
+# | B    | 极高 (规则卡死) | 中 (规则优先) | 高 (规则明确) | 监管严格、安全第一 |
+# | C    | 高 (规则覆盖模型) | 高 (短路节省算力) | 极高 (规则+模型互不干扰) | ★ 信贷、审核等需要安全和效率平衡 |
+# | D    | 中 (权重可能不合适) | 中 (多步计算) | 低 (分数调整不透明) | 规则冲突多、需要精细调优 |
+#
+# 项目选择版本 C 的原因:
+# 1. 安全性: 硬规则短路 + 规则可覆盖模型（REVIEW > APPROVE）
+# 2. 效率: 硬拒绝直接返回，不跑模型
+# 3. 可解释性: 规则结果(reason_code)和模型结果(SHAP)分开给
 ```
 
 ### 练习 2：为内容审核设计分层决策（30min）
 
 ```python
+# ★ 参考答案
+SENSITIVE_KEYWORDS = ['诈骗', '赌博', '色情', '毒品', '枪支']
+
 def moderate_content(text: str, user: dict, model_prob: float) -> dict:
     """
-    四层审核架构:
-
-    Layer 1 — 硬规则: 敏感词字典 → 直接拦截
-      - "诈骗""赌博""色情"等 → 立即拦截
-      - 不需要跑模型（省算力 + 绝对安全）
-
-    Layer 2 — 模型: BERT 违规分类 → 输出概率 [0, 1]
-      - > 0.8: 高危
-      - 0.5-0.8: 中危
-      - < 0.5: 安全
-
-    Layer 3 — 融合: 规则覆盖 + 用户历史
-      - 新用户 + 中危 → MANUAL_REVIEW（给新用户更多宽容）
-      - 惯犯 + 中危 → REJECT（历史差的从严处理）
-
-    Layer 4 — 策略:
-      - APPROVE → 发布
-      - REJECT → 删除 + reason_code
-      - MANUAL_REVIEW → 进入审核队列
+    四层审核架构 — 与信贷风控的四层完全对应
     """
-    # TODO: 实现
-    pass
+
+    # ★ Layer 1: 硬规则 — 敏感词拦截（短路）
+    for kw in SENSITIVE_KEYWORDS:
+        if kw in text:
+            return {
+                "action": "BLOCK",
+                "reason": f"命中敏感词: {kw}",
+                "model_prob": model_prob,
+                "layer": 1,
+            }
+
+    # Layer 2: 模型输出
+    if model_prob > 0.8:
+        level = "high"
+    elif model_prob > 0.5:
+        level = "medium"
+    else:
+        level = "low"
+
+    # ★ Layer 3: 融合判定 — 规则覆盖 + 用户历史 + 模型
+    if level == "high":
+        if user.get("violation_count", 0) >= 3:
+            return {"action": "BLOCK", "reason": "高危+惯犯", "layer": 3}
+        return {"action": "MANUAL_REVIEW", "reason": "高风险", "layer": 3}
+
+    elif level == "medium":
+        if user.get("violation_count", 0) >= 3:
+            return {"action": "BLOCK", "reason": "中危+惯犯", "layer": 3}
+        if user.get("is_new", True):
+            return {"action": "MANUAL_REVIEW", "reason": "新人+中危", "layer": 3}
+        return {"action": "FLAG", "reason": "中危老人,标记观察", "layer": 3}
+
+    else:
+        # ★ Layer 4: 低危 — 放行（但记录日志）
+        return {"action": "PASS", "reason": "安全", "layer": 4}
+
+# 测试用例
+users = [
+    {"violation_count": 0, "is_new": True},
+    {"violation_count": 5, "is_new": False},
+]
+texts = ["你好吗", "诈骗电话", "这个商品不错", "这是一个测试"]
+
+for u in users:
+    for t in texts:
+        result = moderate_content(t, u, 0.6)
+        print(f"user={u['violation_count']}次违规 | {t[:15]:15s} → {result['action']}")
 ```
 
 ---

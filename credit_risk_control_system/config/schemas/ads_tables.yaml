@@ -1,0 +1,200 @@
+# ============================================================
+# ADS 层表结构定义 (Application Data Service)
+# 原则: 直接服务上层应用，预聚合、即查即用
+# 来源: DWS 宽表 + 标签表 + 模型预测结果
+# ============================================================
+
+tables:
+
+  # ── 1. 模型训练样本集 ──
+  ads_training_samples:
+    description: >
+      DWS宽表 + 逾期标签 = 训练样本。
+      这是模型训练的最终输入——每条样本 = 某个用户在某天的特征向量 + T+30的逾期标签。
+    source_tables:
+      - dws.user_risk_feature_wide   # 特征
+      - labels                       # 标签(loan_labels表，含T+30逾期标记)
+    grain: "用户 × 日期"
+    columns:
+
+      # 继承自 DWS 宽表的全部特征列
+      - name: user_id
+        type: STRING
+        description: "用户ID"
+
+      - name: apply_amount_avg
+        type: DOUBLE
+        description: "← DWS宽表特征"
+
+      - name: apply_amount_max
+        type: DOUBLE
+
+      - name: monthly_income
+        type: DOUBLE
+
+      - name: total_apply_cnt
+        type: INTEGER
+
+      - name: distinct_device_cnt
+        type: INTEGER
+
+      - name: distinct_city_cnt
+        type: INTEGER
+
+      - name: apply_cnt_7d
+        type: INTEGER
+
+      - name: apply_cnt_30d
+        type: INTEGER
+
+      - name: night_ops_ratio_30d
+        type: DOUBLE
+
+      - name: page_view_cnt_7d
+        type: INTEGER
+
+      - name: input_cnt_7d
+        type: INTEGER
+
+      - name: error_event_cnt_7d
+        type: INTEGER
+
+      - name: overdue_cnt_hist
+        type: INTEGER
+
+      - name: total_due_amount
+        type: DOUBLE
+
+      - name: total_paid_amount
+        type: DOUBLE
+
+      - name: repayment_cnt
+        type: INTEGER
+
+      - name: on_time_rate
+        type: DOUBLE
+
+      # 标签列
+      - name: label
+        type: INTEGER
+        nullable: false
+        values: [0, 1]
+        description: >
+          ★ 逾期标签。0=好样本(30天内正常还款), 1=坏样本(DPD30+逾期)。
+          这是XGBoost的预测目标(y)，必须严格保证 dt_特征 < dt_标签 (PIT原则)。
+
+      - name: label_date
+        type: STRING
+        description: "标签观察日期 = dt + 30天。特征快照日期=T，标签日期=T+30"
+
+      # 分区
+      - name: dt
+        type: STRING
+        description: "分区键 — 特征快照日期"
+
+    pit_principle:
+      description: >
+        ★ Point-in-Time 正确性：特征快照时间(dt)必须严格早于标签观察时间(label_date)。
+        例如: 用7月1日的特征预测8月1日是否逾期是合法的。
+        但用8月1日的特征去预测7月1日的逾期 → 时间泄漏 → 上线后模型完全失效。
+
+  # ── 2. 模型监控日报 ──
+  ads_model_monitor_daily:
+    description: "每日一条记录，汇总当天的模型审批指标。Grafana直接消费此表。"
+    grain: "日期"
+    columns:
+      - name: dt
+        type: STRING
+        description: "统计日期"
+
+      - name: total_applications
+        type: INTEGER
+        description: "当日总申请数"
+
+      - name: approval_rate
+        type: DOUBLE
+        range: [0.0, 1.0]
+        description: "通过率 = APPROVE数 / 总数"
+
+      - name: reject_rate
+        type: DOUBLE
+        range: [0.0, 1.0]
+        description: "拒绝率"
+
+      - name: manual_review_rate
+        type: DOUBLE
+        range: [0.0, 1.0]
+        description: "人工审核率。过高→模型区分力不足或规则过于保守"
+
+      - name: avg_score
+        type: DOUBLE
+        range: [300, 900]
+        description: "平均信用评分"
+
+      - name: score_std
+        type: DOUBLE
+        description: "评分标准差。反映评分分布的离散程度"
+
+      - name: score_p10
+        type: DOUBLE
+        description: "评分P10分位数（最低10%用户的分数）"
+
+      - name: score_p50
+        type: DOUBLE
+        description: "评分中位数"
+
+      - name: score_p90
+        type: DOUBLE
+        description: "评分P90分位数"
+
+      - name: avg_credit_limit
+        type: DOUBLE
+        description: "平均授信额度(元)"
+
+      - name: avg_latency_ms
+        type: DOUBLE
+        description: "平均推理延迟(ms)。警戒线: >300ms"
+
+    alert_rules:
+      - metric: approval_rate
+        condition: "approval_rate > 0.90 OR approval_rate < 0.30"
+        severity: WARNING
+        message: "通过率异常偏离"
+
+      - metric: avg_latency_ms
+        condition: "avg_latency_ms > 300"
+        severity: CRITICAL
+        message: "推理延迟超标"
+
+      - metric: manual_review_rate
+        condition: "manual_review_rate > 0.20"
+        severity: WARNING
+        message: "人工审核率过高"
+
+  # ── 3. 资产组合分析 ──
+  ads_portfolio_analysis:
+    description: "当日资产组合的全景视图。JSON格式，供风控报表使用。"
+    grain: "日期"
+    format: JSON
+    schema:
+      total_portfolio:
+        type: INTEGER
+        description: "总笔数"
+
+      total_credit_exposure:
+        type: DOUBLE
+        description: "总授信敞口(元) = sum(credit_limit)"
+
+      avg_credit_limit:
+        type: DOUBLE
+        description: "平均授信额度(元)"
+
+      score_distribution:
+        type: MAP<STRING, INTEGER>
+        description: >
+          分数段分布: {'A+': 20, 'A': 30, 'B+': 89, 'B': 105, 'C': 172, 'D': 39}
+          分段规则: A+(≥750), A(700-749), B+(650-699), B(600-649), C(500-599), D(<500)
+
+      avg_score_by_bucket:
+        type: MAP<STRING, DOUBLE>
+        description: "各分数段的平均评分"

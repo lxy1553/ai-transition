@@ -155,27 +155,33 @@ events = pd.DataFrame({
 def build_ecommerce_behavior_features(events, ref_date):
     """
     从电商行为事件 → 用户行为特征。
-
-    要求 8 个特征:
-    模式1(COUNT WHERE):
-      - view_cnt_7d: 近7天浏览商品次数
-      - cart_cnt_7d: 近7天加购次数
-      - purchase_cnt_7d: 近7天购买次数
-      - search_cnt_7d: 近7天搜索次数
-    模式2(比率衍生):
-      - cart_conversion_7d: 加购转化率 = 加购/浏览
-      - purchase_conversion_7d: 购买转化率 = 购买/加购
-    模式3(多样性):
-      - category_diversity_7d: 浏览品类数（nunique）
-      - avg_daily_events_7d: 日均事件数
     """
     ref = datetime.strptime(ref_date, '%Y-%m-%d')
     events['event_time'] = pd.to_datetime(events['event_time'])
 
     result = []
     for user_id, group in events.groupby('user_id'):
-        # TODO: 实现
-        pass
+        in_7d = group['event_time'] >= ref - timedelta(days=7)
+        g7 = group[in_7d]
+
+        # ★ 参考答案
+        row = {
+            'user_id': user_id,
+            # 模式1: COUNT WHERE
+            'view_cnt_7d':    (g7['event_type'] == 'view_item').sum(),
+            'cart_cnt_7d':    (g7['event_type'] == 'add_cart').sum(),
+            'purchase_cnt_7d':(g7['event_type'] == 'purchase').sum(),
+            'search_cnt_7d':  (g7['event_type'] == 'search').sum(),
+            # 模式2: 比率衍生 (注意防除零)
+            'cart_conversion_7d': ((g7['event_type'] == 'add_cart').sum()
+                                    / max((g7['event_type'] == 'view_item').sum(), 1)),
+            'purchase_conversion_7d': ((g7['event_type'] == 'purchase').sum()
+                                        / max((g7['event_type'] == 'add_cart').sum(), 1)),
+            # 模式3: 多样性 + 均值
+            'category_diversity_7d': g7['category'].nunique(),
+            'avg_daily_events_7d': round(len(g7) / 7, 2),
+        }
+        result.append(row)
 
     return pd.DataFrame(result)
 
@@ -190,15 +196,32 @@ print(result)
 ### 练习 2：验证比率衍生优于 sum（30min）
 
 ```python
-# 构造两个用户，行为总量不同但模式相似
-高频用户: 200 次事件, 其中 40 次购买 → sum=40, rate=0.20
-低频用户: 20 次事件, 其中 4 次购买 → sum=4, rate=0.20
+# ★ 参考答案
+import numpy as np
 
-# 任务：
-# 1. 写代码生成这两个用户的模拟数据
-# 2. 分别用 sum 和 rate 计算"购买倾向"
-# 3. 分析：如果用 sum 排序，谁排在前面？如果用 rate 排序呢？
-# 4. 哪个更合理？为什么？
+# 构造两个用户: 总量不同但模式相同
+np.random.seed(42)
+high_freq_events = np.random.choice(['view', 'buy'], size=200,
+                                     p=[0.8, 0.2])  # 200 次, 购买率 20%
+low_freq_events  = np.random.choice(['view', 'buy'], size=20,
+                                     p=[0.8, 0.2])   # 20 次, 购买率 20%
+
+high_sum = (high_freq_events == 'buy').sum()  # 约 40
+low_sum  = (low_freq_events == 'buy').sum()   # 约 4
+high_rate = (high_freq_events == 'buy').mean()  # 0.20
+low_rate  = (low_freq_events == 'buy').mean()   # 0.20
+
+print(f"高频用户: sum={high_sum}, rate={high_rate:.2f}")
+print(f"低频用户: sum={low_sum}, rate={low_rate:.2f}")
+print()
+print(f"按 sum 排序: 高频用户({high_sum}) > 低频用户({low_sum})")
+print("  → 误判：低频用户被标记为"低购买意愿"")
+print(f"按 rate 排序: 高频用户({high_rate:.2f}) = 低频用户({low_rate:.2f})")
+print("  → 正确：购买模式相同，购买意愿相同")
+print()
+print("结论：sum 会受到"用户活跃度"的干扰，活跃的用户一切行为都多。")
+print("rate（占比）消除了活跃度偏差，只反映行为模式本身。")
+print("在信贷场景中：night_ops_ratio 用 mean() 而非 sum() 也是同样原因。")
 ```
 
 ---

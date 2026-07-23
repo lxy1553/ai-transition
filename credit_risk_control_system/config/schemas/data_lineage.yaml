@@ -1,0 +1,154 @@
+# ============================================================
+# 数据仓库 — 数据血缘 (Data Lineage)
+# 记录每一列的来源和转换路径
+# ============================================================
+
+# ═══════════════════════════════════════════════════════════
+# 层间流转关系
+# ═══════════════════════════════════════════════════════════
+
+lineage:
+  ods_to_dwd:
+    - source: ods_application
+      target: dwd_application
+      relationship: "1:1 + 新增2列(dq_score, dq_quarantined)"
+      transformations:
+        - "user_name/id_card/phone/ip → 脱敏(mask)"
+        - "apply_amount → 负数/空值修正为0"
+        - "product_type → 标准化字典映射"
+        - "channel → 标准化字典映射"
+        - "occupation → 标准化 + fillna"
+        - "NEW: dq_score = 100-扣分项"
+        - "NEW: dq_quarantined = dq_score < 60"
+
+    - source: ods_user_behavior
+      target: dwd_user_behavior
+      relationship: "1:1 + dq_score"
+      transformations:
+        - "user_id空值→'anonymous'"
+        - "event_type→白名单校验"
+        - "session_id空值→'session_generated'"
+
+    - source: ods_repayment
+      target: dwd_repayment
+      relationship: "1:1 + dq_score"
+      transformations:
+        - "due_amount/paid_amount→非负修正"
+        - "status→标准化映射"
+
+  dwd_to_dws:
+    - sources:
+        - dwd_application
+        - dwd_user_behavior
+        - dwd_repayment
+      target: dws.user_risk_feature_wide
+      relationship: "N:1 (多表聚合为一个用户一行)"
+      grain_change: "明细粒度 → 用户×日期粒度"
+      transformations:
+        - "dwd_application → groupby(user_id) → 6个画像特征"
+        - "dwd_user_behavior → groupby(user_id) + 时间窗口 → 6个行为特征"
+        - "dwd_repayment → groupby(user_id) → 5个还款特征"
+        - "三路 left join → 17维宽表"
+        - "fillna(0) — 新用户无行为/无还款记录"
+
+  dws_to_ads:
+    - source: dws.user_risk_feature_wide + labels
+      target: ads_training_samples
+      relationship: "1:1 + label"
+      transformations:
+        - "inner join on user_id"
+        - "NEW: label (T+30逾期标记)"
+        - "NEW: label_date"
+
+    - source: model_predictions + dws宽表
+      target: ads_model_monitor_daily
+      relationship: "聚合为每日一条"
+      grain_change: "用户粒度 → 日期粒度"
+
+    - source: model_predictions + dws宽表
+      target: ads_portfolio_analysis
+      relationship: "聚合为每日一条"
+      grain_change: "用户粒度 → 日期粒度(JSON)"
+
+# ═══════════════════════════════════════════════════════════
+# 宽表特征血缘：每个特征追溯到DWD源列
+# ═══════════════════════════════════════════════════════════
+
+wide_table_lineage:
+  # ── 申请画像 ──
+  apply_amount_avg:
+    source_column: dwd_application.apply_amount
+    aggregation: "AVG"
+    description: "用户所有历史申请金额的均值"
+
+  apply_amount_max:
+    source_column: dwd_application.apply_amount
+    aggregation: "MAX"
+
+  monthly_income:
+    source_column: dwd_application.monthly_income
+    aggregation: "MAX"
+    note: "取最大值——用户可能在不同申请中填不同收入"
+
+  total_apply_cnt:
+    source_column: dwd_application.application_id
+    aggregation: "COUNT DISTINCT"
+
+  distinct_device_cnt:
+    source_column: dwd_application.device_id
+    aggregation: "COUNT DISTINCT"
+
+  distinct_city_cnt:
+    source_column: dwd_application.city
+    aggregation: "COUNT DISTINCT"
+
+  # ── 行为衍生 ──
+  apply_cnt_7d:
+    source_column: dwd_user_behavior.event_type
+    aggregation: "SUM(event_type='submit') WHERE event_time >= ref-7d"
+    note: "用event_time做时间窗口过滤，不是dt分区"
+
+  apply_cnt_30d:
+    source_column: dwd_user_behavior.event_type
+    aggregation: "SUM(event_type='submit') WHERE event_time >= ref-30d"
+
+  night_ops_ratio_30d:
+    source_column: dwd_user_behavior.event_time
+    aggregation: "AVG(hour IN 22-05) WHERE event_time >= ref-30d"
+    note: "★ 风控强特征 — 从event_time提取小时维度"
+
+  page_view_cnt_7d:
+    source_column: dwd_user_behavior.event_type
+    aggregation: "SUM(event_type='page_view') WHERE event_time >= ref-7d"
+
+  input_cnt_7d:
+    source_column: dwd_user_behavior.event_type
+    aggregation: "SUM(event_type='input') WHERE event_time >= ref-7d"
+
+  error_event_cnt_7d:
+    source_column: dwd_user_behavior.event_type
+    aggregation: "SUM(event_type='error') WHERE event_time >= ref-7d"
+
+  # ── 还款表现 ──
+  overdue_cnt_hist:
+    source_column: dwd_repayment.status
+    aggregation: "SUM(status='OVERDUE')"
+
+  total_due_amount:
+    source_column: dwd_repayment.due_amount
+    aggregation: "SUM"
+
+  total_paid_amount:
+    source_column: dwd_repayment.paid_amount
+    aggregation: "SUM"
+
+  repayment_cnt:
+    source_column: dwd_repayment.repayment_id
+    aggregation: "COUNT"
+
+  on_time_rate:
+    source_columns:
+      - dwd_repayment.status
+      - dwd_repayment.repayment_id
+    aggregation: "1 - SUM(OVERDUE) / COUNT(*) — 衍生指标"
+    default_for_new_users: 1.0

@@ -1,0 +1,261 @@
+# ============================================================
+# DWD 层表结构定义 (Data Warehouse Detail)
+# 原则: 清洗 + 脱敏 + 标准化，不聚合。仍保留明细粒度。
+# 新增列: dq_score(数据质量分), dq_quarantined(隔离标记)
+# 脱敏列: user_name, id_card, phone, ip_address → mask 后保留原名
+# ============================================================
+
+tables:
+
+  # ── 1. 清洗后申请表 ──
+  dwd_application:
+    source_table: ods_application
+    description: "清洗+脱敏后的用户申请明细。dq_score < 60 的记录被隔离"
+    columns:
+      - name: user_id
+        type: STRING
+        nullable: false
+        description: "用户ID。原始为空的已填充'MISSING'并扣分"
+        transformation: "必填校验，空值→'MISSING'"
+
+      - name: application_id
+        type: STRING
+        nullable: false
+        description: "申请单号"
+        transformation: "保持不变"
+
+      - name: apply_amount
+        type: DOUBLE
+        nullable: false
+        description: "申请金额(元)。负数/异常值已修正为0"
+        transformation: "pd.to_numeric → fillna(0) → clip(lower=0)"
+
+      - name: product_type
+        type: STRING
+        nullable: false
+        description: "产品类型(已标准化): CASH_LOAN/INSTALLMENT/REVOLVING/UNKNOWN"
+        transformation: "字典映射: cash_loan→CASH_LOAN, None→UNKNOWN"
+
+      - name: user_name
+        type: STRING
+        nullable: false
+        description: "★ 脱敏后姓名: 黄敏→黄*"
+        transformation: "DataMasker.mask_name() — 保留首字，其余变*"
+
+      - name: id_card
+        type: STRING
+        nullable: false
+        description: "★ 脱敏后身份证: 934184********8691"
+        transformation: "DataMasker.mask_id_card() — 保留前6位+后4位"
+
+      - name: phone
+        type: STRING
+        nullable: false
+        description: "★ 脱敏后手机号: 138****8795"
+        transformation: "DataMasker.mask_phone() — 保留前3位+后4位"
+
+      - name: occupation
+        type: STRING
+        nullable: false
+        description: "职业(已标准化): employee/self_employed/freelancer/unemployed/UNKNOWN"
+        transformation: "fillna('UNKNOWN') → str.lower() → 字典校验"
+
+      - name: monthly_income
+        type: DOUBLE
+        nullable: false
+        description: "月收入(元)。0/空→0，并扣5分"
+        transformation: "pd.to_numeric → fillna(0) → clip(lower=0)"
+
+      - name: education
+        type: STRING
+        nullable: true
+        description: "学历。暂不标准化"
+        transformation: "保持不变"
+
+      - name: city
+        type: STRING
+        nullable: true
+        description: "所在城市"
+        transformation: "保持不变"
+
+      - name: ip_address
+        type: STRING
+        nullable: true
+        description: "★ 脱敏后IP（保留原格式，生产环境应hash）"
+        transformation: "当前保留原值（演示），生产用hash"
+
+      - name: device_id
+        type: STRING
+        nullable: true
+        description: "设备指纹ID"
+        transformation: "保持不变"
+
+      - name: channel
+        type: STRING
+        nullable: false
+        description: "渠道(已标准化): APP_ANDROID/APP_IOS/H5/PARTNER_A/PARTNER_B/UNKNOWN"
+        transformation: "字典映射标准化"
+
+      - name: apply_time
+        type: TIMESTAMP
+        nullable: true
+        description: "申请提交时间"
+        transformation: "保持不变"
+
+      - name: dq_score
+        type: INTEGER
+        nullable: false
+        description: "★ 数据质量评分(0-100)。初始100，逐项扣分"
+        transformation: "NEW — 必填缺失-30, 金额异常-20, 类型未知-10, 收入0-5..."
+
+      - name: dq_quarantined
+        type: BOOLEAN
+        nullable: false
+        description: "★ 是否被隔离。dq_score < 60 → True，不入DWS层"
+        transformation: "NEW — dq_score < 60"
+
+      - name: dt
+        type: STRING
+        nullable: false
+        description: "分区键 — 日期"
+        transformation: "继承自ODS"
+
+    # 数据质量指标
+    quality_metrics:
+      - name: dq_score
+        description: "数据质量综合评分"
+        threshold_pass: 60
+      - name: null_rate
+        description: "各列空值率"
+      - name: quarantined_rate
+        description: "隔离率 = quarantined / total"
+
+  # ── 2. 清洗后行为日志表 ──
+  dwd_user_behavior:
+    source_table: ods_user_behavior
+    description: "清洗后的用户行为事件明细。匿名用户标记但不丢弃"
+    columns:
+      - name: user_id
+        type: STRING
+        nullable: false
+        description: "用户ID。空值/anonymous已统一标记为'anonymous'"
+        transformation: "空值→'anonymous'，扣20分但不丢弃"
+
+      - name: event_type
+        type: STRING
+        nullable: false
+        description: "事件类型(已标准化): page_view/click/input/submit/app_install/app_uninstall/error/unknown"
+        transformation: "非白名单值→'unknown'"
+
+      - name: event_detail
+        type: STRING
+        nullable: true
+        description: "事件详情JSON"
+        transformation: "保持不变"
+
+      - name: device_id
+        type: STRING
+        nullable: true
+        description: "设备指纹ID"
+        transformation: "保持不变"
+
+      - name: session_id
+        type: STRING
+        nullable: false
+        description: "会话ID。空值→'session_generated'"
+        transformation: "fillna('session_generated')"
+
+      - name: page_url
+        type: STRING
+        nullable: true
+        description: "页面路径"
+        transformation: "保持不变"
+
+      - name: ip
+        type: STRING
+        nullable: true
+        description: "客户端IP"
+        transformation: "保持不变"
+
+      - name: event_time
+        type: TIMESTAMP
+        nullable: false
+        description: "事件发生时间"
+        transformation: "保持不变"
+
+      - name: dq_score
+        type: INTEGER
+        nullable: false
+        description: "数据质量评分(0-100)"
+        transformation: "NEW — 匿名用户-20"
+
+      - name: dt
+        type: STRING
+        nullable: false
+        description: "分区键 — 日期"
+        transformation: "继承自ODS"
+
+  # ── 3. 清洗后还款记录表 ──
+  dwd_repayment:
+    source_table: ods_repayment
+    description: "清洗后的还款记录明细。金额非负、状态标准化"
+    columns:
+      - name: repayment_id
+        type: STRING
+        nullable: false
+        description: "还款记录ID"
+        transformation: "保持不变"
+
+      - name: application_id
+        type: STRING
+        nullable: false
+        description: "关联申请单号"
+        transformation: "保持不变"
+
+      - name: user_id
+        type: STRING
+        nullable: false
+        description: "用户ID"
+        transformation: "保持不变"
+
+      - name: due_date
+        type: TIMESTAMP
+        nullable: true
+        description: "应还款日期"
+        transformation: "保持不变"
+
+      - name: paid_date
+        type: TIMESTAMP
+        nullable: true
+        description: "实际还款日期"
+        transformation: "保持不变"
+
+      - name: due_amount
+        type: DOUBLE
+        nullable: false
+        description: "应还金额(元)。负数→0"
+        transformation: "pd.to_numeric → fillna(0) → clip(lower=0)"
+
+      - name: paid_amount
+        type: DOUBLE
+        nullable: false
+        description: "实还金额(元)。负数→0"
+        transformation: "pd.to_numeric → fillna(0) → clip(lower=0)"
+
+      - name: status
+        type: STRING
+        nullable: false
+        description: "还款状态(已标准化): PENDING/PAID/OVERDUE/UNKNOWN"
+        transformation: "字典映射: overdue→OVERDUE, ERROR_STATUS→UNKNOWN"
+
+      - name: dq_score
+        type: INTEGER
+        nullable: false
+        description: "数据质量评分(0-100)"
+        transformation: "NEW — 金额为0-10"
+
+      - name: dt
+        type: STRING
+        nullable: false
+        description: "分区键 — 日期"
+        transformation: "继承自ODS"

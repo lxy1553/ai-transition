@@ -142,7 +142,22 @@ def clean_order(ods_df: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
     df = ods_df.copy()
     df['dq_score'] = 100
 
-    # TODO: 实现上述清洗规则
+    # ★ 参考答案
+    # 1. 必填检查
+    df.loc[df['order_id'].isna(), 'dq_score'] -= 30
+    df.loc[df['user_id'].isna(), 'dq_score'] -= 30
+    # 2. 金额异常
+    df.loc[df['pay_amount'] <= 0, 'dq_score'] -= 20
+    df.loc[df['pay_amount'] > 1000000, 'dq_score'] -= 20
+    # 3. 地址标准化（简化: 若 address 有值但无法解析 province 则扣分）
+    df.loc[df['address'].notna(), 'dq_score'] -= 10  # 简化版
+    # 4. 联系方式脱敏
+    df['phone'] = df['phone'].fillna('MISSING').apply(
+        lambda x: x[:3] + '****' + x[-4:] if x != 'MISSING' else x
+    )
+    # 5. 填充默认值
+    df[['order_id', 'user_id']] = df[['order_id', 'user_id']].fillna('MISSING')
+    df['pay_amount'] = df['pay_amount'].fillna(0).clip(lower=0)
 
     # 隔离
     df_clean = df[df['dq_score'] >= 60]
@@ -168,7 +183,8 @@ test_orders = pd.DataFrame({
 clean_df, report = clean_order(test_orders)
 print(f"通过: {report['passed']}/{report['total']}")
 print(f"隔离: {report['quarantined']}")
-# 预期: O3 隔离 (user_id 空+phone 空), O2 隔离 (user_id 空)
+# 预期: O3 隔离 (user_id 空+phone 空, dq_score=100-30-0-0=70? 不对, 扣30=70≥60通过)
+# 实际分析: O3: order_id 空(-30) → dq=70 ✓; O2: user_id 空(-30)+pay_amount=-50(-20) → dq=50 < 60❌隔离
 ```
 
 ### 练习 2：设计扣分权重（30min）
@@ -179,11 +195,11 @@ print(f"隔离: {report['quarantined']}")
 字段：patient_id, test_time, glucose(血糖), blood_pressure(血压), lab_tech(检验师)
 
 问题场景：
-A. patient_id 为空 → 扣 ? 分（理由: ?）
-B. glucose = 0（不可能，活人血糖不会是 0）→ 扣 ? 分（理由: ?）
-C. lab_tech 为空 → 扣 ? 分（理由: ? 这个字段对分析重要吗？）
-
-要求：给出每个场景的扣分和理由
+A. patient_id 为空 → 扣 30 分（理由: 患者ID是主键，缺失=记录不可用，等同于信贷的user_id为空）
+B. glucose = 0（不可能，活人血糖不会是 0）→ 扣 20 分（理由: 核心检验字段异常，
+   但可修正为NULL标记"无效"，单独异常(80分)不隔离，叠加其他问题隔离）
+C. lab_tech 为空 → 扣 5 分（理由: 检验师姓名对诊断分析不重要，不影响医学判断，
+   只影响追溯和审计，单独缺失几乎不影响数据质量）
 ```
 
 ---

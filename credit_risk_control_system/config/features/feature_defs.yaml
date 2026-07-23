@@ -1,0 +1,171 @@
+# ============================================================
+# 特征定义注册表
+# 每个特征定义包含: 名称、类型、数据源、计算逻辑、owner
+# PRODUCTION: 此配置由 Feast FeatureView 管理
+# ============================================================
+
+features:
+  # ── 基础画像特征 ──────────────────────────────────────
+  - name: age
+    type: int
+    category: basic_profile
+    source: user_application
+    description: 申请人年龄
+    owner: data_team
+    psi_threshold: 0.1
+    null_fill_strategy: reject  # 空值则拒绝该笔申请
+
+  - name: age_bucket
+    type: category
+    category: basic_profile
+    source: derived
+    derivation: "pd.cut(age, bins=[0,22,30,40,50,65], labels=['<22','22-30','30-40','40-50','50+'])"
+    owner: feature_team
+
+  - name: monthly_income
+    type: float
+    category: basic_profile
+    source: user_application
+    description: 月收入（元）
+    owner: data_team
+    null_fill_strategy: median_by_occupation
+
+  - name: income_level
+    type: category
+    category: basic_profile
+    source: derived
+    derivation: "pd.cut(monthly_income, bins=[0,3000,8000,15000,30000,1000000])"
+
+  - name: education
+    type: category
+    category: basic_profile
+    source: user_application
+    values: [primary, middle, high, bachelor, master, phd]
+
+  # ── 行为类特征 ────────────────────────────────────────
+  - name: apply_cnt_7d
+    type: int
+    category: behavior
+    source: flink_realtime
+    description: 近7天申请次数
+    computation: "COUNT(DISTINCT session_id) WHERE event_time >= NOW() - INTERVAL 7 DAY"
+    online_store_key: "feature:{user_id}:apply_cnt_7d"
+    ttl_seconds: 604800
+    owner: feature_team
+
+  - name: apply_cnt_30d
+    type: int
+    category: behavior
+    source: flink_realtime
+    description: 近30天申请次数
+    online_store_key: "feature:{user_id}:apply_cnt_30d"
+    ttl_seconds: 2592000
+
+  - name: night_ops_ratio_30d
+    type: float
+    category: behavior
+    source: flink_realtime
+    description: 近30天夜间(22:00-06:00)操作占比
+    range: [0.0, 1.0]
+    online_store_key: "feature:{user_id}:night_ops_ratio_30d"
+    ttl_seconds: 2592000
+
+  - name: avg_session_duration_7d
+    type: float
+    category: behavior
+    source: flink_realtime
+    description: 近7天平均会话时长(秒)
+
+  - name: device_change_cnt_30d
+    type: int
+    category: behavior
+    source: flink_realtime
+    description: 近30天更换设备次数
+
+  # ── 征信衍生特征 ──────────────────────────────────────
+  - name: credit_score_raw
+    type: int
+    category: credit_derived
+    source: credit_report_service
+    description: 央行征信原始分
+    range: [300, 900]
+
+  - name: credit_score_normalized
+    type: float
+    category: credit_derived
+    source: derived
+    description: 征信分归一化到 [0, 1]
+    derivation: "(credit_score_raw - 300) / 600"
+
+  - name: debt_to_income_ratio
+    type: float
+    category: credit_derived
+    source: derived
+    description: 负债率 = 月还款总额 / 月收入
+    derivation: "total_monthly_debt / monthly_income"
+
+  - name: overdue_cnt_hist
+    type: int
+    category: credit_derived
+    source: credit_report_service
+    description: 历史逾期次数
+
+  - name: query_cnt_3m
+    type: int
+    category: credit_derived
+    source: credit_report_service
+    description: 近3个月征信查询次数
+
+  # ── 多头借贷特征 ──────────────────────────────────────
+  - name: multi_head_cnt_7d
+    type: int
+    category: multi_head
+    source: multi_head_service
+    description: 近7天多头借贷平台数
+
+  - name: multi_head_cnt_30d
+    type: int
+    category: multi_head
+    source: multi_head_service
+    description: 近30天多头借贷平台数
+
+  # ── 设备指纹特征 ──────────────────────────────────────
+  - name: device_risk_score
+    type: float
+    category: device
+    source: device_fingerprint_service
+    description: 设备风险评分
+    range: [0.0, 1.0]
+
+  - name: device_rooted_flag
+    type: int
+    category: device
+    source: device_fingerprint_service
+    description: 设备是否Root/越狱
+    values: [0, 1]
+
+  - name: device_linked_users
+    type: int
+    category: device
+    source: flink_realtime
+    description: 同设备关联的账号数量
+
+  - name: sim_change_cnt_30d
+    type: int
+    category: device
+    source: device_fingerprint_service
+    description: 近30天SIM卡更换次数
+
+  # ── 反欺诈特征 ────────────────────────────────────────
+  - name: fraud_score
+    type: float
+    category: fraud
+    source: device_fingerprint_service
+    description: 综合反欺诈评分
+    range: [0.0, 1.0]
+
+  - name: identity_verified
+    type: bool
+    category: fraud
+    source: user_application
+    description: 三要素核验是否通过

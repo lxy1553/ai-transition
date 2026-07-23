@@ -146,15 +146,29 @@ def build_portfolio_analysis(self, decisions, dws_wide_table) -> dict:
 ### 练习 1：设计电商分区策略（45min）
 
 ```
-场景: 电商订单表
-  - 日增 5000 万行
-  - 90% 的查询是近 7 天
-  - 大促(618)当天 5 亿行
+★ 参考答案
 
-1. 分区键选什么？
-2. 分区粒度: 天够吗？大促当天需要小时分区吗？
-3. 各层保留策略: ODS=?天, DWD=?天, ADS=?天
-4. 大促当天分区查询慢 → 如何优化？
+场景: 电商订单表
+
+1. 分区键: dt（下单日期）
+   理由: 90% 查询按日期过滤，dt 是最常用过滤条件
+
+2. 分区粒度: 天 + 大促当天用二级分区(小时)
+   平常: dt 天分区即可（每天 5000 万行，天粒度够）
+   618大促: 当天 5 亿行 → 按小时二级分区
+     dt='2026-06-18' AND hour='14' → 只扫描该小时数据
+     不加二级分区 → 大促日查询扫描 5 亿行（慢 10 倍）
+
+3. 各层保留:
+   ODS: 30 天（原始数据量大，保留太久贵）
+   DWD: 90 天（清洗后的数据更紧凑）
+   DWS: 365 天（用户画像需要看一年趋势）
+   ADS: 730 天（监控报表需要两年对比）
+
+4. 大促优化:
+   方案 A: 当天做二级分区(小时) → 查询加速
+   方案 B: 大促数据单独存储（hot path）
+   方案 C: 用 ClickHouse 代替 Hive 做实时查询
 ```
 
 ### 练习 2：设计广告投放的数据产品（30min）
@@ -164,9 +178,27 @@ def build_ad_monitor_minute(ad_impressions, ad_clicks, dt, hour, minute):
     """
     消费者: 实时大屏（每分钟刷新）
     粒度: 广告 × 分钟
-    要求指标: ctr, ecpm, spend, conversion
+    指标: ctr, ecpm, spend, conversion
     """
-    pass
+    # ★ 参考答案
+    merged = ad_impressions.merge(ad_clicks, on=['ad_id', 'user_id'],
+                                  how='left')
+
+    monitor = merged.groupby('ad_id').agg(
+        impressions=('impression_id', 'count'),
+        clicks=('click_id', lambda x: x.notna().sum()),
+        spend=('cost', 'sum'),
+        conversions=('conversion_flag', 'sum'),
+    ).reset_index()
+
+    monitor['ctr'] = monitor['clicks'] / monitor['impressions'].replace(0, 1)
+    monitor['ecpm'] = monitor['spend'] / monitor['impressions'].replace(0, 1) * 1000
+    monitor['dt'] = dt
+    monitor['hour'] = hour
+    monitor['minute'] = minute
+
+    return monitor[['ad_id', 'ctr', 'ecpm', 'spend', 'conversions',
+                    'impressions', 'clicks', 'dt', 'hour', 'minute']]
 ```
 
 ---

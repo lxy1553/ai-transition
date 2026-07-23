@@ -1,0 +1,175 @@
+{
+  "table_name": "dwd_application",
+  "layer": "dwd",
+  "description": "清洗+脱敏后的用户申请明细。dq_score < 60 的记录被隔离",
+  "primary_key": [],
+  "partition_key": "dt",
+  "source_table": "ods_application",
+  "grain": null,
+  "columns": [
+    {
+      "name": "user_id",
+      "type": "STRING",
+      "nullable": false,
+      "description": "用户ID。原始为空的已填充'MISSING'并扣分",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "application_id",
+      "type": "STRING",
+      "nullable": false,
+      "description": "申请单号",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "apply_amount",
+      "type": "DOUBLE",
+      "nullable": false,
+      "description": "申请金额(元)。负数/异常值已修正为0",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "product_type",
+      "type": "STRING",
+      "nullable": false,
+      "description": "产品类型(已标准化): CASH_LOAN/INSTALLMENT/REVOLVING/UNKNOWN",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "user_name",
+      "type": "STRING",
+      "nullable": false,
+      "description": "★ 脱敏后姓名: 黄敏→黄*",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "id_card",
+      "type": "STRING",
+      "nullable": false,
+      "description": "★ 脱敏后身份证: 934184********8691",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "phone",
+      "type": "STRING",
+      "nullable": false,
+      "description": "★ 脱敏后手机号: 138****8795",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "occupation",
+      "type": "STRING",
+      "nullable": false,
+      "description": "职业(已标准化): employee/self_employed/freelancer/unemployed/UNKNOWN",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "monthly_income",
+      "type": "DOUBLE",
+      "nullable": false,
+      "description": "月收入(元)。0/空→0，并扣5分",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "education",
+      "type": "STRING",
+      "nullable": true,
+      "description": "学历。暂不标准化",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "city",
+      "type": "STRING",
+      "nullable": true,
+      "description": "所在城市",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "ip_address",
+      "type": "STRING",
+      "nullable": true,
+      "description": "★ 脱敏后IP（保留原格式，生产环境应hash）",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "device_id",
+      "type": "STRING",
+      "nullable": true,
+      "description": "设备指纹ID",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "channel",
+      "type": "STRING",
+      "nullable": false,
+      "description": "渠道(已标准化): APP_ANDROID/APP_IOS/H5/PARTNER_A/PARTNER_B/UNKNOWN",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "apply_time",
+      "type": "TIMESTAMP",
+      "nullable": true,
+      "description": "申请提交时间",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "dq_score",
+      "type": "INTEGER",
+      "nullable": false,
+      "description": "★ 数据质量评分(0-100)。初始100，逐项扣分",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "dq_quarantined",
+      "type": "BOOLEAN",
+      "nullable": false,
+      "description": "★ 是否被隔离。dq_score < 60 → True，不入DWS层",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "dt",
+      "type": "STRING",
+      "nullable": false,
+      "description": "分区键 — 日期",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    }
+  ],
+  "_generated_by": "SchemaRegistry",
+  "_schema_version": "1.0"
+}

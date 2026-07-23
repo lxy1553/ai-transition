@@ -1,0 +1,121 @@
+{
+  "table_name": "ads_model_monitor_daily",
+  "layer": "ads",
+  "description": "每日一条记录，汇总当天的模型审批指标。Grafana直接消费此表。",
+  "primary_key": [],
+  "partition_key": "dt",
+  "source_table": null,
+  "grain": null,
+  "columns": [
+    {
+      "name": "dt",
+      "type": "STRING",
+      "nullable": true,
+      "description": "统计日期",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "total_applications",
+      "type": "INTEGER",
+      "nullable": true,
+      "description": "当日总申请数",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "approval_rate",
+      "type": "DOUBLE",
+      "nullable": true,
+      "description": "通过率 = APPROVE数 / 总数",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "reject_rate",
+      "type": "DOUBLE",
+      "nullable": true,
+      "description": "拒绝率",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "manual_review_rate",
+      "type": "DOUBLE",
+      "nullable": true,
+      "description": "人工审核率。过高→模型区分力不足或规则过于保守",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "avg_score",
+      "type": "DOUBLE",
+      "nullable": true,
+      "description": "平均信用评分",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "score_std",
+      "type": "DOUBLE",
+      "nullable": true,
+      "description": "评分标准差。反映评分分布的离散程度",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "score_p10",
+      "type": "DOUBLE",
+      "nullable": true,
+      "description": "评分P10分位数（最低10%用户的分数）",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "score_p50",
+      "type": "DOUBLE",
+      "nullable": true,
+      "description": "评分中位数",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "score_p90",
+      "type": "DOUBLE",
+      "nullable": true,
+      "description": "评分P90分位数",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "avg_credit_limit",
+      "type": "DOUBLE",
+      "nullable": true,
+      "description": "平均授信额度(元)",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    },
+    {
+      "name": "avg_latency_ms",
+      "type": "DOUBLE",
+      "nullable": true,
+      "description": "平均推理延迟(ms)。警戒线: >300ms",
+      "pii": false,
+      "sensitivity": null,
+      "aggregation": null
+    }
+  ],
+  "_generated_by": "SchemaRegistry",
+  "_schema_version": "1.0"
+}
