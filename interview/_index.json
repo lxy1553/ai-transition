@@ -1,1222 +1,2774 @@
 [
   {
-    "title": "Agent 面试题介绍",
-    "url": "https://xiaolinnote.com/ai/agent/agent_info.html",
-    "path": "/ai/agent/agent_info.html"
+    "id": "Q001",
+    "source": "mianshiya",
+    "category": "微调与 PEFT",
+    "title": "什么是⼤模型微调？与预训练的核⼼区别是什么？"
   },
   {
-    "title": "小林面试笔记",
-    "url": "https://xiaolinnote.com/",
-    "path": "/"
+    "id": "Q002",
+    "source": "mianshiya",
+    "category": "微调与 PEFT",
+    "title": "常⻅的微调任务有哪些？"
   },
   {
-    "title": "大模型面试题",
-    "url": "https://xiaolinnote.com/ai/",
-    "path": "/ai/"
+    "id": "Q003",
+    "source": "mianshiya",
+    "category": "微调与 PEFT",
+    "title": "常⻅的微调⽅法有哪些？"
   },
   {
-    "title": "图解 Agent",
-    "url": "https://xiaolinnote.com/agent/",
-    "path": "/agent/"
+    "id": "Q004",
+    "source": "mianshiya",
+    "category": "微调与 PEFT",
+    "title": "PEFT 是什么？为什么需要 PEFT？"
   },
   {
-    "title": "图解 Claude Code",
-    "url": "https://xiaolinnote.com/claudecode/",
-    "path": "/claudecode/"
+    "id": "Q005",
+    "source": "mianshiya",
+    "category": "微调与 PEFT",
+    "title": "PEFT 和全量微调的区别？"
   },
   {
-    "title": "赞赏支持",
-    "url": "https://xiaolinnote.com/other/sponsor.html",
-    "path": "/other/sponsor.html"
+    "id": "Q006",
+    "source": "mianshiya",
+    "category": "微调与 PEFT",
+    "title": "在进⾏ Fine-Tuning 时，如何选择适合的预训练模型？"
   },
   {
-    "title": "关于网站",
-    "url": "https://xiaolinnote.com/other/xiaolinnote.html",
-    "path": "/other/xiaolinnote.html"
+    "id": "Q007",
+    "source": "mianshiya",
+    "category": "微调与 PEFT",
+    "title": "微调中常⽤的优化器有哪些？"
   },
   {
-    "title": "1. 什么是 Agent？与大模型有什么本质不同？",
-    "url": "https://xiaolinnote.com/ai/agent/1_whatisagent.html",
-    "path": "/ai/agent/1_whatisagent.html"
+    "id": "Q008",
+    "source": "mianshiya",
+    "category": "微调与 PEFT",
+    "title": "如何判断微调效果是否达到预期？"
   },
   {
-    "title": "2. Agent 的基本架构由哪些核心组件构成？",
-    "url": "https://xiaolinnote.com/ai/agent/2_components.html",
-    "path": "/ai/agent/2_components.html"
+    "id": "Q009",
+    "source": "mianshiya",
+    "category": "微调与 PEFT",
+    "title": "什么是低秩适配（LoRA）技术？如何结合 LoRA 技术进⾏微调？"
   },
   {
-    "title": "3. Workflow，Agent，Tools 这三个的概念和区别介绍一下？",
-    "url": "https://xiaolinnote.com/ai/agent/3_workflow_tools.html",
-    "path": "/ai/agent/3_workflow_tools.html"
+    "id": "Q010",
+    "source": "mianshiya",
+    "category": "微调与 PEFT",
+    "title": "微调的过拟合⻛险如何通过正则化缓解？"
   },
   {
-    "title": "4. 了解哪些其他的 Agent 设计范式？Agent 和 Workflow的区别是什么？",
-    "url": "https://xiaolinnote.com/ai/agent/4_patterns.html",
-    "path": "/ai/agent/4_patterns.html"
+    "id": "Q011",
+    "source": "mianshiya",
+    "category": "微调与 PEFT",
+    "title": "请详细讨论微调时如何防⽌灾难性遗忘问题？"
   },
   {
-    "title": "5. Agent 推理模式有哪些？ReAct 是啥？具体是怎么实现的？",
-    "url": "https://xiaolinnote.com/ai/agent/5_react.html",
-    "path": "/ai/agent/5_react.html"
+    "id": "Q012",
+    "source": "mianshiya",
+    "category": "微调与 PEFT",
+    "title": "在多模态微调（如图⽂⽣成）中，如何确保⽂本和图像数据的对⻬质量？"
   },
   {
-    "title": "6. ReAct、Plan-and-Execute、Reflection 三种范式有什么核心区别？实际项目中该如何选型？",
-    "url": "https://xiaolinnote.com/ai/agent/6_three_patterns.html",
-    "path": "/ai/agent/6_three_patterns.html"
+    "id": "Q013",
+    "source": "mianshiya",
+    "category": "微调与 PEFT",
+    "title": "参数⾼效微调（PEFT）如何减少计算成本？"
   },
   {
-    "title": "7. 复杂任务怎么做的任务拆分？为什么要拆分？效果如何提升？",
-    "url": "https://xiaolinnote.com/ai/agent/7_tasksplit.html",
-    "path": "/ai/agent/7_tasksplit.html"
+    "id": "Q014",
+    "source": "mianshiya",
+    "category": "微调与 PEFT",
+    "title": "冻结层在微调中的作⽤是什么？"
   },
   {
-    "title": "8. 请你介绍一下 AI Agent 的记忆机制，并说明在实际开发中应该如何设计记忆模块？",
-    "url": "https://xiaolinnote.com/ai/agent/8_memory.html",
-    "path": "/ai/agent/8_memory.html"
+    "id": "Q015",
+    "source": "mianshiya",
+    "category": "微调与 PEFT",
+    "title": "为什么需要混合精度训练？"
   },
   {
-    "title": "9. Agent 的长短期记忆系统怎么做的？记忆是怎么存的？粒度是多少？怎么用的？",
-    "url": "https://xiaolinnote.com/ai/agent/9_memory_storage.html",
-    "path": "/ai/agent/9_memory_storage.html"
+    "id": "Q016",
+    "source": "mianshiya",
+    "category": "微调与 PEFT",
+    "title": "模型输出重复和幻觉如何微调解决？"
   },
   {
-    "title": "10. 什么是 Multi-Agent？",
-    "url": "https://xiaolinnote.com/ai/agent/10_multiagent.html",
-    "path": "/ai/agent/10_multiagent.html"
+    "id": "Q017",
+    "source": "mianshiya",
+    "category": "微调与 PEFT",
+    "title": "SFT 指令微调数据如何构建？"
   },
   {
-    "title": "11. 说说 Single-Agent 和 Multi-Agent 的设计方案？",
-    "url": "https://xiaolinnote.com/ai/agent/11_single_multi.html",
-    "path": "/ai/agent/11_single_multi.html"
+    "id": "Q018",
+    "source": "mianshiya",
+    "category": "微调与 PEFT",
+    "title": "请解释⼤模型微调(Fine-tuning)的原理，并说明在什么业务场景下需要微调⽽不是直接使⽤基础模型？"
   },
   {
-    "title": "12. Agent 记忆压缩通常有哪些方法？",
-    "url": "https://xiaolinnote.com/ai/agent/12_memcompress.html",
-    "path": "/ai/agent/12_memcompress.html"
+    "id": "Q019",
+    "source": "mianshiya",
+    "category": "微调与 PEFT",
+    "title": "指令微调的好处？"
   },
   {
-    "title": "13. 在工程实践中，为什么有时候选择「手搓」Agent，而不是直接用成熟框架？",
-    "url": "https://xiaolinnote.com/ai/agent/13_handcode.html",
-    "path": "/ai/agent/13_handcode.html"
+    "id": "Q020",
+    "source": "mianshiya",
+    "category": "RAG 检索增强",
+    "title": "RAG 的完整流程是怎么样的？"
   },
   {
-    "title": "14. 如何赋予 LLM 规划能力？",
-    "url": "https://xiaolinnote.com/ai/agent/14_planning.html",
-    "path": "/ai/agent/14_planning.html"
+    "id": "Q021",
+    "source": "mianshiya",
+    "category": "RAG 检索增强",
+    "title": "什么⾃查询？为什么在 RAG 中需要⾃查询？"
   },
   {
-    "title": "15. 讲讲 Agent 的反思机制？为什么要用反思？具体怎么实现？",
-    "url": "https://xiaolinnote.com/ai/agent/15_reflection.html",
-    "path": "/ai/agent/15_reflection.html"
+    "id": "Q022",
+    "source": "mianshiya",
+    "category": "RAG 检索增强",
+    "title": "什么提⽰压缩？为什么在 RAG 中需要提⽰压缩？"
   },
   {
-    "title": "16. 如何设计多 Agent 的协作与动态切换机制？",
-    "url": "https://xiaolinnote.com/ai/agent/16_collab.html",
-    "path": "/ai/agent/16_collab.html"
+    "id": "Q023",
+    "source": "mianshiya",
+    "category": "RAG 检索增强",
+    "title": "什么是 RAG 中的分块？为什么需要分块？"
   },
   {
-    "title": "小林面试笔记",
-    "url": "https://xiaolinnote.com",
-    "path": ""
+    "id": "Q024",
+    "source": "mianshiya",
+    "category": "RAG 检索增强",
+    "title": "在 RAG 中，常⻅的分块策略有哪些？分别有什么区别？"
   },
   {
-    "title": "RAG 面试题介绍",
-    "url": "https://xiaolinnote.com/ai/rag/rag_info.html",
-    "path": "/ai/rag/rag_info.html"
+    "id": "Q025",
+    "source": "mianshiya",
+    "category": "RAG 检索增强",
+    "title": "在 RAG 中的 Embedding 嵌⼊是什么？"
   },
   {
-    "title": "LLM工具调用面试题介绍",
-    "url": "https://xiaolinnote.com/ai/tools/tools_info.html",
-    "path": "/ai/tools/tools_info.html"
+    "id": "Q026",
+    "source": "mianshiya",
+    "category": "RAG 检索增强",
+    "title": "在 RAG 中，你知道有哪些 Embedding Model 嵌⼊模型？"
   },
   {
-    "title": "大模型工程面试题介绍",
-    "url": "https://xiaolinnote.com/ai/llm/llm_info.html",
-    "path": "/ai/llm/llm_info.html"
+    "id": "Q027",
+    "source": "mianshiya",
+    "category": "RAG 检索增强",
+    "title": "什么是 GPTCache？"
   },
   {
-    "title": "LangChain框架面试题介绍",
-    "url": "https://xiaolinnote.com/ai/langchain/langchain_info.html",
-    "path": "/ai/langchain/langchain_info.html"
+    "id": "Q028",
+    "source": "mianshiya",
+    "category": "RAG 检索增强",
+    "title": "使⽤LangChain时，如何实现多路召回结果的动态权重分配？"
   },
   {
-    "title": "1. 什么是 RAG？详细描述一个完整 RAG 系统的详细工作流程？",
-    "url": "https://xiaolinnote.com/ai/rag/1_whatisrag.html",
-    "path": "/ai/rag/1_whatisrag.html"
+    "id": "Q029",
+    "source": "mianshiya",
+    "category": "RAG 检索增强",
+    "title": "当发现RAG系统召回结果与⽤户query意图不匹配时，有哪些可能的改进⽅向？"
   },
   {
-    "title": "2. 大模型的 RAG 主要用来解决什么问题？",
-    "url": "https://xiaolinnote.com/ai/rag/2_rag_problems.html",
-    "path": "/ai/rag/2_rag_problems.html"
+    "id": "Q030",
+    "source": "mianshiya",
+    "category": "RAG 检索增强",
+    "title": "使⽤LangChain实现RAG系统时，如何处理PDF⽂档中的表格数据召回问题？"
   },
   {
-    "title": "3. 相比直接微调 LLM，RAG 解决了什么问题？微调和 RAG 各自的优劣势是什么？",
-    "url": "https://xiaolinnote.com/ai/rag/3_rag_vs_finetune.html",
-    "path": "/ai/rag/3_rag_vs_finetune.html"
+    "id": "Q031",
+    "source": "mianshiya",
+    "category": "RAG 检索增强",
+    "title": "什么是 RAG 中的 Rerank？具体需要怎么做？"
   },
   {
-    "title": "4. RAG 中的文档是怎么存的？粒度是多大？详细说说文档切割（Chunking）策略？",
-    "url": "https://xiaolinnote.com/ai/rag/4_chunking.html",
-    "path": "/ai/rag/4_chunking.html"
+    "id": "Q032",
+    "source": "mianshiya",
+    "category": "RAG 检索增强",
+    "title": "什么混合检索？在基于⼤模型的应⽤开发中，混合检索主要解决什么问题？"
   },
   {
-    "title": "5. 怎么规避语义被切割掉的问题？",
-    "url": "https://xiaolinnote.com/ai/rag/5_semantic_cuts.html",
-    "path": "/ai/rag/5_semantic_cuts.html"
+    "id": "Q033",
+    "source": "mianshiya",
+    "category": "RAG 检索增强",
+    "title": "在 RAG 应⽤中为了优化检索精度，其中的数据清洗和预处理怎么做？"
   },
   {
-    "title": "6. 在 RAG 中 Embedding 究竟是什么？如何选择和评估一个 Embedding 模型？",
-    "url": "https://xiaolinnote.com/ai/rag/6_embedding.html",
-    "path": "/ai/rag/6_embedding.html"
+    "id": "Q034",
+    "source": "mianshiya",
+    "category": "RAG 检索增强",
+    "title": "什么查询扩展？为什么在 RAG 应⽤中需要查询扩展？"
   },
   {
-    "title": "7. Embedding 有哪几种算法你了解过吗？",
-    "url": "https://xiaolinnote.com/ai/rag/7_embedding_algos.html",
-    "path": "/ai/rag/7_embedding_algos.html"
+    "id": "Q035",
+    "source": "mianshiya",
+    "category": "RAG 检索增强",
+    "title": "在 RAG 中，你如何选择 Embedding Model 嵌⼊模型，需要考虑哪些因素？"
   },
   {
-    "title": "8. 什么是向量数据库？有没有做过向量数据库的对比选型？",
-    "url": "https://xiaolinnote.com/ai/rag/8_vectordb.html",
-    "path": "/ai/rag/8_vectordb.html"
+    "id": "Q036",
+    "source": "mianshiya",
+    "category": "RAG 检索增强",
+    "title": "在 RAG 中，索引流程中的⽂档解析你们怎么做的？"
   },
   {
-    "title": "9. 讲讲你用的向量数据库？数据量级是多大？性能如何？遇到过性能瓶颈吗？",
-    "url": "https://xiaolinnote.com/ai/rag/9_vectordb_practice.html",
-    "path": "/ai/rag/9_vectordb_practice.html"
+    "id": "Q037",
+    "source": "mianshiya",
+    "category": "RAG 检索增强",
+    "title": "你都了解哪些向量数据库？如何选型？"
   },
   {
-    "title": "10. 你使用 RAG 给大模型一个输入，系统是怎样的工作流程？",
-    "url": "https://xiaolinnote.com/ai/rag/10_online_workflow.html",
-    "path": "/ai/rag/10_online_workflow.html"
+    "id": "Q038",
+    "source": "mianshiya",
+    "category": "RAG 检索增强",
+    "title": "向量数据库中的 HNSW、LSH、PQ 分别是什么意思？"
   },
   {
-    "title": "11. 请你介绍一下向量检索和关键词检索的区别？",
-    "url": "https://xiaolinnote.com/ai/rag/11_retrieval_types.html",
-    "path": "/ai/rag/11_retrieval_types.html"
+    "id": "Q039",
+    "source": "mianshiya",
+    "category": "RAG 检索增强",
+    "title": "向量数据库中的 ANN 是什么？为什么需要⽤它？"
   },
   {
-    "title": "12. 如何润色用户的 Query（Query Rewrite）？目的是什么？",
-    "url": "https://xiaolinnote.com/ai/rag/12_query_rewrite.html",
-    "path": "/ai/rag/12_query_rewrite.html"
+    "id": "Q040",
+    "source": "mianshiya",
+    "category": "RAG 检索增强",
+    "title": "什么是 Advanced RAG？"
   },
   {
-    "title": "13. 什么是多路召回？具体怎么做？",
-    "url": "https://xiaolinnote.com/ai/rag/13_multi_retrieval.html",
-    "path": "/ai/rag/13_multi_retrieval.html"
+    "id": "Q041",
+    "source": "mianshiya",
+    "category": "RAG 检索增强",
+    "title": "什么是 Modular RAG？"
   },
   {
-    "title": "14. RAG 检索优化策略有哪些？",
-    "url": "https://xiaolinnote.com/ai/rag/14_retrieval_opt.html",
-    "path": "/ai/rag/14_retrieval_opt.html"
+    "id": "Q042",
+    "source": "mianshiya",
+    "category": "RAG 检索增强",
+    "title": "你有多个知识库，做 RAG 的时候，怎么保证查询效率和准确性兼容，并尽可能减少幻觉？"
   },
   {
-    "title": "15. 了解哪些更复杂的 RAG 范式？",
-    "url": "https://xiaolinnote.com/ai/rag/15_advanced_paradigms.html",
-    "path": "/ai/rag/15_advanced_paradigms.html"
+    "id": "Q043",
+    "source": "mianshiya",
+    "category": "Prompt 与结构化输出",
+    "title": "什么是 GPT Structured Outputs？"
   },
   {
-    "title": "16. 在什么场景下，你会选择使用图数据库来增强传统的向量检索？",
-    "url": "https://xiaolinnote.com/ai/rag/16_graph_db.html",
-    "path": "/ai/rag/16_graph_db.html"
+    "id": "Q044",
+    "source": "mianshiya",
+    "category": "Prompt 与结构化输出",
+    "title": "⼤模型的结构化输出指的是什么？"
   },
   {
-    "title": "17. 如何规避 RAG 系统中大模型的幻觉？",
-    "url": "https://xiaolinnote.com/ai/rag/17_hallucination.html",
-    "path": "/ai/rag/17_hallucination.html"
+    "id": "Q045",
+    "source": "mianshiya",
+    "category": "Prompt 与结构化输出",
+    "title": "什么是护栏技术？"
   },
   {
-    "title": "18. 怎么量化你的 RAG 效果？",
-    "url": "https://xiaolinnote.com/ai/rag/18_evaluation.html",
-    "path": "/ai/rag/18_evaluation.html"
+    "id": "Q046",
+    "source": "mianshiya",
+    "category": "Agent 与框架",
+    "title": "MCP 与 Function Calling 的区别是什么？"
   },
   {
-    "title": "19. RAG 知识库如何实现动态与持续更新？",
-    "url": "https://xiaolinnote.com/ai/rag/19_dynamic_update.html",
-    "path": "/ai/rag/19_dynamic_update.html"
+    "id": "Q047",
+    "source": "mianshiya",
+    "category": "Agent 与框架",
+    "title": "什么是 LangChain？"
   },
   {
-    "title": "20. 在实际落地中，你觉得 RAG 最难的地方是哪里？",
-    "url": "https://xiaolinnote.com/ai/rag/20_hardest_parts.html",
-    "path": "/ai/rag/20_hardest_parts.html"
+    "id": "Q048",
+    "source": "mianshiya",
+    "category": "Agent 与框架",
+    "title": "什么是 LangGraph ？"
   },
   {
-    "title": "1. 什么是 Function Calling ？原理是什么？",
-    "url": "https://xiaolinnote.com/ai/tools/1_function_calling.html",
-    "path": "/ai/tools/1_function_calling.html"
+    "id": "Q049",
+    "source": "mianshiya",
+    "category": "Agent 与框架",
+    "title": "LangGraph 编排的原理是什么？"
   },
   {
-    "title": "2. LLM 是如何学会调用外部工具的？",
-    "url": "https://xiaolinnote.com/ai/tools/2_llm_tool_learning.html",
-    "path": "/ai/tools/2_llm_tool_learning.html"
+    "id": "Q050",
+    "source": "mianshiya",
+    "category": "Agent 与框架",
+    "title": "LangChain 和 LangGraph 有什么区别？"
   },
   {
-    "title": "3. 大模型的 Function Call 能力是怎么训练出来的？",
-    "url": "https://xiaolinnote.com/ai/tools/3_fc_training.html",
-    "path": "/ai/tools/3_fc_training.html"
+    "id": "Q051",
+    "source": "mianshiya",
+    "category": "Agent 与框架",
+    "title": "什么是 Manus？"
   },
   {
-    "title": "4. 什么是 MCP（模型上下文协议）？讲讲它的核心内容？",
-    "url": "https://xiaolinnote.com/ai/tools/4_what_is_mcp.html",
-    "path": "/ai/tools/4_what_is_mcp.html"
+    "id": "Q052",
+    "source": "mianshiya",
+    "category": "Agent 与框架",
+    "title": "ReAct 是什么？"
   },
   {
-    "title": "5. MCP 由哪几部分组成？",
-    "url": "https://xiaolinnote.com/ai/tools/5_mcp_components.html",
-    "path": "/ai/tools/5_mcp_components.html"
+    "id": "Q053",
+    "source": "mianshiya",
+    "category": "Agent 与框架",
+    "title": "LLM Agent 的基本架构有哪些组成部分？"
   },
   {
-    "title": "6. MCP 和 Function Calling 有什么区别？有没有实际跑过 MCP？",
-    "url": "https://xiaolinnote.com/ai/tools/6_mcp_vs_fc.html",
-    "path": "/ai/tools/6_mcp_vs_fc.html"
+    "id": "Q054",
+    "source": "mianshiya",
+    "category": "Agent 与框架",
+    "title": "LLM Agent 常⻅功能有哪些？"
   },
   {
-    "title": "7. Function Calling 也属于工具调用，请问什么场景下使用 Function Calling，什么场景下使用 MCP？",
-    "url": "https://xiaolinnote.com/ai/tools/7_fc_vs_mcp_usage.html",
-    "path": "/ai/tools/7_fc_vs_mcp_usage.html"
+    "id": "Q055",
+    "source": "mianshiya",
+    "category": "Agent 与框架",
+    "title": "市⾯上有哪些主流的 LLM Agent 框架？各⾃的特点是什么？"
   },
   {
-    "title": "8. 为什么有些特定的推理模型不支持 MCP 协议？",
-    "url": "https://xiaolinnote.com/ai/tools/8_reasoning_no_mcp.html",
-    "path": "/ai/tools/8_reasoning_no_mcp.html"
+    "id": "Q056",
+    "source": "mianshiya",
+    "category": "Agent 与框架",
+    "title": "什么是 LangChain Agent?"
   },
   {
-    "title": "9. Skill 是什么？",
-    "url": "https://xiaolinnote.com/ai/tools/9_skill.html",
-    "path": "/ai/tools/9_skill.html"
+    "id": "Q057",
+    "source": "mianshiya",
+    "category": "Agent 与框架",
+    "title": "什么是 LangChain model?"
   },
   {
-    "title": "10. MCP 和 Agent Skill 的区别是什么？",
-    "url": "https://xiaolinnote.com/ai/tools/10_mcp_vs_skill.html",
-    "path": "/ai/tools/10_mcp_vs_skill.html"
+    "id": "Q058",
+    "source": "mianshiya",
+    "category": "Agent 与框架",
+    "title": "在⼤模型应⽤中，通常如何实现⻓短期记忆机制？"
   },
   {
-    "title": "11. Function Calling、Skill、MCP 这三个有什么区别？",
-    "url": "https://xiaolinnote.com/ai/tools/11_fc_skill_mcp.html",
-    "path": "/ai/tools/11_fc_skill_mcp.html"
+    "id": "Q059",
+    "source": "mianshiya",
+    "category": "Agent 与框架",
+    "title": "Copilot 模式和 Agent 模式的区别是什么？"
   },
   {
-    "title": "12. 什么是 A2A 协议？它和 MCP 协议的区别是什么？",
-    "url": "https://xiaolinnote.com/ai/tools/12_a2a_protocol.html",
-    "path": "/ai/tools/12_a2a_protocol.html"
+    "id": "Q060",
+    "source": "mianshiya",
+    "category": "Agent 与框架",
+    "title": "Agent智能体的⼯作过程是怎样的？"
   },
   {
-    "title": "13. MCP 协议通常采用什么通信方式？",
-    "url": "https://xiaolinnote.com/ai/tools/13_mcp_transport.html",
-    "path": "/ai/tools/13_mcp_transport.html"
+    "id": "Q061",
+    "source": "mianshiya",
+    "category": "Agent 与框架",
+    "title": "LLM Agent 如何进⾏动态 API 调⽤？"
   },
   {
-    "title": "14. 说说 WebSocket 和 SSE 通信的区别及局限性？",
-    "url": "https://xiaolinnote.com/ai/tools/14_sse_vs_websocket.html",
-    "path": "/ai/tools/14_sse_vs_websocket.html"
+    "id": "Q062",
+    "source": "mianshiya",
+    "category": "Agent 与框架",
+    "title": "LangChain 的核⼼组件有哪些？"
   },
   {
-    "title": "15. 为什么要用 WebRTC 协议？它和 WebSocket（WS）在 AI 对话流中的核心差异是什么？",
-    "url": "https://xiaolinnote.com/ai/tools/15_webrtc_vs_ws.html",
-    "path": "/ai/tools/15_webrtc_vs_ws.html"
+    "id": "Q063",
+    "source": "mianshiya",
+    "category": "Agent 与框架",
+    "title": "Agent 死循环问题有遇到过吗？如何解决？"
   },
   {
-    "title": "16. 有没有用过大模型的网关框架？网关层解决了什么问题？",
-    "url": "https://xiaolinnote.com/ai/tools/16_llm_gateway.html",
-    "path": "/ai/tools/16_llm_gateway.html"
+    "id": "Q064",
+    "source": "mianshiya",
+    "category": "Agent 与框架",
+    "title": "如何让 LLM Agent 具备⻓期记忆能⼒？"
   },
   {
-    "title": "1. 什么是大语言模型？和传统 NLP 模型有什么区别？",
-    "url": "https://xiaolinnote.com/ai/llm/what_is_llm.html",
-    "path": "/ai/llm/what_is_llm.html"
+    "id": "Q065",
+    "source": "mianshiya",
+    "category": "Agent 与框架",
+    "title": "LLM Agent 在多模态任务中如何执⾏推理？"
   },
   {
-    "title": "2. 讲讲 Transformer 架构基本原理？Encoder 和 Decoder 是什么？",
-    "url": "https://xiaolinnote.com/ai/llm/transformer_architecture.html",
-    "path": "/ai/llm/transformer_architecture.html"
+    "id": "Q066",
+    "source": "mianshiya",
+    "category": "Agent 与框架",
+    "title": "LlamaIndex 如何与 LangChain 结合？"
   },
   {
-    "title": "3. 多头注意力（MHA）有哪些局限？MQA、GQA、Flash Attention 怎么解决？",
-    "url": "https://xiaolinnote.com/ai/llm/mha_mqa_gqa_flash_attention.html",
-    "path": "/ai/llm/mha_mqa_gqa_flash_attention.html"
+    "id": "Q067",
+    "source": "mianshiya",
+    "category": "Agent 与框架",
+    "title": "AutoGPT 如何实现⾃主决策？"
   },
   {
-    "title": "4. 大模型的位置编码是干什么用的？sin/cos、RoPE、ALiBi 有什么区别？",
-    "url": "https://xiaolinnote.com/ai/llm/position_encoding.html",
-    "path": "/ai/llm/position_encoding.html"
+    "id": "Q068",
+    "source": "mianshiya",
+    "category": "MCP 与协议",
+    "title": "什么是 MCP 协议，它在 AI ⼤模型系统中的作⽤是什么？"
   },
   {
-    "title": "5. 什么是大模型项目的分词器？原理是什么？",
-    "url": "https://xiaolinnote.com/ai/llm/tokenizer.html",
-    "path": "/ai/llm/tokenizer.html"
+    "id": "Q069",
+    "source": "mianshiya",
+    "category": "MCP 与协议",
+    "title": "MCP 架构包含哪些核⼼组件？"
   },
   {
-    "title": "6. 大模型是怎么训练出来的？",
-    "url": "https://xiaolinnote.com/ai/llm/llm_training.html",
-    "path": "/ai/llm/llm_training.html"
+    "id": "Q070",
+    "source": "mianshiya",
+    "category": "MCP 与协议",
+    "title": "MCP 协议⽀持哪两种模式？"
   },
   {
-    "title": "7. 什么是 Scaling Law？大模型的「涌现能力」是怎么回事？",
-    "url": "https://xiaolinnote.com/ai/llm/scaling_law_emergence.html",
-    "path": "/ai/llm/scaling_law_emergence.html"
+    "id": "Q071",
+    "source": "mianshiya",
+    "category": "MCP 与协议",
+    "title": "MCP 的⼯作流程是什么？"
   },
   {
-    "title": "8. 大模型微调的方案有哪些？",
-    "url": "https://xiaolinnote.com/ai/llm/finetuning.html",
-    "path": "/ai/llm/finetuning.html"
+    "id": "Q072",
+    "source": "mianshiya",
+    "category": "MCP 与协议",
+    "title": "在 Spring AI 框架中如何集成 MCP？"
   },
   {
-    "title": "9. 请讲一下 LoRA 技术，除了减少参数量，它还有哪些优点？",
-    "url": "https://xiaolinnote.com/ai/llm/lora.html",
-    "path": "/ai/llm/lora.html"
+    "id": "Q073",
+    "source": "mianshiya",
+    "category": "MCP 与协议",
+    "title": "MCP 协议安全性设计包含哪些层⾯？"
   },
   {
-    "title": "10. SFT 之后还有哪些 Post-Training？RLHF、DPO、GRPO、拒绝采样什么关系？",
-    "url": "https://xiaolinnote.com/ai/llm/post_training.html",
-    "path": "/ai/llm/post_training.html"
+    "id": "Q074",
+    "source": "mianshiya",
+    "category": "MCP 与协议",
+    "title": "如何将已有的应⽤转换成 MCP 服务？"
   },
   {
-    "title": "11. 大模型的 DPO 和 PPO 的区别是什么？",
-    "url": "https://xiaolinnote.com/ai/llm/dpo_vs_ppo.html",
-    "path": "/ai/llm/dpo_vs_ppo.html"
+    "id": "Q075",
+    "source": "mianshiya",
+    "category": "MCP 与协议",
+    "title": "A2A 协议的⼯作原理是怎样的？"
   },
   {
-    "title": "12. 大模型生成文本时的解码策略有哪些？贪心、Beam Search、采样分别什么时候用？",
-    "url": "https://xiaolinnote.com/ai/llm/decoding_strategies.html",
-    "path": "/ai/llm/decoding_strategies.html"
+    "id": "Q076",
+    "source": "mianshiya",
+    "category": "MCP 与协议",
+    "title": "A2A 协议的⼯作流程是怎样的？"
   },
   {
-    "title": "13. 大模型的参数：温度值、Top-P、Top-K 分别是什么？各个场景下的最佳设置是什么？",
-    "url": "https://xiaolinnote.com/ai/llm/temperature_top_p_top_k.html",
-    "path": "/ai/llm/temperature_top_p_top_k.html"
+    "id": "Q077",
+    "source": "mianshiya",
+    "category": "MCP 与协议",
+    "title": "什么是 Google ADK？"
   },
   {
-    "title": "14. KV Cache 是什么？Prompt Caching 的原理是什么？",
-    "url": "https://xiaolinnote.com/ai/llm/kv_cache_prompt_caching.html",
-    "path": "/ai/llm/kv_cache_prompt_caching.html"
+    "id": "Q078",
+    "source": "mianshiya",
+    "category": "MCP 与协议",
+    "title": "什么是 A2A 协议，它的核⼼架构及主要组件有哪些？"
   },
   {
-    "title": "15. 大模型量化是什么？INT8/INT4/AWQ/GPTQ 怎么选？",
-    "url": "https://xiaolinnote.com/ai/llm/quantization.html",
-    "path": "/ai/llm/quantization.html"
+    "id": "Q079",
+    "source": "mianshiya",
+    "category": "MCP 与协议",
+    "title": "A2A 协议有哪五⼤设计原则？"
   },
   {
-    "title": "16. 如何写好 Prompt？分享下 Prompt 工程实践经验？",
-    "url": "https://xiaolinnote.com/ai/llm/prompt_engineering.html",
-    "path": "/ai/llm/prompt_engineering.html"
+    "id": "Q080",
+    "source": "mianshiya",
+    "category": "MCP 与协议",
+    "title": "A2A 协议 与 MCP 协议的关系是怎样的？"
   },
   {
-    "title": "17. 什么是 CoT？为啥效果好？它有什么缺点或局限性？",
-    "url": "https://xiaolinnote.com/ai/llm/cot.html",
-    "path": "/ai/llm/cot.html"
+    "id": "Q081",
+    "source": "mianshiya",
+    "category": "工程与场景",
+    "title": "当⼤模型API响应延迟超过1秒时，前端可以采取哪些优化策略保证⽤户体验？"
   },
   {
-    "title": "18. 大模型为什么会出现幻觉？怎么缓解？",
-    "url": "https://xiaolinnote.com/ai/llm/hallucination.html",
-    "path": "/ai/llm/hallucination.html"
+    "id": "Q082",
+    "source": "mianshiya",
+    "category": "工程与场景",
+    "title": "当⼤模型上下⽂窗⼝扩展到100万token时，哪些现有业务场景可能发⽣质变？"
   },
   {
-    "title": "19. MoE 混合专家模型是什么？DeepSeek V3、Qwen 为什么用 MoE？",
-    "url": "https://xiaolinnote.com/ai/llm/moe.html",
-    "path": "/ai/llm/moe.html"
+    "id": "Q083",
+    "source": "mianshiya",
+    "category": "工程与场景",
+    "title": "请举例说明假设在电商系统中，哪些功能适合直接使⽤⼤模型完成，哪些需要结合⼯程化⼿段？"
   },
   {
-    "title": "20. 大模型部署有哪些主流方案？vLLM、TGI、llama.cpp、SGLang 实际项目里怎么选？",
-    "url": "https://xiaolinnote.com/ai/llm/deployment_frameworks.html",
-    "path": "/ai/llm/deployment_frameworks.html"
+    "id": "Q084",
+    "source": "mianshiya",
+    "category": "工程与场景",
+    "title": "假设请你设计⼀个医疗问诊系统，如何平衡AI幻觉带来的⻛险与效率提升？需要哪些技术⼿段？"
   },
   {
-    "title": "21. 大模型能力评测指标有哪些？",
-    "url": "https://xiaolinnote.com/ai/llm/evaluation_metrics.html",
-    "path": "/ai/llm/evaluation_metrics.html"
+    "id": "Q085",
+    "source": "mianshiya",
+    "category": "其他",
+    "title": "当需要处理超⻓⼤模型上下⽂窗⼝限制时，有哪些可⾏的⼯程解决⽅案？"
   },
   {
-    "title": "22. 对比使用过哪些主流大模型？你们项目中最终选用了哪个模型？为什么？",
-    "url": "https://xiaolinnote.com/ai/llm/model_selection.html",
-    "path": "/ai/llm/model_selection.html"
+    "id": "Q086",
+    "source": "mianshiya",
+    "category": "其他",
+    "title": "提⽰词优化考虑哪些维度？你们提⽰词模板有哪些字段？"
   },
   {
-    "title": "01｜ Agent面试题",
-    "url": "https://xiaolinnote.com/ai/agent/",
-    "path": "/ai/agent/"
+    "id": "附-01",
+    "source": "mianshiya",
+    "category": "未分类",
+    "title": "如果一个GPU集群的LLM处理能力为1000tokens/s，那1000个用户同时并发访问，响应给每个用户的性能只有1 token/s吗？怎么分析性能瓶颈"
   },
   {
-    "title": "AI Agent 是什么？Agent 面试题万字图解",
-    "url": "https://xiaolinnote.com/agent/concept/agent.html",
-    "path": "/agent/concept/agent.html"
+    "id": "附-02",
+    "source": "mianshiya",
+    "category": "未分类",
+    "title": "向量数据库原理是什么？请简述下它的原理"
   },
   {
-    "title": "OpenClaw 是什么？OpenClaw 面试题万字图解",
-    "url": "https://xiaolinnote.com/agent/concept/openclaw.html",
-    "path": "/agent/concept/openclaw.html"
+    "id": "附-03",
+    "source": "mianshiya",
+    "category": "未分类",
+    "title": "解释LangChain框架中的Chain和Agent概念，并举例说明各自的应用场景"
   },
   {
-    "title": "RAG 是什么？RAG 检索增强面试题万字图解",
-    "url": "https://xiaolinnote.com/agent/rag/rag.html",
-    "path": "/agent/rag/rag.html"
+    "id": "附-04",
+    "source": "mianshiya",
+    "category": "未分类",
+    "title": "什么是大模型的\"涌现能力\"？列举三种典型表现并解释其可能成因"
   },
   {
-    "title": "GraphRAG 和 LightRAG 详解：原理、对比与选型",
-    "url": "https://xiaolinnote.com/agent/rag/graphrag-lightrag.html",
-    "path": "/agent/rag/graphrag-lightrag.html"
+    "id": "附-05",
+    "source": "mianshiya",
+    "category": "未分类",
+    "title": "假设需要让大模型生成一个React表单组件代码，请设计一个包含上下文约束的Prompt（需包含数据验证、错误提示等要求）"
   },
   {
-    "title": "Harness Engineering 是什么？AI Agent 越用越聪明的秘密",
-    "url": "https://xiaolinnote.com/agent/engineering/harness-engineering.html",
-    "path": "/agent/engineering/harness-engineering.html"
+    "id": "附-06",
+    "source": "mianshiya",
+    "category": "未分类",
+    "title": "请描述使用LangChain构建一个文档问答系统的关键技术组件及实现步骤"
   },
   {
-    "title": "Loop Engineering 是什么？AI 编程从 Prompt 到 Loop 的范式转变",
-    "url": "https://xiaolinnote.com/agent/engineering/loop-engineering.html",
-    "path": "/agent/engineering/loop-engineering.html"
+    "id": "附-07",
+    "source": "mianshiya",
+    "category": "未分类",
+    "title": "假设要开发一个智能工单分类系统，请拆解AI可参与的环节并说明技术选型思路"
   },
   {
-    "title": "Loop Engineering 怎么落地？一条从 0 到 1 的上手路径",
-    "url": "https://xiaolinnote.com/agent/engineering/loop_engineering_handbook.html",
-    "path": "/agent/engineering/loop_engineering_handbook.html"
+    "id": "Q001",
+    "source": "interview_core",
+    "category": "RAG检索增强",
+    "title": "生产环境里的 RAG 系统一般怎么设计？"
   },
   {
-    "title": "Agent 概念与生态",
-    "url": "https://xiaolinnote.com/agent/concept/",
-    "path": "/agent/concept/"
+    "id": "Q002",
+    "source": "interview_core",
+    "category": "RAG检索增强",
+    "title": "为什么生产级 RAG 要分离线入库和在线问答两条链路？"
   },
   {
-    "title": "RAG 检索增强",
-    "url": "https://xiaolinnote.com/agent/rag/",
-    "path": "/agent/rag/"
+    "id": "Q003",
+    "source": "interview_core",
+    "category": "RAG检索增强",
+    "title": "RAG 文档切分时怎么设计 chunk？"
   },
   {
-    "title": "Agent 工程方法论",
-    "url": "https://xiaolinnote.com/agent/engineering/",
-    "path": "/agent/engineering/"
+    "id": "Q004",
+    "source": "interview_core",
+    "category": "RAG检索增强",
+    "title": "向量检索、关键词检索和混合检索有什么区别？"
   },
   {
-    "title": "Claude Code 使用教程：新手入门必学的基础技巧",
-    "url": "https://xiaolinnote.com/claudecode/basics/cc_use.html",
-    "path": "/claudecode/basics/cc_use.html"
+    "id": "Q095",
+    "source": "interview_core",
+    "category": "RAG检索增强",
+    "title": "RAG 离线链路里的混合检索怎么设计，RRF 是什么？"
   },
   {
-    "title": "Claude Code /powerup 教程：18 个官方互动课程全解析",
-    "url": "https://xiaolinnote.com/claudecode/basics/cc_powerup.html",
-    "path": "/claudecode/basics/cc_powerup.html"
+    "id": "Q005",
+    "source": "interview_core",
+    "category": "RAG检索增强",
+    "title": "rerank 在 RAG 里解决什么问题？"
   },
   {
-    "title": "CLAUDE.md 指南：Claude Code 的项目记忆该怎么写？",
-    "url": "https://xiaolinnote.com/claudecode/playbook/cc_claude_md.html",
-    "path": "/claudecode/playbook/cc_claude_md.html"
+    "id": "Q007",
+    "source": "interview_core",
+    "category": "RAG检索增强",
+    "title": "RAG 为什么要做引用来源和可追溯？"
   },
   {
-    "title": "Claude Code 大型代码库实战：百万行代码怎么扛得住？",
-    "url": "https://xiaolinnote.com/claudecode/playbook/cc_large_codebase.html",
-    "path": "/claudecode/playbook/cc_large_codebase.html"
+    "id": "Q014",
+    "source": "interview_core",
+    "category": "Prompt工程",
+    "title": "结构化输出为什么是 AI 应用里的关键能力？"
   },
   {
-    "title": "Claude Code Skill 揭秘：Skill 真的只是一份 markdown 吗？",
-    "url": "https://xiaolinnote.com/claudecode/playbook/cc_skills.html",
-    "path": "/claudecode/playbook/cc_skills.html"
+    "id": "Q015",
+    "source": "interview_core",
+    "category": "综合",
+    "title": "JSON 合法和业务校验通过有什么区别？"
   },
   {
-    "title": "SDD 规约驱动开发实战：在 Claude Code 里跑通先规约后编码",
-    "url": "https://xiaolinnote.com/claudecode/playbook/spec_driven_dev.html",
-    "path": "/claudecode/playbook/spec_driven_dev.html"
+    "id": "Q016",
+    "source": "interview_core",
+    "category": "Agent",
+    "title": "Tool Use 在生产 AI 应用里怎么设计？"
   },
   {
-    "title": "grill-me 使用指南：写代码前，先让 Claude Code 审问你的需求",
-    "url": "https://xiaolinnote.com/claudecode/playbook/grill_me.html",
-    "path": "/claudecode/playbook/grill_me.html"
+    "id": "Q017",
+    "source": "interview_core",
+    "category": "Prompt工程",
+    "title": "Prompt 在生产项目里应该怎么管理？"
   },
   {
-    "title": "superpowers vs grill-me：同一个需求实测，差距到底在哪？",
-    "url": "https://xiaolinnote.com/claudecode/playbook/superpowers_vs_grillme.html",
-    "path": "/claudecode/playbook/superpowers_vs_grillme.html"
+    "id": "Q018",
+    "source": "interview_core",
+    "category": "综合",
+    "title": "一次 LLM 调用需要关注哪些参数和工程问题？"
   },
   {
-    "title": "Claude Fable 5 系统提示词详解：1600 行泄漏 prompt 里的工程干货",
-    "url": "https://xiaolinnote.com/claudecode/prompt/fable5_prompt_leak_cl4.html",
-    "path": "/claudecode/prompt/fable5_prompt_leak_cl4.html"
+    "id": "Q019",
+    "source": "interview_core",
+    "category": "工程化",
+    "title": "FastAPI 在 AI 应用服务化里一般承担什么角色？"
   },
   {
-    "title": "Claude Code 源码拆解：51 万行泄漏代码里的架构设计",
-    "url": "https://xiaolinnote.com/claudecode/source/cc_source.html",
-    "path": "/claudecode/source/cc_source.html"
+    "id": "Q020",
+    "source": "interview_core",
+    "category": "工程化",
+    "title": "AI API 服务为什么需要配置、日志和异常处理？"
   },
   {
-    "title": "Claude Code 主循环 Query 图解：一轮对话是怎么跑起来的？",
-    "url": "https://xiaolinnote.com/claudecode/source/cc_query_loop.html",
-    "path": "/claudecode/source/cc_query_loop.html"
+    "id": "Q021",
+    "source": "interview_core",
+    "category": "工程化",
+    "title": "调用外部 API 或 LLM API 时要怎么保证稳定性？"
   },
   {
-    "title": "Claude Code 上下文管理图解：Compact 压缩机制怎么实现？",
-    "url": "https://xiaolinnote.com/claudecode/source/cc_compact.html",
-    "path": "/claudecode/source/cc_compact.html"
+    "id": "Q022",
+    "source": "interview_core",
+    "category": "NL2SQL",
+    "title": "你的 SQL 解释助手在生产环境里能解决什么问题？"
   },
   {
-    "title": "Claude Code 代码检索图解：为什么用 grep 而不用 RAG？",
-    "url": "https://xiaolinnote.com/claudecode/source/cc_grep.html",
-    "path": "/claudecode/source/cc_grep.html"
+    "id": "Q023",
+    "source": "interview_core",
+    "category": "NL2SQL",
+    "title": "为什么 SQL 风险检查不能完全依赖 LLM？"
   },
   {
-    "title": "Claude Code 记忆机制图解：为什么不用向量数据库？",
-    "url": "https://xiaolinnote.com/claudecode/source/cc_memory.html",
-    "path": "/claudecode/source/cc_memory.html"
+    "id": "Q024",
+    "source": "interview_core",
+    "category": "金融信贷",
+    "title": "金融信贷开发经验如何迁移到 AI 数据问答项目？"
   },
   {
-    "title": "Claude Code 多 Agent 图解：SubAgent 实现机制怎么做？",
-    "url": "https://xiaolinnote.com/claudecode/source/cc_multi_agent.html",
-    "path": "/claudecode/source/cc_multi_agent.html"
+    "id": "Q025",
+    "source": "interview_core",
+    "category": "RAG检索增强",
+    "title": "RAG 知识库更新和版本管理怎么做？"
   },
   {
-    "title": "Anthropic 40 万次会话研究：用好 AI 编程的关键不是会写代码",
-    "url": "https://xiaolinnote.com/claudecode/insights/expertise_over_coding.html",
-    "path": "/claudecode/insights/expertise_over_coding.html"
+    "id": "Q026",
+    "source": "interview_core",
+    "category": "数据治理",
+    "title": "AI 应用上线后需要监控哪些指标？"
   },
   {
-    "title": "Claude Code 基础入门",
-    "url": "https://xiaolinnote.com/claudecode/basics/",
-    "path": "/claudecode/basics/"
+    "id": "Q027",
+    "source": "interview_core",
+    "category": "RAG检索增强",
+    "title": "RAG 知识入库和索引构建在生产环境里怎么设计？"
   },
   {
-    "title": "Claude Code 实践技巧",
-    "url": "https://xiaolinnote.com/claudecode/playbook/",
-    "path": "/claudecode/playbook/"
+    "id": "Q028",
+    "source": "interview_core",
+    "category": "RAG检索增强",
+    "title": "RAG 在线问答为什么必须返回引用来源？"
   },
   {
-    "title": "Claude Code 提示词工程",
-    "url": "https://xiaolinnote.com/claudecode/prompt/",
-    "path": "/claudecode/prompt/"
+    "id": "Q029",
+    "source": "interview_core",
+    "category": "RAG检索增强",
+    "title": "RAG 召回质量差时，你会怎么排查和优化？"
   },
   {
-    "title": "Claude Code 源码解析",
-    "url": "https://xiaolinnote.com/claudecode/source/",
-    "path": "/claudecode/source/"
+    "id": "Q030",
+    "source": "interview_core",
+    "category": "RAG检索增强",
+    "title": "RAG 问答 API 在生产环境里应该怎么设计？"
   },
   {
-    "title": "Claude Code 行业观察",
-    "url": "https://xiaolinnote.com/claudecode/insights/",
-    "path": "/claudecode/insights/"
+    "id": "Q031",
+    "source": "interview_core",
+    "category": "RAG检索增强",
+    "title": "一个 RAG 项目怎样包装成可展示、可复盘的作品？"
   },
   {
-    "title": "小林面试笔记",
-    "url": "http://xiaolinnote.com",
-    "path": ""
+    "id": "Q032",
+    "source": "interview_core",
+    "category": "RAG检索增强",
+    "title": "Query rewrite 在 RAG 里解决什么问题，生产里怎么控制风险？"
   },
   {
-    "title": "02｜ RAG面试题",
-    "url": "https://xiaolinnote.com/ai/rag/",
-    "path": "/ai/rag/"
+    "id": "Q033",
+    "source": "interview_core",
+    "category": "NL2SQL",
+    "title": "SQL 解释助手能检查哪些风险？"
   },
   {
-    "title": "小林面试笔记",
-    "url": "http://xiaolinnote.com/",
-    "path": "/"
+    "id": "Q034",
+    "source": "interview_core",
+    "category": "RAG检索增强",
+    "title": "RAG 项目 README 至少应该包含哪些内容？"
   },
   {
-    "title": "大模型面试题",
-    "url": "http://xiaolinnote.com/ai/",
-    "path": "/ai/"
+    "id": "Q035",
+    "source": "interview_core",
+    "category": "RAG检索增强",
+    "title": "为什么 RAG 项目演示不能只展示成功问题，还要展示 bad case？"
   },
   {
-    "title": "图解 Agent",
-    "url": "http://xiaolinnote.com/agent/",
-    "path": "/agent/"
+    "id": "Q036",
+    "source": "interview_core",
+    "category": "RAG检索增强",
+    "title": "Day 17 到 Day 20 的 RAG 项目完整链路是什么？"
   },
   {
-    "title": "图解 Claude Code",
-    "url": "http://xiaolinnote.com/claudecode/",
-    "path": "/claudecode/"
+    "id": "Q037",
+    "source": "interview_core",
+    "category": "综合",
+    "title": "演示 citations 时，应该向面试官或同事说明什么？"
   },
   {
-    "title": "赞赏支持",
-    "url": "http://xiaolinnote.com/other/sponsor.html",
-    "path": "/other/sponsor.html"
+    "id": "Q038",
+    "source": "interview_core",
+    "category": "RAG检索增强",
+    "title": "本地 RAG 项目当前有哪些限制，后续可以怎么优化？"
   },
   {
-    "title": "关于网站",
-    "url": "http://xiaolinnote.com/other/xiaolinnote.html",
-    "path": "/other/xiaolinnote.html"
+    "id": "Q039",
+    "source": "interview_core",
+    "category": "RAG检索增强",
+    "title": "用户原始问题为什么不一定适合直接检索？"
   },
   {
-    "title": "Agent 面试题介绍",
-    "url": "http://xiaolinnote.com/ai/agent/agent_info.html",
-    "path": "/ai/agent/agent_info.html"
+    "id": "Q040",
+    "source": "interview_core",
+    "category": "综合",
+    "title": "query rewrite 有哪些常见方式？"
   },
   {
-    "title": "RAG 面试题介绍",
-    "url": "http://xiaolinnote.com/ai/rag/rag_info.html",
-    "path": "/ai/rag/rag_info.html"
+    "id": "Q041",
+    "source": "interview_core",
+    "category": "综合",
+    "title": "rewrite drift 是什么，为什么危险？"
   },
   {
-    "title": "LLM工具调用面试题介绍",
-    "url": "http://xiaolinnote.com/ai/tools/tools_info.html",
-    "path": "/ai/tools/tools_info.html"
+    "id": "Q042",
+    "source": "interview_core",
+    "category": "RAG检索增强",
+    "title": "怎么判断 query rewrite 是否真的改善了召回质量？"
   },
   {
-    "title": "大模型工程面试题介绍",
-    "url": "http://xiaolinnote.com/ai/llm/llm_info.html",
-    "path": "/ai/llm/llm_info.html"
+    "id": "Q043",
+    "source": "interview_core",
+    "category": "RAG检索增强",
+    "title": "RAG 测试集应该怎么构建，评估哪些指标？"
   },
   {
-    "title": "LangChain框架面试题介绍",
-    "url": "http://xiaolinnote.com/ai/langchain/langchain_info.html",
-    "path": "/ai/langchain/langchain_info.html"
+    "id": "Q044",
+    "source": "interview_core",
+    "category": "RAG检索增强",
+    "title": "为什么评估 RAG 不能只看最终答案？"
   },
   {
-    "title": "03｜ LLM工具调用面试题",
-    "url": "https://xiaolinnote.com/ai/tools/",
-    "path": "/ai/tools/"
+    "id": "Q045",
+    "source": "interview_core",
+    "category": "RAG检索增强",
+    "title": "expected_sources 在 RAG 测试集中有什么作用？"
   },
   {
-    "title": "1. 什么是 Agent？与大模型有什么本质不同？",
-    "url": "http://xiaolinnote.com/ai/agent/1_whatisagent.html",
-    "path": "/ai/agent/1_whatisagent.html"
+    "id": "Q046",
+    "source": "interview_core",
+    "category": "RAG检索增强",
+    "title": "RAG 系统什么时候应该拒答？"
   },
   {
-    "title": "2. Agent 的基本架构由哪些核心组件构成？",
-    "url": "http://xiaolinnote.com/ai/agent/2_components.html",
-    "path": "/ai/agent/2_components.html"
+    "id": "Q048",
+    "source": "interview_core",
+    "category": "RAG检索增强",
+    "title": "RAG 幻觉通常怎么产生，怎么降低？"
   },
   {
-    "title": "3. Workflow，Agent，Tools 这三个的概念和区别介绍一下？",
-    "url": "http://xiaolinnote.com/ai/agent/3_workflow_tools.html",
-    "path": "/ai/agent/3_workflow_tools.html"
+    "id": "Q049",
+    "source": "interview_core",
+    "category": "RAG检索增强",
+    "title": "RAG 系统怎么做权限控制和敏感信息保护？"
   },
   {
-    "title": "4. 了解哪些其他的 Agent 设计范式？Agent 和 Workflow的区别是什么？",
-    "url": "http://xiaolinnote.com/ai/agent/4_patterns.html",
-    "path": "/ai/agent/4_patterns.html"
+    "id": "Q051",
+    "source": "interview_core",
+    "category": "RAG检索增强",
+    "title": "RAG 的 citations 也会有安全风险吗？"
   },
   {
-    "title": "5. Agent 推理模式有哪些？ReAct 是啥？具体是怎么实现的？",
-    "url": "http://xiaolinnote.com/ai/agent/5_react.html",
-    "path": "/ai/agent/5_react.html"
+    "id": "Q052",
+    "source": "interview_core",
+    "category": "RAG检索增强",
+    "title": "生产 RAG 怎么控制 token 成本和响应延迟？"
   },
   {
-    "title": "6. ReAct、Plan-and-Execute、Reflection 三种范式有什么核心区别？实际项目中该如何选型？",
-    "url": "http://xiaolinnote.com/ai/agent/6_three_patterns.html",
-    "path": "/ai/agent/6_three_patterns.html"
+    "id": "Q053",
+    "source": "interview_core",
+    "category": "RAG检索增强",
+    "title": "RAG 系统里缓存应该怎么设计，为什么不能只按问题文本缓存？"
   },
   {
-    "title": "7. 复杂任务怎么做的任务拆分？为什么要拆分？效果如何提升？",
-    "url": "http://xiaolinnote.com/ai/agent/7_tasksplit.html",
-    "path": "/ai/agent/7_tasksplit.html"
+    "id": "Q054",
+    "source": "interview_core",
+    "category": "RAG检索增强",
+    "title": "为什么 RAG 不是 top-k 越大越好？"
   },
   {
-    "title": "8. 请你介绍一下 AI Agent 的记忆机制，并说明在实际开发中应该如何设计记忆模块？",
-    "url": "http://xiaolinnote.com/ai/agent/8_memory.html",
-    "path": "/ai/agent/8_memory.html"
+    "id": "Q055",
+    "source": "interview_core",
+    "category": "RAG检索增强",
+    "title": "你会怎么准备一个 RAG 项目的 5 分钟演示？"
   },
   {
-    "title": "9. Agent 的长短期记忆系统怎么做的？记忆是怎么存的？粒度是多少？怎么用的？",
-    "url": "http://xiaolinnote.com/ai/agent/9_memory_storage.html",
-    "path": "/ai/agent/9_memory_storage.html"
+    "id": "Q056",
+    "source": "interview_core",
+    "category": "RAG检索增强",
+    "title": "RAG 项目演示前应该做哪些稳定性检查？"
   },
   {
-    "title": "10. 什么是 Multi-Agent？",
-    "url": "http://xiaolinnote.com/ai/agent/10_multiagent.html",
-    "path": "/ai/agent/10_multiagent.html"
+    "id": "Q057",
+    "source": "interview_core",
+    "category": "综合",
+    "title": "为什么演示时要主动讲 bad case？"
   },
   {
-    "title": "11. 说说 Single-Agent 和 Multi-Agent 的设计方案？",
-    "url": "http://xiaolinnote.com/ai/agent/11_single_multi.html",
-    "path": "/ai/agent/11_single_multi.html"
+    "id": "Q058",
+    "source": "interview_core",
+    "category": "RAG检索增强",
+    "title": "如何把一个 RAG Demo 包装成可投递项目？"
   },
   {
-    "title": "12. Agent 记忆压缩通常有哪些方法？",
-    "url": "http://xiaolinnote.com/ai/agent/12_memcompress.html",
-    "path": "/ai/agent/12_memcompress.html"
+    "id": "Q059",
+    "source": "interview_core",
+    "category": "综合",
+    "title": "试投前应该检查哪些材料？"
   },
   {
-    "title": "13. 在工程实践中，为什么有时候选择「手搓」Agent，而不是直接用成熟框架？",
-    "url": "http://xiaolinnote.com/ai/agent/13_handcode.html",
-    "path": "/ai/agent/13_handcode.html"
+    "id": "Q060",
+    "source": "interview_core",
+    "category": "综合",
+    "title": "为什么试投要先小批量验证，而不是一开始海投？"
   },
   {
-    "title": "14. 如何赋予 LLM 规划能力？",
-    "url": "http://xiaolinnote.com/ai/agent/14_planning.html",
-    "path": "/ai/agent/14_planning.html"
+    "id": "Q061",
+    "source": "interview_core",
+    "category": "综合",
+    "title": "AI 转型学习环境为什么要先保证可复现？"
   },
   {
-    "title": "15. 讲讲 Agent 的反思机制？为什么要用反思？具体怎么实现？",
-    "url": "http://xiaolinnote.com/ai/agent/15_reflection.html",
-    "path": "/ai/agent/15_reflection.html"
+    "id": "Q062",
+    "source": "interview_core",
+    "category": "综合",
+    "title": "Python 模块化为什么是 AI 应用工程的基础？"
   },
   {
-    "title": "16. 如何设计多 Agent 的协作与动态切换机制？",
-    "url": "http://xiaolinnote.com/ai/agent/16_collab.html",
-    "path": "/ai/agent/16_collab.html"
+    "id": "Q063",
+    "source": "interview_core",
+    "category": "RAG检索增强",
+    "title": "数据清洗和字段校验为什么会影响后续 RAG 或数据问答质量？"
   },
   {
-    "title": "1. 什么是 RAG？详细描述一个完整 RAG 系统的详细工作流程？",
-    "url": "http://xiaolinnote.com/ai/rag/1_whatisrag.html",
-    "path": "/ai/rag/1_whatisrag.html"
+    "id": "Q064",
+    "source": "interview_core",
+    "category": "综合",
+    "title": "第一周复盘时，如何把基础能力讲成 AI 应用工程能力？"
   },
   {
-    "title": "2. 大模型的 RAG 主要用来解决什么问题？",
-    "url": "http://xiaolinnote.com/ai/rag/2_rag_problems.html",
-    "path": "/ai/rag/2_rag_problems.html"
+    "id": "Q065",
+    "source": "interview_core",
+    "category": "NL2SQL",
+    "title": "NL2SQL 为什么不能直接把用户问题交给模型生成 SQL？"
   },
   {
-    "title": "3. 相比直接微调 LLM，RAG 解决了什么问题？微调和 RAG 各自的优劣势是什么？",
-    "url": "http://xiaolinnote.com/ai/rag/3_rag_vs_finetune.html",
-    "path": "/ai/rag/3_rag_vs_finetune.html"
+    "id": "Q066",
+    "source": "interview_core",
+    "category": "NL2SQL",
+    "title": "NL2SQL 的 Schema Catalog 应该包含哪些信息？"
   },
   {
-    "title": "4. RAG 中的文档是怎么存的？粒度是多大？详细说说文档切割（Chunking）策略？",
-    "url": "http://xiaolinnote.com/ai/rag/4_chunking.html",
-    "path": "/ai/rag/4_chunking.html"
+    "id": "Q067",
+    "source": "interview_core",
+    "category": "NL2SQL",
+    "title": "NL2SQL 问题分类有什么价值？"
   },
   {
-    "title": "5. 怎么规避语义被切割掉的问题？",
-    "url": "http://xiaolinnote.com/ai/rag/5_semantic_cuts.html",
-    "path": "/ai/rag/5_semantic_cuts.html"
+    "id": "Q068",
+    "source": "interview_core",
+    "category": "NL2SQL",
+    "title": "NL2SQL 里为什么要先做问题解析？"
   },
   {
-    "title": "6. 在 RAG 中 Embedding 究竟是什么？如何选择和评估一个 Embedding 模型？",
-    "url": "http://xiaolinnote.com/ai/rag/6_embedding.html",
-    "path": "/ai/rag/6_embedding.html"
+    "id": "Q069",
+    "source": "interview_core",
+    "category": "NL2SQL",
+    "title": "自然语言时间在 NL2SQL 里怎么处理？"
   },
   {
-    "title": "7. Embedding 有哪几种算法你了解过吗？",
-    "url": "http://xiaolinnote.com/ai/rag/7_embedding_algos.html",
-    "path": "/ai/rag/7_embedding_algos.html"
+    "id": "Q070",
+    "source": "interview_core",
+    "category": "数据治理",
+    "title": "指标抽取和维度抽取有什么区别？"
   },
   {
-    "title": "8. 什么是向量数据库？有没有做过向量数据库的对比选型？",
-    "url": "http://xiaolinnote.com/ai/rag/8_vectordb.html",
-    "path": "/ai/rag/8_vectordb.html"
+    "id": "Q071",
+    "source": "interview_core",
+    "category": "NL2SQL",
+    "title": "NL2SQL 生成 SQL 时为什么必须加 Schema 约束？"
   },
   {
-    "title": "9. 讲讲你用的向量数据库？数据量级是多大？性能如何？遇到过性能瓶颈吗？",
-    "url": "http://xiaolinnote.com/ai/rag/9_vectordb_practice.html",
-    "path": "/ai/rag/9_vectordb_practice.html"
+    "id": "Q072",
+    "source": "interview_core",
+    "category": "NL2SQL",
+    "title": "为什么 SQL 生成后不能直接执行？"
   },
   {
-    "title": "10. 你使用 RAG 给大模型一个输入，系统是怎样的工作流程？",
-    "url": "http://xiaolinnote.com/ai/rag/10_online_workflow.html",
-    "path": "/ai/rag/10_online_workflow.html"
+    "id": "Q073",
+    "source": "interview_core",
+    "category": "NL2SQL",
+    "title": "规则模板生成 SQL 和 LLM 生成 SQL 怎么取舍？"
   },
   {
-    "title": "11. 请你介绍一下向量检索和关键词检索的区别？",
-    "url": "http://xiaolinnote.com/ai/rag/11_retrieval_types.html",
-    "path": "/ai/rag/11_retrieval_types.html"
+    "id": "Q074",
+    "source": "interview_core",
+    "category": "NL2SQL",
+    "title": "NL2SQL 为什么必须有 SQL 校验层？"
   },
   {
-    "title": "12. 如何润色用户的 Query（Query Rewrite）？目的是什么？",
-    "url": "http://xiaolinnote.com/ai/rag/12_query_rewrite.html",
-    "path": "/ai/rag/12_query_rewrite.html"
+    "id": "Q075",
+    "source": "interview_core",
+    "category": "NL2SQL",
+    "title": "SQL 校验层通常要检查哪些内容？"
   },
   {
-    "title": "13. 什么是多路召回？具体怎么做？",
-    "url": "http://xiaolinnote.com/ai/rag/13_multi_retrieval.html",
-    "path": "/ai/rag/13_multi_retrieval.html"
+    "id": "Q076",
+    "source": "interview_core",
+    "category": "NL2SQL",
+    "title": "为什么不能只靠 prompt 要求模型生成安全 SQL？"
   },
   {
-    "title": "14. RAG 检索优化策略有哪些？",
-    "url": "http://xiaolinnote.com/ai/rag/14_retrieval_opt.html",
-    "path": "/ai/rag/14_retrieval_opt.html"
+    "id": "Q077",
+    "source": "interview_core",
+    "category": "NL2SQL",
+    "title": "NL2SQL 查询执行层为什么必须放在 SQL 校验之后？"
   },
   {
-    "title": "15. 了解哪些更复杂的 RAG 范式？",
-    "url": "http://xiaolinnote.com/ai/rag/15_advanced_paradigms.html",
-    "path": "/ai/rag/15_advanced_paradigms.html"
+    "id": "Q078",
+    "source": "interview_core",
+    "category": "NL2SQL",
+    "title": "NL2SQL 查询执行层要控制哪些生产风险？"
   },
   {
-    "title": "16. 在什么场景下，你会选择使用图数据库来增强传统的向量检索？",
-    "url": "http://xiaolinnote.com/ai/rag/16_graph_db.html",
-    "path": "/ai/rag/16_graph_db.html"
+    "id": "Q079",
+    "source": "interview_core",
+    "category": "NL2SQL",
+    "title": "NL2SQL 返回结果为什么不能只返回数据库原始行？"
   },
   {
-    "title": "17. 如何规避 RAG 系统中大模型的幻觉？",
-    "url": "http://xiaolinnote.com/ai/rag/17_hallucination.html",
-    "path": "/ai/rag/17_hallucination.html"
+    "id": "Q080",
+    "source": "interview_core",
+    "category": "NL2SQL",
+    "title": "NL2SQL 为什么需要结果解释层？"
   },
   {
-    "title": "18. 怎么量化你的 RAG 效果？",
-    "url": "http://xiaolinnote.com/ai/rag/18_evaluation.html",
-    "path": "/ai/rag/18_evaluation.html"
+    "id": "Q081",
+    "source": "interview_core",
+    "category": "综合",
+    "title": "结果解释层怎么避免模型编造业务原因？"
   },
   {
-    "title": "19. RAG 知识库如何实现动态与持续更新？",
-    "url": "http://xiaolinnote.com/ai/rag/19_dynamic_update.html",
-    "path": "/ai/rag/19_dynamic_update.html"
+    "id": "Q082",
+    "source": "interview_core",
+    "category": "NL2SQL",
+    "title": "被 SQL 校验拦截的问题，结果解释层应该怎么回答？"
   },
   {
-    "title": "20. 在实际落地中，你觉得 RAG 最难的地方是哪里？",
-    "url": "http://xiaolinnote.com/ai/rag/20_hardest_parts.html",
-    "path": "/ai/rag/20_hardest_parts.html"
+    "id": "Q084",
+    "source": "interview_core",
+    "category": "NL2SQL",
+    "title": "你会怎么演示一个 NL2SQL 项目？"
   },
   {
-    "title": "1. 什么是 Function Calling ？原理是什么？",
-    "url": "http://xiaolinnote.com/ai/tools/1_function_calling.html",
-    "path": "/ai/tools/1_function_calling.html"
+    "id": "Q085",
+    "source": "interview_core",
+    "category": "NL2SQL",
+    "title": "NL2SQL 项目整合时，为什么要保留每一层的中间结果？"
   },
   {
-    "title": "2. LLM 是如何学会调用外部工具的？",
-    "url": "http://xiaolinnote.com/ai/tools/2_llm_tool_learning.html",
-    "path": "/ai/tools/2_llm_tool_learning.html"
+    "id": "Q086",
+    "source": "interview_core",
+    "category": "工程化",
+    "title": "为什么 AI 应用要从脚本重构成后端服务？"
   },
   {
-    "title": "3. 大模型的 Function Call 能力是怎么训练出来的？",
-    "url": "http://xiaolinnote.com/ai/tools/3_fc_training.html",
-    "path": "/ai/tools/3_fc_training.html"
+    "id": "Q087",
+    "source": "interview_core",
+    "category": "NL2SQL",
+    "title": "NL2SQL API 为什么要区分安全阻断和系统错误？"
   },
   {
-    "title": "4. 什么是 MCP（模型上下文协议）？讲讲它的核心内容？",
-    "url": "http://xiaolinnote.com/ai/tools/4_what_is_mcp.html",
-    "path": "/ai/tools/4_what_is_mcp.html"
+    "id": "Q088",
+    "source": "interview_core",
+    "category": "工程化",
+    "title": "Docker 化解决了 AI 应用交付里的什么问题？"
   },
   {
-    "title": "5. MCP 由哪几部分组成？",
-    "url": "http://xiaolinnote.com/ai/tools/5_mcp_components.html",
-    "path": "/ai/tools/5_mcp_components.html"
+    "id": "Q089",
+    "source": "interview_core",
+    "category": "工程化",
+    "title": "为什么配置和密钥不能写死在代码里？"
   },
   {
-    "title": "6. MCP 和 Function Calling 有什么区别？有没有实际跑过 MCP？",
-    "url": "http://xiaolinnote.com/ai/tools/6_mcp_vs_fc.html",
-    "path": "/ai/tools/6_mcp_vs_fc.html"
+    "id": "Q090",
+    "source": "interview_core",
+    "category": "NL2SQL",
+    "title": "NL2SQL 服务为什么需要审计存储？"
   },
   {
-    "title": "7. Function Calling 也属于工具调用，请问什么场景下使用 Function Calling，什么场景下使用 MCP？",
-    "url": "http://xiaolinnote.com/ai/tools/7_fc_vs_mcp_usage.html",
-    "path": "/ai/tools/7_fc_vs_mcp_usage.html"
+    "id": "Q091",
+    "source": "interview_core",
+    "category": "NL2SQL",
+    "title": "NL2SQL 服务最小回归测试应该覆盖哪些场景？"
   },
   {
-    "title": "8. 为什么有些特定的推理模型不支持 MCP 协议？",
-    "url": "http://xiaolinnote.com/ai/tools/8_reasoning_no_mcp.html",
-    "path": "/ai/tools/8_reasoning_no_mcp.html"
+    "id": "Q092",
+    "source": "interview_core",
+    "category": "综合",
+    "title": "什么叫把 AI 应用像产品一样交付？"
   },
   {
-    "title": "9. Skill 是什么？",
-    "url": "http://xiaolinnote.com/ai/tools/9_skill.html",
-    "path": "/ai/tools/9_skill.html"
+    "id": "Q093",
+    "source": "interview_core",
+    "category": "Agent",
+    "title": "Agent 工作流为什么不能让模型完全自由调用工具？"
   },
   {
-    "title": "10. MCP 和 Agent Skill 的区别是什么？",
-    "url": "http://xiaolinnote.com/ai/tools/10_mcp_vs_skill.html",
-    "path": "/ai/tools/10_mcp_vs_skill.html"
+    "id": "Q094",
+    "source": "interview_core",
+    "category": "Agent",
+    "title": "多工具 Agent 为什么必须有工具选择和失败回退策略？"
   },
   {
-    "title": "11. Function Calling、Skill、MCP 这三个有什么区别？",
-    "url": "http://xiaolinnote.com/ai/tools/11_fc_skill_mcp.html",
-    "path": "/ai/tools/11_fc_skill_mcp.html"
+    "id": "Q096",
+    "source": "interview_core",
+    "category": "Agent",
+    "title": "生产级 AI 应用为什么需要端到端评测，而不是只测单个 Prompt 或工具？"
   },
   {
-    "title": "12. 什么是 A2A 协议？它和 MCP 协议的区别是什么？",
-    "url": "http://xiaolinnote.com/ai/tools/12_a2a_protocol.html",
-    "path": "/ai/tools/12_a2a_protocol.html"
+    "id": "Q100",
+    "source": "interview_core",
+    "category": "Agent",
+    "title": "金融信贷仓库 Agent 的端到端评测集应该怎么设计？"
   },
   {
-    "title": "13. MCP 协议通常采用什么通信方式？",
-    "url": "http://xiaolinnote.com/ai/tools/13_mcp_transport.html",
-    "path": "/ai/tools/13_mcp_transport.html"
+    "id": "Q101",
+    "source": "interview_core",
+    "category": "Agent",
+    "title": "实时仓库问题进入 Agent 评测时要重点检查哪些风险？"
   },
   {
-    "title": "14. 说说 WebSocket 和 SSE 通信的区别及局限性？",
-    "url": "http://xiaolinnote.com/ai/tools/14_sse_vs_websocket.html",
-    "path": "/ai/tools/14_sse_vs_websocket.html"
+    "id": "Q097",
+    "source": "interview_core",
+    "category": "Agent",
+    "title": "AI Agent 出现 bad case 后，你会怎么做错误治理？"
   },
   {
-    "title": "15. 为什么要用 WebRTC 协议？它和 WebSocket（WS）在 AI 对话流中的核心差异是什么？",
-    "url": "http://xiaolinnote.com/ai/tools/15_webrtc_vs_ws.html",
-    "path": "/ai/tools/15_webrtc_vs_ws.html"
+    "id": "Q102",
+    "source": "interview_core",
+    "category": "Agent",
+    "title": "为什么 AI Agent bad case 必须按责任层归因？"
   },
   {
-    "title": "16. 有没有用过大模型的网关框架？网关层解决了什么问题？",
-    "url": "http://xiaolinnote.com/ai/tools/16_llm_gateway.html",
-    "path": "/ai/tools/16_llm_gateway.html"
+    "id": "Q103",
+    "source": "interview_core",
+    "category": "数据仓库",
+    "title": "金融信贷离线仓库为什么要分 ODS、DWD、DWS、ADS？"
   },
   {
-    "title": "1. 什么是大语言模型？和传统 NLP 模型有什么区别？",
-    "url": "http://xiaolinnote.com/ai/llm/what_is_llm.html",
-    "path": "/ai/llm/what_is_llm.html"
+    "id": "Q104",
+    "source": "interview_core",
+    "category": "NL2SQL",
+    "title": "Agent 查询离线指标时，为什么应该优先选择 ADS 或 DWS？"
   },
   {
-    "title": "2. 讲讲 Transformer 架构基本原理？Encoder 和 Decoder 是什么？",
-    "url": "http://xiaolinnote.com/ai/llm/transformer_architecture.html",
-    "path": "/ai/llm/transformer_architecture.html"
+    "id": "Q105",
+    "source": "interview_core",
+    "category": "NL2SQL",
+    "title": "Agent 每一步为什么通常用 JSON 做结构化输入输出，字段应该怎么设计？"
   },
   {
-    "title": "3. 多头注意力（MHA）有哪些局限？MQA、GQA、Flash Attention 怎么解决？",
-    "url": "http://xiaolinnote.com/ai/llm/mha_mqa_gqa_flash_attention.html",
-    "path": "/ai/llm/mha_mqa_gqa_flash_attention.html"
+    "id": "Q106",
+    "source": "interview_core",
+    "category": "Agent",
+    "title": "实时仓库和离线仓库在 Agent 数据问答里有什么区别？"
   },
   {
-    "title": "4. 大模型的位置编码是干什么用的？sin/cos、RoPE、ALiBi 有什么区别？",
-    "url": "http://xiaolinnote.com/ai/llm/position_encoding.html",
-    "path": "/ai/llm/position_encoding.html"
+    "id": "Q107",
+    "source": "interview_core",
+    "category": "NL2SQL",
+    "title": "Agent 查询实时指标时为什么必须检查窗口和延迟？"
   },
   {
-    "title": "5. 什么是大模型项目的分词器？原理是什么？",
-    "url": "http://xiaolinnote.com/ai/llm/tokenizer.html",
-    "path": "/ai/llm/tokenizer.html"
+    "id": "Q108",
+    "source": "interview_core",
+    "category": "Agent",
+    "title": "金融信贷 Agent 为什么要先做主题域识别，再做意图识别？"
   },
   {
-    "title": "6. 大模型是怎么训练出来的？",
-    "url": "http://xiaolinnote.com/ai/llm/llm_training.html",
-    "path": "/ai/llm/llm_training.html"
+    "id": "Q109",
+    "source": "interview_core",
+    "category": "数据仓库",
+    "title": "如何区分离线指标、实时状态、口径解释、血缘追溯和敏感导出问题？"
   },
   {
-    "title": "7. 什么是 Scaling Law？大模型的「涌现能力」是怎么回事？",
-    "url": "http://xiaolinnote.com/ai/llm/scaling_law_emergence.html",
-    "path": "/ai/llm/scaling_law_emergence.html"
+    "id": "Q110",
+    "source": "interview_core",
+    "category": "NL2SQL",
+    "title": "金融信贷 Agent 为什么需要指标字典，指标字典应该包含哪些字段？"
   },
   {
-    "title": "8. 大模型微调的方案有哪些？",
-    "url": "http://xiaolinnote.com/ai/llm/finetuning.html",
-    "path": "/ai/llm/finetuning.html"
+    "id": "Q111",
+    "source": "interview_core",
+    "category": "RAG检索增强",
+    "title": "为什么口径解释问题应该走 RAG，而不是直接生成 SQL？"
   },
   {
-    "title": "9. 请讲一下 LoRA 技术，除了减少参数量，它还有哪些优点？",
-    "url": "http://xiaolinnote.com/ai/llm/lora.html",
-    "path": "/ai/llm/lora.html"
+    "id": "Q112",
+    "source": "interview_core",
+    "category": "数据治理",
+    "title": "指标字典和 Schema Catalog 有什么区别？"
   },
   {
-    "title": "10. SFT 之后还有哪些 Post-Training？RLHF、DPO、GRPO、拒绝采样什么关系？",
-    "url": "http://xiaolinnote.com/ai/llm/post_training.html",
-    "path": "/ai/llm/post_training.html"
+    "id": "Q113",
+    "source": "interview_core",
+    "category": "Agent",
+    "title": "金融信贷 Agent 的 Schema Catalog 应该包含哪些信息？"
   },
   {
-    "title": "11. 大模型的 DPO 和 PPO 的区别是什么？",
-    "url": "http://xiaolinnote.com/ai/llm/dpo_vs_ppo.html",
-    "path": "/ai/llm/dpo_vs_ppo.html"
+    "id": "Q114",
+    "source": "interview_core",
+    "category": "NL2SQL",
+    "title": "Agent 工具注册表应该如何设计？"
   },
   {
-    "title": "12. 大模型生成文本时的解码策略有哪些？贪心、Beam Search、采样分别什么时候用？",
-    "url": "http://xiaolinnote.com/ai/llm/decoding_strategies.html",
-    "path": "/ai/llm/decoding_strategies.html"
+    "id": "Q115",
+    "source": "interview_core",
+    "category": "Agent",
+    "title": "为什么工具调用前必须检查前置条件和风险等级？"
   },
   {
-    "title": "13. 大模型的参数：温度值、Top-P、Top-K 分别是什么？各个场景下的最佳设置是什么？",
-    "url": "http://xiaolinnote.com/ai/llm/temperature_top_p_top_k.html",
-    "path": "/ai/llm/temperature_top_p_top_k.html"
+    "id": "Q116",
+    "source": "interview_core",
+    "category": "Agent",
+    "title": "数据血缘在金融信贷 Agent 里解决什么问题？"
   },
   {
-    "title": "14. KV Cache 是什么？Prompt Caching 的原理是什么？",
-    "url": "http://xiaolinnote.com/ai/llm/kv_cache_prompt_caching.html",
-    "path": "/ai/llm/kv_cache_prompt_caching.html"
+    "id": "Q117",
+    "source": "interview_core",
+    "category": "数据仓库",
+    "title": "离线指标血缘和实时告警血缘有什么区别？"
   },
   {
-    "title": "15. 大模型量化是什么？INT8/INT4/AWQ/GPTQ 怎么选？",
-    "url": "http://xiaolinnote.com/ai/llm/quantization.html",
-    "path": "/ai/llm/quantization.html"
+    "id": "Q118",
+    "source": "interview_core",
+    "category": "Agent",
+    "title": "Agent 做血缘追溯时，为什么必须返回证据和影响范围？"
   },
   {
-    "title": "16. 如何写好 Prompt？分享下 Prompt 工程实践经验？",
-    "url": "http://xiaolinnote.com/ai/llm/prompt_engineering.html",
-    "path": "/ai/llm/prompt_engineering.html"
+    "id": "Q119",
+    "source": "interview_core",
+    "category": "NL2SQL",
+    "title": "生产级 NL2SQL 为什么不能生成 SQL 后直接执行？"
   },
   {
-    "title": "17. 什么是 CoT？为啥效果好？它有什么缺点或局限性？",
-    "url": "http://xiaolinnote.com/ai/llm/cot.html",
-    "path": "/ai/llm/cot.html"
+    "id": "Q120",
+    "source": "interview_core",
+    "category": "NL2SQL",
+    "title": "离线 NL2SQL 的 SQL Validator 通常要检查哪些内容？"
   },
   {
-    "title": "18. 大模型为什么会出现幻觉？怎么缓解？",
-    "url": "http://xiaolinnote.com/ai/llm/hallucination.html",
-    "path": "/ai/llm/hallucination.html"
+    "id": "Q121",
+    "source": "interview_core",
+    "category": "NL2SQL",
+    "title": "为什么离线指标查询要强制时间范围和分区裁剪？"
   },
   {
-    "title": "19. MoE 混合专家模型是什么？DeepSeek V3、Qwen 为什么用 MoE？",
-    "url": "http://xiaolinnote.com/ai/llm/moe.html",
-    "path": "/ai/llm/moe.html"
+    "id": "Q124",
+    "source": "interview_core",
+    "category": "Agent",
+    "title": "实时链路延迟超阈值时，Agent 应该怎么回答？"
   },
   {
-    "title": "20. 大模型部署有哪些主流方案？vLLM、TGI、llama.cpp、SGLang 实际项目里怎么选？",
-    "url": "http://xiaolinnote.com/ai/llm/deployment_frameworks.html",
-    "path": "/ai/llm/deployment_frameworks.html"
+    "id": "Q126",
+    "source": "interview_core",
+    "category": "数据仓库",
+    "title": "日报 + 实时告警摘要为什么必须区分离线日期和实时窗口？"
   },
   {
-    "title": "21. 大模型能力评测指标有哪些？",
-    "url": "http://xiaolinnote.com/ai/llm/evaluation_metrics.html",
-    "path": "/ai/llm/evaluation_metrics.html"
+    "id": "Q127",
+    "source": "interview_core",
+    "category": "Agent",
+    "title": "多工具 Agent 为什么必须写审计日志？"
   },
   {
-    "title": "22. 对比使用过哪些主流大模型？你们项目中最终选用了哪个模型？为什么？",
-    "url": "http://xiaolinnote.com/ai/llm/model_selection.html",
-    "path": "/ai/llm/model_selection.html"
+    "id": "Q128",
+    "source": "interview_core",
+    "category": "Agent",
+    "title": "金融信贷仓库 Agent 的端到端评测应该覆盖哪些场景？"
   },
   {
-    "title": "01｜ Agent面试题",
-    "url": "http://xiaolinnote.com/ai/agent/",
-    "path": "/ai/agent/"
+    "id": "Q129",
+    "source": "interview_core",
+    "category": "Agent",
+    "title": "为什么 Agent 端到端评测不能只看最终回答文字？"
   },
   {
-    "title": "AI Agent 是什么？Agent 面试题万字图解",
-    "url": "http://xiaolinnote.com/agent/concept/agent.html",
-    "path": "/agent/concept/agent.html"
+    "id": "Q130",
+    "source": "interview_core",
+    "category": "数据仓库",
+    "title": "如何设计空分区、实时延迟、告警误报和口径冲突这类 bad case？"
   },
   {
-    "title": "OpenClaw 是什么？OpenClaw 面试题万字图解",
-    "url": "http://xiaolinnote.com/agent/concept/openclaw.html",
-    "path": "/agent/concept/openclaw.html"
+    "id": "Q098",
+    "source": "interview_core",
+    "category": "NL2SQL",
+    "title": "离线/实时仓库如何支撑金融信贷 Agent 或 NL2SQL 数据问答？"
   },
   {
-    "title": "RAG 是什么？RAG 检索增强面试题万字图解",
-    "url": "http://xiaolinnote.com/agent/rag/rag.html",
-    "path": "/agent/rag/rag.html"
+    "id": "Q099",
+    "source": "interview_core",
+    "category": "综合",
+    "title": "生产级 AI 数据问答系统通常应该拆成哪些层？"
   },
   {
-    "title": "GraphRAG 和 LightRAG 详解：原理、对比与选型",
-    "url": "http://xiaolinnote.com/agent/rag/graphrag-lightrag.html",
-    "path": "/agent/rag/graphrag-lightrag.html"
+    "id": "Q131",
+    "source": "interview_core",
+    "category": "Agent",
+    "title": "为什么金融信贷仓库 Agent 必须感知数据质量状态？"
   },
   {
-    "title": "Harness Engineering 是什么？AI Agent 越用越聪明的秘密",
-    "url": "http://xiaolinnote.com/agent/engineering/harness-engineering.html",
-    "path": "/agent/engineering/harness-engineering.html"
+    "id": "Q132",
+    "source": "interview_core",
+    "category": "综合",
+    "title": "数据质量问题为什么要接入错误治理和回归测试？"
   },
   {
-    "title": "Loop Engineering 是什么？AI 编程从 Prompt 到 Loop 的范式转变",
-    "url": "http://xiaolinnote.com/agent/engineering/loop-engineering.html",
-    "path": "/agent/engineering/loop-engineering.html"
+    "id": "Q133",
+    "source": "interview_core",
+    "category": "Agent",
+    "title": "为什么金融信贷 Agent 服务化必须先定 request_id 和审计结构？"
   },
   {
-    "title": "Loop Engineering 怎么落地？一条从 0 到 1 的上手路径",
-    "url": "http://xiaolinnote.com/agent/engineering/loop_engineering_handbook.html",
-    "path": "/agent/engineering/loop_engineering_handbook.html"
+    "id": "Q134",
+    "source": "interview_core",
+    "category": "NL2SQL",
+    "title": "为什么不能把完整用户问题和原始查询结果直接写进日志？"
   },
   {
-    "title": "Agent 概念与生态",
-    "url": "http://xiaolinnote.com/agent/concept/",
-    "path": "/agent/concept/"
+    "id": "Q135",
+    "source": "interview_core",
+    "category": "综合",
+    "title": "为什么综合项目必须提供统一入口，而不是保留多个独立脚本？"
   },
   {
-    "title": "RAG 检索增强",
-    "url": "http://xiaolinnote.com/agent/rag/",
-    "path": "/agent/rag/"
+    "id": "Q136",
+    "source": "interview_core",
+    "category": "综合",
+    "title": "为什么综合项目要保留本地 fallback？"
   },
   {
-    "title": "Agent 工程方法论",
-    "url": "http://xiaolinnote.com/agent/engineering/",
-    "path": "/agent/engineering/"
+    "id": "Q137",
+    "source": "interview_core",
+    "category": "Agent",
+    "title": "为什么金融信贷 Agent 项目演示必须同时展示成功路径和风险路径？"
   },
   {
-    "title": "Claude Code 使用教程：新手入门必学的基础技巧",
-    "url": "http://xiaolinnote.com/claudecode/basics/cc_use.html",
-    "path": "/claudecode/basics/cc_use.html"
+    "id": "Q138",
+    "source": "interview_core",
+    "category": "综合",
+    "title": "3 分钟项目演示最应该讲什么？"
   },
   {
-    "title": "Claude Code /powerup 教程：18 个官方互动课程全解析",
-    "url": "http://xiaolinnote.com/claudecode/basics/cc_powerup.html",
-    "path": "/claudecode/basics/cc_powerup.html"
+    "id": "Q139",
+    "source": "interview_core",
+    "category": "NL2SQL",
+    "title": "为什么生产级 NL2SQL 必须带分区、权限和扫描成本控制？"
   },
   {
-    "title": "CLAUDE.md 指南：Claude Code 的项目记忆该怎么写？",
-    "url": "http://xiaolinnote.com/claudecode/playbook/cc_claude_md.html",
-    "path": "/claudecode/playbook/cc_claude_md.html"
+    "id": "Q140",
+    "source": "interview_core",
+    "category": "数据仓库",
+    "title": "为什么实时窗口和离线日报指标不能混着解释？"
   },
   {
-    "title": "Claude Code 大型代码库实战：百万行代码怎么扛得住？",
-    "url": "http://xiaolinnote.com/claudecode/playbook/cc_large_codebase.html",
-    "path": "/claudecode/playbook/cc_large_codebase.html"
+    "id": "Q141",
+    "source": "interview_core",
+    "category": "Agent",
+    "title": "为什么金融信贷 Agent 项目不能只强调用了 LangChain / LangGraph / LangSmith？"
   },
   {
-    "title": "Claude Code Skill 揭秘：Skill 真的只是一份 markdown 吗？",
-    "url": "http://xiaolinnote.com/claudecode/playbook/cc_skills.html",
-    "path": "/claudecode/playbook/cc_skills.html"
+    "id": "Q142",
+    "source": "interview_core",
+    "category": "安全与合规",
+    "title": "模拟面试里为什么一定要准备 bad case 和安全问题？"
   },
   {
-    "title": "SDD 规约驱动开发实战：在 Claude Code 里跑通先规约后编码",
-    "url": "http://xiaolinnote.com/claudecode/playbook/spec_driven_dev.html",
-    "path": "/claudecode/playbook/spec_driven_dev.html"
+    "id": "Q143",
+    "source": "interview_core",
+    "category": "RAG检索增强",
+    "title": "为什么这套项目应该被表达成\"金融信贷离线/实时仓库 + Agent\"而不是单独的 RAG Demo？"
   },
   {
-    "title": "grill-me 使用指南：写代码前，先让 Claude Code 审问你的需求",
-    "url": "http://xiaolinnote.com/claudecode/playbook/grill_me.html",
-    "path": "/claudecode/playbook/grill_me.html"
+    "id": "Q144",
+    "source": "interview_core",
+    "category": "综合",
+    "title": "简历里最值得保留的项目亮点应该是什么？"
   },
   {
-    "title": "superpowers vs grill-me：同一个需求实测，差距到底在哪？",
-    "url": "http://xiaolinnote.com/claudecode/playbook/superpowers_vs_grillme.html",
-    "path": "/claudecode/playbook/superpowers_vs_grillme.html"
+    "id": "Q145",
+    "source": "interview_core",
+    "category": "综合",
+    "title": "作品集目录至少应该包含哪些内容？"
   },
   {
-    "title": "Claude Fable 5 系统提示词详解：1600 行泄漏 prompt 里的工程干货",
-    "url": "http://xiaolinnote.com/claudecode/prompt/fable5_prompt_leak_cl4.html",
-    "path": "/claudecode/prompt/fable5_prompt_leak_cl4.html"
+    "id": "Q146",
+    "source": "interview_core",
+    "category": "综合",
+    "title": "哪些回答信号能让面试官觉得你更接近生产工程师？"
   },
   {
-    "title": "Claude Code 源码拆解：51 万行泄漏代码里的架构设计",
-    "url": "http://xiaolinnote.com/claudecode/source/cc_source.html",
-    "path": "/claudecode/source/cc_source.html"
+    "id": "X001",
+    "source": "xiaolinnote",
+    "category": "Agent图解专栏",
+    "title": "AI Agent 是什么？Agent 面试题万字图解"
   },
   {
-    "title": "Claude Code 主循环 Query 图解：一轮对话是怎么跑起来的？",
-    "url": "http://xiaolinnote.com/claudecode/source/cc_query_loop.html",
-    "path": "/claudecode/source/cc_query_loop.html"
+    "id": "X002",
+    "source": "xiaolinnote",
+    "category": "Agent图解专栏",
+    "title": "OpenClaw 是什么？OpenClaw 面试题万字图解"
   },
   {
-    "title": "Claude Code 上下文管理图解：Compact 压缩机制怎么实现？",
-    "url": "http://xiaolinnote.com/claudecode/source/cc_compact.html",
-    "path": "/claudecode/source/cc_compact.html"
+    "id": "X003",
+    "source": "xiaolinnote",
+    "category": "Agent图解专栏",
+    "title": "Harness Engineering 是什么？AI Agent 越用越聪明的秘密"
   },
   {
-    "title": "Claude Code 代码检索图解：为什么用 grep 而不用 RAG？",
-    "url": "http://xiaolinnote.com/claudecode/source/cc_grep.html",
-    "path": "/claudecode/source/cc_grep.html"
+    "id": "X004",
+    "source": "xiaolinnote",
+    "category": "Agent图解专栏",
+    "title": "Loop Engineering 怎么落地？一条从 0 到 1 的上手路径"
   },
   {
-    "title": "Claude Code 记忆机制图解：为什么不用向量数据库？",
-    "url": "http://xiaolinnote.com/claudecode/source/cc_memory.html",
-    "path": "/claudecode/source/cc_memory.html"
+    "id": "X005",
+    "source": "xiaolinnote",
+    "category": "Agent图解专栏",
+    "title": "Loop Engineering 是什么？AI 编程从 Prompt 到 Loop 的范式转变"
   },
   {
-    "title": "Claude Code 多 Agent 图解：SubAgent 实现机制怎么做？",
-    "url": "http://xiaolinnote.com/claudecode/source/cc_multi_agent.html",
-    "path": "/claudecode/source/cc_multi_agent.html"
+    "id": "X006",
+    "source": "xiaolinnote",
+    "category": "Agent图解专栏",
+    "title": "GraphRAG 和 LightRAG 详解：原理、对比与选型"
   },
   {
-    "title": "Anthropic 40 万次会话研究：用好 AI 编程的关键不是会写代码",
-    "url": "http://xiaolinnote.com/claudecode/insights/expertise_over_coding.html",
-    "path": "/claudecode/insights/expertise_over_coding.html"
+    "id": "X007",
+    "source": "xiaolinnote",
+    "category": "Agent图解专栏",
+    "title": "RAG 是什么？RAG 检索增强面试题万字图解"
   },
   {
-    "title": "Claude Code 基础入门",
-    "url": "http://xiaolinnote.com/claudecode/basics/",
-    "path": "/claudecode/basics/"
+    "id": "X008",
+    "source": "xiaolinnote",
+    "category": "Agent",
+    "title": "1. 什么是 Agent？与大模型有什么本质不同？"
   },
   {
-    "title": "Claude Code 实践技巧",
-    "url": "http://xiaolinnote.com/claudecode/playbook/",
-    "path": "/claudecode/playbook/"
+    "id": "X009",
+    "source": "xiaolinnote",
+    "category": "Agent",
+    "title": "10. 什么是 Multi-Agent？"
   },
   {
-    "title": "Claude Code 提示词工程",
-    "url": "http://xiaolinnote.com/claudecode/prompt/",
-    "path": "/claudecode/prompt/"
+    "id": "X010",
+    "source": "xiaolinnote",
+    "category": "Agent",
+    "title": "11. 说说 Single-Agent 和 Multi-Agent 的设计方案？"
   },
   {
-    "title": "Claude Code 源码解析",
-    "url": "http://xiaolinnote.com/claudecode/source/",
-    "path": "/claudecode/source/"
+    "id": "X011",
+    "source": "xiaolinnote",
+    "category": "Agent",
+    "title": "12. Agent 记忆压缩通常有哪些方法？"
   },
   {
-    "title": "Claude Code 行业观察",
-    "url": "http://xiaolinnote.com/claudecode/insights/",
-    "path": "/claudecode/insights/"
+    "id": "X012",
+    "source": "xiaolinnote",
+    "category": "Agent",
+    "title": "13. 在工程实践中，为什么有时候选择「手搓」Agent，而不是直接用成熟框架？"
   },
   {
-    "title": "03｜ 大模型工程面试题",
-    "url": "https://xiaolinnote.com/ai/llm/",
-    "path": "/ai/llm/"
+    "id": "X013",
+    "source": "xiaolinnote",
+    "category": "Agent",
+    "title": "14. 如何赋予 LLM 规划能力？"
   },
   {
-    "title": "02｜ RAG面试题",
-    "url": "http://xiaolinnote.com/ai/rag/",
-    "path": "/ai/rag/"
+    "id": "X014",
+    "source": "xiaolinnote",
+    "category": "Agent",
+    "title": "15. 讲讲 Agent 的反思机制？为什么要用反思？具体怎么实现？"
   },
   {
-    "title": "05｜ LangChain框架面试题",
-    "url": "https://xiaolinnote.com/ai/langchain/",
-    "path": "/ai/langchain/"
+    "id": "X015",
+    "source": "xiaolinnote",
+    "category": "Agent",
+    "title": "16. 如何设计多 Agent 的协作与动态切换机制？"
   },
   {
-    "title": "03｜ LLM工具调用面试题",
-    "url": "http://xiaolinnote.com/ai/tools/",
-    "path": "/ai/tools/"
+    "id": "X016",
+    "source": "xiaolinnote",
+    "category": "Agent",
+    "title": "2. Agent 的基本架构由哪些核心组件构成？"
   },
   {
-    "title": "03｜ 大模型工程面试题",
-    "url": "http://xiaolinnote.com/ai/llm/",
-    "path": "/ai/llm/"
+    "id": "X017",
+    "source": "xiaolinnote",
+    "category": "Agent",
+    "title": "3. Workflow，Agent，Tools 这三个的概念和区别介绍一下？"
   },
   {
-    "title": "05｜ LangChain框架面试题",
-    "url": "http://xiaolinnote.com/ai/langchain/",
-    "path": "/ai/langchain/"
+    "id": "X018",
+    "source": "xiaolinnote",
+    "category": "Agent",
+    "title": "4. 了解哪些其他的 Agent 设计范式？Agent 和 Workflow的区别是什么？"
+  },
+  {
+    "id": "X019",
+    "source": "xiaolinnote",
+    "category": "Agent",
+    "title": "5. Agent 推理模式有哪些？ReAct 是啥？具体是怎么实现的？"
+  },
+  {
+    "id": "X020",
+    "source": "xiaolinnote",
+    "category": "Agent",
+    "title": "6. ReAct、Plan-and-Execute、Reflection 三种范式有什么核心区别？实际项目中该如何选型？"
+  },
+  {
+    "id": "X021",
+    "source": "xiaolinnote",
+    "category": "Agent",
+    "title": "7. 复杂任务怎么做的任务拆分？为什么要拆分？效果如何提升？"
+  },
+  {
+    "id": "X022",
+    "source": "xiaolinnote",
+    "category": "Agent",
+    "title": "8. 请你介绍一下 AI Agent 的记忆机制，并说明在实际开发中应该如何设计记忆模块？"
+  },
+  {
+    "id": "X023",
+    "source": "xiaolinnote",
+    "category": "Agent",
+    "title": "9. Agent 的长短期记忆系统怎么做的？记忆是怎么存的？粒度是多少？怎么用的？"
+  },
+  {
+    "id": "X024",
+    "source": "xiaolinnote",
+    "category": "大模型工程",
+    "title": "1. 什么是大语言模型？和传统 NLP 模型有什么区别？"
+  },
+  {
+    "id": "X025",
+    "source": "xiaolinnote",
+    "category": "大模型工程",
+    "title": "10. SFT 之后还有哪些 Post-Training？RLHF、DPO、GRPO、拒绝采样什么关系？"
+  },
+  {
+    "id": "X026",
+    "source": "xiaolinnote",
+    "category": "大模型工程",
+    "title": "11. 大模型的 DPO 和 PPO 的区别是什么？"
+  },
+  {
+    "id": "X027",
+    "source": "xiaolinnote",
+    "category": "大模型工程",
+    "title": "12. 大模型生成文本时的解码策略有哪些？贪心、Beam Search、采样分别什么时候用？"
+  },
+  {
+    "id": "X028",
+    "source": "xiaolinnote",
+    "category": "大模型工程",
+    "title": "13. 大模型的参数：温度值、Top-P、Top-K 分别是什么？各个场景下的最佳设置是什么？"
+  },
+  {
+    "id": "X029",
+    "source": "xiaolinnote",
+    "category": "大模型工程",
+    "title": "14. KV Cache 是什么？Prompt Caching 的原理是什么？"
+  },
+  {
+    "id": "X030",
+    "source": "xiaolinnote",
+    "category": "大模型工程",
+    "title": "15. 大模型量化是什么？INT8/INT4/AWQ/GPTQ 怎么选？"
+  },
+  {
+    "id": "X031",
+    "source": "xiaolinnote",
+    "category": "大模型工程",
+    "title": "16. 如何写好 Prompt？分享下 Prompt 工程实践经验？"
+  },
+  {
+    "id": "X032",
+    "source": "xiaolinnote",
+    "category": "大模型工程",
+    "title": "17. 什么是 CoT？为啥效果好？它有什么缺点或局限性？"
+  },
+  {
+    "id": "X033",
+    "source": "xiaolinnote",
+    "category": "大模型工程",
+    "title": "18. 大模型为什么会出现幻觉？怎么缓解？"
+  },
+  {
+    "id": "X034",
+    "source": "xiaolinnote",
+    "category": "大模型工程",
+    "title": "19. MoE 混合专家模型是什么？DeepSeek V3、Qwen 为什么用 MoE？"
+  },
+  {
+    "id": "X035",
+    "source": "xiaolinnote",
+    "category": "大模型工程",
+    "title": "2. 讲讲 Transformer 架构基本原理？Encoder 和 Decoder 是什么？"
+  },
+  {
+    "id": "X036",
+    "source": "xiaolinnote",
+    "category": "大模型工程",
+    "title": "20. 大模型部署有哪些主流方案？vLLM、TGI、llama.cpp、SGLang 实际项目里怎么选？"
+  },
+  {
+    "id": "X037",
+    "source": "xiaolinnote",
+    "category": "大模型工程",
+    "title": "21. 大模型能力评测指标有哪些？"
+  },
+  {
+    "id": "X038",
+    "source": "xiaolinnote",
+    "category": "大模型工程",
+    "title": "22. 对比使用过哪些主流大模型？你们项目中最终选用了哪个模型？为什么？"
+  },
+  {
+    "id": "X039",
+    "source": "xiaolinnote",
+    "category": "大模型工程",
+    "title": "3. 多头注意力（MHA）有哪些局限？MQA、GQA、Flash Attention 怎么解决？"
+  },
+  {
+    "id": "X040",
+    "source": "xiaolinnote",
+    "category": "大模型工程",
+    "title": "4. 大模型的位置编码是干什么用的？sin/cos、RoPE、ALiBi 有什么区别？"
+  },
+  {
+    "id": "X041",
+    "source": "xiaolinnote",
+    "category": "大模型工程",
+    "title": "5. 什么是大模型项目的分词器？原理是什么？"
+  },
+  {
+    "id": "X042",
+    "source": "xiaolinnote",
+    "category": "大模型工程",
+    "title": "6. 大模型是怎么训练出来的？"
+  },
+  {
+    "id": "X043",
+    "source": "xiaolinnote",
+    "category": "大模型工程",
+    "title": "7. 什么是 Scaling Law？大模型的「涌现能力」是怎么回事？"
+  },
+  {
+    "id": "X044",
+    "source": "xiaolinnote",
+    "category": "大模型工程",
+    "title": "8. 大模型微调的方案有哪些？"
+  },
+  {
+    "id": "X045",
+    "source": "xiaolinnote",
+    "category": "大模型工程",
+    "title": "9. 请讲一下 LoRA 技术，除了减少参数量，它还有哪些优点？"
+  },
+  {
+    "id": "X046",
+    "source": "xiaolinnote",
+    "category": "RAG 检索增强",
+    "title": "1. 什么是 RAG？详细描述一个完整 RAG 系统的详细工作流程？"
+  },
+  {
+    "id": "X047",
+    "source": "xiaolinnote",
+    "category": "RAG 检索增强",
+    "title": "10. 你使用 RAG 给大模型一个输入，系统是怎样的工作流程？"
+  },
+  {
+    "id": "X048",
+    "source": "xiaolinnote",
+    "category": "RAG 检索增强",
+    "title": "11. 请你介绍一下向量检索和关键词检索的区别？"
+  },
+  {
+    "id": "X049",
+    "source": "xiaolinnote",
+    "category": "RAG 检索增强",
+    "title": "12. 如何润色用户的 Query（Query Rewrite）？目的是什么？"
+  },
+  {
+    "id": "X050",
+    "source": "xiaolinnote",
+    "category": "RAG 检索增强",
+    "title": "13. 什么是多路召回？具体怎么做？"
+  },
+  {
+    "id": "X051",
+    "source": "xiaolinnote",
+    "category": "RAG 检索增强",
+    "title": "14. RAG 检索优化策略有哪些？"
+  },
+  {
+    "id": "X052",
+    "source": "xiaolinnote",
+    "category": "RAG 检索增强",
+    "title": "15. 了解哪些更复杂的 RAG 范式？"
+  },
+  {
+    "id": "X053",
+    "source": "xiaolinnote",
+    "category": "RAG 检索增强",
+    "title": "16. 在什么场景下，你会选择使用图数据库来增强传统的向量检索？"
+  },
+  {
+    "id": "X054",
+    "source": "xiaolinnote",
+    "category": "RAG 检索增强",
+    "title": "17. 如何规避 RAG 系统中大模型的幻觉？"
+  },
+  {
+    "id": "X055",
+    "source": "xiaolinnote",
+    "category": "RAG 检索增强",
+    "title": "18. 怎么量化你的 RAG 效果？"
+  },
+  {
+    "id": "X056",
+    "source": "xiaolinnote",
+    "category": "RAG 检索增强",
+    "title": "19. RAG 知识库如何实现动态与持续更新？"
+  },
+  {
+    "id": "X057",
+    "source": "xiaolinnote",
+    "category": "RAG 检索增强",
+    "title": "2. 大模型的 RAG 主要用来解决什么问题？"
+  },
+  {
+    "id": "X058",
+    "source": "xiaolinnote",
+    "category": "RAG 检索增强",
+    "title": "20. 在实际落地中，你觉得 RAG 最难的地方是哪里？"
+  },
+  {
+    "id": "X059",
+    "source": "xiaolinnote",
+    "category": "RAG 检索增强",
+    "title": "3. 相比直接微调 LLM，RAG 解决了什么问题？微调和 RAG 各自的优劣势是什么？"
+  },
+  {
+    "id": "X060",
+    "source": "xiaolinnote",
+    "category": "RAG 检索增强",
+    "title": "4. RAG 中的文档是怎么存的？粒度是多大？详细说说文档切割（Chunking）策略？"
+  },
+  {
+    "id": "X061",
+    "source": "xiaolinnote",
+    "category": "RAG 检索增强",
+    "title": "5. 怎么规避语义被切割掉的问题？"
+  },
+  {
+    "id": "X062",
+    "source": "xiaolinnote",
+    "category": "RAG 检索增强",
+    "title": "6. 在 RAG 中 Embedding 究竟是什么？如何选择和评估一个 Embedding 模型？"
+  },
+  {
+    "id": "X063",
+    "source": "xiaolinnote",
+    "category": "RAG 检索增强",
+    "title": "7. Embedding 有哪几种算法你了解过吗？"
+  },
+  {
+    "id": "X064",
+    "source": "xiaolinnote",
+    "category": "RAG 检索增强",
+    "title": "8. 什么是向量数据库？有没有做过向量数据库的对比选型？"
+  },
+  {
+    "id": "X065",
+    "source": "xiaolinnote",
+    "category": "RAG 检索增强",
+    "title": "9. 讲讲你用的向量数据库？数据量级是多大？性能如何？遇到过性能瓶颈吗？"
+  },
+  {
+    "id": "X066",
+    "source": "xiaolinnote",
+    "category": "LLM工具调用与协议",
+    "title": "1. 什么是 Function Calling ？原理是什么？"
+  },
+  {
+    "id": "X067",
+    "source": "xiaolinnote",
+    "category": "LLM工具调用与协议",
+    "title": "10. MCP 和 Agent Skill 的区别是什么？"
+  },
+  {
+    "id": "X068",
+    "source": "xiaolinnote",
+    "category": "LLM工具调用与协议",
+    "title": "11. Function Calling、Skill、MCP 这三个有什么区别？"
+  },
+  {
+    "id": "X069",
+    "source": "xiaolinnote",
+    "category": "LLM工具调用与协议",
+    "title": "12. 什么是 A2A 协议？它和 MCP 协议的区别是什么？"
+  },
+  {
+    "id": "X070",
+    "source": "xiaolinnote",
+    "category": "LLM工具调用与协议",
+    "title": "13. MCP 协议通常采用什么通信方式？"
+  },
+  {
+    "id": "X071",
+    "source": "xiaolinnote",
+    "category": "LLM工具调用与协议",
+    "title": "14. 说说 WebSocket 和 SSE 通信的区别及局限性？"
+  },
+  {
+    "id": "X072",
+    "source": "xiaolinnote",
+    "category": "LLM工具调用与协议",
+    "title": "15. 为什么要用 WebRTC 协议？它和 WebSocket（WS）在 AI 对话流中的核心差异是什么？"
+  },
+  {
+    "id": "X073",
+    "source": "xiaolinnote",
+    "category": "LLM工具调用与协议",
+    "title": "16. 有没有用过大模型的网关框架？网关层解决了什么问题？"
+  },
+  {
+    "id": "X074",
+    "source": "xiaolinnote",
+    "category": "LLM工具调用与协议",
+    "title": "2. LLM 是如何学会调用外部工具的？"
+  },
+  {
+    "id": "X075",
+    "source": "xiaolinnote",
+    "category": "LLM工具调用与协议",
+    "title": "3. 大模型的 Function Call 能力是怎么训练出来的？"
+  },
+  {
+    "id": "X076",
+    "source": "xiaolinnote",
+    "category": "LLM工具调用与协议",
+    "title": "4. 什么是 MCP（模型上下文协议）？讲讲它的核心内容？"
+  },
+  {
+    "id": "X077",
+    "source": "xiaolinnote",
+    "category": "LLM工具调用与协议",
+    "title": "5. MCP 由哪几部分组成？"
+  },
+  {
+    "id": "X078",
+    "source": "xiaolinnote",
+    "category": "LLM工具调用与协议",
+    "title": "6. MCP 和 Function Calling 有什么区别？有没有实际跑过 MCP？"
+  },
+  {
+    "id": "X079",
+    "source": "xiaolinnote",
+    "category": "LLM工具调用与协议",
+    "title": "7. Function Calling 也属于工具调用，请问什么场景下使用 Function Calling，什么场景下使用 MCP？"
+  },
+  {
+    "id": "X080",
+    "source": "xiaolinnote",
+    "category": "LLM工具调用与协议",
+    "title": "8. 为什么有些特定的推理模型不支持 MCP 协议？"
+  },
+  {
+    "id": "X081",
+    "source": "xiaolinnote",
+    "category": "LLM工具调用与协议",
+    "title": "9. Skill 是什么？"
+  },
+  {
+    "id": "X082",
+    "source": "xiaolinnote",
+    "category": "Claude Code图解专栏",
+    "title": "Claude Code /powerup 教程：18 个官方互动课程全解析"
+  },
+  {
+    "id": "X083",
+    "source": "xiaolinnote",
+    "category": "Claude Code图解专栏",
+    "title": "Claude Code 使用教程：新手入门必学的基础技巧"
+  },
+  {
+    "id": "X084",
+    "source": "xiaolinnote",
+    "category": "Claude Code图解专栏",
+    "title": "Anthropic 40 万次会话研究：用好 AI 编程的关键不是会写代码"
+  },
+  {
+    "id": "X085",
+    "source": "xiaolinnote",
+    "category": "Claude Code图解专栏",
+    "title": "CLAUDE.md 指南：Claude Code 的项目记忆该怎么写？"
+  },
+  {
+    "id": "X086",
+    "source": "xiaolinnote",
+    "category": "Claude Code图解专栏",
+    "title": "Claude Code Skill 揭秘：Skill 真的只是一份 markdown 吗？"
+  },
+  {
+    "id": "X087",
+    "source": "xiaolinnote",
+    "category": "Claude Code图解专栏",
+    "title": "Claude Code 大型代码库实战：百万行代码怎么扛得住？"
+  },
+  {
+    "id": "X088",
+    "source": "xiaolinnote",
+    "category": "Claude Code图解专栏",
+    "title": "SDD 规约驱动开发实战：在 Claude Code 里跑通先规约后编码"
+  },
+  {
+    "id": "X089",
+    "source": "xiaolinnote",
+    "category": "Claude Code图解专栏",
+    "title": "grill-me 使用指南：写代码前，先让 Claude Code 审问你的需求"
+  },
+  {
+    "id": "X090",
+    "source": "xiaolinnote",
+    "category": "Claude Code图解专栏",
+    "title": "superpowers vs grill-me：同一个需求实测，差距到底在哪？"
+  },
+  {
+    "id": "X091",
+    "source": "xiaolinnote",
+    "category": "Claude Code图解专栏",
+    "title": "Claude Fable 5 系统提示词详解：1600 行泄漏 prompt 里的工程干货"
+  },
+  {
+    "id": "X092",
+    "source": "xiaolinnote",
+    "category": "Claude Code图解专栏",
+    "title": "Claude Code 上下文管理图解：Compact 压缩机制怎么实现？"
+  },
+  {
+    "id": "X093",
+    "source": "xiaolinnote",
+    "category": "Claude Code图解专栏",
+    "title": "Claude Code 主循环 Query 图解：一轮对话是怎么跑起来的？"
+  },
+  {
+    "id": "X094",
+    "source": "xiaolinnote",
+    "category": "Claude Code图解专栏",
+    "title": "Claude Code 代码检索图解：为什么用 grep 而不用 RAG？"
+  },
+  {
+    "id": "X095",
+    "source": "xiaolinnote",
+    "category": "Claude Code图解专栏",
+    "title": "Claude Code 多 Agent 图解：SubAgent 实现机制怎么做？"
+  },
+  {
+    "id": "X096",
+    "source": "xiaolinnote",
+    "category": "Claude Code图解专栏",
+    "title": "Claude Code 源码拆解：51 万行泄漏代码里的架构设计"
+  },
+  {
+    "id": "X097",
+    "source": "xiaolinnote",
+    "category": "Claude Code图解专栏",
+    "title": "Claude Code 记忆机制图解：为什么不用向量数据库？"
+  },
+  {
+    "id": "L001",
+    "source": "learning",
+    "category": "AI应用开发",
+    "title": "请举例说明一个让你记住一辈子的例子（20min）如何实现？"
+  },
+  {
+    "id": "L002",
+    "source": "learning",
+    "category": "AI应用开发",
+    "title": "请举例说明从代码看 PIT 正确性（1h）如何实现？"
+  },
+  {
+    "id": "L003",
+    "source": "learning",
+    "category": "AI应用开发",
+    "title": "请讲讲PIT 样本构建 — 时间泄漏是 AI 工程师的第一课中的动手练习（1.5h）"
+  },
+  {
+    "id": "L004",
+    "source": "learning",
+    "category": "AI应用开发",
+    "title": "请讲讲PIT 样本构建 — 时间泄漏是 AI 工程师的第一课中的跨业务思考（30min）"
+  },
+  {
+    "id": "L005",
+    "source": "learning",
+    "category": "AI应用开发",
+    "title": "请讲讲PIT 样本构建 — 时间泄漏是 AI 工程师的第一课中的今日要点"
+  },
+  {
+    "id": "L006",
+    "source": "learning",
+    "category": "AI应用开发",
+    "title": "请讲讲PIT 样本构建 — 时间泄漏是 AI 工程师的第一课中的检查清单"
+  },
+  {
+    "id": "L007",
+    "source": "learning",
+    "category": "AI应用开发",
+    "title": "请说说原始事件 vs 特征向量（20min）"
+  },
+  {
+    "id": "L008",
+    "source": "learning",
+    "category": "AI应用开发",
+    "title": "请讲讲特征工程 — 从事件流到特征向量的三种模式中的三种特征构造模式（1.5h）"
+  },
+  {
+    "id": "L009",
+    "source": "learning",
+    "category": "AI应用开发",
+    "title": "请讲讲特征工程 — 从事件流到特征向量的三种模式中的动手练习（1.5h）"
+  },
+  {
+    "id": "L010",
+    "source": "learning",
+    "category": "AI应用开发",
+    "title": "请讲讲特征工程 — 从事件流到特征向量的三种模式中的跨业务思考（30min）"
+  },
+  {
+    "id": "L011",
+    "source": "learning",
+    "category": "AI应用开发",
+    "title": "请讲讲特征工程 — 从事件流到特征向量的三种模式中的今日要点"
+  },
+  {
+    "id": "L012",
+    "source": "learning",
+    "category": "AI应用开发",
+    "title": "为什么不能只用模型？（20min）"
+  },
+  {
+    "id": "L013",
+    "source": "learning",
+    "category": "AI应用开发",
+    "title": "请举例说明核心代码：`inference_pipeline.py` 的 execute()（1h）如何实现？"
+  },
+  {
+    "id": "L014",
+    "source": "learning",
+    "category": "AI应用开发",
+    "title": "请讲讲规则 + 模型融合 — 四层决策架构中的动手练习（1.5h）"
+  },
+  {
+    "id": "L015",
+    "source": "learning",
+    "category": "AI应用开发",
+    "title": "请讲讲规则 + 模型融合 — 四层决策架构中的跨业务思考（30min）"
+  },
+  {
+    "id": "L016",
+    "source": "learning",
+    "category": "AI应用开发",
+    "title": "请讲讲模型评估 + 线上监控 + 自动熔断中的模型不是训完就结束了（20min）"
+  },
+  {
+    "id": "L017",
+    "source": "learning",
+    "category": "AI应用开发",
+    "title": "请讲讲模型评估 + 线上监控 + 自动熔断中的上线前评估：四个核心指标（1h）"
+  },
+  {
+    "id": "L018",
+    "source": "learning",
+    "category": "AI应用开发",
+    "title": "请讲讲模型评估 + 线上监控 + 自动熔断中的熔断器：不让坏模型继续害人（40min）"
+  },
+  {
+    "id": "L019",
+    "source": "learning",
+    "category": "AI应用开发",
+    "title": "请讲讲模型评估 + 线上监控 + 自动熔断中的动手练习（1.5h）"
+  },
+  {
+    "id": "L020",
+    "source": "learning",
+    "category": "AI应用开发",
+    "title": "请举例说明三层降级代码精读（1h）如何实现？"
+  },
+  {
+    "id": "L021",
+    "source": "learning",
+    "category": "AI应用开发",
+    "title": "请讲讲生产级降级 + 容错设计中的动手练习（1.5h）"
+  },
+  {
+    "id": "L022",
+    "source": "learning",
+    "category": "AI应用开发",
+    "title": "请讲讲生产级降级 + 容错设计中的跨业务思考（30min）"
+  },
+  {
+    "id": "L023",
+    "source": "learning",
+    "category": "AI应用开发",
+    "title": "请讲讲★ 参考答案中的NL2SQL：让业务人员用自然语言查数仓（1.5h）"
+  },
+  {
+    "id": "L024",
+    "source": "learning",
+    "category": "AI应用开发",
+    "title": "请讲讲★ 参考答案中的RAG：让 LLM 基于项目文档回答（1h）"
+  },
+  {
+    "id": "L025",
+    "source": "learning",
+    "category": "AI应用开发",
+    "title": "请讲讲★ 参考答案中的LangGraph：多步骤 AI 工作流（40min）"
+  },
+  {
+    "id": "L026",
+    "source": "learning",
+    "category": "AI应用开发",
+    "title": "请讲讲★ 参考答案中的动手练习（1.5h）"
+  },
+  {
+    "id": "L027",
+    "source": "learning",
+    "category": "AI应用开发",
+    "title": "请讲讲可解释性 + 综合项目：智能客服质检系统中的SHAP 可解释性（1h）"
+  },
+  {
+    "id": "L028",
+    "source": "learning",
+    "category": "AI应用开发",
+    "title": "请讲讲可解释性 + 综合项目：智能客服质检系统中的综合项目：智能客服质检系统（3h）"
+  },
+  {
+    "id": "L029",
+    "source": "learning",
+    "category": "AI应用开发",
+    "title": "请讲讲可解释性 + 综合项目：智能客服质检系统中的自评表（30min）"
+  },
+  {
+    "id": "L030",
+    "source": "learning",
+    "category": "AI应用开发",
+    "title": "请讲讲可解释性 + 综合项目：智能客服质检系统中的一周回顾"
+  },
+  {
+    "id": "L031",
+    "source": "learning",
+    "category": "数据仓库",
+    "title": "为什么需要分层？（30min）"
+  },
+  {
+    "id": "L032",
+    "source": "learning",
+    "category": "数据仓库",
+    "title": "请讲讲分层数据仓库架构设计与 DDL中的ODS 层：原始数据 1:1 镜像（1h）"
+  },
+  {
+    "id": "L033",
+    "source": "learning",
+    "category": "数据仓库",
+    "title": "请讲讲分层数据仓库架构设计与 DDL中的DWD 层：清洗不聚合（40min）"
+  },
+  {
+    "id": "L034",
+    "source": "learning",
+    "category": "数据仓库",
+    "title": "请讲讲分层数据仓库架构设计与 DDL中的DWS 层：聚合建模（30min）"
+  },
+  {
+    "id": "L035",
+    "source": "learning",
+    "category": "数据仓库",
+    "title": "请讲讲分层数据仓库架构设计与 DDL中的ADS 层：数据产品（30min）"
+  },
+  {
+    "id": "L036",
+    "source": "learning",
+    "category": "数据仓库",
+    "title": "请讲讲分层数据仓库架构设计与 DDL中的DDL 写作规范（30min）"
+  },
+  {
+    "id": "L037",
+    "source": "learning",
+    "category": "数据仓库",
+    "title": "请讲讲分层数据仓库架构设计与 DDL中的今日检查清单"
+  },
+  {
+    "id": "L038",
+    "source": "learning",
+    "category": "数据仓库",
+    "title": "为什么简单的\"通过/不通过\"不够用？（20min）"
+  },
+  {
+    "id": "L039",
+    "source": "learning",
+    "category": "数据仓库",
+    "title": "请举例说明项目中的扣分制实现（1h）如何实现？"
+  },
+  {
+    "id": "L040",
+    "source": "learning",
+    "category": "数据仓库",
+    "title": "请讲讲数据质量体系 — 扣分制 vs 二元判定中的动手练习（1.5h）"
+  },
+  {
+    "id": "L041",
+    "source": "learning",
+    "category": "数据仓库",
+    "title": "请讲讲数据质量体系 — 扣分制 vs 二元判定中的跨业务思考（30min）"
+  },
+  {
+    "id": "L042",
+    "source": "learning",
+    "category": "数据仓库",
+    "title": "请讲讲数据质量体系 — 扣分制 vs 二元判定中的今日要点"
+  },
+  {
+    "id": "L043",
+    "source": "learning",
+    "category": "数据仓库",
+    "title": "请讲讲维度建模 + 宽表设计中的核心概念：粒度（30min）"
+  },
+  {
+    "id": "L044",
+    "source": "learning",
+    "category": "数据仓库",
+    "title": "请讲讲维度建模 + 宽表设计中的项目宽表：从 3 张 DWD 到 1 张 DWS（1h）"
+  },
+  {
+    "id": "L045",
+    "source": "learning",
+    "category": "数据仓库",
+    "title": "请讲讲维度建模 + 宽表设计中的动手练习（2.5h）"
+  },
+  {
+    "id": "L046",
+    "source": "learning",
+    "category": "数据仓库",
+    "title": "请讲讲维度建模 + 宽表设计中的跨业务思考（30min）"
+  },
+  {
+    "id": "L047",
+    "source": "learning",
+    "category": "数据仓库",
+    "title": "请讲讲数据血缘 + SchemaRegistry 元数据管理中的没有血缘的数仓 = 没有地图的城市（20min）"
+  },
+  {
+    "id": "L048",
+    "source": "learning",
+    "category": "数据仓库",
+    "title": "请讲讲数据血缘 + SchemaRegistry 元数据管理中的SchemaRegistry：数据仓库的\"目录服务\"（1h）"
+  },
+  {
+    "id": "L049",
+    "source": "learning",
+    "category": "数据仓库",
+    "title": "请讲讲数据血缘 + SchemaRegistry 元数据管理中的数据血缘：每列追溯来源（40min）"
+  },
+  {
+    "id": "L050",
+    "source": "learning",
+    "category": "数据仓库",
+    "title": "请讲讲数据血缘 + SchemaRegistry 元数据管理中的动手练习：为 SchemaRegistry 添加新功能（1h）"
+  },
+  {
+    "id": "L051",
+    "source": "learning",
+    "category": "数据仓库",
+    "title": "请讲讲数据血缘 + SchemaRegistry 元数据管理中的今天要点"
+  },
+  {
+    "id": "L052",
+    "source": "learning",
+    "category": "数据仓库",
+    "title": "请讲讲PII 脱敏 + DDL 规范 + 合规中的脱敏不是\"全删\"——是\"保留该保留的\"（30min）"
+  },
+  {
+    "id": "L053",
+    "source": "learning",
+    "category": "数据仓库",
+    "title": "请讲讲PII 脱敏 + DDL 规范 + 合规中的DDL 写作规范（1h）"
+  },
+  {
+    "id": "L054",
+    "source": "learning",
+    "category": "数据仓库",
+    "title": "请讲讲PII 脱敏 + DDL 规范 + 合规中的动手练习（1.5h）"
+  },
+  {
+    "id": "L055",
+    "source": "learning",
+    "category": "数据仓库",
+    "title": "请讲讲PII 脱敏 + DDL 规范 + 合规中的跨业务思考（30min）"
+  },
+  {
+    "id": "L056",
+    "source": "learning",
+    "category": "数据仓库",
+    "title": "请讲讲分区策略 + 数据产品设计中的分区是数仓性能的基石（40min）"
+  },
+  {
+    "id": "L057",
+    "source": "learning",
+    "category": "数据仓库",
+    "title": "请讲讲分区策略 + 数据产品设计中的ADS 数据产品：不是\"把 DWS 改个名\"（1h）"
+  },
+  {
+    "id": "L058",
+    "source": "learning",
+    "category": "数据仓库",
+    "title": "请讲讲分区策略 + 数据产品设计中的动手练习（1.5h）"
+  },
+  {
+    "id": "L059",
+    "source": "learning",
+    "category": "数据仓库",
+    "title": "请讲讲综合项目 — 为在线教育平台设计完整数仓中的业务理解（30min）"
+  },
+  {
+    "id": "L060",
+    "source": "learning",
+    "category": "数据仓库",
+    "title": "请谈谈设计任务（2h）怎么设计？"
+  },
+  {
+    "id": "L061",
+    "source": "learning",
+    "category": "数据仓库",
+    "title": "请讲讲综合项目 — 为在线教育平台设计完整数仓中的自评表（20min）"
+  },
+  {
+    "id": "L062",
+    "source": "learning",
+    "category": "信贷风控建模",
+    "title": "请讲讲XGBoost 训练 + 模型评估完整指南中的XGBoost 核心概念（30min）"
+  },
+  {
+    "id": "L063",
+    "source": "learning",
+    "category": "信贷风控建模",
+    "title": "请详细讲解完整训练流程（1h）"
+  },
+  {
+    "id": "L064",
+    "source": "learning",
+    "category": "信贷风控建模",
+    "title": "请讲讲XGBoost 训练 + 模型评估完整指南中的模型评估指标体系（1h）"
+  },
+  {
+    "id": "L065",
+    "source": "learning",
+    "category": "信贷风控建模",
+    "title": "请讲讲XGBoost 训练 + 模型评估完整指南中的动手练习：完整训练+评估（1.5h）"
+  },
+  {
+    "id": "L066",
+    "source": "learning",
+    "category": "信贷风控建模",
+    "title": "面试官问：常见问题你会怎么回答？"
+  },
+  {
+    "id": "L067",
+    "source": "learning",
+    "category": "信贷风控建模",
+    "title": "为什么需要模型训练？"
+  },
+  {
+    "id": "L068",
+    "source": "learning",
+    "category": "信贷风控建模",
+    "title": "模型训练怎么做：全流程拆解"
+  },
+  {
+    "id": "L069",
+    "source": "learning",
+    "category": "信贷风控建模",
+    "title": "请举例说明更多实际例子如何实现？"
+  },
+  {
+    "id": "L070",
+    "source": "learning",
+    "category": "信贷风控建模",
+    "title": "请讲讲数据已按时间切分，且无泄漏中的训练完成后的持续迭代闭环"
+  },
+  {
+    "id": "L071",
+    "source": "learning",
+    "category": "信贷风控建模",
+    "title": "请讲讲补充/01_黑白名单建立.md中的黑名单的建立方式"
+  },
+  {
+    "id": "L072",
+    "source": "learning",
+    "category": "信贷风控建模",
+    "title": "请讲讲补充/01_黑白名单建立.md中的白名单的建立方式"
+  },
+  {
+    "id": "L073",
+    "source": "learning",
+    "category": "信贷风控建模",
+    "title": "请举例说明技术实现细节如何实现？"
+  },
+  {
+    "id": "L074",
+    "source": "learning",
+    "category": "信贷风控建模",
+    "title": "请详细讲解更新与监控机制"
+  },
+  {
+    "id": "L075",
+    "source": "learning",
+    "category": "综合",
+    "title": "什么是特征"
+  },
+  {
+    "id": "L076",
+    "source": "learning",
+    "category": "综合",
+    "title": "请讲讲补充/02_Feature 详细解释，作用，实现，应用.md中的特征的作用"
+  },
+  {
+    "id": "L077",
+    "source": "learning",
+    "category": "综合",
+    "title": "请谈谈特征工程的实现：从设计到服务怎么设计？"
+  },
+  {
+    "id": "L078",
+    "source": "learning",
+    "category": "综合",
+    "title": "请讲讲补充/02_Feature 详细解释，作用，实现，应用.md中的特征在不同场景中的应用实例"
+  },
+  {
+    "id": "L079",
+    "source": "learning",
+    "category": "LLM与AI工程",
+    "title": "RAG 解决了什么问题？（20min）"
+  },
+  {
+    "id": "L080",
+    "source": "learning",
+    "category": "LLM与AI工程",
+    "title": "请讲讲RAG 全链路详解：从文档到问答中的RAG 的核心步骤（1.5h）"
+  },
+  {
+    "id": "L081",
+    "source": "learning",
+    "category": "LLM与AI工程",
+    "title": "请讲讲RAG 全链路详解：从文档到问答中的要求"
+  },
+  {
+    "id": "L082",
+    "source": "learning",
+    "category": "LLM与AI工程",
+    "title": "请讲讲RAG 全链路详解：从文档到问答中的动手练习：构建一个最小 RAG 系统（1.5h）"
+  },
+  {
+    "id": "L083",
+    "source": "learning",
+    "category": "LLM与AI工程",
+    "title": "请讲讲RAG 全链路详解：从文档到问答中的RAG 的常见陷阱"
+  },
+  {
+    "id": "L084",
+    "source": "learning",
+    "category": "信贷风控建模",
+    "title": "先说清三个概念分别是什么"
+  },
+  {
+    "id": "L085",
+    "source": "learning",
+    "category": "信贷风控建模",
+    "title": "请说说XGBoost 与机器学习的关系：局部 vs 整体"
+  },
+  {
+    "id": "L086",
+    "source": "learning",
+    "category": "信贷风控建模",
+    "title": "请说说机器学习和深度学习的核心区别"
+  },
+  {
+    "id": "L087",
+    "source": "learning",
+    "category": "信贷风控建模",
+    "title": "结合多场景，看它们如何选型（附例子）"
+  },
+  {
+    "id": "L088",
+    "source": "learning",
+    "category": "信贷风控建模",
+    "title": "请讲讲补充/02_XGBoost，机器学习和深度学习区别.md中的总结：一句话抓住精髓"
+  },
+  {
+    "id": "L089",
+    "source": "learning",
+    "category": "信贷风控建模",
+    "title": "请讲讲补充/02_abc 卡以及其他领域对应模型.md中的A/B/C 卡在信贷中的标准定义"
+  },
+  {
+    "id": "L090",
+    "source": "learning",
+    "category": "信贷风控建模",
+    "title": "请讲讲补充/02_abc 卡以及其他领域对应模型.md中的其他行业中的对应模型（换了个名字）"
+  },
+  {
+    "id": "L091",
+    "source": "learning",
+    "category": "信贷风控建模",
+    "title": "为什么其他行业不叫 A/B/C 卡？"
+  },
+  {
+    "id": "L092",
+    "source": "learning",
+    "category": "LLM与AI工程",
+    "title": "请讲讲feature_service 和 rule_engine 作为依赖注入中的FastAPI 的核心特性"
+  },
+  {
+    "id": "L093",
+    "source": "learning",
+    "category": "LLM与AI工程",
+    "title": "请讲讲feature_service 和 rule_engine 作为依赖注入中的在 AI/ML 系统中的具体作用"
+  },
+  {
+    "id": "L094",
+    "source": "learning",
+    "category": "LLM与AI工程",
+    "title": "为什么选 FastAPI 而不是 Flask？"
+  },
+  {
+    "id": "L095",
+    "source": "learning",
+    "category": "信贷风控建模",
+    "title": "ML 系统是什么？"
+  },
+  {
+    "id": "L096",
+    "source": "learning",
+    "category": "信贷风控建模",
+    "title": "请讲讲补充/02_ml 系统以及关键组成应用.md中的ML 系统的核心组成"
+  },
+  {
+    "id": "L097",
+    "source": "learning",
+    "category": "信贷风控建模",
+    "title": "ML 系统的作用（为什么需要它）"
+  },
+  {
+    "id": "L098",
+    "source": "learning",
+    "category": "信贷风控建模",
+    "title": "请讲讲补充/02_ml 系统以及关键组成应用.md中的在信贷风控中的具体作用实例"
+  },
+  {
+    "id": "L099",
+    "source": "learning",
+    "category": "信贷风控建模",
+    "title": "请讲讲补充/02_规则引擎，决策树，逻辑回归评分卡，信用分，XGBoost，高精度确定性树模型，A 卡，b 卡.md中的逐个详细解释"
+  },
+  {
+    "id": "L100",
+    "source": "learning",
+    "category": "信贷风控建模",
+    "title": "请讲讲补充/02_规则引擎，决策树，逻辑回归评分卡，信用分，XGBoost，高精度确定性树模型，A 卡，b 卡.md中的它们之间的联系"
+  },
+  {
+    "id": "L101",
+    "source": "learning",
+    "category": "信贷风控建模",
+    "title": "请讲讲补充/02_规则引擎，决策树，逻辑回归评分卡，信用分，XGBoost，高精度确定性树模型，A 卡，b 卡.md中的作用总结"
+  },
+  {
+    "id": "L102",
+    "source": "learning",
+    "category": "信贷风控建模",
+    "title": "具体如何使用（结合生产项目）"
+  },
+  {
+    "id": "L103",
+    "source": "learning",
+    "category": "LLM与AI工程",
+    "title": "什么是向量数据库？（20min）"
+  },
+  {
+    "id": "L104",
+    "source": "learning",
+    "category": "LLM与AI工程",
+    "title": "请说说主流向量数据库对比（15min）"
+  },
+  {
+    "id": "L105",
+    "source": "learning",
+    "category": "LLM与AI工程",
+    "title": "请详细讲解核心概念与原理（40min）"
+  },
+  {
+    "id": "L106",
+    "source": "learning",
+    "category": "LLM与AI工程",
+    "title": "请举例说明动手实战：用 Chroma 搭建 RAG 知识库（1h）如何实现？"
+  },
+  {
+    "id": "L107",
+    "source": "learning",
+    "category": "LLM与AI工程",
+    "title": "请讲讲向量数据库：从概念到实战中的进阶：Milvus 生产部署"
+  },
+  {
+    "id": "L108",
+    "source": "learning",
+    "category": "LLM与AI工程",
+    "title": "面试官问：常见问题你会怎么回答？"
+  },
+  {
+    "id": "L109",
+    "source": "learning",
+    "category": "LLM与AI工程",
+    "title": "请说说主流 LLM API 对比（15min）"
+  },
+  {
+    "id": "L110",
+    "source": "learning",
+    "category": "LLM与AI工程",
+    "title": "请讲讲LLM API 调用：从 Prompt 到 Function Calling中的API 调用的四种模式（1h）"
+  },
+  {
+    "id": "L111",
+    "source": "learning",
+    "category": "LLM与AI工程",
+    "title": "请讲讲LLM API 调用：从 Prompt 到 Function Calling中的输出"
+  },
+  {
+    "id": "L112",
+    "source": "learning",
+    "category": "LLM与AI工程",
+    "title": "请讲讲LLM API 调用：从 Prompt 到 Function Calling中的Token 管理与成本控制"
+  },
+  {
+    "id": "L113",
+    "source": "learning",
+    "category": "LLM与AI工程",
+    "title": "请讲讲LLM API 调用：从 Prompt 到 Function Calling中的动手练习"
+  },
+  {
+    "id": "L114",
+    "source": "learning",
+    "category": "LLM与AI工程",
+    "title": "面试官问：常见问题你会怎么回答？"
+  },
+  {
+    "id": "L115",
+    "source": "learning",
+    "category": "LLM与AI工程",
+    "title": "什么是微调？（20min）"
+  },
+  {
+    "id": "L116",
+    "source": "learning",
+    "category": "LLM与AI工程",
+    "title": "请讲讲PyTorch 微调：从原理到 LoRA中的PyTorch 基础：训练三板斧（40min）"
+  },
+  {
+    "id": "L117",
+    "source": "learning",
+    "category": "LLM与AI工程",
+    "title": "请讲讲PyTorch 微调：从原理到 LoRA中的LoRA：高效微调（1h）"
+  },
+  {
+    "id": "L118",
+    "source": "learning",
+    "category": "LLM与AI工程",
+    "title": "请说说LoRA 参数选择指南"
+  },
+  {
+    "id": "L119",
+    "source": "learning",
+    "category": "LLM与AI工程",
+    "title": "请讲讲PyTorch 微调：从原理到 LoRA中的动手练习"
+  },
+  {
+    "id": "L120",
+    "source": "learning",
+    "category": "LLM与AI工程",
+    "title": "面试官问：常见问题你会怎么回答？"
+  },
+  {
+    "id": "L121",
+    "source": "learning",
+    "category": "LLM与AI工程",
+    "title": "为什么需要 LangChain（20min）"
+  },
+  {
+    "id": "L122",
+    "source": "learning",
+    "category": "LLM与AI工程",
+    "title": "请讲讲LangChain / LangGraph：LLM 应用开发框架实战中的LangChain 核心概念（40min）"
+  },
+  {
+    "id": "L123",
+    "source": "learning",
+    "category": "LLM与AI工程",
+    "title": "请讲讲LangChain / LangGraph：LLM 应用开发框架实战中的LangGraph：状态机工作流（1h）"
+  },
+  {
+    "id": "L124",
+    "source": "learning",
+    "category": "LLM与AI工程",
+    "title": "请讲讲LangChain / LangGraph：LLM 应用开发框架实战中的LangGraph 的进阶功能"
+  },
+  {
+    "id": "L125",
+    "source": "learning",
+    "category": "LLM与AI工程",
+    "title": "请说说LangChain vs LangGraph 选择指南"
+  },
+  {
+    "id": "L126",
+    "source": "learning",
+    "category": "LLM与AI工程",
+    "title": "请讲讲LangChain / LangGraph：LLM 应用开发框架实战中的动手练习（1h）"
+  },
+  {
+    "id": "L127",
+    "source": "learning",
+    "category": "LLM与AI工程",
+    "title": "面试官问：常见问题你会怎么回答？"
+  },
+  {
+    "id": "L128",
+    "source": "learning",
+    "category": "模型可解释性",
+    "title": "请讲讲补充/07_reason_codes和 SHAP 区别.md中的批量监控：从“看一个人”到“看一群人”"
+  },
+  {
+    "id": "L129",
+    "source": "learning",
+    "category": "模型可解释性",
+    "title": "逻辑漂移：为什么“标准”变了？"
+  },
+  {
+    "id": "L130",
+    "source": "learning",
+    "category": "模型可解释性",
+    "title": "请讲讲补充/07_reason_codes和 SHAP 区别.md中的面试完整话术（建议背诵）"
+  },
+  {
+    "id": "L131",
+    "source": "learning",
+    "category": "模型可解释性",
+    "title": "请讲讲补充/07_reason_codes和 SHAP 区别.md中的附加思考：逻辑漂移的根因（面试备选）"
+  },
+  {
+    "id": "L132",
+    "source": "learning",
+    "category": "Agent面试题",
+    "title": "LLM 和 Agent 有什么区别？"
+  },
+  {
+    "id": "L133",
+    "source": "learning",
+    "category": "Agent面试题",
+    "title": "Agent 和 Workflow 有什么区别？"
+  },
+  {
+    "id": "L134",
+    "source": "learning",
+    "category": "Agent面试题",
+    "title": "Agent 有什么工作模式？"
+  },
+  {
+    "id": "L135",
+    "source": "learning",
+    "category": "Agent面试题",
+    "title": "Function Call 是什么？"
+  },
+  {
+    "id": "L136",
+    "source": "learning",
+    "category": "Agent面试题",
+    "title": "MCP 是什么协议？"
+  },
+  {
+    "id": "L137",
+    "source": "learning",
+    "category": "Agent面试题",
+    "title": "Skills 是什么？"
+  },
+  {
+    "id": "L138",
+    "source": "learning",
+    "category": "Agent面试题",
+    "title": "Function Call、MCP、Skills 有什么区别？"
+  },
+  {
+    "id": "L139",
+    "source": "learning",
+    "category": "Agent面试题",
+    "title": "什么是 A2A 协议？"
   }
 ]
