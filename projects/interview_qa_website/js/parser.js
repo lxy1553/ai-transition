@@ -13,6 +13,8 @@ const Parser = (() => {
     'https://raw.githubusercontent.com/lxy1553/ai-transition/main/docs/interview_core_questions.md';
   const URL_XIAOLIN =
     'https://raw.githubusercontent.com/lxy1553/ai-transition/main/docs/xiaolinnote_questions.md';
+  const URL_LEARNING =
+    'https://raw.githubusercontent.com/lxy1553/ai-transition/main/docs/learning_review_questions.md';
 
   /**
    * 从 URL 拉取文本，支持本地缓存
@@ -230,24 +232,49 @@ const Parser = (() => {
    * force=true 跳过缓存强制拉取
    * 返回 { questions, cacheTime }，cacheTime 为缓存中最旧的时间戳
    */
+  // ---- learning_review 文件解析 ---------------------------------------
+
+  function parseLearning(text) {
+    const questions = [];
+    const blocks = text.split(/\n(?=### L\d+)/);
+    for (const block of blocks) {
+      const q = parseMianshiyaBlock(block);
+      if (q && q.title) {
+        q.source = 'learning';
+        // 根据分类调整难度
+        if (q.category === 'AI应用开发' || q.category === 'LLM与AI工程') q.difficulty = 'hard';
+        else if (q.category === '数据仓库') q.difficulty = 'medium';
+        else if (q.category === '信贷风控建模') q.difficulty = 'hard';
+        else q.difficulty = 'medium';
+        questions.push(q);
+      }
+    }
+    return questions;
+  }
+
+  // ---- 公开 API ---------------------------------------------------------
+
   async function loadAll(force) {
-    const [text1, text2, text3] = await Promise.all([
+    const [text1, text2, text3, text4] = await Promise.all([
       fetchText(URL_MIANSHIYA, force),
       fetchText(URL_CORE, force),
-      fetchText(URL_XIAOLIN, force)
+      fetchText(URL_XIAOLIN, force),
+      fetchText(URL_LEARNING, force)
     ]);
     const q1 = parseMianshiya(text1);
     const q2 = parseInterviewCore(text2);
     const q3 = parseXiaolin(text3);
-    const all = [...q1, ...q2, ...q3];
+    const q4 = parseLearning(text4);
+    const all = [...q1, ...q2, ...q3, ...q4];
 
     const t1 = getCacheTime(URL_MIANSHIYA);
     const t2 = getCacheTime(URL_CORE);
     const t3 = getCacheTime(URL_XIAOLIN);
-    const cacheTime = Math.min(t1, t2, t3) || Date.now();
+    const t4 = getCacheTime(URL_LEARNING);
+    const cacheTime = Math.min(t1, t2, t3, t4) || Date.now();
 
     return { questions: all, cacheTime };
   }
 
-  return { loadAll, URL_MIANSHIYA, URL_CORE, URL_XIAOLIN, getCacheTime };
+  return { loadAll, URL_MIANSHIYA, URL_CORE, URL_XIAOLIN, URL_LEARNING, getCacheTime };
 })();
