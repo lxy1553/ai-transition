@@ -3,7 +3,7 @@ category: NL2SQL 自然语言查询
 total: 32
 sources: interview_core
 deduped: 3
-generated: 2026-07-23T17:24:10.787385
+generated: 2026-07-23T17:30:39.628342
 ---
 
 # 🏷️ NL2SQL 自然语言查询

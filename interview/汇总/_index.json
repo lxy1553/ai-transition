@@ -1,14 +1,7 @@
 [
   {
-    "category": "AI 安全与合规",
-    "total": 1,
-    "deduped": 0,
-    "sources": "interview_core",
-    "file": "AI 安全与合规.md"
-  },
-  {
     "category": "AI 应用工程化",
-    "total": 26,
+    "total": 27,
     "deduped": 14,
     "sources": "interview_core, learning, mianshiya",
     "file": "AI 应用工程化.md"
@@ -42,13 +35,6 @@
     "file": "NL2SQL 自然语言查询.md"
   },
   {
-    "category": "Prompt 工程",
-    "total": 5,
-    "deduped": 0,
-    "sources": "interview_core, mianshiya",
-    "file": "Prompt 工程.md"
-  },
-  {
     "category": "RAG 检索增强生成",
     "total": 75,
     "deduped": 4,
@@ -57,16 +43,16 @@
   },
   {
     "category": "信贷风控建模",
-    "total": 23,
-    "deduped": 7,
+    "total": 25,
+    "deduped": 9,
     "sources": "interview_core, learning",
     "file": "信贷风控建模.md"
   },
   {
     "category": "大模型工程与训练",
-    "total": 56,
+    "total": 61,
     "deduped": 18,
-    "sources": "learning, mianshiya, xiaolinnote",
+    "sources": "interview_core, learning, mianshiya, xiaolinnote",
     "file": "大模型工程与训练.md"
   },
   {
@@ -75,13 +61,6 @@
     "deduped": 14,
     "sources": "interview_core, learning",
     "file": "数据仓库与治理.md"
-  },
-  {
-    "category": "模型可解释性与评估",
-    "total": 2,
-    "deduped": 2,
-    "sources": "learning",
-    "file": "模型可解释性与评估.md"
   },
   {
     "category": "综合",
