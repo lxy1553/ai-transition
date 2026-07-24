@@ -1,72 +1,42 @@
 [
   {
     "category": "AI 应用工程化",
-    "total": 27,
-    "deduped": 14,
-    "sources": "interview_core, learning, mianshiya",
+    "count": 10,
     "file": "AI 应用工程化.md"
   },
   {
     "category": "Agent 智能体",
-    "total": 63,
-    "deduped": 12,
-    "sources": "interview_core, learning, mianshiya, xiaolinnote",
+    "count": 60,
     "file": "Agent 智能体.md"
   },
   {
     "category": "Claude Code 开发实战",
-    "total": 22,
-    "deduped": 1,
-    "sources": "xiaolinnote",
+    "count": 15,
     "file": "Claude Code 开发实战.md"
   },
   {
     "category": "MCP 工具调用与协议",
-    "total": 21,
-    "deduped": 3,
-    "sources": "mianshiya, xiaolinnote",
+    "count": 21,
     "file": "MCP 工具调用与协议.md"
   },
   {
     "category": "NL2SQL 自然语言查询",
-    "total": 32,
-    "deduped": 3,
-    "sources": "interview_core",
+    "count": 41,
     "file": "NL2SQL 自然语言查询.md"
   },
   {
     "category": "RAG 检索增强生成",
-    "total": 75,
-    "deduped": 4,
-    "sources": "interview_core, mianshiya, xiaolinnote",
+    "count": 75,
     "file": "RAG 检索增强生成.md"
   },
   {
-    "category": "信贷风控建模",
-    "total": 25,
-    "deduped": 9,
-    "sources": "interview_core, learning",
-    "file": "信贷风控建模.md"
-  },
-  {
     "category": "大模型工程与训练",
-    "total": 61,
-    "deduped": 18,
-    "sources": "interview_core, learning, mianshiya, xiaolinnote",
+    "count": 56,
     "file": "大模型工程与训练.md"
   },
   {
-    "category": "数据仓库与治理",
-    "total": 26,
-    "deduped": 14,
-    "sources": "interview_core, learning",
-    "file": "数据仓库与治理.md"
-  },
-  {
     "category": "综合",
-    "total": 33,
-    "deduped": 1,
-    "sources": "interview_core, learning, mianshiya",
+    "count": 32,
     "file": "综合.md"
   }
 ]
