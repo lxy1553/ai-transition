@@ -1,0 +1,131 @@
+#!/usr/bin/env python3
+"""生成项目技术词汇表 CSV"""
+import csv
+from pathlib import Path
+
+# 精选技术词汇表：单词, 音标, 释义(简短), 解释(详细)
+GLOSSARY = [
+    # ===== AI/ML 基础 =====
+    ("LLM", "/ˌelˌelˈem/", "大语言模型", "Large Language Model，通过海量文本训练的神经网络，具备语言理解和生成能力。ChatGPT、Claude、DeepSeek 都是 LLM。"),
+    ("GPT", "/ˌdʒiːˌpiːˈtiː/", "生成式预训练变换器", "Generative Pre-trained Transformer，OpenAI 开发的 LLM 系列。核心思想：先在海量文本上预训练，再针对具体任务微调。"),
+    ("NLP", "/ˌenˌelˈpiː/", "自然语言处理", "Natural Language Processing，让计算机理解和生成人类语言的技术领域。LLM 是 NLP 的子集。"),
+    ("Transformer", "/trænsˈfɔːrmər/", "变换器架构", "2017 年 Google 提出的神经网络架构，用自注意力机制替代 RNN。所有现代 LLM（GPT、Claude、Llama）都基于 Transformer。"),
+    ("Attention", "/əˈtenʃn/", "注意力机制", "让模型在处理每个词时能够'关注'输入中的其他相关词。核心公式: Attention(Q,K,V) = softmax(QK^T/√d)V。"),
+    ("MHA", "/ˌemˌeɪtʃˈeɪ/", "多头注意力", "Multi-Head Attention，并行运行多组注意力，每组关注不同的语义关系。Transformer 的核心组件。"),
+    ("MQA", "/ˌemˌkjuːˈeɪ/", "多查询注意力", "Multi-Query Attention，所有头共享同一组 Key-Value，减少 KV Cache 大小。PaLM、Falcon 使用。"),
+    ("GQA", "/ˌdʒiːˌkjuːˈeɪ/", "分组查询注意力", "Grouped-Query Attention，将头分成若干组，组内共享 KV。MHA 和 MQA 的折中方案。Llama 2/3、Mistral 使用。"),
+    ("Embedding", "/ɪmˈbedɪŋ/", "嵌入向量", "将文字、图片等离散数据映射为连续向量。语义相近的词，向量距离也近。在 RAG 中用于检索相似文档。"),
+    ("Token", "/ˈtoʊkən/", "词元/令牌", "LLM 处理文本的最小单位。一个中文汉字 ≈ 1-2 token，一个英文单词 ≈ 1-3 token。模型的上下文窗口按 token 计算。"),
+    ("KV Cache", "/ˌkeɪˈviː kæʃ/", "键值缓存", "Key-Value Cache，推理时缓存之前 token 的 Key 和 Value，避免重复计算。LLM 推理加速的核心技术。"),
+    ("MoE", "/ˌemˌoʊˈiː/", "混合专家模型", "Mixture of Experts，模型由多个'专家'子网络组成，每次只激活其中一部分。DeepSeek V3、Mixtral 使用，能在大参数量下控制计算成本。"),
+    ("CoT", "/ˌsiːˌoʊˈtiː/", "思维链提示", "Chain of Thought，让 LLM 分步骤推理而非直接给答案。能大幅提升复杂推理任务的准确率。"),
+    ("PEFT", "/peft/", "参数高效微调", "Parameter-Efficient Fine-Tuning，只调整模型的一小部分参数而非全部。大幅降低微调成本。LoRA 是最流行的 PEFT 方法。"),
+    ("LoRA", "/ˈloʊrə/", "低秩适配", "Low-Rank Adaptation，在原始权重旁加一个低秩矩阵来学习新任务。只需训练极少参数（<1%），效果接近全量微调。"),
+    ("SFT", "/ˌesˌefˈtiː/", "监督微调", "Supervised Fine-Tuning，用人工标注的高质量问答数据训练模型，让模型学会'对话'格式。"),
+    ("RLHF", "/ˌɑːrˌelˌeɪtʃˈef/", "基于人类反馈的强化学习", "Reinforcement Learning from Human Feedback，先让人类给模型输出打分，再用强化学习优化。ChatGPT 的训练方法。"),
+    ("DPO", "/ˌdiːˌpiːˈoʊ/", "直接偏好优化", "Direct Preference Optimization，直接用偏好数据优化模型，无需单独训练奖励模型。比 RLHF 更简单稳定的对齐方法。"),
+    ("GRPO", "/ˌdʒiːˌɑːrˌpiːˈoʊ/", "分组相对策略优化", "Group Relative Policy Optimization，DeepSeek 提出的 RL 变体，用组内互评替代价值模型，降低训练成本。"),
+    ("PPO", "/ˌpiːˌpiːˈoʊ/", "近端策略优化", "Proximal Policy Optimization，OpenAI 提出的强化学习算法，限制每次更新的幅度防止训练崩溃。ChatGPT 训练的基础算法。"),
+    ("GPU", "/ˌdʒiːˌpiːˈjuː/", "图形处理器", "Graphics Processing Unit，最初用于渲染图形，现在是大模型训练和推理的核心算力。NVIDIA 是绝对主导。"),
+    ("Quantization", "/ˌkwɑːntɪˈzeɪʃn/", "量化", "用低精度（INT8/INT4）存储模型权重，减少显存占用和推理延迟。AWQ 和 GPTQ 是两种主流量化方法。"),
+    ("AWQ", "/ˌeɪˌdʌb.əl.juːˈkjuː/", "激活感知权重量化", "Activation-aware Weight Quantization，根据激活值分布优化量化策略。比 GPTQ 更快，对效果影响更小。"),
+    ("GPTQ", "/ˌdʒiːˌpiːˌtiːˈkjuː/", "GPT 后训练量化", "GPT Post-Training Quantization，用 OBQ 算法逐层量化。精度高但速度比 AWQ 慢。"),
+    ("Hallucination", "/həˌluːsɪˈneɪʃn/", "幻觉", "LLM 生成看似合理但事实上错误的内容。RAG 通过提供可信上下文来缓解幻觉。"),
+    ("Prompt", "/prɑːmpt/", "提示词", "给 LLM 的输入指令。好的 Prompt = 角色定义 + 任务描述 + 输出格式 + 约束条件 + 示例。"),
+    ("Inference", "/ˈɪnfərəns/", "推理", "用训练好的模型处理新数据并产出结果。LLM 推理的核心瓶颈是显存带宽，不是计算量。"),
+    ("Fine-tuning", "/faɪn ˈtuːnɪŋ/", "微调", "在预训练模型基础上用特定领域数据继续训练。全量微调贵，LoRA 是更经济的选择。"),
+    ("Temperature", "/ˈtemprətʃər/", "温度参数", "控制 LLM 生成随机性的参数。0→确定性输出，1→正常随机，>1→更发散。代码生成用低温，创意写作用高温。"),
+
+    # ===== Agent 生态 =====
+    ("Agent", "/ˈeɪdʒənt/", "智能体", "能自主感知、规划、执行、反思的 AI 系统。核心闭环: 感知→规划→行动→再感知。与普通 LLM 的区别在于'自主性'。"),
+    ("MCP", "/ˌemˌsiːˈpiː/", "模型上下文协议", "Model Context Protocol，Anthropic 2024 年开源。统一了 AI 应用与外部工具的连接标准，被称为'AI 界的 USB-C'。"),
+    ("A2A", "/ˌeɪtəˈeɪ/", "智能体间协议", "Agent-to-Agent Protocol，Google 2025 年发布。解决不同 Agent 之间的发现、通信和任务委派。与 MCP 互补（横向 vs 竖向）。"),
+    ("Function Calling", "/ˈfʌŋkʃn ˈkɔːlɪŋ/", "函数调用", "LLM 输出结构化的函数调用请求，由外部代码执行后返回结果。Agent 工具调用能力的底层基础。"),
+    ("ReAct", "/riːˈækt/", "推理-行动循环", "Reasoning + Acting，一种 Agent 范式：一边推理一边行动，每步观察结果再决定下一步。最常用的 Agent 模式。"),
+    ("Workflow", "/ˈwɜːrkfloʊ/", "工作流", "预先定义好的执行路径，LLM 只在指定节点被调用。确定性高但灵活性低。vs Agent：流程控制权在代码 vs 在 LLM。"),
+    ("LangChain", "/læŋ tʃeɪn/", "LangChain 框架", "最流行的 LLM 应用开发框架，提供 Chain、Agent、Tool、Memory 等抽象。降低了 LLM 应用的开发门槛。"),
+    ("LangGraph", "/læŋ græf/", "LangGraph 框架", "LangChain 团队推出的有状态 Agent 编排框架。用有向图定义 Agent 工作流，支持条件分支和循环。"),
+    ("Skill", "/skɪl/", "技能", "用 Markdown 文件定义的 Agent 行为指令，教 Agent '什么时候该用什么方法做什么事'。Claude Code 中核心概念。"),
+
+    # ===== RAG =====
+    ("RAG", "/ræɡ/", "检索增强生成", "Retrieval-Augmented Generation，先从知识库检索相关文档，再让 LLM 基于检索结果生成回答。解决 LLM 知识过时和幻觉问题。"),
+    ("Chunk", "/tʃʌŋk/", "文本分块", "将长文档切成小段供 Embedding 和检索。chunk 太小→语义不完整；chunk 太大→检索不精确。通常 512-1024 token。"),
+    ("Rerank", "/riːˈræŋk/", "重排序", "对初步检索结果用更精细的模型重新排序。向量检索速度快但不够准，Rerank 提升精准度。常用 BGE-Reranker、Cohere Rerank。"),
+    ("HNSW", "/ˌeɪtʃˌenˌesˈdʌb.əl.juː/", "分层可导航小世界", "Hierarchical Navigable Small World，一种近似最近邻搜索算法。大多数向量数据库（Milvus、Chroma）的默认索引。"),
+    ("RRF", "/ˌɑːrˌɑːrˈef/", "倒数排序融合", "Reciprocal Rank Fusion，将多个检索结果列表合并排序的算法。常用于混合检索中融合向量检索和关键词检索的结果。"),
+    ("Milvus", "/ˈmɪlvəs/", "Milvus 向量数据库", "最流行的开源向量数据库。支持 HNSW/IVF 等多种索引，十亿级向量检索，生产环境首选。"),
+    ("Chroma", "/ˈkroʊmə/", "Chroma 向量数据库", "轻量级向量数据库，适合原型和小规模场景。API 简洁，本地部署零配置。"),
+
+    # ===== 数据仓库 =====
+    ("ODS", "/ˌoʊˌdiːˈes/", "操作数据层", "Operational Data Store，数据仓库最底层。从业务系统 1:1 镜像原始数据，不做加工。"),
+    ("DWD", "/ˌdiːˌdʌb.əl.juːˈdiː/", "明细数据层", "Data Warehouse Detail，对 ODS 数据做清洗、去重、脱敏、标准化。数据质量和口径统一的起点。"),
+    ("DWS", "/ˌdiːˌdʌb.əl.juːˈes/", "服务数据层/汇总层", "Data Warehouse Service，按主题域（用户、交易、风控等）做轻度汇总的宽表。DWD 的多表 Join 产物。"),
+    ("ADS", "/ˌeɪˌdiːˈes/", "应用数据层", "Application Data Service，面向前端应用的指标/报表。直接给 BI、API、Agent 查询使用。"),
+    ("NL2SQL", "/ˌenˌelˈtuːˈsiːkwəl/", "自然语言转 SQL", "Natural Language to SQL，让用户用自然语言提问，系统自动生成并执行 SQL。Agent 数据问答的核心能力。"),
+    ("Schema", "/ˈskiːmə/", "数据模式/表结构", "数据库表结构的定义，包含字段名、类型、注释。NL2SQL 生成 SQL 必须注入 Schema 约束，否则模型会编造字段名。"),
+    ("Lineage", "/ˈlɪniɪdʒ/", "数据血缘", "追踪数据从源头到目的地的完整流转路径。回答'这个指标是怎么算出来的'。正向追溯→影响分析，反向追溯→根因定位。"),
+    ("DDL", "/ˌdiːˌdiːˈel/", "数据定义语言", "Data Definition Language，CREATE TABLE、ALTER TABLE 等定义表结构的 SQL。"),
+    ("Partition", "/pɑːrˈtɪʃn/", "分区", "按某一字段（通常是日期 dt）将大表切分成小文件。查询时只扫描相关分区，是大数据查询性能的基石。"),
+    ("Snapshot", "/ˈsnæpʃɑːt/", "快照", "某一时刻数据的完整拷贝。DWD 通常用每日快照。"),
+
+    # ===== 信贷风控 =====
+    ("PIT", "/ˌpiːˌaɪˈtiː/", "时点正确", "Point-In-Time，保证训练数据中特征快照时间早于标签观察时间。PIT 错误会导致时间泄漏（模型偷看到未来信息）。"),
+    ("AUC", "/ˌeɪˌjuːˈsiː/", "ROC 曲线下面积", "Area Under ROC Curve，二分类模型排序能力的核心指标。0.7→可用，0.8→良好，0.9→优秀。"),
+    ("KS", "/ˌkeɪˈes/", "KS 统计量", "Kolmogorov-Smirnov，衡量模型区分好坏样本能力的指标。KS = max(|好样本累积比例 - 坏样本累积比例|)。"),
+    ("PSI", "/ˌpiːˌesˈaɪ/", "群体稳定性指标", "Population Stability Index，衡量模型输入分布是否发生漂移。PSI<0.1→正常，0.1-0.25→预警，>0.25→显著漂移需要重训。"),
+    ("SHAP", "/ʃæp/", "SHAP 可解释性", "SHapley Additive exPlanations，基于博弈论的特征贡献度计算方法。回答'为什么这个用户被拒'。"),
+    ("XGBoost", "/ˌeksˈdʒiːbuːst/", "极限梯度提升", "eXtreme Gradient Boosting，最流行的表格数据 ML 模型。自带正则化、自动处理缺失值、可解释性强。数据量<10万时优于深度学习。"),
+    ("WOE", "/ˌdʌb.əl.juːˌoʊˈiː/", "证据权重", "Weight of Evidence，衡量特征各分箱对好坏样本的区分能力。WOE=ln(好样本占比/坏样本占比)。评分卡建模的核心编码方式。"),
+    ("IV", "/ˌaɪˈviː/", "信息值", "Information Value，衡量特征整体预测能力的指标。IV<0.02→无预测力，0.02-0.1→弱，0.1-0.3→中等，>0.3→强。"),
+
+    # ===== 工程化 =====
+    ("API", "/ˌeɪˌpiːˈaɪ/", "应用程序接口", "Application Programming Interface，系统间交互的约定。RESTful API 是 Web 服务最常用的风格。"),
+    ("SDK", "/ˌesˌdiːˈkeɪ/", "软件开发工具包", "Software Development Kit，一套辅助开发某平台/语言的工具集合。MCP SDK 让开发者快速接入 MCP 协议。"),
+    ("SSE", "/ˌesˌesˈiː/", "服务器推送事件", "Server-Sent Events，服务器向客户端单向推送实时数据。比 WebSocket 简单，适合 LLM 流式输出。"),
+    ("WebSocket", "/ˈwebˌsɑːkɪt/", "WebSocket 协议", "全双工通信协议，客户端和服务器可以随时互发消息。适合需要双向实时通信的 Agent 场景。"),
+    ("WebRTC", "/ˈwebˌɑːrˌtiːˈsiː/", "网页实时通信", "Web Real-Time Communication，浏览器之间点对点实时通信。用于 Agent 间的低延迟音视频/数据传输。"),
+    ("RPC", "/ˌɑːrˌpiːˈsiː/", "远程过程调用", "Remote Procedure Call，像调本地函数一样调用远程服务。gRPC 是 Google 开源的现代 RPC 框架。"),
+    ("SSH", "/ˌesˌesˈeɪtʃ/", "安全外壳协议", "Secure Shell，加密的远程登录协议。Git 推送代码和登录服务器的标准方式。"),
+    ("CI/CD", "/ˌsiːˌaɪˌsiːˈdiː/", "持续集成/持续部署", "Continuous Integration / Continuous Deployment，代码提交后自动测试、构建、部署。GitHub Actions、GitLab CI 是实现工具。"),
+    ("API Gateway", "/ˌeɪˌpiːˈaɪ ˈɡeɪtweɪ/", "API 网关", "统一管理所有 API 请求的入口。负责认证、限流、路由、日志。LLM API 前面通常会加一层网关。"),
+    ("Circuit Breaker", "/ˈsɜːrkɪt ˈbreɪkər/", "熔断器", "服务不可用时自动切断请求，防止级联故障。三种状态：关闭(正常)→打开(熔断)→半开(探测恢复)。"),
+    ("Degradation", "/ˌdeɡrəˈdeɪʃn/", "降级", "系统部分功能不可用时，提供有损但可用的服务。Agent 中典型：LLM 超时→降级到规则引擎→降级到默认回答。"),
+    ("Middleware", "/ˈmɪdlwer/", "中间件", "操作系统和应用程序之间的基础软件。Redis(缓存)、Kafka(消息队列)、Nginx(反向代理)都是中间件。"),
+
+    # ===== 通信与安全 =====
+    ("HTTP", "/ˌeɪtʃˌtiːˌtiːˈpiː/", "超文本传输协议", "HyperText Transfer Protocol，Web 通信的基础协议。LLM API 调用走 HTTPS(POST+JSON Body+Bearer Token)。"),
+    ("SSL/TLS", "/ˌesˌesˈel/ / /ˌtiːˌelˈes/", "安全传输层协议", "Secure Sockets Layer / Transport Layer Security。加密 HTTP 流量，HTTPS = HTTP + TLS。"),
+    ("PII", "/ˌpiːˌaɪˈaɪ/", "个人身份信息", "Personally Identifiable Information，姓名、手机号、身份证号等能定位到个人的数据。数仓中需要脱敏处理。"),
+    ("OAuth", "/oʊˈɔːθ/", "开放授权协议", "Open Authorization，允许第三方应用在用户授权下访问资源。'用微信登录'的背后就是 OAuth 2.0。"),
+    ("JSON", "/ˈdʒeɪsən/", "JavaScript 对象表示法", "JavaScript Object Notation，最通用的数据交换格式。LLM API 请求和响应都走 JSON。"),
+    ("YAML", "/ˈjæməl/", "YAML 标记语言", "YAML Ain't Markup Language，人类友好的配置语言。Docker Compose、GitHub Actions、项目 Schema 定义都用 YAML。"),
+
+    # ===== 编程与工具 =====
+    ("Git", "/ɡɪt/", "分布式版本控制", "Linus Torvalds 创建的版本控制系统。GitHub 是最大的代码托管平台。核心操作：clone/pull/add/commit/push。"),
+    ("CLI", "/ˌsiːˌelˈaɪ/", "命令行界面", "Command Line Interface，通过终端输入文本命令操作计算机。Claude Code 就是一个 CLI 工具。"),
+    ("Docker", "/ˈdɑːkər/", "容器化平台", "将应用及其依赖打包成轻量级容器，保证开发/测试/生产环境一致。AI 项目标配部署方式。"),
+    ("Kafka", "/ˈkæfkə/", "分布式消息队列", "Apache Kafka，高吞吐的发布-订阅消息系统。Agent 审计日志、数据管道、事件驱动架构的标配。"),
+    ("Redis", "/ˈredɪs/", "内存数据库", "Remote Dictionary Server，高性能内存 KV 存储。Agent 中用于缓存热点查询、限流计数器、会话存储。"),
+
+    # ===== 项目特定 =====
+    ("GCAI", "/ˌdʒiːˌsiːˌeɪˈaɪ/", "生成式 AI 应用开发", "指向拥抱 AI 技术，将模型能力工程化落地的方向。核心：不只是用 API，而是设计完整系统——安全、可监控、能迭代。"),
+    ("Bad Case", "/bæd keɪs/", "失败案例", "模型输出错误的真实案例。Agent 面试中最重要的概念之一：不怕有 bad case，怕的是不知道怎么排查归因。"),
+    ("End-to-End", "/ˌendtəˈend/", "端到端", "从头到尾打通完整链路。端到端评测不只看单个模块，而是评估整个系统从输入到输出的质量。"),
+]
+
+OUT = Path("/Users/lxy/Documents/ai_transition/docs/technical_glossary.csv")
+
+with open(OUT, "w", encoding="utf-8-sig", newline="") as f:
+    w = csv.writer(f)
+    w.writerow(["单词", "音标", "释义", "解释"])
+    for word, phonetic, definition, explanation in GLOSSARY:
+        w.writerow([word, phonetic, definition, explanation])
+
+print(f"✅ 生成: {OUT} ({len(GLOSSARY)} 个术语)")
+print(f"   分类: AI基础({sum(1 for g in GLOSSARY if g[0] in ['LLM','GPT','NLP','Transformer','Attention','MHA','MQA','GQA','Embedding','Token','KV Cache','MoE','CoT','PEFT','LoRA','SFT','RLHF','DPO','GRPO','PPO','GPU','Quantization','AWQ','GPTQ','Hallucination','Prompt','Inference','Fine-tuning','Temperature'])}), ", end="")
+print(f"Agent({sum(1 for g in GLOSSARY if g[0] in ['Agent','MCP','A2A','Function Calling','ReAct','Workflow','LangChain','LangGraph','Skill'])}), ", end="")
+print(f"RAG({sum(1 for g in GLOSSARY if g[0] in ['RAG','Chunk','Rerank','HNSW','RRF','Milvus','Chroma'])}), ", end="")
+print(f"数仓({sum(1 for g in GLOSSARY if g[0] in ['ODS','DWD','DWS','ADS','NL2SQL','Schema','Lineage','DDL','Partition','Snapshot'])}), ", end="")
+print(f"风控({sum(1 for g in GLOSSARY if g[0] in ['PIT','AUC','KS','PSI','SHAP','XGBoost','WOE','IV'])}), ", end="")
+print(f"工程({sum(1 for g in GLOSSARY if g[0] in ['API','SDK','SSE','WebSocket','WebRTC','RPC','SSH','CI/CD','API Gateway','Circuit Breaker','Degradation','Middleware'])}), ", end="")
+print(f"其他({len(GLOSSARY) - sum(1 for g in GLOSSARY if g[0] not in ['LLM','GPT','NLP','Transformer','Attention','MHA','MQA','GQA','Embedding','Token','KV Cache','MoE','CoT','PEFT','LoRA','SFT','RLHF','DPO','GRPO','PPO','GPU','Quantization','AWQ','GPTQ','Hallucination','Prompt','Inference','Fine-tuning','Temperature','Agent','MCP','A2A','Function Calling','ReAct','Workflow','LangChain','LangGraph','Skill','RAG','Chunk','Rerank','HNSW','RRF','Milvus','Chroma','ODS','DWD','DWS','ADS','NL2SQL','Schema','Lineage','DDL','Partition','Snapshot','PIT','AUC','KS','PSI','SHAP','XGBoost','WOE','IV','API','SDK','SSE','WebSocket','WebRTC','RPC','SSH','CI/CD','API Gateway','Circuit Breaker','Degradation','Middleware'])})")
