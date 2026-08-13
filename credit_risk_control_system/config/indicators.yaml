@@ -1,0 +1,120 @@
+# ============================================================
+# 指标口径字典 —— AI 数据问答系统的"知识底座"
+#
+# 小白类比：这份文件就像一份《公司数据名词解释手册》。
+# 当用户问"逾期率是多少"时，系统翻这本手册，才能知道：
+#   - "逾期率"这个口语词，对应数仓里哪个字段、哪张表
+#   - 它是怎么算出来的（公式）
+#   - 有哪些容易混淆的同义词
+#   - 有哪些口径歧义（比如按笔数算还是按金额算）
+#
+# 为什么不用代码写死，而用 YAML 配置？
+#   - 指标会经常变（新口径、新指标），改配置不用改代码、不用重新发布
+#   - 非技术同事（产品、运营）也能看懂、能改
+#   - 这份文件同时被三个地方消费：RAG检索（查定义）、NL2SQL（查表结构）、结果解释（查口径）
+# ============================================================
+
+# ── 全局默认口径 ──────────────────────────────────────────
+# 当用户没指明口径时，系统默认采用这里的规定
+defaults:
+  # 逾期率的默认口径：按"笔数"算（逾期笔数/总笔数）
+  # 另一个口径是"金额"（逾期金额/总金额），用户没明说时用笔数
+  delinquency_basis: "by_count"
+  # 观察窗口：DPD30+（逾期超过30天才算坏样本）
+  overdue_window: "DPD30+"
+  # 自然月 vs 滚动30天：默认自然月
+  month_definition: "natural_month"
+
+# ── 指标列表 ──────────────────────────────────────────────
+indicators:
+
+  # ── 指标 1：逾期率 ──────────────────────────────────────
+  - name: "delinquency_rate"            # 数仓里的标准字段名（代码用它）
+    aliases:                             # 用户口语里的各种叫法（同义词）
+      - "逾期率"
+      - "坏账率"
+      - "不良率"
+      - "违约率"
+    description: "逾期贷款笔数占总放贷笔数的比例，是信贷风险最核心的指标"
+    # 计算公式：逾期率 = 坏样本数 / 总样本数
+    formula: "bad_loans / total_loans"
+    # 这张指标存在数仓 ADS 层哪张表
+    table: "ads_delinquency_daily"
+    # 该表里哪两列参与计算
+    columns:
+      numerator: "bad_loans"      # 分子：坏样本数
+      denominator: "total_loans"  # 分母：总样本数
+    # 时间字段：按哪个字段做时间过滤和按月分组
+    time_field: "label_date"
+    # 口径歧义：这个指标有几种算法，用户没说清时系统要反问
+    ambiguity:
+      - dimension: "basis"
+        options:
+          - value: "by_count"
+            label: "按笔数（逾期笔数/放贷笔数）"
+          - value: "by_amount"
+            label: "按金额（逾期金额/放贷金额）"
+      - dimension: "window"
+        options:
+          - value: "DPD30+"
+            label: "逾期30天以上"
+          - value: "DPD60+"
+            label: "逾期60天以上"
+    # 权限：谁能查这个指标
+    # all=所有人, analyst=分析师及以上, risk=风控专属
+    required_role: "analyst"
+
+  # ── 指标 2：审批通过率 ──────────────────────────────────
+  - name: "approval_rate"
+    aliases:
+      - "通过率"
+      - "审批通过率"
+      - "批核率"
+    description: "审批通过的申请数占总申请数的比例"
+    formula: "approved_count / total_applications"
+    table: "ads_model_monitor_daily"
+    columns:
+      numerator: "approval_rate"   # 注意：这张表已经预计算好通过率了
+      denominator: null
+    time_field: "dt"
+    ambiguity: []
+    required_role: "all"
+
+  # ── 指标 3：平均授信额度 ────────────────────────────────
+  - name: "avg_credit_limit"
+    aliases:
+      - "平均额度"
+      - "人均授信"
+      - "平均授信额度"
+    description: "所有通过审批用户的平均授信额度"
+    formula: "avg(credit_limit)"
+    table: "ads_model_monitor_daily"
+    columns:
+      numerator: "avg_credit_limit"
+      denominator: null
+    time_field: "dt"
+    ambiguity: []
+    required_role: "analyst"
+
+# ── 表结构目录（供 NL2SQL 使用）──────────────────────────
+# 小白类比：就像给每个"货架"列了一张清单，告诉模型：
+#   这张表有哪些字段、每个字段是干什么的、类型是什么
+# NL2SQL 必须拿到这个清单，否则模型会自己瞎编字段名
+tables:
+  - name: "ads_delinquency_daily"
+    description: "逾期率日报，每天一行，按放贷日期统计"
+    columns:
+      - {name: "label_date", type: "DATE", desc: "标签观察日期（放贷日+30天）"}
+      - {name: "total_loans", type: "BIGINT", desc: "当日放贷总笔数"}
+      - {name: "bad_loans", type: "BIGINT", desc: "当日逾期笔数（DPD30+）"}
+      - {name: "delinquency_rate", type: "DOUBLE", desc: "逾期率（预计算）"}
+      - {name: "dt", type: "STRING", desc: "分区键，格式 YYYY-MM-DD"}
+
+  - name: "ads_model_monitor_daily"
+    description: "模型监控日报，每天一条审批指标汇总"
+    columns:
+      - {name: "dt", type: "STRING", desc: "统计日期 YYYY-MM-DD"}
+      - {name: "total_applications", type: "BIGINT", desc: "总申请数"}
+      - {name: "approval_rate", type: "DOUBLE", desc: "审批通过率"}
+      - {name: "avg_credit_limit", type: "DOUBLE", desc: "平均授信额度"}
+      - {name: "avg_score", type: "DOUBLE", desc: "平均信用评分"}
