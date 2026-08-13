@@ -5,3 +5,6 @@ __pycache__/
 .env
 config/*.env
 logs/
+
+# SQLite 运行时生成的模拟数仓（demo 运行时会自动重建）
+*.db

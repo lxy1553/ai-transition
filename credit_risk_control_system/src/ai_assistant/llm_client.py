@@ -147,19 +147,103 @@ class MockLLM(LLMClient):
         return prompt
 
 
-# ── 生产级真实实现示例（骨架）──────────────────────────────
-# 下面是真实调用某家大模型时的样子。学习时不需要跑通，但你可以看到：
-# 真实的 LLMClient 实现长什么样——本质就是发 HTTP 请求，把结果 parse 成结构。
-#
-# class DeepSeekLLM(LLMClient):
-#     def __init__(self, api_key: str, base_url: str = "https://api.deepseek.com"):
-#         self.api_key = api_key
-#         self.base_url = base_url
-#
-#     def chat(self, prompt: str, **kwargs) -> str:
-#         resp = requests.post(
-#             f"{self.base_url}/v1/chat/completions",
-#             headers={"Authorization": f"Bearer {self.api_key}"},
-#             json={"model": "deepseek-chat", "messages": [{"role": "user", "content": prompt}]},
-#         )
-#         return resp.json()["choices"][0]["message"]["content"]
+# ── 真实 LLM 实现 ─────────────────────────────────────────
+# 下面是真实调用 DeepSeek 大模型的实现。
+# 本质就一件事：发 HTTP 请求，把返回的 JSON 里的文字抽出来。
+
+import os
+import json
+
+
+class DeepSeekLLM(LLMClient):
+    """
+    真实调用 DeepSeek 大模型。
+
+    小白类比：这才是"真的大脑"。MockLLM 是背答案的机器人，
+    这个是真把问题发到 DeepSeek 服务器，让真的大模型理解并回答。
+
+    使用前提：
+      1. 去 platform.deepseek.com 注册，拿一个 API Key
+      2. 设置环境变量：export DEEPSEEK_API_KEY=sk-xxxx
+      3. 装了 requests：pip install requests
+
+    为什么选 DeepSeek？
+      - 便宜（价格是 GPT 的几十分之一），学习/开发成本低
+      - API 兼容 OpenAI 格式，换 GPT/Claude 只需改个 base_url 和模型名
+    """
+
+    def __init__(self, api_key: str, base_url: str = "https://api.deepseek.com"):
+        self.api_key = api_key
+        self.base_url = base_url
+
+    def chat(self, prompt: str, **kwargs) -> str:
+        """发一段话，拿回模型的文本回答。"""
+        content = self._call(prompt, json_mode=False)
+        return content
+
+    def chat_json(self, prompt: str, **kwargs) -> dict[str, Any]:
+        """
+        发一段话，拿回结构化的 JSON 回答。
+
+        关键：这里开了 JSON mode（response_format=json_object），
+        让模型保证返回合法 JSON，下游才能安全地 json.loads。
+        """
+        content = self._call(prompt, json_mode=True)
+        # 模型可能返回带 ```json 包裹的内容，剥掉再解析
+        content = content.strip()
+        if content.startswith("```"):
+            content = content.strip("`")
+            content = content.replace("json\n", "", 1)
+        try:
+            return json.loads(content)
+        except json.JSONDecodeError:
+            # 解析失败兜底：返回一个空结构，让上层走降级逻辑
+            return {"result": "parse_error"}
+
+    def _call(self, prompt: str, json_mode: bool) -> str:
+        """
+        真正发 HTTP 请求的核心方法。
+
+        小白理解：把 prompt 打包成 JSON，POST 到 DeepSeek 服务器，
+        服务器返回一段 JSON，里面 choices[0].message.content 就是回答。
+        """
+        import requests  # 延迟导入：只有真用 DeepSeek 时才需要 requests
+
+        payload = {
+            "model": "deepseek-chat",
+            "messages": [{"role": "user", "content": prompt}],
+            "temperature": 0.3,   # 低温 = 输出更稳定、更少随机，适合意图识别这种任务
+        }
+        # JSON mode：让模型保证返回合法 JSON
+        if json_mode:
+            payload["response_format"] = {"type": "json_object"}
+
+        resp = requests.post(
+            f"{self.base_url}/chat/completions",
+            headers={
+                "Authorization": f"Bearer {self.api_key}",
+                "Content-Type": "application/json",
+            },
+            json=payload,
+            timeout=30,   # 30 秒超时，防止一直挂着
+        )
+        resp.raise_for_status()  # 非 200 抛异常（比如 API Key 错、欠费）
+        data = resp.json()
+        return data["choices"][0]["message"]["content"]
+
+
+def create_llm() -> LLMClient:
+    """
+    LLM 工厂函数 —— 根据环境变量决定用真的还是假的。
+
+    小白理解：这是一个"自动开关"。
+      设置了 DEEPSEEK_API_KEY → 用真 DeepSeek
+      没设置 → 用 MockLLM（方便本地开发、不花钱）
+
+    这样你的代码不用改，靠环境变量就能在"真实"和"模拟"之间切换。
+    """
+    api_key = os.environ.get("DEEPSEEK_API_KEY", "").strip()
+    if api_key:
+        return DeepSeekLLM(api_key)
+    # 没 Key 就降级用 Mock（本地开发、跑 demo、跑单测都够用）
+    return MockLLM()

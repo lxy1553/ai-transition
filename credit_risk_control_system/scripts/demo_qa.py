@@ -16,7 +16,7 @@ from pathlib import Path
 # 把项目根目录加进 sys.path，这样才能 import src 下的模块
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from src.ai_assistant.llm_client import MockLLM
+from src.ai_assistant.llm_client import create_llm
 from src.ai_assistant.schema_catalog import SchemaCatalog
 from src.ai_assistant.pipeline import QAPipeline
 
@@ -26,8 +26,8 @@ def main():
     print("AI 数据问答层 演示")
     print("=" * 60)
 
-    # ── 1. 组装：用假的 LLM + 真的指标目录 ──
-    llm = MockLLM()
+    # ── 1. 组装：用工厂函数选 LLM（有 Key 用真 DeepSeek，没有用 Mock）──
+    llm = create_llm()
     catalog = SchemaCatalog()
     pipeline = QAPipeline(llm=llm, catalog=catalog)
 

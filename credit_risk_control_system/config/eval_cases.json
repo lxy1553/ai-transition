@@ -1,0 +1,85 @@
+{
+  "description": "AI 数据问答系统的评测集。每个用例包含用户问题 + 预期结果，评测脚本据此算准确率。",
+  "cases": [
+    {
+      "id": 1,
+      "query": "上个月逾期率是多少？",
+      "expected_intent": "指标查询",
+      "expected_indicator": "delinquency_rate",
+      "expected_behavior": "正常回答",
+      "note": "标准指标查询"
+    },
+    {
+      "id": 2,
+      "query": "坏账率有多少？",
+      "expected_intent": "指标查询",
+      "expected_indicator": "delinquency_rate",
+      "expected_behavior": "正常回答",
+      "note": "同义词映射：坏账率→逾期率"
+    },
+    {
+      "id": 3,
+      "query": "通过率怎么样？",
+      "expected_intent": "指标查询",
+      "expected_indicator": "approval_rate",
+      "expected_behavior": "正常回答",
+      "note": "另一个指标"
+    },
+    {
+      "id": 4,
+      "query": "逾期率是什么意思？",
+      "expected_intent": "口径解释",
+      "expected_indicator": null,
+      "expected_behavior": "正常回答",
+      "note": "口径解释，走 RAG 不查数"
+    },
+    {
+      "id": 5,
+      "query": "逾期率是怎么算出来的？",
+      "expected_intent": "血缘追溯",
+      "expected_indicator": null,
+      "expected_behavior": "正常回答",
+      "note": "血缘追溯"
+    },
+    {
+      "id": 6,
+      "query": "你吃饭了吗？",
+      "expected_intent": "闲聊",
+      "expected_indicator": null,
+      "expected_behavior": "反问/拒答",
+      "note": "闲聊应反问，不该硬答"
+    },
+    {
+      "id": 7,
+      "query": "帮我查一个不存在的指标xyzabc",
+      "expected_intent": "指标查询",
+      "expected_indicator": null,
+      "expected_behavior": "反问/拒答",
+      "note": "未知指标应反问，不该编造"
+    },
+    {
+      "id": 8,
+      "query": "平均额度是多少？",
+      "expected_intent": "指标查询",
+      "expected_indicator": "avg_credit_limit",
+      "expected_behavior": "正常回答",
+      "note": "第三个指标"
+    },
+    {
+      "id": 9,
+      "query": "最近的逾期率和上个月比怎么样？",
+      "expected_intent": "指标查询",
+      "expected_indicator": "delinquency_rate",
+      "expected_behavior": "正常回答",
+      "note": "涉及环比（衍生指标，可能需要特殊处理）"
+    },
+    {
+      "id": 10,
+      "query": "不良率呢？",
+      "expected_intent": "指标查询",
+      "expected_indicator": "delinquency_rate",
+      "expected_behavior": "正常回答",
+      "note": "同义词映射：不良率→逾期率"
+    }
+  ]
+}

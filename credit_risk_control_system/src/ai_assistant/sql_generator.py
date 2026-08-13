@@ -87,12 +87,15 @@ class SQLGenerator:
 
         # 逾期率这种有分子分母的指标：算比值
         if den:
+            # 注意：这里用 strftime 是 SQLite 方言（MySQL 用 DATE_FORMAT）
+            # 真实生产里，NL2SQL 生成器必须针对目标数据库的方言生成 SQL，
+            # 不同数据库（MySQL/ClickHouse/Hive）函数名不一样，这是个大坑
             return (
-                f"SELECT DATE_FORMAT({time_field}, '%Y-%m') AS month, "
-                f"ROUND(SUM({num}) / SUM({den}), 4) AS rate "
+                f"SELECT strftime('%Y-%m', {time_field}) AS month, "
+                f"ROUND(SUM({num}) * 1.0 / SUM({den}), 4) AS rate "
                 f"FROM {table} "
                 f"WHERE {time_field} >= '2026-06-01' "  # 上个月的起始日期（示例写死）
-                f"GROUP BY DATE_FORMAT({time_field}, '%Y-%m') "
+                f"GROUP BY strftime('%Y-%m', {time_field}) "
                 f"ORDER BY month;"
             )
         # 已经预计算好的指标（如 approval_rate）：直接查

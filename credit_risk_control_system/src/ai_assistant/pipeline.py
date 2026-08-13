@@ -80,7 +80,10 @@ class QAPipeline:
         self.permission = PermissionFilter(catalog)
         self.sql_generator = SQLGenerator(llm, catalog)
         self.sql_validator = SQLValidator()
-        self.executor = QueryExecutor()
+        # 执行器连上真实数仓（SQLite）。真实生产把 SQLite 换成 ClickHouse 驱动即可
+        from src.ai_assistant.mock_warehouse import MockWarehouse
+        self.warehouse = MockWarehouse()
+        self.executor = QueryExecutor(self.warehouse.get_connection())
         self.explainer = ResultExplainer(llm)
         self.audit = AuditLogger()
 
