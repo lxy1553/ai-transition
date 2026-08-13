@@ -64,6 +64,8 @@ indicators:
     # 权限：谁能查这个指标
     # all=所有人, analyst=分析师及以上, risk=风控专属
     required_role: "analyst"
+    # 血缘：这个指标从哪来、怎么算的（供"血缘追溯"意图查询）
+    lineage: "逾期率 = bad_loans / total_loans。bad_loans（坏样本数）来自 DWD 层 dwd_repayment 表 status=OVERDUE 状态的聚合计数；total_loans（总放贷笔数）来自 DWD 层 dwd_application 表按日计数。两列在 ADS 层 ads_delinquency_daily 表预计算。"
 
   # ── 指标 2：审批通过率 ──────────────────────────────────
   - name: "approval_rate"
@@ -80,6 +82,7 @@ indicators:
     time_field: "dt"
     ambiguity: []
     required_role: "all"
+    lineage: "通过率 = 审批通过数 / 总申请数。来自 DWD 层 dwd_application 表按决策结果（APPROVE/REJECT）聚合，在 ADS 层 ads_model_monitor_daily 表预计算。"
 
   # ── 指标 3：平均授信额度 ────────────────────────────────
   - name: "avg_credit_limit"
@@ -96,6 +99,7 @@ indicators:
     time_field: "dt"
     ambiguity: []
     required_role: "analyst"
+    lineage: "平均额度 = avg(credit_limit)。credit_limit 来自推理流水线（inference_pipeline）的额度计算结果，按日聚合到 ADS 层 ads_model_monitor_daily 表。"
 
 # ── 表结构目录（供 NL2SQL 使用）──────────────────────────
 # 小白类比：就像给每个"货架"列了一张清单，告诉模型：

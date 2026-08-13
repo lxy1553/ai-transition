@@ -200,3 +200,20 @@ class SchemaCatalog:
     def get_default_basis(self) -> str:
         """查默认口径（用户没指明时用哪个）。"""
         return self._data.get("defaults", {}).get("delinquency_basis", "by_count")
+
+    def get_lineage(self, indicator_name: str) -> str:
+        """
+        查某指标的血缘（来源和计算链路）。
+
+        小白理解：用户问"逾期率是怎么算出来的"，就是查这个。
+        返回一段描述这个指标从哪来、怎么算的话。
+
+        血缘（Lineage）和口径（Definition）的区别：
+        - 口径解释：这个指标"是什么"（定义、含义）
+        - 血缘追溯：这个指标"从哪来、怎么算的"（来源链路）
+        两者是不同的意图，回答内容也不同。
+        """
+        ind = self.get_indicator_by_name(indicator_name)
+        if ind is None:
+            return ""
+        return ind.get("lineage", "")

@@ -113,9 +113,15 @@ class QAPipeline:
             answer, sql, result = self._handle_indicator_query(
                 query, user_role, trace_id
             )
-        elif intent_result.intent in (IntentClassifier.INTENT_DEFINITION, IntentClassifier.INTENT_LINEAGE):
-            # 口径解释/血缘追溯 → 走 RAG 直接回答
+        elif intent_result.intent == IntentClassifier.INTENT_DANGEROUS:
+            # 危险操作 → 直接拒绝，不进入任何查询逻辑
+            answer = "抱歉，系统只支持数据查询，不支持修改或删除操作。"
+        elif intent_result.intent == IntentClassifier.INTENT_DEFINITION:
+            # 口径解释 → 走 RAG 查定义
             answer = self._handle_definition_query(query)
+        elif intent_result.intent == IntentClassifier.INTENT_LINEAGE:
+            # 血缘追溯 → 查血缘（从哪来、怎么算）
+            answer = self._handle_lineage_query(query)
         else:
             # 闲聊 → 直接让 LLM 回答
             answer = self.llm.chat(query)
@@ -135,6 +141,12 @@ class QAPipeline:
 
         # 改写失败（没识别出指标）→ 反问
         if not rewritten.resolved:
+            # 区分两种失败：未来时间 vs 没找到指标
+            if rewritten.time_range.get("type") == "future":
+                return (
+                    "抱歉，无法查询未来时间的数据，请查询已经发生的时间范围。",
+                    "", QueryResult(success=False, data=[]),
+                )
             return (
                 "抱歉，我没有找到对应的指标，请问您想查什么数据？",
                 "", QueryResult(success=False, data=[]),
@@ -199,6 +211,38 @@ class QAPipeline:
         # 把检索到的定义拼起来回答
         definitions = "\n".join(f"- {doc.content}" for doc in top_docs)
         return f"根据资料，相关解释如下：\n{definitions}"
+
+    # ── 血缘追溯的链路 ──────────────────────────────────
+
+    def _handle_lineage_query(self, query: str) -> str:
+        """
+        处理"血缘追溯"类问题：查指标的血缘（从哪来、怎么算的）。
+
+        小白理解：用户问"逾期率是怎么算的""这个指标数据来源是什么"，
+        就是查血缘——这个指标从哪个源头、经过什么加工算出来的。
+
+        和"口径解释"的区别：
+        - 口径解释：指标"是什么"（定义、含义）→ 走 RAG 查 description
+        - 血缘追溯：指标"从哪来、怎么算的"（来源链路）→ 查 lineage 字段
+        之前两者混在一起走 RAG，现在拆开，各自查各自的内容。
+        """
+        # 用改写器提取指标名（"逾期率是怎么算的" → delinquency_rate）
+        rewritten = self.query_rewriter.rewrite(query)
+        if not rewritten.resolved or not rewritten.indicators:
+            return "抱歉，我没有找到对应的指标，无法追溯其血缘。"
+
+        indicator_name = rewritten.indicators[0]
+        indicator = self.catalog.get_indicator_by_name(indicator_name)
+        lineage = self.catalog.get_lineage(indicator_name)
+
+        if not lineage:
+            return f"抱歉，「{indicator_name}」暂未记录血缘信息。"
+
+        formula = indicator.get("formula", "")
+        return (
+            f"「{indicator_name}」的数据血缘：\n{lineage}\n\n"
+            f"计算公式：{formula}"
+        )
 
     # ── 审计 ────────────────────────────────────────────
 

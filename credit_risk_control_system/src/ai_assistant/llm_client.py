@@ -110,6 +110,24 @@ class MockLLM(LLMClient):
         query_actions = ["是多少", "多少", "查询", "查", "有没有"]
         return any(action in query for action in query_actions)
 
+    def _extract_time(self, query: str) -> str:
+        """
+        从 query 里提取时间表达（含未来时间，供下游做时间合理性校验）。
+
+        小白理解：真实 LLM 能理解"下个月"是未来时间、该反问。
+        Mock 靠关键词，所以要在这里把所有时间词（含未来的）都提出来，
+        下游 query_rewriter 才能判断"未来时间"并反问。
+        """
+        if "下个月" in query or "下月" in query or "明年" in query:
+            return "下个月"
+        if "上个月" in query or "上月" in query:
+            return "上个月"
+        if "本月" in query or "这个月" in query:
+            return "本月"
+        if "最近30天" in query or "近30天" in query:
+            return "最近30天"
+        return ""
+
     def chat(self, prompt: str, **kwargs) -> str:
         """
         返回一段模拟的自然语言回答。
@@ -143,10 +161,13 @@ class MockLLM(LLMClient):
 
         # ── 意图识别 ──
         if "意图" in prompt or "属于哪类" in prompt:
-            # 判断顺序很重要：
-            #  1. 先判"血缘追溯"（因为"数据来源是什么"里既有"来源"又有"是什么"）
+            # 判断顺序很重要（最危险的最先判）：
+            #  0. 先判"危险操作"（删/改数据，安全第一道防线）
+            #  1. 再判"血缘追溯"（"数据来源是什么"里既有"来源"又有"是什么"）
             #  2. 再判"口径解释"（"什么是坏账率"/"坏账率是什么"）
             #  3. 最后判"指标查询"（动作信号 OR 指标信号）
+            if "删" in query or "删除" in query or "清空" in query or "改掉" in query or "更新" in query or "drop" in query.lower():
+                return {"intent": "危险操作", "confidence": 0.99}
             if "怎么算" in query or "来源" in query or "血缘" in query or "计算逻辑" in query or "计算方式" in query:
                 return {"intent": "血缘追溯", "confidence": 0.90}
             # 注意：同时匹配"什么是"和"是什么"两种语序（"什么是坏账率" vs "坏账率是什么"）
@@ -160,14 +181,14 @@ class MockLLM(LLMClient):
                 return {"intent": "指标查询", "confidence": 0.92}
             return {"intent": "闲聊", "confidence": 0.60}
 
-        # ── Query 改写：抽取指标关键词 ──
+        # ── Query 改写：抽取指标关键词 + 时间 ──
         if "indicator_keyword" in prompt or "提取" in prompt:
             # 用指标目录找 query 提到的指标，返回标准名
             indicator = self._find_indicator(query)
             keyword = indicator["name"] if indicator else ""
             return {
                 "indicator_keyword": keyword,
-                "time": "上个月" if ("上个月" in query or "上月" in query) else "",
+                "time": self._extract_time(query),
             }
 
         # ── 槽位抽取 ──

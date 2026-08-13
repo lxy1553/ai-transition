@@ -37,6 +37,19 @@ def load_cases() -> list[dict]:
     return data["cases"]
 
 
+def is_rejection(answer_text: str) -> bool:
+    """
+    判断回答是否属于"反问/拒答"（相对于"正常回答"）。
+
+    小白理解：系统面对"没权限""没找到指标""危险操作"时，应该反问或拒绝，
+    而不是硬给答案。这个函数靠关键词判断回答是不是"拒绝类"。
+
+    拒绝类关键词：抱歉、没有找到、没有权限、不确定、拦截、请（反问语气）
+    """
+    reject_keywords = ["抱歉", "没有找到", "没有权限", "不确定", "拦截", "请确认", "请换个"]
+    return any(kw in answer_text for kw in reject_keywords)
+
+
 def evaluate(pipeline, cases: list[dict]) -> dict:
     """
     跑评测，返回评测报告。
@@ -49,15 +62,18 @@ def evaluate(pipeline, cases: list[dict]) -> dict:
     intent_correct = 0
     indicator_correct = 0
     indicator_total = 0
+    behavior_correct = 0
+    behavior_total = 0
     bad_cases = []
     # 按维度统计
-    dim_stats = {}   # {dimension: {intent_correct, intent_total, indicator_correct, indicator_total}}
+    dim_stats = {}   # {dimension: {intent_correct, intent_total, indicator_correct, indicator_total, behavior_correct, behavior_total}}
 
     for case in cases:
         dim = case.get("dimension", "未分类")
         if dim not in dim_stats:
             dim_stats[dim] = {"intent_correct": 0, "intent_total": 0,
-                              "indicator_correct": 0, "indicator_total": 0}
+                              "indicator_correct": 0, "indicator_total": 0,
+                              "behavior_correct": 0, "behavior_total": 0}
         dim_stats[dim]["intent_total"] += 1
 
         # 调内部方法拿意图（评测需要直接看中间结果）
@@ -91,8 +107,28 @@ def evaluate(pipeline, cases: list[dict]) -> dict:
                     "expected": case["expected_indicator"], "actual": actual_indicator,
                 })
 
+        # ── 评行为（正常回答 vs 反问拒答）──
+        # 用每个 case 自己的 user_role（默认 analyst）跑完整链路，看最终回答
+        behavior_total += 1
+        dim_stats[dim]["behavior_total"] += 1
+        user_role = case.get("user_role", "analyst")
+        answer = pipeline.ask(case["query"], user_id="eval_user", user_role=user_role)
+        actual_is_reject = is_rejection(answer.answer)
+        expected_is_reject = (case["expected_behavior"] == "反问拒答")
+        if actual_is_reject == expected_is_reject:
+            behavior_correct += 1
+            dim_stats[dim]["behavior_correct"] += 1
+        else:
+            bad_cases.append({
+                "id": case["id"], "query": case["query"],
+                "dimension": dim, "eval_dim": "行为",
+                "expected": case["expected_behavior"],
+                "actual": "反问拒答" if actual_is_reject else "正常回答",
+            })
+
     intent_acc = intent_correct / len(cases) if cases else 0
     indicator_acc = indicator_correct / indicator_total if indicator_total else 0
+    behavior_acc = behavior_correct / behavior_total if behavior_total else 0
 
     return {
         "intent_accuracy": intent_acc,
@@ -101,6 +137,9 @@ def evaluate(pipeline, cases: list[dict]) -> dict:
         "indicator_accuracy": indicator_acc,
         "indicator_correct": indicator_correct,
         "indicator_total": indicator_total,
+        "behavior_accuracy": behavior_acc,
+        "behavior_correct": behavior_correct,
+        "behavior_total": behavior_total,
         "dim_stats": dim_stats,
         "bad_cases": bad_cases,
     }
@@ -131,19 +170,23 @@ def main():
           f"= {report['intent_accuracy']:.0%}")
     print(f"指标解析准确率：{report['indicator_correct']}/{report['indicator_total']} "
           f"= {report['indicator_accuracy']:.0%}")
+    print(f"行为判定准确率：{report['behavior_correct']}/{report['behavior_total']} "
+          f"= {report['behavior_accuracy']:.0%}")
 
     # ── 按维度分组统计 ──
     print("\n" + "-" * 60)
     print("按维度分组（看出短板在哪）：")
     print("-" * 60)
-    print(f"{'维度':<12} {'意图':>10} {'指标解析':>12}")
+    print(f"{'维度':<12} {'意图':>10} {'指标解析':>12} {'行为':>10}")
     for dim, stats in sorted(report["dim_stats"].items()):
         i_acc = stats["intent_correct"] / stats["intent_total"] if stats["intent_total"] else 0
         ind_acc = (stats["indicator_correct"] / stats["indicator_total"]
                    if stats["indicator_total"] else 0)
+        b_acc = (stats["behavior_correct"] / stats["behavior_total"]
+                 if stats["behavior_total"] else 0)
         print(f"{dim:<12} {stats['intent_correct']}/{stats['intent_total']} "
               f"({i_acc:.0%})  {stats['indicator_correct']}/{stats['indicator_total']} "
-              f"({ind_acc:.0%})")
+              f"({ind_acc:.0%})  {stats['behavior_correct']}/{stats['behavior_total']} ({b_acc:.0%})")
 
     # ── 打印 bad case ──
     if report["bad_cases"]:

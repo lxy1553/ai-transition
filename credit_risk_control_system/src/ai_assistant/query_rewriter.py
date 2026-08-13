@@ -84,10 +84,23 @@ class QueryRewriter:
 
         # ── 第三步：口径绑定 ──
         # 用户没说口径，就用配置里的默认值（逾期率默认按笔数、DPD30+）
+        time_range = self._parse_time(extracted.get("time", ""))
+
+        # 未来时间校验：查"下个月"这种未来数据没意义，标记为未解析（上层反问）
+        if time_range.get("type") == "future":
+            return RewrittenQuery(
+                original=query,
+                indicators=[indicator["name"]],
+                time_range=time_range,
+                basis=self.catalog.get_default_basis(),
+                window="DPD30+",
+                resolved=False,
+            )
+
         return RewrittenQuery(
             original=query,
             indicators=[indicator["name"]],
-            time_range=self._parse_time(extracted.get("time", "")),
+            time_range=time_range,
             basis=self.catalog.get_default_basis(),
             window="DPD30+",
             resolved=True,
@@ -104,6 +117,9 @@ class QueryRewriter:
             return {"type": "unspecified", "value": None}
 
         # 用规则做简单的时间归一化（生产里这块通常也要过 LLM 或专门的时间解析库）
+        # 先判"未来时间"——查未来数据没有意义，应该反问（时间合理性校验）
+        if "下个月" in time_expr or "明年" in time_expr or "下季度" in time_expr or "未来" in time_expr:
+            return {"type": "future", "value": time_expr}
         if "上个月" in time_expr or "上月" in time_expr:
             return {"type": "natural_month", "value": "last_month"}
         if "最近30天" in time_expr or "近30天" in time_expr:

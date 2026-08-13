@@ -45,6 +45,7 @@ class IntentClassifier:
     INTENT_DEFINITION = "口径解释"  # 解释概念
     INTENT_LINEAGE = "血缘追溯"     # 查来源
     INTENT_CHAT = "闲聊"            # 跟数据无关的聊天
+    INTENT_DANGEROUS = "危险操作"   # 想删库/改数据等破坏性操作
 
     # 置信度阈值：低于这个值，说明模型没把握，宁可反问也不要硬猜
     CONFIDENCE_THRESHOLD = 0.7
