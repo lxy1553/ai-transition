@@ -27,8 +27,8 @@ def main():
     print("=" * 60)
 
     # ── 1. 组装：用工厂函数选 LLM（有 Key 用真 DeepSeek，没有用 Mock）──
-    llm = create_llm()
     catalog = SchemaCatalog()
+    llm = create_llm(catalog=catalog)
     pipeline = QAPipeline(llm=llm, catalog=catalog)
 
     # ── 2. 模拟用户提问 ──

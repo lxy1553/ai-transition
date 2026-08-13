@@ -76,14 +76,78 @@ class SchemaCatalog:
 
     def resolve_indicator(self, keyword: str) -> Optional[dict]:
         """
-        智能匹配：先试标准名，再试别名。查不到返回 None。
+        智能匹配：精确匹配 → 包含匹配（兜底）。查不到返回 None。
 
-        这是最常用的入口——无论用户说标准名还是口语名，都能找到指标。
+        三级匹配（从准到松）：
+          1. 标准名精确匹配（"delinquency_rate"）
+          2. 别名精确匹配（"逾期率"）
+          3. 包含匹配（"额度"能匹配到"平均额度"）
+
+        为什么需要"包含匹配"兜底？
+          用户经常用简称、口语化表达，比如问"额度"其实是想问"平均额度"。
+          如果只做精确匹配，"额度"就匹配不上，系统会误判"没这个指标"。
+
+        防误匹配（关键）：
+          最小长度阈值——关键词至少 2 个字才做包含匹配。
+          否则单字"率"会同时匹配到"逾期率"和"通过率"，全是误匹配。
         """
-        return (
-            self.get_indicator_by_name(keyword)
-            or self.get_indicator_by_alias(keyword)
-        )
+        if not keyword:
+            return None
+
+        # 第一级 + 第二级：精确匹配
+        exact = self.get_indicator_by_name(keyword)
+        if exact:
+            return exact
+        exact_alias = self.get_indicator_by_alias(keyword)
+        if exact_alias:
+            return exact_alias
+
+        # 第三级：包含匹配（兜底，带最小长度阈值）
+        if len(keyword) >= 2:
+            fuzzy = self._fuzzy_match(keyword)
+            if fuzzy:
+                return fuzzy[0]   # 多个匹配取第一个（歧义情况见 resolve_ambiguous）
+
+        return None
+
+    def _fuzzy_match(self, keyword: str) -> list[dict]:
+        """
+        包含匹配：关键词是别名的子串，或别名是关键词的子串。
+
+        小白理解：用户说"额度"，别名里有"平均额度"，"额度"是"平均额度"的一部分，
+        就算匹配上了。反之，用户说"平均授信额度"，别名里有"平均额度"，
+        "平均额度"是"平均授信额度"的一部分，也算匹配上。
+        """
+        matches = []
+        for ind in self._data.get("indicators", []):
+            for alias in ind.get("aliases", []):
+                if keyword in alias or alias in keyword:
+                    matches.append(ind)
+                    break   # 一个指标只加一次，避免重复
+        return matches
+
+    def resolve_ambiguous(self, keyword: str) -> list[dict]:
+        """
+        返回所有匹配的指标（用于歧义检测）。
+
+        小白理解：如果"额度"同时匹配到多个指标，说明有歧义，
+        系统应该反问用户"您是指平均额度还是授信额度"，而不是随便选一个。
+
+        这个方法返回所有匹配项，供上层判断是否需要反问。
+        """
+        if not keyword:
+            return []
+        # 精确匹配 + 包含匹配，全部收集
+        matches = []
+        seen = set()
+        for ind in self._data.get("indicators", []):
+            if ind["name"] == keyword or keyword in ind.get("aliases", []):
+                if ind["name"] not in seen:
+                    matches.append(ind)
+                    seen.add(ind["name"])
+        if not matches and len(keyword) >= 2:
+            matches = self._fuzzy_match(keyword)
+        return matches
 
     # ── 表结构查询 ──────────────────────────────────────
 

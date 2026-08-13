@@ -35,6 +35,7 @@ indicators:
       - "坏账率"
       - "不良率"
       - "违约率"
+      - "不良贷款率"
     description: "逾期贷款笔数占总放贷笔数的比例，是信贷风险最核心的指标"
     # 计算公式：逾期率 = 坏样本数 / 总样本数
     formula: "bad_loans / total_loans"

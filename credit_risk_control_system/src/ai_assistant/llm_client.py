@@ -56,9 +56,44 @@ class MockLLM(LLMClient):
     小白类比：这就像一个"背答案的机器人"，你问它什么，它从一个小抄本里找答案。
     目的是让整条链路能跑通，方便你理解数据流，而不是真的去理解你的问题。
 
+    关键改进：Mock 不再硬编码"逾期率""通过率"这几个词，
+    而是接收一个指标目录（catalog），查目录里的别名表来判断。
+    这样 Mock 能识别配置里定义的所有同义词（坏账率、不良率、违约率...），
+    评测测的才是"系统的真实映射能力"，而不是"Mock 硬编码了几个词"。
+
     生产级替换：真实项目里，把这个类换成 OpenAILLM / ClaudeLLM / DeepSeekLLM，
     它们实现同样的 chat / chat_json 接口，只是内部真的发 HTTP 请求。
+    真实 LLM 理解同义词靠"语义"，Mock 靠"查别名表"，效果上等价——都是把口语词映射到标准指标。
     """
+
+    def __init__(self, catalog=None):
+        """
+        Args:
+            catalog: 指标目录（SchemaCatalog）。Mock 靠它识别同义词。
+                     不传也能跑（退化成只认几个硬编码词），但评测会失真。
+        """
+        self.catalog = catalog
+
+    def _find_indicator(self, query: str):
+        """
+        用指标目录查 query 里提到了哪个指标（模拟 LLM 理解同义词）。
+
+        小白理解：真实 LLM 看到"坏账率"能理解它是"逾期率"。
+        Mock 做不到语义理解，但可以查别名表——如果"坏账率"在某个指标的
+        aliases 里，就等价于"理解"了这个同义词。
+        """
+        if self.catalog is None:
+            return None
+        for ind in self.catalog._data.get("indicators", []):
+            # 检查 query 里是否含指标的标准名
+            if ind["name"] in query:
+                return ind
+            for alias in ind.get("aliases", []):
+                # 双向包含：别名是 query 的子串，或 query 是别名的子串
+                # 例："坏账率" in query → 匹配；query="额度"，"额度" in "平均额度" → 匹配
+                if alias in query or query in alias:
+                    return ind
+        return None
 
     def chat(self, prompt: str, **kwargs) -> str:
         """
@@ -93,28 +128,26 @@ class MockLLM(LLMClient):
 
         # ── 意图识别 ──
         if "意图" in prompt or "属于哪类" in prompt:
-            # 判断顺序很重要：先判"解释意图"，再判"查询意图"
-            # 因为"逾期率是什么意思"里既有"逾期率"又有"意思"，
-            # 应该判成"口径解释"而不是"指标查询"
-            if "什么意思" in query or "是什么" in query or "定义" in query:
-                return {"intent": "口径解释", "confidence": 0.90}
-            if "怎么算" in query or "来源" in query or "血缘" in query:
+            # 判断顺序很重要：
+            #  1. 先判"血缘追溯"（因为"数据来源是什么"里既有"来源"又有"是什么"）
+            #  2. 再判"口径解释"（"什么是坏账率"/"坏账率是什么"）
+            #  3. 最后判"指标查询"（含指标同义词）
+            if "怎么算" in query or "来源" in query or "血缘" in query or "计算逻辑" in query or "计算方式" in query:
                 return {"intent": "血缘追溯", "confidence": 0.90}
-            if "逾期率" in query or "通过率" in query or "额度" in query:
+            # 注意：同时匹配"什么是"和"是什么"两种语序（"什么是坏账率" vs "坏账率是什么"）
+            if "什么意思" in query or "是什么" in query or "什么是" in query or "定义" in query:
+                return {"intent": "口径解释", "confidence": 0.90}
+            # 用指标目录判断：query 里含任何指标的同义词 → 指标查询
+            # 这样能识别配置里所有同义词，不再硬编码
+            if self._find_indicator(query) is not None:
                 return {"intent": "指标查询", "confidence": 0.92}
             return {"intent": "闲聊", "confidence": 0.60}
 
         # ── Query 改写：抽取指标关键词 ──
         if "indicator_keyword" in prompt or "提取" in prompt:
-            # 把口语指标词映射成标准关键词（注意用 query 判断，不是 prompt）
-            if "坏账率" in query or "不良率" in query or "逾期率" in query:
-                keyword = "逾期率"
-            elif "通过率" in query:
-                keyword = "通过率"
-            elif "额度" in query:
-                keyword = "额度"
-            else:
-                keyword = ""
+            # 用指标目录找 query 提到的指标，返回标准名
+            indicator = self._find_indicator(query)
+            keyword = indicator["name"] if indicator else ""
             return {
                 "indicator_keyword": keyword,
                 "time": "上个月" if ("上个月" in query or "上月" in query) else "",
@@ -232,7 +265,7 @@ class DeepSeekLLM(LLMClient):
         return data["choices"][0]["message"]["content"]
 
 
-def create_llm() -> LLMClient:
+def create_llm(catalog=None) -> LLMClient:
     """
     LLM 工厂函数 —— 根据环境变量决定用真的还是假的。
 
@@ -241,9 +274,12 @@ def create_llm() -> LLMClient:
       没设置 → 用 MockLLM（方便本地开发、不花钱）
 
     这样你的代码不用改，靠环境变量就能在"真实"和"模拟"之间切换。
+
+    Args:
+        catalog: 指标目录。传给 MockLLM 让它能识别同义词（查别名表）。
     """
     api_key = os.environ.get("DEEPSEEK_API_KEY", "").strip()
     if api_key:
         return DeepSeekLLM(api_key)
     # 没 Key 就降级用 Mock（本地开发、跑 demo、跑单测都够用）
-    return MockLLM()
+    return MockLLM(catalog)
