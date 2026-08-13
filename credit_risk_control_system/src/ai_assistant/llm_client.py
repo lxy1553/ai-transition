@@ -95,6 +95,21 @@ class MockLLM(LLMClient):
                     return ind
         return None
 
+    def _has_query_action(self, query: str) -> bool:
+        """
+        检查用户是否有"查询动作"信号（这是解耦的关键）。
+
+        小白理解：意图识别要回答"用户想不想查数据"，看的是"动作"，
+        不是"查的指标存不存在"。用户说"查一个不存在的指标"，动作"查"是明确的，
+        意图就应该是"指标查询"，至于指标不存在，那是后面"指标解析"要处理的。
+
+        为什么动作词要选得精准？
+          - "多少""是多少""查""查询""有没有" → 精准，闲聊里几乎不出现
+          - "怎么样""看看""帮我" → 太宽泛，会误判"今天天气怎么样""帮我写首诗"
+        """
+        query_actions = ["是多少", "多少", "查询", "查", "有没有"]
+        return any(action in query for action in query_actions)
+
     def chat(self, prompt: str, **kwargs) -> str:
         """
         返回一段模拟的自然语言回答。
@@ -131,15 +146,17 @@ class MockLLM(LLMClient):
             # 判断顺序很重要：
             #  1. 先判"血缘追溯"（因为"数据来源是什么"里既有"来源"又有"是什么"）
             #  2. 再判"口径解释"（"什么是坏账率"/"坏账率是什么"）
-            #  3. 最后判"指标查询"（含指标同义词）
+            #  3. 最后判"指标查询"（动作信号 OR 指标信号）
             if "怎么算" in query or "来源" in query or "血缘" in query or "计算逻辑" in query or "计算方式" in query:
                 return {"intent": "血缘追溯", "confidence": 0.90}
             # 注意：同时匹配"什么是"和"是什么"两种语序（"什么是坏账率" vs "坏账率是什么"）
             if "什么意思" in query or "是什么" in query or "什么是" in query or "定义" in query:
                 return {"intent": "口径解释", "confidence": 0.90}
-            # 用指标目录判断：query 里含任何指标的同义词 → 指标查询
-            # 这样能识别配置里所有同义词，不再硬编码
-            if self._find_indicator(query) is not None:
+            # ★ 解耦关键：意图判断 = 动作信号（想查数） OR 指标信号（陈述式查询）
+            #   动作信号：用户说"查""多少"，就是查询意图，不管指标存不存在
+            #   指标信号：用户说"最近30天的逾期率"，没有动作词但有指标名，也是查询
+            #   两者满足其一就是"指标查询"，指标是否存在交给下游"指标解析"处理
+            if self._has_query_action(query) or self._find_indicator(query) is not None:
                 return {"intent": "指标查询", "confidence": 0.92}
             return {"intent": "闲聊", "confidence": 0.60}
 
