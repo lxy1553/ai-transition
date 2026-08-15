@@ -8,3 +8,6 @@ logs/
 
 # SQLite 运行时生成的模拟数仓（demo 运行时会自动重建）
 *.db
+
+# 克隆的第三方项目（vanna 自带 .git，不并入主仓库）
+/github/project/vanna/
