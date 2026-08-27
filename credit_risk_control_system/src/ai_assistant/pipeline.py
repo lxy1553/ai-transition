@@ -87,6 +87,10 @@ class QAPipeline:
         self.explainer = ResultExplainer(llm)
         self.audit = AuditLogger()
 
+        # 多轮对话状态：session_id → 会话上下文（最近解析出的指标）
+        # 小白理解：这就是 Agent 的"短期记忆"，让"这个指标"能指代上一轮的"逾期率"
+        self.sessions: dict = {}
+
     def ask(self, query: str, user_id: str = "anonymous", user_role: str = "analyst") -> Answer:
         """
         主入口：用户问一句话，返回一个答案。

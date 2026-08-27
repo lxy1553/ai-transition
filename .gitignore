@@ -9,5 +9,14 @@ logs/
 # SQLite 运行时生成的模拟数仓（demo 运行时会自动重建）
 *.db
 
-# 克隆的第三方项目（vanna 自带 .git，不并入主仓库）
+# 克隆的第三方项目（自带 .git，不并入主仓库）
 /github/project/vanna/
+/github/project/queryforge-test2sql/
+/github/project/RAG-BUILD-SKILLS/
+/github/project/ragent/
+/github/project/ragflow/
+
+# 本地 Claude Code 工具（grill-me 技能，非学习内容）
+/.agents/
+/.claude/
+/skills-lock.json
