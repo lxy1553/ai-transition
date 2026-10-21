@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="AI 应用与算法面试题整理，以及 B 端指标问答与报告 Agent 项目问答。">
+  <title>AI 应用与算法面试题库</title>
+  <style>
+    :root{color-scheme:light;--ink:#203247;--muted:#61758a;--line:#dce5ee;--blue:#245b82;--paper:#f3f6fa}
+    *{box-sizing:border-box}html,body{height:100%;margin:0}body{display:flex;flex-direction:column;background:var(--paper);color:var(--ink);font:15px/1.5 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}
+    header{padding:20px max(20px,calc((100vw - 1240px)/2));background:#19314e;color:white}h1{margin:0;font-size:22px;letter-spacing:.01em}header p{margin:5px 0 0;color:#d1deeb;font-size:14px}
+    nav{display:flex;gap:8px;padding:12px max(20px,calc((100vw - 1240px)/2));background:white;border-bottom:1px solid var(--line)}button{border:1px solid var(--line);border-radius:9px;background:#fff;color:#41576d;padding:9px 16px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer}button[aria-selected="true"]{border-color:var(--blue);background:var(--blue);color:white}button:focus-visible{outline:3px solid #9bc8e9;outline-offset:2px}
+    main{flex:1;min-height:0;max-width:1280px;width:100%;margin:0 auto;padding:14px 18px 18px}.panel{height:100%;min-height:420px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:white;box-shadow:0 4px 18px #1534520a}.panel[hidden]{display:none}iframe{display:block;width:100%;height:100%;min-height:420px;border:0;background:white}
+    @media(max-width:600px){header{padding:16px 16px}h1{font-size:19px}nav{padding:10px 12px;gap:6px;overflow:auto}button{white-space:nowrap;padding:8px 11px;font-size:13px}main{padding:10px}.panel{border-radius:8px}}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>AI 应用与算法面试题库</h1>
+    <p>完整学习问答记录 · 按专题复习与项目深挖</p>
+  </header>
+  <nav role="tablist" aria-label="面试题库">
+    <button id="tab-general" role="tab" aria-selected="true" aria-controls="panel-general" tabindex="0">AI 应用与算法面试题</button>
+    <button id="tab-agent" role="tab" aria-selected="false" aria-controls="panel-agent" tabindex="-1">B 端指标问答与报告 Agent</button>
+  </nav>
+  <main>
+    <section class="panel" id="panel-general" role="tabpanel" aria-labelledby="tab-general"><iframe title="AI 应用与算法完整学习问答记录" src="ai-app-algorithm-interview.html?file=ai-app-algorithm-interview.md"></iframe></section>
+    <section class="panel" id="panel-agent" role="tabpanel" aria-labelledby="tab-agent" hidden><iframe title="B 端指标问答与报告 Agent 面试题库" data-src="ai-app-algorithm-interview.html?file=b-end-metric-agent.md"></iframe></section>
+  </main>
+  <script>
+    const tabs=[...document.querySelectorAll('[role="tab"]')];
+    function activate(tab){
+      for(const item of tabs){const selected=item===tab;item.setAttribute('aria-selected',String(selected));item.tabIndex=selected?0:-1;document.getElementById(item.getAttribute('aria-controls')).hidden=!selected;}
+      const frame=document.querySelector(`#${tab.getAttribute('aria-controls')} iframe`);if(!frame.getAttribute('src'))frame.src=frame.dataset.src;
+    }
+    tabs.forEach((tab,index)=>{tab.addEventListener('click',()=>activate(tab));tab.addEventListener('keydown',event=>{if(event.key==='ArrowRight'||event.key==='ArrowLeft'){event.preventDefault();const next=tabs[(index+(event.key==='ArrowRight'?1:tabs.length-1))%tabs.length];activate(next);next.focus();}})});
+  </script>
+</body>
+</html>
