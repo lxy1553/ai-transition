@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="description" content="AI 应用与算法面试题整理，以及 B 端指标问答与报告 Agent 项目问答。">
   <title>AI 应用与算法面试题库</title>
   <style>
@@ -11,7 +11,7 @@
     header{padding:20px max(20px,calc((100vw - 1240px)/2));background:#19314e;color:white}h1{margin:0;font-size:22px;letter-spacing:.01em}header p{margin:5px 0 0;color:#d1deeb;font-size:14px}
     nav{display:flex;gap:8px;padding:12px max(20px,calc((100vw - 1240px)/2));background:white;border-bottom:1px solid var(--line)}button{border:1px solid var(--line);border-radius:9px;background:#fff;color:#41576d;padding:9px 16px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer}button[aria-selected="true"]{border-color:var(--blue);background:var(--blue);color:white}button:focus-visible{outline:3px solid #9bc8e9;outline-offset:2px}
     main{flex:1;min-height:0;max-width:1280px;width:100%;margin:0 auto;padding:14px 18px 18px}.panel{height:100%;min-height:420px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:white;box-shadow:0 4px 18px #1534520a}.panel[hidden]{display:none}iframe{display:block;width:100%;height:100%;min-height:420px;border:0;background:white}
-    @media(max-width:600px){header{padding:16px 16px}h1{font-size:19px}nav{padding:10px 12px;gap:6px;overflow:auto}button{white-space:nowrap;padding:8px 11px;font-size:13px}main{padding:10px}.panel{border-radius:8px}}
+    @media(max-width:600px){html,body{height:100%;min-height:100%;overscroll-behavior-y:contain}header{padding:14px 16px;padding-top:max(14px,env(safe-area-inset-top))}h1{font-size:19px}header p{font-size:13px}nav{padding:8px 12px;gap:6px;overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}button{min-height:44px;white-space:nowrap;padding:8px 11px;font-size:13px}main{display:flex;flex-direction:column;padding:8px;flex:1;min-height:0}.panel{flex:1;min-height:0;border-radius:8px}iframe{height:calc(100dvh - 150px);min-height:420px}}
   </style>
 </head>
 <body>
